@@ -1,3 +1,9 @@
+### Hotfix CI V6.50 — E2E Admin Fail-Closed (2026-09-10)
+- o rate limit administrativo continua fail-closed em produção real, mas o E2E stateless pode usar bucket local somente quando `GITHUB_ACTIONS=true` e `MARQUES_CI_STATELESS_AUTH=1`;
+- o contrato HTTP passa a impedir que esse bypass de teste seja ampliado para ambientes fora do GitHub Actions;
+- o E2E de logout aceita tanto redirect HTTP quanto redirect de streaming do App Router, mantendo a exigência de retorno ao login;
+- TypeScript e build de produção já haviam passado no CI anterior; este hotfix atua somente no bloqueio funcional do E2E.
+
 ### Manutenção V6.50 — Cross-System Media Lease & Verified Completion (2026-09-10)
 - o lifecycle de mídia passa a atravessar **PostgreSQL + S3** com leases tokenizadas: upload/delete adquirem a geração antes do I/O externo e só finalizam se o mesmo token continuar vigente;
 - o **schema 27** adiciona `media_lifecycle_leases`, campos operacionais nos tombstones e funções begin/complete/fail/cancel; atalhos V6.48/V6.49 inseguros são removidos;

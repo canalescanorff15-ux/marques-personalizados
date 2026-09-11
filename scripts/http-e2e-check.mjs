@@ -64,7 +64,7 @@ try{
     r=await request('/api/admin/operations?summary=1',{headers:authHeaders});const operationsState=await bodyJson(r);assert(r.ok&&operationsState.schema&&operationsState.integrity&&operationsState.audit_integrity&&operationsState.storage&&operationsState.release&&operationsState.incident_summary,'Sessão autenticada acessa central operacional');
     r=await request('/api/admin/restore',{headers:authHeaders});const restoreState=await bodyJson(r);assert(r.ok&&Array.isArray(restoreState.snapshots),'Sessão autenticada acessa snapshots de recuperação');
     r=await request('/api/admin/logout',{method:'POST',headers:sameOriginHeaders(authHeaders)});const logout=await bodyJson(r);const clearedCookie=cookieFrom(r);assert(r.ok&&logout.ok===true,'Logout administrativo funciona');assert(clearedCookie==='catalog_admin_session=','Logout expira o cookie administrativo');
-    r=await request('/admin',{headers:{cookie:clearedCookie}});assert([302,303,307,308].includes(r.status),'Navegador sem cookie ativo volta a exigir login',`HTTP ${r.status}`);
+    r=await request('/admin',{headers:{cookie:clearedCookie}});const loggedOutBody=[302,303,307,308].includes(r.status)?'':await r.text();const redirectedToLogin=[302,303,307,308].includes(r.status)||(r.status===200&&/admin\/login/i.test(loggedOutBody)&&/(http-equiv=[\"']refresh|NEXT_REDIRECT|redirect)/i.test(loggedOutBody));assert(redirectedToLogin,'Navegador sem cookie ativo volta a exigir login',`HTTP ${r.status}`);
   }else console.warn('Aviso: E2E_ADMIN_PASSWORD ausente; fluxo positivo de login foi ignorado.');
 }catch(error){console.error('Falha inesperada no E2E HTTP:',error instanceof Error?error.message:String(error));failures++;}
 

@@ -12,6 +12,8 @@ if(/x-forwarded-host|x-forwarded-proto/i.test(origin))errors.push('request-origi
 const security=read('lib/security.ts');
 if(!security.includes("import { sameOriginBoundary } from './request-origin'"))errors.push('security.ts deve delegar CSRF ao boundary puro');
 if(!security.includes('sameOriginBoundary(request)'))errors.push('sameOriginRequest deve usar sameOriginBoundary');
+if(!security.includes("process.env.GITHUB_ACTIONS==='true'&&process.env.MARQUES_CI_STATELESS_AUTH==='1'"))errors.push('rate limit local de CI deve ficar restrito ao GitHub Actions');
+if(!/strictDistributedRateScope\(scope\)&&!allowCiLocalRateLimit\(\)/.test(security))errors.push('produção deve manter rate limit distribuído fail-closed fora do bypass explícito de CI');
 
 const limits=read('lib/request-limits.ts');
 for(const token of ['advertisedContentLength','exceedsAdvertisedBodyLimit','isMultipartFormData','isJsonContentType','readBytesBodyWithinLimit','readTextBodyWithinLimit','readMultipartFormDataWithinLimit','reader.cancel'])if(!limits.includes(token))errors.push(`request-limits sem ${token}`);

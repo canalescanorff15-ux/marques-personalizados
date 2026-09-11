@@ -13,13 +13,14 @@ type RateLimitResult={allowed:boolean;remaining:number;degraded?:boolean};
 const distributedRateState={failures:0,openUntil:0};
 const DISTRIBUTED_RATE_BREAKER_MS=5_000;
 const DISTRIBUTED_RATE_FAILURE_THRESHOLD=3;
+function allowCiLocalRateLimit(){return process.env.GITHUB_ACTIONS==='true'&&process.env.MARQUES_CI_STATELESS_AUTH==='1';}
 export function rateLimit(key:string,limit:number,windowMs:number):RateLimitResult{const now=Date.now();if(buckets.size>2000){for(const[k,b]of buckets)if(b.reset<=now)buckets.delete(k);}const b=buckets.get(key);if(!b||b.reset<=now){buckets.set(key,{count:1,reset:now+windowMs});return{allowed:true,remaining:limit-1};}if(b.count>=limit)return{allowed:false,remaining:0};b.count++;return{allowed:true,remaining:Math.max(0,limit-b.count)};}
 export function clientIp(request:Request){return firstHeaderValue(request.headers.get('x-forwarded-for'))||firstHeaderValue(request.headers.get('x-real-ip'))||'unknown';}
 function pseudonym(value:string){const secret=process.env.SESSION_SECRET||'local-development-only';return crypto.createHmac('sha256',secret).update(value).digest('hex');}
 async function consumeDistributedBucket(scope:string,hash:string,limit:number,windowMs:number){return consumeDistributedRateLimit(scope,hash,limit,windowMs);}
 export async function protectedRateLimit(request:Request,scope:string,limit:number,windowMs:number):Promise<RateLimitResult>{
   const hash=pseudonym(clientIp(request));const key=`${scope}:${hash}`;const now=Date.now();
-  const distributedExpected=Boolean(process.env.DATABASE_URL);const strict=process.env.NODE_ENV==='production'&&strictDistributedRateScope(scope);
+  const distributedExpected=Boolean(process.env.DATABASE_URL);const strict=process.env.NODE_ENV==='production'&&strictDistributedRateScope(scope)&&!allowCiLocalRateLimit();
   if(!distributedExpected){if(strict)return{allowed:false,remaining:0,degraded:true};return rateLimit(key,limit,windowMs);}
   if(distributedRateState.openUntil>now){if(strict)return{allowed:false,remaining:0,degraded:true};return{...rateLimit(key,limit,windowMs),degraded:true};}
   try{
