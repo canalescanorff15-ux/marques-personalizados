@@ -1,3 +1,3 @@
-export const dynamic='force-dynamic';
-export const revalidate=0;
-export default function AdminLoginLayout({children}:{children:React.ReactNode}){return children;}
+import type { Metadata } from 'next';
+export const metadata:Metadata={title:'Admin',robots:{index:false,follow:false,nocache:true}};
+export default function AdminLayout({children}:{children:React.ReactNode}){return children;}
