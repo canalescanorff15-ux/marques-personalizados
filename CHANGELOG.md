@@ -2,6 +2,7 @@
 - o rate limit administrativo continua fail-closed em produção real, mas o E2E stateless pode usar bucket local somente quando `GITHUB_ACTIONS=true` e `MARQUES_CI_STATELESS_AUTH=1`;
 - o contrato HTTP passa a impedir que esse bypass de teste seja ampliado para ambientes fora do GitHub Actions;
 - o E2E de logout aceita tanto redirect HTTP quanto redirect de streaming do App Router, mantendo a exigência de retorno ao login;
+- o cliente E2E agora mantém um cookie jar real e interpreta múltiplos `Set-Cookie`, validando explicitamente `HttpOnly` da sessão e `Max-Age=0` no logout sem confundir cookie de dispositivo com cookie administrativo;
 - TypeScript e build de produção já haviam passado no CI anterior; este hotfix atua somente no bloqueio funcional do E2E.
 
 ### Manutenção V6.50 — Cross-System Media Lease & Verified Completion (2026-09-10)

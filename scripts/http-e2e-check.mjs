@@ -18,7 +18,34 @@ function assert(ok,label,detail=''){assertions++;console.log(`${ok?'✓':'✗'} 
 async function request(path,options={}){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12_000);try{return await fetch(`${base}${path}`,{redirect:'manual',...options,signal:controller.signal});}finally{clearTimeout(timer);}}
 async function bodyJson(response){try{return await response.json();}catch{return {};}}
 function sameOriginHeaders(extra={}){return {'origin':origin,'referer':`${origin}/`,'sec-fetch-site':'same-origin',...extra};}
-function cookieFrom(response){const raw=response.headers.get('set-cookie')||'';return raw.split(';')[0]||'';}
+function responseSetCookies(response){
+  if(typeof response.headers.getSetCookie==='function'){
+    const values=response.headers.getSetCookie();
+    if(Array.isArray(values)&&values.length)return values;
+  }
+  const raw=response.headers.get('set-cookie')||'';
+  if(!raw)return [];
+  return raw.split(/,(?=\s*[^;,=\s]+=[^;,]*)/g).map(value=>value.trim()).filter(Boolean);
+}
+function parsedSetCookie(header){
+  const parts=String(header||'').split(';').map(part=>part.trim()).filter(Boolean);
+  const first=parts.shift()||'';const index=first.indexOf('=');
+  if(index<1)return null;
+  const name=first.slice(0,index).trim();const value=first.slice(index+1);
+  const attributes=new Map();
+  for(const part of parts){const sep=part.indexOf('=');const key=(sep<0?part:part.slice(0,sep)).trim().toLowerCase();const attrValue=sep<0?'':part.slice(sep+1).trim();attributes.set(key,attrValue);}
+  return{name,value,attributes,raw:String(header||'')};
+}
+function setCookieByName(response,name){return responseSetCookies(response).map(parsedSetCookie).find(cookie=>cookie?.name===name)||null;}
+function applySetCookies(jar,response){
+  for(const parsed of responseSetCookies(response).map(parsedSetCookie)){
+    if(!parsed)continue;
+    const maxAge=parsed.attributes.get('max-age');
+    if(parsed.value===''||maxAge==='0')jar.delete(parsed.name);else jar.set(parsed.name,parsed.value);
+  }
+}
+function cookieHeader(jar){return [...jar].map(([name,value])=>`${name}=${value}`).join('; ');}
+
 
 async function waitForServer(){for(let i=0;i<40;i++){try{const r=await request('/api/health?mode=live');if(r.ok)return true;}catch{}await new Promise(resolve=>setTimeout(resolve,500));}return false;}
 
@@ -48,23 +75,26 @@ try{
   r=await request('/api/admin/login',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json'}),body:JSON.stringify({password:'__invalid_e2e_password__'})});assert(r.status===401,'Login rejeita senha inválida',`HTTP ${r.status}`);
 
   if(adminPassword){
-    r=await request('/api/admin/login',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json'}),body:JSON.stringify({password:adminPassword})});const login=await bodyJson(r);let cookie=cookieFrom(r);assert(r.ok&&login.ok===true,'Senha administrativa válida é aceita',`HTTP ${r.status}`);
+    const jar=new Map();
+    r=await request('/api/admin/login',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json'}),body:JSON.stringify({password:adminPassword})});const login=await bodyJson(r);const loginChallenge=setCookieByName(r,'catalog_admin_mfa_challenge');applySetCookies(jar,r);assert(r.ok&&login.ok===true,'Senha administrativa válida é aceita',`HTTP ${r.status}`);
     if(login.mfa_required){
-      assert(cookie.startsWith('catalog_admin_mfa_challenge='),'Senha válida emite desafio MFA temporário');
+      assert(Boolean(loginChallenge)&&loginChallenge.attributes.has('httponly'),'Senha válida emite desafio MFA temporário HttpOnly');
       assert(Boolean(adminTotpSecret),'E2E possui segredo TOTP para concluir o segundo fator');
       const code=currentTotp(adminTotpSecret);const wrong=code==='000000'?'000001':'000000';
-      r=await request('/api/admin/mfa/verify',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json','cookie':cookie}),body:JSON.stringify({code:wrong})});assert(r.status===401,'MFA rejeita código incorreto',`HTTP ${r.status}`);
-      r=await request('/api/admin/mfa/verify',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json','cookie':cookie}),body:JSON.stringify({code})});const mfa=await bodyJson(r);cookie=cookieFrom(r);assert(r.ok&&mfa.ok===true,'MFA aceita código TOTP válido',`HTTP ${r.status}`);assert(cookie.startsWith('catalog_admin_session='),'MFA concluído emite cookie de sessão HttpOnly');
-    }else assert(cookie.startsWith('catalog_admin_session='),'Login não-MFA em ambiente local emite cookie de sessão');
-    const authHeaders={'cookie':cookie};
+      r=await request('/api/admin/mfa/verify',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json','cookie':cookieHeader(jar)}),body:JSON.stringify({code:wrong})});assert(r.status===401,'MFA rejeita código incorreto',`HTTP ${r.status}`);
+      r=await request('/api/admin/mfa/verify',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json','cookie':cookieHeader(jar)}),body:JSON.stringify({code})});const mfa=await bodyJson(r);const sessionCookie=setCookieByName(r,'catalog_admin_session');applySetCookies(jar,r);assert(r.ok&&mfa.ok===true,'MFA aceita código TOTP válido',`HTTP ${r.status}`);assert(Boolean(sessionCookie)&&sessionCookie.attributes.has('httponly')&&jar.has('catalog_admin_session'),'MFA concluído emite cookie de sessão HttpOnly');
+    }else{
+      const sessionCookie=setCookieByName(r,'catalog_admin_session');assert(Boolean(sessionCookie)&&sessionCookie.attributes.has('httponly')&&jar.has('catalog_admin_session'),'Login não-MFA em ambiente local emite cookie de sessão HttpOnly');
+    }
+    const authHeaders={'cookie':cookieHeader(jar)};
     r=await request('/admin',{headers:authHeaders});assert(r.ok,'Sessão autenticada acessa /admin',`HTTP ${r.status}`);
     r=await request('/api/admin/analytics?days=7',{headers:authHeaders});const analytics=await bodyJson(r);assert(r.ok&&analytics.days===7&&analytics.analytics,'Sessão autenticada acessa API administrativa');
     r=await request('/api/admin/sessions',{headers:authHeaders});const sessionState=await bodyJson(r);assert(r.ok&&['database','stateless'].includes(sessionState.store)&&Array.isArray(sessionState.sessions),'Sessão autenticada consulta dispositivos ativos');if(sessionState.store==='database')assert(typeof sessionState.current_session_id==='string'&&sessionState.sessions.some(session=>session.id===sessionState.current_session_id),'Sessão atual aparece no controle de dispositivos');
     r=await request('/api/admin/security',{headers:authHeaders});const securityState=await bodyJson(r);assert(r.ok&&['database','stateless'].includes(securityState.store)&&Array.isArray(securityState.devices)&&Array.isArray(securityState.events),'Sessão autenticada acessa central de segurança');
     r=await request('/api/admin/operations?summary=1',{headers:authHeaders});const operationsState=await bodyJson(r);assert(r.ok&&operationsState.schema&&operationsState.integrity&&operationsState.audit_integrity&&operationsState.storage&&operationsState.release&&operationsState.incident_summary,'Sessão autenticada acessa central operacional');
     r=await request('/api/admin/restore',{headers:authHeaders});const restoreState=await bodyJson(r);assert(r.ok&&Array.isArray(restoreState.snapshots),'Sessão autenticada acessa snapshots de recuperação');
-    r=await request('/api/admin/logout',{method:'POST',headers:sameOriginHeaders(authHeaders)});const logout=await bodyJson(r);const clearedCookie=cookieFrom(r);assert(r.ok&&logout.ok===true,'Logout administrativo funciona');assert(clearedCookie==='catalog_admin_session=','Logout expira o cookie administrativo');
-    r=await request('/admin',{headers:{cookie:clearedCookie}});const loggedOutBody=[302,303,307,308].includes(r.status)?'':await r.text();const redirectedToLogin=[302,303,307,308].includes(r.status)||(r.status===200&&/admin\/login/i.test(loggedOutBody)&&/(http-equiv=[\"']refresh|NEXT_REDIRECT|redirect)/i.test(loggedOutBody));assert(redirectedToLogin,'Navegador sem cookie ativo volta a exigir login',`HTTP ${r.status}`);
+    r=await request('/api/admin/logout',{method:'POST',headers:sameOriginHeaders(authHeaders)});const logout=await bodyJson(r);const clearedSession=setCookieByName(r,'catalog_admin_session');assert(r.ok&&logout.ok===true,'Logout administrativo funciona');assert(Boolean(clearedSession)&&clearedSession.value===''&&clearedSession.attributes.get('max-age')==='0','Logout expira o cookie administrativo');applySetCookies(jar,r);
+    r=await request('/admin',{headers:{cookie:cookieHeader(jar)}});const loggedOutBody=[302,303,307,308].includes(r.status)?'':await r.text();const redirectedToLogin=[302,303,307,308].includes(r.status)||(r.status===200&&/admin\/login/i.test(loggedOutBody)&&/(http-equiv=[\"']refresh|NEXT_REDIRECT|redirect)/i.test(loggedOutBody));assert(redirectedToLogin,'Navegador sem cookie ativo volta a exigir login',`HTTP ${r.status}`);
   }else console.warn('Aviso: E2E_ADMIN_PASSWORD ausente; fluxo positivo de login foi ignorado.');
 }catch(error){console.error('Falha inesperada no E2E HTTP:',error instanceof Error?error.message:String(error));failures++;}
 
