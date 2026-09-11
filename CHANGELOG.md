@@ -1,4 +1,4 @@
-### Hotfix CI V6.50 — E2E Admin Fail-Closed (2026-09-10)
+### Manutenção V6.50 — Hotfix CI E2E Admin Fail-Closed (2026-09-10)
 - o rate limit administrativo continua fail-closed em produção real, mas o E2E stateless pode usar bucket local somente quando `GITHUB_ACTIONS=true` e `MARQUES_CI_STATELESS_AUTH=1`;
 - o contrato HTTP passa a impedir que esse bypass de teste seja ampliado para ambientes fora do GitHub Actions;
 - o E2E de logout aceita tanto redirect HTTP quanto redirect de streaming do App Router, mantendo a exigência de retorno ao login;
