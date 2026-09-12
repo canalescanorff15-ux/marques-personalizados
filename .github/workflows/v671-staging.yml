@@ -28,7 +28,7 @@ jobs:
           node-version: '22.23.2'
           cache: npm
 
-      - name: Reconstruct verified V6.71 patch
+      - name: Reconstruct canonical V6.71 patch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -47,16 +47,16 @@ jobs:
 
           parts, mids, mid3, split7, part8 = {}, {}, {}, {}, {}
           repair = None
+          patterns = [
+              (r'^PART-(0[1-6])\n([A-Za-z0-9+/=\s]+)$', parts),
+              (r'^MID-(01|02|0[4-9])\n([A-Za-z0-9+/=\s]+)$', mids),
+              (r'^MID-03(A1|A2|B)\n([A-Za-z0-9+/=\s]+)$', mid3),
+              (r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', split7),
+              (r'^PART-08([AB])\n([A-Za-z0-9+/=\s]+)$', part8),
+          ]
 
           for comment in comments:
               body = str(comment.get('body') or '').strip()
-              patterns = [
-                  (r'^PART-(0[1-6])\n([A-Za-z0-9+/=\s]+)$', parts),
-                  (r'^MID-(01|02|0[4-9])\n([A-Za-z0-9+/=\s]+)$', mids),
-                  (r'^MID-03(A1|A2|B)\n([A-Za-z0-9+/=\s]+)$', mid3),
-                  (r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', split7),
-                  (r'^PART-08([AB])\n([A-Za-z0-9+/=\s]+)$', part8),
-              ]
               matched = False
               for pattern, target in patterns:
                   m = re.match(pattern, body)
@@ -73,7 +73,7 @@ jobs:
               m = re.match(r'^FIX-MID-03A1-06\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   if repair is not None:
-                      raise SystemExit('FIX-MID-03A1-06 duplicado')
+                      raise SystemExit('reparo duplicado')
                   repair = ''.join(m.group(1).split())
 
           if set(parts) != {f'{n:02d}' for n in range(1, 7)}:
@@ -81,97 +81,43 @@ jobs:
           if set(mids) != {'01','02','04','05','06','07','08','09'}:
               raise SystemExit(f'MIDs inválidos: {sorted(mids)}')
           if set(mid3) != {'A1','A2','B'}:
-              raise SystemExit(f'MID-03 subpartes inválidas: {sorted(mid3)}')
-          if set(split7) != {'A','B'}:
-              raise SystemExit(f'PART-07 subpartes inválidas: {sorted(split7)}')
-          if set(part8) != {'A','B'}:
-              raise SystemExit(f'PART-08 subpartes inválidas: {sorted(part8)}')
+              raise SystemExit(f'MID-03 inválido: {sorted(mid3)}')
+          if set(split7) != {'A','B'} or set(part8) != {'A','B'}:
+              raise SystemExit('partes finais incompletas')
           if repair is None or len(repair) != 500:
-              raise SystemExit(f'reparo inválido: {0 if repair is None else len(repair)}')
+              raise SystemExit('reparo ausente ou inválido')
 
-          repair_sha = hashlib.sha256(repair.encode()).hexdigest()
-          expected_repair_sha = '5aee85541736ddf3e63adfbce2e35f5e1384801e9b35df348d523a5d3d2d834d'
-          if repair_sha != expected_repair_sha:
-              raise SystemExit(f'reparo divergente: {repair_sha}')
+          if hashlib.sha256(repair.encode()).hexdigest() != '5aee85541736ddf3e63adfbce2e35f5e1384801e9b35df348d523a5d3d2d834d':
+              raise SystemExit('reparo não é canônico')
+          if len(mid3['A1']) != 3000:
+              raise SystemExit('MID-03A1 com tamanho inválido')
 
-          if len(mid3['A1']) != 3000 or len(mid3['A2']) != 3000 or len(mid3['B']) != 6000:
-              raise SystemExit('comprimento MID-03 inválido')
           mid3['A1'] = mid3['A1'][:2500] + repair
-          mid03 = mid3['A1'] + mid3['A2'] + mid3['B']
-          if hashlib.sha256(mid03.encode()).hexdigest() != '14f70fe79374d14b511e4bc42dc6167492a76e468ce55faaea055e3311b0d44b':
-              raise SystemExit('MID-03 reconstituído divergente')
-
-          p08 = part8['A'] + part8['B']
-          if len(part8['A']) != 10000 or len(part8['B']) != 10234:
-              raise SystemExit('PART-08 comprimento inválido')
-          if hashlib.sha256(p08.encode()).hexdigest() != '88336dadebc308ec508e6e62b3d6e7d9ac581cc2018027e084007e2e43e43973':
-              raise SystemExit('PART-08 reconstituído divergente')
-
-          expected_hashes = {
-              'PART-01':'e809a626c3d0169a28e9268c7e081e365f1abb2ee3be2e18e3f48f9f27e78733',
-              'PART-02':'2a446c621a374156d59776460c293c53b9f730093193edb2c474e951137085df',
-              'PART-03':'6dc9291d40c42efe9a093224697494601ec1f441d0bae5712b863b116d3991c7',
-              'PART-04':'6ac74c854a74a799da3829174ec1b03092ca918fc2adf0c753087e1e47aac00c',
-              'PART-05':'94a31aaf07dd70d7b1cdaf7467a870777b8b7faab8385f9f947d55979472d5f4',
-              'PART-06':'b73ebb8c103185aea21f00e0372ad114adb892517e546b05cc2f2b1cfe14d47a',
-              'MID-01':'72eacc76bf870fbc9f29c55dc0453bb08540382b5524c3d7201d7d5a30dc3426',
-              'MID-02':'46ea768153d93e6ca408dccd037ce3047623ffad09cacdae3cfdfce653316df0',
-              'MID-04':'db140f7ddceb3144992dce37b50135d7c567a14d3d7168eb7979b4355a10d48b',
-              'MID-05':'7326a9d542a3b059596eabb6227c27b3a1c5b2561078100fb30b979f16ce2093',
-              'MID-06':'7c38c3bf924f124c965eb29b97d0208369a125c094cf4ae17d14eeb4332be2cf',
-              'MID-07':'7bc26c5cfed1227b3b1eb70ca7880e52ecb5690d815caf6b5863bfd5d7464f60',
-              'MID-08':'d9400ce6a3a03d1eb846e18e079de24786ab05f85ff9ab42252e6d1b89132076',
-              'MID-09':'947617cd3a4dc3aa5aa6ea2be537db7d30d1c65e2b5b09997e99212f2927caca',
-              'PART-07A':'896b32b26828bce08168f43c0ddd1730fa803f22c9301f98747c5b5c765c9473',
-              'PART-07B':'3e168675dacdac86efdc74bc4ee5222ab1bcf7cce3f73e2a5987d3985ba49ab8',
-          }
-          for n in range(1,7):
-              key = f'{n:02d}'
-              value = parts[key]
-              if len(value) != 12000:
-                  raise SystemExit(f'PART-{key} tamanho divergente: {len(value)}')
-              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'PART-{key}']:
-                  raise SystemExit(f'PART-{key} divergente')
-
-          expected_mid_lengths = {'01':12000,'02':12000,'04':12000,'05':12000,'06':12000,'07':12000,'08':3702,'09':6387}
-          for key, expected_len in expected_mid_lengths.items():
-              value = mids[key]
-              if len(value) != expected_len:
-                  raise SystemExit(f'MID-{key} tamanho divergente: {len(value)}')
-              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'MID-{key}']:
-                  raise SystemExit(f'MID-{key} divergente')
-
-          for key, expected_len in {'A':13308,'B':13309}.items():
-              value = split7[key]
-              if len(value) != expected_len:
-                  raise SystemExit(f'PART-07{key} tamanho divergente: {len(value)}')
-              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'PART-07{key}']:
-                  raise SystemExit(f'PART-07{key} divergente')
-
           encoded = (
               ''.join(parts[f'{n:02d}'] for n in range(1,7))
-              + mids['01'] + mids['02'] + mid03
+              + mids['01'] + mids['02']
+              + mid3['A1'] + mid3['A2'] + mid3['B']
               + mids['04'] + mids['05'] + mids['06'] + mids['07'] + mids['08']
-              + split7['A'] + split7['B'] + mids['09'] + p08
+              + split7['A'] + split7['B']
+              + mids['09']
+              + part8['A'] + part8['B']
           )
           if len(encoded) != 212940:
               raise SystemExit(f'base64 total inválido: {len(encoded)}')
+
           raw = base64.b64decode(encoded, validate=True)
-          if len(raw) != 159704:
-              raise SystemExit(f'payload inválido: {len(raw)} bytes')
           digest = hashlib.sha256(raw).hexdigest()
-          expected_payload = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
+          expected = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
           print(f'V6.71 payload: {len(raw)} bytes / sha256={digest}')
-          if digest != expected_payload:
-              raise SystemExit(f'SHA-256 final divergente: {digest}')
-          open('/tmp/v671-patch.tar.xz','wb').write(raw)
+          if len(raw) != 159704 or digest != expected:
+              raise SystemExit('payload V6.71 divergente')
+          open('/tmp/v671-patch.tar.xz', 'wb').write(raw)
           PY
 
           rm -rf /tmp/v671-patch
           mkdir -p /tmp/v671-patch
           tar -xJf /tmp/v671-patch.tar.xz -C /tmp/v671-patch
           rsync -a /tmp/v671-patch/ ./
-          rm -f .github/workflows/v671-staging.yml
 
       - name: Install locked dependencies
         run: npm ci --ignore-scripts --no-fund --no-audit
@@ -184,6 +130,9 @@ jobs:
 
       - name: Commit validated V6.71 staging tree
         run: |
+          # The GitHub Actions token cannot update workflow files. Preserve them here;
+          # they are applied directly with the authorized connector after validation.
+          git restore --source=HEAD -- .github/workflows/ci.yml .github/workflows/v671-staging.yml tsconfig.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
