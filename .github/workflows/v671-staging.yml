@@ -46,74 +46,92 @@ jobs:
           with urllib.request.urlopen(req) as response:
               comments = json.load(response)
 
-          parts = {}
-          mids = {}
-          split7 = {}
+          parts, mids, split7 = {}, {}, {}
           for comment in comments:
               body = str(comment.get('body') or '').strip()
-
               m = re.match(r'^PART-(0[1-6]|08)\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
-                  if key in parts:
-                      raise SystemExit(f'parte duplicada: {key}')
+                  if key in parts: raise SystemExit(f'parte duplicada: {key}')
                   parts[key] = ''.join(m.group(2).split())
                   continue
-
               m = re.match(r'^MID-(0[1-9])\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
-                  if key in mids:
-                      raise SystemExit(f'mid duplicado: {key}')
+                  if key in mids: raise SystemExit(f'mid duplicado: {key}')
                   mids[key] = ''.join(m.group(2).split())
                   continue
-
               m = re.match(r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
-                  if key in split7:
-                      raise SystemExit(f'parte 07{key} duplicada')
+                  if key in split7: raise SystemExit(f'parte 07{key} duplicada')
                   split7[key] = ''.join(m.group(2).split())
 
           expected_parts = {'01', '02', '03', '04', '05', '06', '08'}
           expected_mids = {f'{n:02d}' for n in range(1, 10)}
           if set(parts) != expected_parts or set(mids) != expected_mids or set(split7) != {'A', 'B'}:
-              raise SystemExit(
-                  f'partes inválidas: padrão={sorted(parts)}, mids={sorted(mids)}, split7={sorted(split7)}'
-              )
-
-          lengths = {k: len(v) for k, v in sorted(parts.items())}
-          mid_lengths = {k: len(v) for k, v in sorted(mids.items())}
-          split_lengths = {k: len(v) for k, v in sorted(split7.items())}
-          print(f'comprimentos padrão={lengths}; mids={mid_lengths}; split7={split_lengths}')
+              raise SystemExit(f'partes inválidas: padrão={sorted(parts)}, mids={sorted(mids)}, split7={sorted(split7)}')
 
           expected_lengths = {'01':12000,'02':12000,'03':12000,'04':12000,'05':12000,'06':12000,'08':20234}
-          expected_mid = {'01':12000,'02':12000,'03':12000,'04':12000,'05':12000,'06':12000,'07':12000,'08':3702,'09':6387}
-          expected_split = {'A':13308,'B':13309}
-          if lengths != expected_lengths or mid_lengths != expected_mid or split_lengths != expected_split:
-              raise SystemExit(
-                  f'comprimentos inválidos; esperado padrão={expected_lengths}, mids={expected_mid}, split7={expected_split}'
-              )
+          expected_mid_lengths = {'01':12000,'02':12000,'03':12000,'04':12000,'05':12000,'06':12000,'07':12000,'08':3702,'09':6387}
+          expected_split_lengths = {'A':13308,'B':13309}
+          lengths = {k: len(v) for k,v in sorted(parts.items())}
+          mid_lengths = {k: len(v) for k,v in sorted(mids.items())}
+          split_lengths = {k: len(v) for k,v in sorted(split7.items())}
+          print(f'comprimentos padrão={lengths}; mids={mid_lengths}; split7={split_lengths}')
+          if lengths != expected_lengths or mid_lengths != expected_mid_lengths or split_lengths != expected_split_lengths:
+              raise SystemExit('comprimentos de blocos divergentes')
+
+          expected_part_hashes = {
+              '01':'e809a626c3d0169a28e9268c7e081e365f1abb2ee3be2e18e3f48f9f27e78733',
+              '02':'2a446c621a374156d59776460c293c53b9f730093193edb2c474e951137085df',
+              '03':'6dc9291d40c42efe9a093224697494601ec1f441d0bae5712b863b116d3991c7',
+              '04':'6ac74c854a74a799da3829174ec1b03092ca918fc2adf0c753087e1e47aac00c',
+              '05':'94a31aaf07dd70d7b1cdaf7467a870777b8b7faab8385f9f947d55979472d5f4',
+              '06':'b73ebb8c103185aea21f00e0372ad114adb892517e546b05cc2f2b1cfe14d47a',
+              '08':'88336dadebc308ec508e6e62b3d6e7d9ac581cc2018027e084007e2e43e43973',
+          }
+          expected_mid_hashes = {
+              '01':'72eacc76bf870fbc9f29c55dc0453bb08540382b5524c3d7201d7d5a30dc3426',
+              '02':'46ea768153d93e6ca408dccd037ce3047623ffad09cacdae3cfdfce653316df0',
+              '03':'14f70fe79374d14b511e4bc42dc6167492a76e468ce55faaea055e3311b0d44b',
+              '04':'db140f7ddceb3144992dce37b50135d7c567a14d3d7168eb7979b4355a10d48b',
+              '05':'7326a9d542a3b059596eabb6227c27b3a1c5b2561078100fb30b979f16ce2093',
+              '06':'7c38c3bf924f124c965eb29b97d0208369a125c094cf4ae17d14eeb4332be2cf',
+              '07':'7bc26c5cfed1227b3b1eb70ca7880e52ecb5690d815caf6b5863bfd5d7464f60',
+              '08':'d9400ce6a3a03d1eb846e18e079de24786ab05f85ff9ab42252e6d1b89132076',
+              '09':'947617cd3a4dc3aa5aa6ea2be537db7d30d1c65e2b5b09997e99212f2927caca',
+          }
+          expected_split_hashes = {
+              'A':'896b32b26828bce08168f43c0ddd1730fa803f22c9301f98747c5b5c765c9473',
+              'B':'3e168675dacdac86efdc74bc4ee5222ab1bcf7cce3f73e2a5987d3985ba49ab8',
+          }
+          def sha(s): return hashlib.sha256(s.encode()).hexdigest()
+          mismatches = []
+          for k,v in parts.items():
+              actual = sha(v); print(f'PART-{k} sha256={actual}')
+              if actual != expected_part_hashes[k]: mismatches.append(f'PART-{k}')
+          for k,v in mids.items():
+              actual = sha(v); print(f'MID-{k} sha256={actual}')
+              if actual != expected_mid_hashes[k]: mismatches.append(f'MID-{k}')
+          for k,v in split7.items():
+              actual = sha(v); print(f'PART-07{k} sha256={actual}')
+              if actual != expected_split_hashes[k]: mismatches.append(f'PART-07{k}')
+          if mismatches:
+              raise SystemExit('blocos com conteúdo divergente: ' + ', '.join(mismatches))
 
           encoded = (
               ''.join(parts[f'{n:02d}'] for n in range(1, 7))
               + ''.join(mids[f'{n:02d}'] for n in range(1, 9))
-              + split7['A'] + split7['B']
-              + mids['09']
-              + parts['08']
+              + split7['A'] + split7['B'] + mids['09'] + parts['08']
           )
-          if len(encoded) != 212940:
-              raise SystemExit(f'base64 total inválido: {len(encoded)} != 212940')
-
+          if len(encoded) != 212940: raise SystemExit(f'base64 total inválido: {len(encoded)}')
           raw = base64.b64decode(encoded, validate=True)
-          if len(raw) != 159704:
-              raise SystemExit(f'payload inválido: {len(raw)} bytes != 159704')
-
+          if len(raw) != 159704: raise SystemExit(f'payload inválido: {len(raw)} bytes')
           digest = hashlib.sha256(raw).hexdigest()
           expected_sha = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
           print(f'payload: {len(raw)} bytes / sha256={digest}')
-          if digest != expected_sha:
-              raise SystemExit(f'SHA-256 divergente: esperado {expected_sha}, recebido {digest}')
+          if digest != expected_sha: raise SystemExit(f'SHA-256 divergente: {digest}')
           open('/tmp/v671-patch.tar.xz', 'wb').write(raw)
           PY
 
@@ -121,8 +139,6 @@ jobs:
           mkdir -p /tmp/v671-patch
           tar -xJf /tmp/v671-patch.tar.xz -C /tmp/v671-patch
           rsync -a /tmp/v671-patch/ ./
-
-          # O workflow temporário não integra a release final.
           rm -f .github/workflows/v671-staging.yml
 
       - name: Install locked dependencies
