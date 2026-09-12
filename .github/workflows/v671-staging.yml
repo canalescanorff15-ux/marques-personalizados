@@ -13,18 +13,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  diagnose-transport:
+  validate-and-stage:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Diagnose opaque payload transport
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22.23.2'
+          cache: npm
+
+      - name: Reconstruct verified V6.71 patch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python <<'PY'
-          import hashlib, json, os, re, urllib.request
+          import base64, hashlib, json, os, re, urllib.request
 
           repo = os.environ['GITHUB_REPOSITORY']
           url = f'https://api.github.com/repos/{repo}/issues/11/comments?per_page=100'
@@ -36,66 +45,148 @@ jobs:
           with urllib.request.urlopen(req) as response:
               comments = json.load(response)
 
-          wanted = {
-              'MID-03A1': r'^MID-03A1\n([A-Za-z0-9+/=\s]+)$',
-              'MID-03A2': r'^MID-03A2\n([A-Za-z0-9+/=\s]+)$',
-              'MID-03B': r'^MID-03B\n([A-Za-z0-9+/=\s]+)$',
-              'PART-08A': r'^PART-08A\n([A-Za-z0-9+/=\s]+)$',
-              'PART-08B': r'^PART-08B\n([A-Za-z0-9+/=\s]+)$',
-          }
-          values = {}
+          parts, mids, mid3, split7, part8 = {}, {}, {}, {}, {}
+          repair = None
+
           for comment in comments:
               body = str(comment.get('body') or '').strip()
-              for name, pattern in wanted.items():
+              patterns = [
+                  (r'^PART-(0[1-6])\n([A-Za-z0-9+/=\s]+)$', parts),
+                  (r'^MID-(01|02|0[4-9])\n([A-Za-z0-9+/=\s]+)$', mids),
+                  (r'^MID-03(A1|A2|B)\n([A-Za-z0-9+/=\s]+)$', mid3),
+                  (r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', split7),
+                  (r'^PART-08([AB])\n([A-Za-z0-9+/=\s]+)$', part8),
+              ]
+              matched = False
+              for pattern, target in patterns:
                   m = re.match(pattern, body)
-                  if m:
-                      if name in values:
-                          raise SystemExit(f'bloco duplicado: {name}')
-                      values[name] = ''.join(m.group(1).split())
-          if set(values) != set(wanted):
-              raise SystemExit(f'blocos ausentes: {sorted(set(wanted)-set(values))}')
-
-          expected = {
-              'MID-03A1': [
-                  'eac87f6d08868885026667075269f58eb171a865e5f0c11e516d6983f1626924',
-                  'd930eca50aec287c257e7131b3678c9911ccbc5d8c0e7b92a80837514bd0adc1',
-                  'bb157500bb389738cfa0f5af81474540373a6a55c7d76303a3cd4381669988f8',
-                  '3983c0e2aa385814a2817cd623ee898a9e886cf456ee862fc4060488e3b39fb0',
-                  'f4b121e3d966f0016d3862364a155ae866874e4020c173dc59aa5210bbc8fbc0',
-                  '5aee85541736ddf3e63adfbce2e35f5e1384801e9b35df348d523a5d3d2d834d',
-              ],
-              'MID-03A2': [
-                  '52750b218a4d53968a732492355a1b26c801b69f12a6ded5b2396093cb348cca',
-                  '2229c0ff90b7803fdb8d283ec5b206824696086e0e3afa9f3ce7782b6537722f',
-                  '69b3d160b19e28c3c35ca098593f7262383a90d1a358b1d050141a9cf6ef88c5',
-                  'a8f99ca5ed7ad2dac89ff2c1d05357e969f94c191f6d793e9545b628d1388b66',
-                  '7c8511e51a77953d2eb11736a6c941656241d25ca65c16973afe78e1521ac58f',
-                  '156723d1e9844f2c945f0538419c22008ad67faf988bd7f5b579753dabd51e8f',
-              ],
-              'MID-03B': [
-                  '1712201283b16a0fca74696d648a3a6b81078291b093d07e7ee581cb79966ffc','fed187eae888717b9a1aa5378ae9e2d56107734bddbb5ffa3b7df052ed7dd0b2','35f4ab7eb5ff5889a168ab1266042449981835be068073ff3bbfbfb210eb4201','c872a931296f310cd811ad598f8a08a92c0b7bfcbf09e87c9042624a10361171','675a9627f9fa70896342c448997c418aa52fe5201837fa31b2cc570d05c0ba5c','9526a34788ab7772b08047584c3474c715deda295e30cccf7106c3a9b47a7e9a','c9b98f39a52bb06ac81e2e1617eacc1738e2497b7adbd413739c6b4b200f5b6a','97bcb5a4d0bdd07d1f234e9e57fafcf4c123a97e4eb7b48f91812088d562f52c','30d3b721be0c461b721b86063b651d84d74c466e55083ba706bd7434f47b1e89','e2c2862e58e81369390eb5ebfa4d2d7077df7f19dc0953d4fda4481d393f42f0','d8d92bbc61f46a07020ce260de1a353754c41c86b5b6ca90dcde4250a253676d','72ba1d93ce126fde38b27e9f22cfeb312edc70c8e3f5398d1133076e40abd69f'
-              ],
-              'PART-08A': [
-                  '516b0e0568493b5778dd836018dc13dd964f08ad973e8ae39b4e4702df9555ad','7615c0e8f3d1760d23337c9222efe9f2f19be8344159d7d312609b1b53f22c48','42f4343a1e3dac495fb47050eccb653d275dab9ef7858f6f7d9690d0b448cf5c','bab4238e242eb412456891e9a3fc303258e3b5fd04cb0abe74ae5853c2fd2138','bd57580262e1d1e4ae0df1fedb2ba9975285ce6b71b038fb1a92e47b359c42f3','8d466868c53dfae944ae8ad6c567c5009796eda23a47a3d2a74440ba20c58dba','efd43877543029dde727de401d84ea5f372f7fecd0166e0a62501310173c709d','362916e301bac062c00cc8e073d9f5ef0141ce92bfee9dad80773c1cfb3c9cb5','5b0f31760a459a07bb870de0e8e8d601b73cf1d6fee369a79ef4880ea079ea58','5daa282d0914800350a91b7de65833e76ed99e72ecf8095b391ea18667a6e780','5962d369023b03bbcb5d730388be7c474e97538c237da0bae1aa5eb12678c6ac','b20dfa9eecee81fd1090dbeaa6f8a553e0791f20ecf145b56d512780dd37e2dc','1e38c8de3e867a8350af62bbaddcfcda19529642ed8ebefc7d465d264ac55be2','2bc5e6c7054c011ab27e8c6ed1e62c653bbff4fa242d3bc1fc810a7e06770fcc','60cc496d64d3cfd9658ad1830fcf8f5b33e86ae1b96334a514669ae484356e2c','5cc2e603233f52ed7137b078ad144e85043e498509d393b195d996cfe1258d48','c3414d0db210b1d65ef46393706e02bfca889c8abf118319e55d0b00fdea85bc','f0aeef858701f8b629853ca8fd459fccfd85a1508ef8e9d60d95163cdcaa40e0','200a40c3b81b87616cc591581fa45d32315c8d4feb7d662740ec5836e4de49c8','c490ac598aec3eafa960d64f0bb2f58d8e124095f0e51e5dd9ae93247fd22958'
-              ],
-              'PART-08B': [
-                  '7f132b8bda4da18d9280802e201a331d238c910776c4b017a2b2c37063c1413f','5885eccbc92ef4f33d977adb7f46078a112402fd83dd7e6cff65283873fc7917','5dfa1d28cf010f79b0834302a0f7dcbb3106fe41ebf79a7f9c938f8ff4d6ded7','181b46cd70fde2ecb78c849575dcc5a7ab5da00bb4e8b219f51ae602bfbb5dca','78d6847651ddd553c98b392de0390c2b83b909594d14dc825ecf456915a57d96','5105756ddcb5d9a1e5c3d591d25d2d1a5c60aa3ade4d750a297d457cd3ac214e','c8e6e54f65bceffbd75e410263dd5d41fedecdd2b42902ebd8f5573713b8f2a1','f244b3cd56d3cfab55bb17cbf1df01b1c56edba3a9ebbd82be734d006dc1e125','f7fd2a91c1a4de64a222d163b7f0182b00cd96a4014eaf00fcb425685ed66c40','4c1bbecf1863ed4b0fca122ec5ca284e7e63417b375716e48b42b35e9772cf40','45c1264f4fb259401bd90a184acf6e54e2ae91dc3b853e0bcb09581a93a743b7','c52cea43533546d3271ac0029249cb5150902e2c6b71794afb05f42aa54bf43e','62f0a75042553baa3eae7e50a194c555ec7e28ca9ccecd3a18e9efc5f973c048','b958be3d6b5142ca4e6213d63b04accf8d2b588b6be3f6c7baebe93cb100c9ee','fb546719d5640271c7952e2091f1085db65f775eb63765e1aa8f0e0f20f1da8d','57458979b40b85eff6445e9605e972411346cafc6d89039811eef3366cb47275','82665d0c6840f14ce0fc550ea2b68ff98a9fd04b0ad97cab6c805d40a1b31cac','a85ea87bea0c0fc252dfefc55399a1534b3192d51afa511937031ef51ac1fa55','152b4355760d92becab71e70c2d55863fd9b8ef7700015af8f33dd540fd9142d','8994c343ef58cd3e84b5c5f609a3e2e5ab13e1d95a2727155015d555d916f1d7','253895498c4a63d1b2dca52d39a4e281374e81e37b5f2f794cc0e297b8c50e65'
-              ],
-          }
-
-          mismatches = []
-          for name, exp in expected.items():
-              value = values[name]
-              actual_blocks = [hashlib.sha256(value[i:i+500].encode()).hexdigest() for i in range(0, len(value), 500)]
-              print(f'{name}: len={len(value)} blocks={len(actual_blocks)}')
-              if len(actual_blocks) != len(exp):
-                  mismatches.append(f'{name}:block-count {len(actual_blocks)}!={len(exp)}')
+                  if not m:
+                      continue
+                  key = m.group(1)
+                  if key in target:
+                      raise SystemExit(f'bloco duplicado: {key}')
+                  target[key] = ''.join(m.group(2).split())
+                  matched = True
+                  break
+              if matched:
                   continue
-              for idx, (a, e) in enumerate(zip(actual_blocks, exp), start=1):
-                  if a != e:
-                      print(f'MISMATCH {name} block={idx:02d} actual={a} expected={e}')
-                      mismatches.append(f'{name}:{idx:02d}')
-          if mismatches:
-              raise SystemExit('mismatches=' + ','.join(mismatches))
-          print('All suspicious transport chunks match canonical source.')
+              m = re.match(r'^FIX-MID-03A1-06\n([A-Za-z0-9+/=\s]+)$', body)
+              if m:
+                  if repair is not None:
+                      raise SystemExit('FIX-MID-03A1-06 duplicado')
+                  repair = ''.join(m.group(1).split())
+
+          if set(parts) != {f'{n:02d}' for n in range(1, 7)}:
+              raise SystemExit(f'PARTs inválidos: {sorted(parts)}')
+          if set(mids) != {'01','02','04','05','06','07','08','09'}:
+              raise SystemExit(f'MIDs inválidos: {sorted(mids)}')
+          if set(mid3) != {'A1','A2','B'}:
+              raise SystemExit(f'MID-03 subpartes inválidas: {sorted(mid3)}')
+          if set(split7) != {'A','B'}:
+              raise SystemExit(f'PART-07 subpartes inválidas: {sorted(split7)}')
+          if set(part8) != {'A','B'}:
+              raise SystemExit(f'PART-08 subpartes inválidas: {sorted(part8)}')
+          if repair is None or len(repair) != 500:
+              raise SystemExit(f'reparo inválido: {0 if repair is None else len(repair)}')
+
+          repair_sha = hashlib.sha256(repair.encode()).hexdigest()
+          expected_repair_sha = '5aee85541736ddf3e63adfbce2e35f5e1384801e9b35df348d523a5d3d2d834d'
+          if repair_sha != expected_repair_sha:
+              raise SystemExit(f'reparo divergente: {repair_sha}')
+
+          if len(mid3['A1']) != 3000 or len(mid3['A2']) != 3000 or len(mid3['B']) != 6000:
+              raise SystemExit('comprimento MID-03 inválido')
+          mid3['A1'] = mid3['A1'][:2500] + repair
+          mid03 = mid3['A1'] + mid3['A2'] + mid3['B']
+          if hashlib.sha256(mid03.encode()).hexdigest() != '14f70fe79374d14b511e4bc42dc6167492a76e468ce55faaea055e3311b0d44b':
+              raise SystemExit('MID-03 reconstituído divergente')
+
+          p08 = part8['A'] + part8['B']
+          if len(part8['A']) != 10000 or len(part8['B']) != 10234:
+              raise SystemExit('PART-08 comprimento inválido')
+          if hashlib.sha256(p08.encode()).hexdigest() != '88336dadebc308ec508e6e62b3d6e7d9ac581cc2018027e084007e2e43e43973':
+              raise SystemExit('PART-08 reconstituído divergente')
+
+          expected_hashes = {
+              'PART-01':'e809a626c3d0169a28e9268c7e081e365f1abb2ee3be2e18e3f48f9f27e78733',
+              'PART-02':'2a446c621a374156d59776460c293c53b9f730093193edb2c474e951137085df',
+              'PART-03':'6dc9291d40c42efe9a093224697494601ec1f441d0bae5712b863b116d3991c7',
+              'PART-04':'6ac74c854a74a799da3829174ec1b03092ca918fc2adf0c753087e1e47aac00c',
+              'PART-05':'94a31aaf07dd70d7b1cdaf7467a870777b8b7faab8385f9f947d55979472d5f4',
+              'PART-06':'b73ebb8c103185aea21f00e0372ad114adb892517e546b05cc2f2b1cfe14d47a',
+              'MID-01':'72eacc76bf870fbc9f29c55dc0453bb08540382b5524c3d7201d7d5a30dc3426',
+              'MID-02':'46ea768153d93e6ca408dccd037ce3047623ffad09cacdae3cfdfce653316df0',
+              'MID-04':'db140f7ddceb3144992dce37b50135d7c567a14d3d7168eb7979b4355a10d48b',
+              'MID-05':'7326a9d542a3b059596eabb6227c27b3a1c5b2561078100fb30b979f16ce2093',
+              'MID-06':'7c38c3bf924f124c965eb29b97d0208369a125c094cf4ae17d14eeb4332be2cf',
+              'MID-07':'7bc26c5cfed1227b3b1eb70ca7880e52ecb5690d815caf6b5863bfd5d7464f60',
+              'MID-08':'d9400ce6a3a03d1eb846e18e079de24786ab05f85ff9ab42252e6d1b89132076',
+              'MID-09':'947617cd3a4dc3aa5aa6ea2be537db7d30d1c65e2b5b09997e99212f2927caca',
+              'PART-07A':'896b32b26828bce08168f43c0ddd1730fa803f22c9301f98747c5b5c765c9473',
+              'PART-07B':'3e168675dacdac86efdc74bc4ee5222ab1bcf7cce3f73e2a5987d3985ba49ab8',
+          }
+          for n in range(1,7):
+              key = f'{n:02d}'
+              value = parts[key]
+              if len(value) != 12000:
+                  raise SystemExit(f'PART-{key} tamanho divergente: {len(value)}')
+              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'PART-{key}']:
+                  raise SystemExit(f'PART-{key} divergente')
+
+          expected_mid_lengths = {'01':12000,'02':12000,'04':12000,'05':12000,'06':12000,'07':12000,'08':3702,'09':6387}
+          for key, expected_len in expected_mid_lengths.items():
+              value = mids[key]
+              if len(value) != expected_len:
+                  raise SystemExit(f'MID-{key} tamanho divergente: {len(value)}')
+              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'MID-{key}']:
+                  raise SystemExit(f'MID-{key} divergente')
+
+          for key, expected_len in {'A':13308,'B':13309}.items():
+              value = split7[key]
+              if len(value) != expected_len:
+                  raise SystemExit(f'PART-07{key} tamanho divergente: {len(value)}')
+              if hashlib.sha256(value.encode()).hexdigest() != expected_hashes[f'PART-07{key}']:
+                  raise SystemExit(f'PART-07{key} divergente')
+
+          encoded = (
+              ''.join(parts[f'{n:02d}'] for n in range(1,7))
+              + mids['01'] + mids['02'] + mid03
+              + mids['04'] + mids['05'] + mids['06'] + mids['07'] + mids['08']
+              + split7['A'] + split7['B'] + mids['09'] + p08
+          )
+          if len(encoded) != 212940:
+              raise SystemExit(f'base64 total inválido: {len(encoded)}')
+          raw = base64.b64decode(encoded, validate=True)
+          if len(raw) != 159704:
+              raise SystemExit(f'payload inválido: {len(raw)} bytes')
+          digest = hashlib.sha256(raw).hexdigest()
+          expected_payload = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
+          print(f'V6.71 payload: {len(raw)} bytes / sha256={digest}')
+          if digest != expected_payload:
+              raise SystemExit(f'SHA-256 final divergente: {digest}')
+          open('/tmp/v671-patch.tar.xz','wb').write(raw)
           PY
+
+          rm -rf /tmp/v671-patch
+          mkdir -p /tmp/v671-patch
+          tar -xJf /tmp/v671-patch.tar.xz -C /tmp/v671-patch
+          rsync -a /tmp/v671-patch/ ./
+          rm -f .github/workflows/v671-staging.yml
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts --no-fund --no-audit
+
+      - name: Netlify contract
+        run: npm run check:netlify
+
+      - name: Validate complete V6.71
+        run: npm run verify
+
+      - name: Commit validated V6.71 staging tree
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && { echo 'Nenhuma alteração para promover.'; exit 1; }
+          git commit -m 'test: validated V6.71 staging tree'
+          git push origin HEAD:v6-71-sync-staging
