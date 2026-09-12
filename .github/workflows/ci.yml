@@ -122,6 +122,18 @@ jobs:
         run: npm run check:critical-audit
       - name: Guided kit builder contract
         run: npm run check:kit-builder
+      - name: Merlin branding contract
+        run: npm run check:branding
+      - name: Merlin commercial UX contract
+        run: npm run check:merlin-commercial
+      - name: Inspiration filter contract
+        run: npm run check:inspiration-filters
+      - name: Inspiration detail contract
+        run: npm run check:inspiration-detail
+      - name: Inspiration quote contract
+        run: npm run check:inspiration-quote
+      - name: Inspiration compare contract
+        run: npm run check:inspiration-compare
       - name: Public flow contract
         run: npm run check:public-flow
       - name: TypeScript

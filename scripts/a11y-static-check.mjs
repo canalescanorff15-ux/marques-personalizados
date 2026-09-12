@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
-const ts=require('typescript');
+const loadedTs=require('typescript');
+const ts=(loadedTs&&typeof loadedTs.createSourceFile==='function')?loadedTs:(loadedTs?.default&&typeof loadedTs.default.createSourceFile==='function'?loadedTs.default:loadedTs);
 
 const root=process.cwd();
 const errors=[];
@@ -15,7 +16,10 @@ const tagName=n=>ts.isIdentifier(n)?n.text:n.getText();
 const hasControlDescendant=node=>{let found=false;function visit(n){if(found)return;if(ts.isJsxElement(n)||ts.isJsxSelfClosingElement(n)){const open=ts.isJsxElement(n)?n.openingElement:n;const tag=tagName(open.tagName);if(['input','select','textarea'].includes(tag)){found=true;return;}}ts.forEachChild(n,visit);}ts.forEachChild(node,visit);return found;};
 for(const file of files){
   const text=fs.readFileSync(file,'utf8');
-  const sf=ts.createSourceFile(file,text,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
+  const scriptTarget=ts?.ScriptTarget?.Latest ?? ts?.ScriptTarget?.ESNext ?? 99;
+  const scriptKind=ts?.ScriptKind?.TSX ?? 4;
+  if(!ts||typeof ts.createSourceFile!=='function')throw new Error('TypeScript compiler API indisponível para o guard de acessibilidade');
+  const sf=ts.createSourceFile(file,text,scriptTarget,true,scriptKind);
   const rel=path.relative(root,file).replaceAll('\\','/');
   function report(node,msg){const lc=sf.getLineAndCharacterOfPosition(node.getStart(sf));errors.push(`${rel}:${lc.line+1}:${lc.character+1} ${msg}`);}
   function visit(node){

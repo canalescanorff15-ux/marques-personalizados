@@ -547,3 +547,8 @@ Validação dedicada:
 ```bash
 npm run check:inspiration-compare
 ```
+
+
+## V6.60.1 — CI hotfix
+
+Corrige compatibilidade do guard de acessibilidade com variações do TypeScript, elimina falso negativo do contrato do Monte seu Kit e endurece o Dependabot contra upgrades major automáticos de dependências centrais. Consulte `GITHUB-SUMMARY-V6.60.1.md`.
