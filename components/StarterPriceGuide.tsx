@@ -1,0 +1,11 @@
+import Link from 'next/link';
+import { ArrowUpRight, Calculator, MessageCircle, Sparkles } from 'lucide-react';
+import { formatCatalogMoney,starterCatalogProducts } from '@/lib/catalog-merchandising';
+
+const featuredSlugs=['topo-classico-personalizado','caixinha-milk-premium','kit-mini-festa','display-mesa-personalizado','topper-docinho-personalizado','flor-papel-3d'];
+export default function StarterPriceGuide({whatsapp}:{whatsapp?:string}){
+  const items=featuredSlugs.map(slug=>starterCatalogProducts.find(item=>item.slug===slug)).filter(Boolean) as typeof starterCatalogProducts;
+  const phone=(whatsapp||'').replace(/\D/g,'');
+  const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vi os preços iniciais no site da Merlin e gostaria de montar um orçamento personalizado.')}`:'';
+  return <section className="starter-price-guide" aria-labelledby="starter-price-title"><div className="container"><div className="starter-price-head" data-reveal><div><div className="eyebrow">Transparência para começar</div><h2 id="starter-price-title">Preços para começar.<br/><em>Orçamento para personalizar.</em></h2></div><p>Os valores abaixo são pontos de partida. Quantidade, tema, camadas, acabamento e urgência definem o valor final do pedido.</p></div><div className="starter-price-grid">{items.map(item=><Link href={`/catalogo/${item.slug}`} className="starter-price-card" key={item.slug} data-reveal><small>{item.category}</small><strong>{item.name}</strong><div><span>A partir de</span><b>{formatCatalogMoney(item.price_cents)}</b></div><p>{item.min_quantity>1?`por unidade • mínimo ${item.min_quantity}`:'por peça'}</p><i>Ver detalhes <ArrowUpRight size={14}/></i></Link>)}</div><div className="starter-price-note"><Sparkles size={18}/><p><strong>Personalizado continua sendo personalizado.</strong> Estes preços servem para você ter uma referência real antes de pedir orçamento; o valor definitivo só é confirmado após briefing e quantidade.</p><div><Link className="btn btn-primary" href="/orcamento"><Calculator size={16}/> Meu orçamento</Link><Link className="btn" href="/guia-de-precos">Ver todos os preços <ArrowUpRight size={15}/></Link><Link className="btn" href="/monte-seu-kit">Montar meu kit</Link>{wa&&<a className="btn" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={16}/> WhatsApp</a>}</div></div></div></section>;
+}
