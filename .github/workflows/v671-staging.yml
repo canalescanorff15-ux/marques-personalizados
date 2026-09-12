@@ -50,7 +50,6 @@ jobs:
           split7 = {}
           for comment in comments:
               body = str(comment.get('body') or '').strip()
-
               m = re.match(r'^PART-(0[1-6]|08)\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
@@ -58,7 +57,6 @@ jobs:
                       raise SystemExit(f'parte duplicada: {key}')
                   parts[key] = ''.join(m.group(2).split())
                   continue
-
               m = re.match(r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
@@ -73,11 +71,22 @@ jobs:
                   f'esperado padrão={sorted(expected)}, split7=[A, B]'
               )
 
+          lengths = {k: len(v) for k, v in sorted(parts.items())}
+          split_lengths = {k: len(v) for k, v in sorted(split7.items())}
+          print(f'comprimentos padrão={lengths}; split7={split_lengths}')
+          expected_lengths = {'01':26617,'02':26617,'03':26617,'04':26617,'05':26617,'06':26617,'08':26621}
+          expected_split = {'A':13308,'B':13309}
+          if lengths != expected_lengths or split_lengths != expected_split:
+              raise SystemExit(
+                  f'comprimentos inválidos; esperado padrão={expected_lengths}, split7={expected_split}'
+              )
+
           encoded = ''.join(parts[f'{n:02d}'] for n in range(1, 7)) + split7['A'] + split7['B'] + parts['08']
+          print(f'base64 total={len(encoded)}')
           raw = base64.b64decode(encoded, validate=True)
           digest = hashlib.sha256(raw).hexdigest()
           expected_sha = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
-          print(f'payload: {len(raw)} bytes / sha256={digest} / partes=6+2+1')
+          print(f'payload: {len(raw)} bytes / sha256={digest}')
           if digest != expected_sha:
               raise SystemExit(f'SHA-256 divergente: esperado {expected_sha}, recebido {digest}')
           open('/tmp/v671-patch.tar.xz', 'wb').write(raw)
