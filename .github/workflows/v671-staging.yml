@@ -47,27 +47,39 @@ jobs:
               comments = json.load(response)
 
           parts = {}
+          split7 = {}
           for comment in comments:
               body = str(comment.get('body') or '').strip()
-              m = re.match(r'^PART-(\d{2})\n([A-Za-z0-9+/=\s]+)$', body)
-              if not m:
+
+              m = re.match(r'^PART-(0[1-6]|08)\n([A-Za-z0-9+/=\s]+)$', body)
+              if m:
+                  key = m.group(1)
+                  if key in parts:
+                      raise SystemExit(f'parte duplicada: {key}')
+                  parts[key] = ''.join(m.group(2).split())
                   continue
-              n = int(m.group(1))
-              if n in parts:
-                  raise SystemExit(f'parte duplicada: {n:02d}')
-              parts[n] = ''.join(m.group(2).split())
 
-          expected_parts = list(range(1, 9))
-          if sorted(parts) != expected_parts:
-              raise SystemExit(f'partes inválidas: recebido {sorted(parts)}, esperado {expected_parts}')
+              m = re.match(r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', body)
+              if m:
+                  key = m.group(1)
+                  if key in split7:
+                      raise SystemExit(f'parte 07{key} duplicada')
+                  split7[key] = ''.join(m.group(2).split())
 
-          encoded = ''.join(parts[n] for n in expected_parts)
+          expected = {'01', '02', '03', '04', '05', '06', '08'}
+          if set(parts) != expected or set(split7) != {'A', 'B'}:
+              raise SystemExit(
+                  f'partes inválidas: padrão={sorted(parts)}, split7={sorted(split7)}; '
+                  f'esperado padrão={sorted(expected)}, split7=[A, B]'
+              )
+
+          encoded = ''.join(parts[f'{n:02d}'] for n in range(1, 7)) + split7['A'] + split7['B'] + parts['08']
           raw = base64.b64decode(encoded, validate=True)
           digest = hashlib.sha256(raw).hexdigest()
-          expected = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
-          print(f'payload: {len(raw)} bytes / sha256={digest} / partes={len(parts)}')
-          if digest != expected:
-              raise SystemExit(f'SHA-256 divergente: esperado {expected}, recebido {digest}')
+          expected_sha = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
+          print(f'payload: {len(raw)} bytes / sha256={digest} / partes=6+2+1')
+          if digest != expected_sha:
+              raise SystemExit(f'SHA-256 divergente: esperado {expected_sha}, recebido {digest}')
           open('/tmp/v671-patch.tar.xz', 'wb').write(raw)
           PY
 
