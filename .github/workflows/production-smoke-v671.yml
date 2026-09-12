@@ -1,0 +1,46 @@
+name: V6.71 Production Smoke
+
+on:
+  push:
+    branches: [v6-71-sync-staging]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Verify public production routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          routes=(
+            '/'
+            '/catalogo'
+            '/guia-de-precos'
+            '/orcamento'
+            '/meu-projeto'
+            '/admin/login'
+          )
+          for route in "${routes[@]}"; do
+            code="$(curl -L --max-time 25 --retry 2 --silent --show-error -o /tmp/page.html -w '%{http_code}' "$base$route")"
+            echo "$route -> HTTP $code"
+            test "$code" = '200'
+          done
+          curl -L --max-time 25 --retry 2 --fail --silent --show-error "$base/" -o /tmp/home.html
+          grep -qi 'Merlin' /tmp/home.html
+
+      - name: Verify production health and catalog APIs
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          curl -L --max-time 25 --retry 2 --fail --silent --show-error "$base/api/health" -o /tmp/health.json
+          cat /tmp/health.json
+          grep -Eq '"ok"[[:space:]]*:[[:space:]]*true' /tmp/health.json
+          curl -L --max-time 25 --retry 2 --fail --silent --show-error "$base/api/catalog" -o /tmp/catalog.json
+          test -s /tmp/catalog.json
+          echo "Catalog API bytes: $(wc -c < /tmp/catalog.json)"
