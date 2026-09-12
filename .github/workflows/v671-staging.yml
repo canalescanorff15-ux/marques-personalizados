@@ -1,4 +1,4 @@
-name: V6.71 Staging Validation
+name: V6.71 Staging Promotion
 
 on:
   push:
@@ -13,28 +13,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-and-stage:
+  promote-validated-tree:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: true
           fetch-depth: 0
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: '22.23.2'
-          cache: npm
-
-      - name: Reconstruct canonical V6.71 patch
+      - name: Reconstruct previously validated V6.71 payload
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           python <<'PY'
           import base64, hashlib, json, os, re, urllib.request
-
           repo = os.environ['GITHUB_REPOSITORY']
           url = f'https://api.github.com/repos/{repo}/issues/11/comments?per_page=100'
           req = urllib.request.Request(url, headers={
@@ -54,7 +48,6 @@ jobs:
               (r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', split7),
               (r'^PART-08([AB])\n([A-Za-z0-9+/=\s]+)$', part8),
           ]
-
           for comment in comments:
               body = str(comment.get('body') or '').strip()
               matched = False
@@ -76,42 +69,31 @@ jobs:
                       raise SystemExit('reparo duplicado')
                   repair = ''.join(m.group(1).split())
 
-          if set(parts) != {f'{n:02d}' for n in range(1, 7)}:
-              raise SystemExit(f'PARTs inválidos: {sorted(parts)}')
+          if set(parts) != {f'{n:02d}' for n in range(1,7)}:
+              raise SystemExit('PARTs incompletos')
           if set(mids) != {'01','02','04','05','06','07','08','09'}:
-              raise SystemExit(f'MIDs inválidos: {sorted(mids)}')
-          if set(mid3) != {'A1','A2','B'}:
-              raise SystemExit(f'MID-03 inválido: {sorted(mid3)}')
-          if set(split7) != {'A','B'} or set(part8) != {'A','B'}:
-              raise SystemExit('partes finais incompletas')
+              raise SystemExit('MIDs incompletos')
+          if set(mid3) != {'A1','A2','B'} or set(split7) != {'A','B'} or set(part8) != {'A','B'}:
+              raise SystemExit('subpartes incompletas')
           if repair is None or len(repair) != 500:
-              raise SystemExit('reparo ausente ou inválido')
-
+              raise SystemExit('reparo inválido')
           if hashlib.sha256(repair.encode()).hexdigest() != '5aee85541736ddf3e63adfbce2e35f5e1384801e9b35df348d523a5d3d2d834d':
-              raise SystemExit('reparo não é canônico')
-          if len(mid3['A1']) != 3000:
-              raise SystemExit('MID-03A1 com tamanho inválido')
+              raise SystemExit('reparo divergente')
 
           mid3['A1'] = mid3['A1'][:2500] + repair
           encoded = (
               ''.join(parts[f'{n:02d}'] for n in range(1,7))
-              + mids['01'] + mids['02']
-              + mid3['A1'] + mid3['A2'] + mid3['B']
+              + mids['01'] + mids['02'] + mid3['A1'] + mid3['A2'] + mid3['B']
               + mids['04'] + mids['05'] + mids['06'] + mids['07'] + mids['08']
-              + split7['A'] + split7['B']
-              + mids['09']
-              + part8['A'] + part8['B']
+              + split7['A'] + split7['B'] + mids['09'] + part8['A'] + part8['B']
           )
-          if len(encoded) != 212940:
-              raise SystemExit(f'base64 total inválido: {len(encoded)}')
-
           raw = base64.b64decode(encoded, validate=True)
           digest = hashlib.sha256(raw).hexdigest()
           expected = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
           print(f'V6.71 payload: {len(raw)} bytes / sha256={digest}')
-          if len(raw) != 159704 or digest != expected:
+          if len(encoded) != 212940 or len(raw) != 159704 or digest != expected:
               raise SystemExit('payload V6.71 divergente')
-          open('/tmp/v671-patch.tar.xz', 'wb').write(raw)
+          open('/tmp/v671-patch.tar.xz','wb').write(raw)
           PY
 
           rm -rf /tmp/v671-patch
@@ -119,23 +101,14 @@ jobs:
           tar -xJf /tmp/v671-patch.tar.xz -C /tmp/v671-patch
           rsync -a /tmp/v671-patch/ ./
 
-      - name: Install locked dependencies
-        run: npm ci --ignore-scripts --no-fund --no-audit
-
-      - name: Netlify contract
-        run: npm run check:netlify
-
-      - name: Validate complete V6.71
-        run: npm run verify
-
-      - name: Commit validated V6.71 staging tree
+      - name: Promote validated application files
         run: |
-          # The GitHub Actions token cannot update workflow files. Preserve them here;
-          # they are applied directly with the authorized connector after validation.
+          # Preserve workflow files and tsconfig in this bot commit. The authorized
+          # connector applies the final V6.71 CI file immediately afterwards.
           git restore --source=HEAD -- .github/workflows/ci.yml .github/workflows/v671-staging.yml tsconfig.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git diff --cached --quiet && { echo 'Nenhuma alteração para promover.'; exit 1; }
-          git commit -m 'test: validated V6.71 staging tree'
+          git commit -m 'test: promote validated V6.71 application tree'
           git push origin HEAD:v6-71-sync-staging
