@@ -552,3 +552,7 @@ npm run check:inspiration-compare
 ## V6.60.1 — CI hotfix
 
 Corrige compatibilidade do guard de acessibilidade com variações do TypeScript, elimina falso negativo do contrato do Monte seu Kit e endurece o Dependabot contra upgrades major automáticos de dependências centrais. Consulte `GITHUB-SUMMARY-V6.60.1.md`.
+
+## Deploy recomendado — Netlify + Neon + R2
+
+A partir da V6.71, o deploy recomendado para operação com custo inicial zero é **Netlify Free + Neon Free + Cloudflare R2 Standard**, preservando o backend Next.js e o painel administrativo. O projeto continua híbrido/SSR e **não deve ser convertido para export estático**. Consulte [`NETLIFY.md`](./NETLIFY.md) para a configuração completa, variáveis, storage e checklist de migração.

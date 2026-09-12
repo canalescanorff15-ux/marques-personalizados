@@ -500,3 +500,10 @@
 
 ## 2.0.0 — Catálogo Comercial
 - catálogo/Neon, admin, páginas de produto/categoria, orçamento, SEO, storage opcional e operação inicial.
+
+## V6.62 — Catálogo Comercial, Preços e Imagens Premium
+- 21 produtos com preços iniciais e 6 categorias comerciais.
+- 27 artes SVG próprias para eliminar placeholders genéricos.
+- Guia de preços na Home, contexto de unidade/mínimo e avisos de orçamento final.
+- Fallback comercial, seed idempotente e branding Merlin endurecido.
+- Novo contrato `check:catalog-commercial`.

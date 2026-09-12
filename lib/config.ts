@@ -41,11 +41,11 @@ export const fallbackSiteSettings = {
 
 export const fallbackCategories = [
   'Topos de bolo',
-  'Caixinhas Milk',
+  'Caixas personalizadas',
   'Lembrancinhas',
-  'Flores',
   'Kits personalizados',
-  'Outros'
+  'Mesa & festa',
+  'Flores & acabamentos'
 ] as const;
 
 export const siteUrl = normalizeSiteOrigin(process.env.NEXT_PUBLIC_SITE_URL);

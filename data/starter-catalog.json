@@ -1,0 +1,526 @@
+{
+  "version": "6.62",
+  "currency": "BRL",
+  "pricing_note": "Valores iniciais de referência; personalização, quantidade, acabamento e urgência podem alterar o orçamento final.",
+  "categories": [
+    {
+      "slug": "topos-de-bolo",
+      "name": "Topos de bolo",
+      "description": "Do clássico ao premium em camadas: peças personalizadas para destacar o bolo e conversar com toda a identidade da festa.",
+      "sort_order": 1,
+      "image_url": "/catalog/category-topos.svg"
+    },
+    {
+      "slug": "caixas-personalizadas",
+      "name": "Caixas personalizadas",
+      "description": "Milk, pirâmide, bala, sushi e maleta produzidas sob encomenda, com tema, nome, cores e acabamento combinando entre si.",
+      "sort_order": 2,
+      "image_url": "/catalog/category-caixas.svg"
+    },
+    {
+      "slug": "lembrancinhas",
+      "name": "Lembrancinhas",
+      "description": "Tags, adesivos, toppers e forminhas para completar os detalhes e deixar a mesa com acabamento coordenado.",
+      "sort_order": 3,
+      "image_url": "/catalog/category-lembrancinhas.svg"
+    },
+    {
+      "slug": "kits-personalizados",
+      "name": "Kits personalizados",
+      "description": "Combinações prontas para começar rápido e ajustar quantidade, tema e acabamento conforme a sua comemoração.",
+      "sort_order": 4,
+      "image_url": "/catalog/category-kits.svg"
+    },
+    {
+      "slug": "mesa-festa",
+      "name": "Mesa & festa",
+      "description": "Displays, bandeirolas, wrappers e plaquinhas para compor a mesa principal e os cantinhos da comemoração.",
+      "sort_order": 5,
+      "image_url": "/catalog/category-mesa.svg"
+    },
+    {
+      "slug": "flores-acabamentos",
+      "name": "Flores & acabamentos",
+      "description": "Flores de papel e apliques em camadas para adicionar volume, textura e acabamento premium às peças.",
+      "sort_order": 6,
+      "image_url": "/catalog/category-flores.svg"
+    }
+  ],
+  "products": [
+    {
+      "slug": "topo-classico-personalizado",
+      "name": "Topo Clássico Personalizado",
+      "category": "Topos de bolo",
+      "description": "Topo leve e elegante com nome, idade e elementos do tema. Uma opção versátil para bolos pequenos e médios.",
+      "price_cents": 2490,
+      "min_quantity": 1,
+      "art_kind": "topper",
+      "image_url": "/catalog/topo-classico-personalizado.svg",
+      "featured": true,
+      "badge": "Mais pedido",
+      "tags": [
+        "topo",
+        "clássico",
+        "nome",
+        "idade"
+      ],
+      "customization_fields": [
+        {
+          "id": "nome",
+          "label": "Nome",
+          "type": "text",
+          "required": false,
+          "placeholder": "Nome para personalizar",
+          "options": []
+        },
+        {
+          "id": "idade",
+          "label": "Idade",
+          "type": "number",
+          "required": false,
+          "placeholder": "",
+          "options": []
+        }
+      ],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "topo-premium-camadas",
+      "name": "Topo Premium em Camadas",
+      "category": "Topos de bolo",
+      "description": "Composição em múltiplas camadas com efeito 3D, recortes de destaque e acabamento coordenado ao tema da festa.",
+      "price_cents": 3990,
+      "min_quantity": 1,
+      "art_kind": "topper",
+      "image_url": "/catalog/topo-premium-camadas.svg",
+      "featured": true,
+      "badge": "Destaque",
+      "tags": [
+        "premium",
+        "3D",
+        "camadas",
+        "personalizado"
+      ],
+      "customization_fields": [
+        {
+          "id": "nome",
+          "label": "Nome",
+          "type": "text",
+          "required": false,
+          "placeholder": "Nome para personalizar",
+          "options": []
+        },
+        {
+          "id": "idade",
+          "label": "Idade",
+          "type": "number",
+          "required": false,
+          "placeholder": "",
+          "options": []
+        }
+      ],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "topo-luxo-shaker",
+      "name": "Topo Luxo com Shaker",
+      "category": "Topos de bolo",
+      "description": "Topo premium com camadas, transparência e detalhe shaker quando o tema permitir. Ideal para uma composição de maior impacto.",
+      "price_cents": 5490,
+      "min_quantity": 1,
+      "art_kind": "topper",
+      "image_url": "/catalog/topo-luxo-shaker.svg",
+      "featured": true,
+      "badge": "Premium",
+      "tags": [
+        "luxo",
+        "shaker",
+        "acetato",
+        "camadas"
+      ],
+      "customization_fields": [
+        {
+          "id": "nome",
+          "label": "Nome",
+          "type": "text",
+          "required": false,
+          "placeholder": "Nome para personalizar",
+          "options": []
+        },
+        {
+          "id": "idade",
+          "label": "Idade",
+          "type": "number",
+          "required": false,
+          "placeholder": "",
+          "options": []
+        }
+      ],
+      "production_time": "7 a 12 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "caixinha-milk-premium",
+      "name": "Caixinha Milk Premium",
+      "category": "Caixas personalizadas",
+      "description": "Caixinha Milk personalizada com impressão de alta qualidade, corte preciso e acabamento reforçado.",
+      "price_cents": 450,
+      "min_quantity": 10,
+      "art_kind": "box",
+      "image_url": "/catalog/caixinha-milk-premium.svg",
+      "featured": true,
+      "badge": "Mais pedido",
+      "tags": [
+        "milk",
+        "caixa",
+        "lembrancinha",
+        "festa"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "caixa-piramide-personalizada",
+      "name": "Caixa Pirâmide Personalizada",
+      "category": "Caixas personalizadas",
+      "description": "Formato pirâmide com arte coordenada ao tema, nome e detalhes da comemoração.",
+      "price_cents": 490,
+      "min_quantity": 10,
+      "art_kind": "box",
+      "image_url": "/catalog/caixa-piramide-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "pirâmide",
+        "caixa",
+        "lembrancinha"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "caixa-bala-personalizada",
+      "name": "Caixa Bala Personalizada",
+      "category": "Caixas personalizadas",
+      "description": "Caixa em formato bala para doces e pequenos mimos, com acabamento personalizado.",
+      "price_cents": 550,
+      "min_quantity": 10,
+      "art_kind": "box",
+      "image_url": "/catalog/caixa-bala-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "bala",
+        "caixa",
+        "doces"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "caixa-sushi-personalizada",
+      "name": "Caixa Sushi Personalizada",
+      "category": "Caixas personalizadas",
+      "description": "Caixa baixa estilo sushi, ideal para doces, chocolates e lembranças de mesa.",
+      "price_cents": 590,
+      "min_quantity": 10,
+      "art_kind": "box",
+      "image_url": "/catalog/caixa-sushi-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "sushi",
+        "caixa",
+        "chocolate"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "caixa-maleta-personalizada",
+      "name": "Caixa Maleta Personalizada",
+      "category": "Caixas personalizadas",
+      "description": "Maletinha personalizada com alça e composição em camadas para lembranças de maior destaque.",
+      "price_cents": 690,
+      "min_quantity": 10,
+      "art_kind": "box",
+      "image_url": "/catalog/caixa-maleta-personalizada.svg",
+      "featured": true,
+      "badge": "Premium",
+      "tags": [
+        "maleta",
+        "caixa",
+        "premium"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "tag-personalizada",
+      "name": "Tag Personalizada",
+      "category": "Lembrancinhas",
+      "description": "Tag personalizada para lembranças, sacolas e embalagens. Tema, nome e mensagem podem ser ajustados.",
+      "price_cents": 120,
+      "min_quantity": 20,
+      "art_kind": "tag",
+      "image_url": "/catalog/tag-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "tag",
+        "lembrancinha",
+        "embalagem"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "adesivo-personalizado",
+      "name": "Adesivo Personalizado",
+      "category": "Lembrancinhas",
+      "description": "Adesivo personalizado para fechamento de embalagens, copos, sacolas e lembranças.",
+      "price_cents": 90,
+      "min_quantity": 20,
+      "art_kind": "tag",
+      "image_url": "/catalog/adesivo-personalizado.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "adesivo",
+        "lembrancinha",
+        "embalagem"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "topper-docinho-personalizado",
+      "name": "Topper para Docinhos",
+      "category": "Lembrancinhas",
+      "description": "Mini toppers para brigadeiros, cupcakes e docinhos com elementos coordenados ao tema.",
+      "price_cents": 150,
+      "min_quantity": 10,
+      "art_kind": "tag",
+      "image_url": "/catalog/topper-docinho-personalizado.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "topper",
+        "docinho",
+        "mesa"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "forminha-personalizada",
+      "name": "Forminha Personalizada",
+      "category": "Lembrancinhas",
+      "description": "Forminha decorativa para docinhos, cortada em papel de boa gramatura e combinando com a paleta da festa.",
+      "price_cents": 180,
+      "min_quantity": 20,
+      "art_kind": "tag",
+      "image_url": "/catalog/forminha-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "forminha",
+        "docinho",
+        "mesa"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "kit-mini-festa",
+      "name": "Kit Mini Festa",
+      "category": "Kits personalizados",
+      "description": "Composição enxuta para comemorações menores, reunindo itens coordenados para bolo e mesa.",
+      "price_cents": 7990,
+      "min_quantity": 1,
+      "art_kind": "kit",
+      "image_url": "/catalog/kit-mini-festa.svg",
+      "featured": true,
+      "badge": "Entrada",
+      "tags": [
+        "kit",
+        "mini",
+        "festa-em-casa"
+      ],
+      "customization_fields": [],
+      "production_time": "7 a 12 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "kit-lembrancinhas",
+      "name": "Kit Essencial de Festa",
+      "category": "Kits personalizados",
+      "description": "Kit equilibrado com peças para bolo, mesa e lembrancinhas. Quantidades podem ser ajustadas ao número de convidados.",
+      "price_cents": 12990,
+      "min_quantity": 1,
+      "art_kind": "kit",
+      "image_url": "/catalog/kit-lembrancinhas.svg",
+      "featured": true,
+      "badge": "Mais escolhido",
+      "tags": [
+        "kit",
+        "essencial",
+        "festa"
+      ],
+      "customization_fields": [],
+      "production_time": "8 a 15 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "kit-premium-festa",
+      "name": "Kit Premium de Festa",
+      "category": "Kits personalizados",
+      "description": "Composição mais completa com maior variedade de peças, camadas e acabamentos para uma mesa de maior impacto.",
+      "price_cents": 19990,
+      "min_quantity": 1,
+      "art_kind": "kit",
+      "image_url": "/catalog/kit-premium-festa.svg",
+      "featured": true,
+      "badge": "Premium",
+      "tags": [
+        "kit",
+        "premium",
+        "completo"
+      ],
+      "customization_fields": [],
+      "production_time": "10 a 18 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "display-mesa-personalizado",
+      "name": "Display de Mesa Personalizado",
+      "category": "Mesa & festa",
+      "description": "Display de mesa para personagens, frases, idade ou elementos decorativos, com base própria para ficar em pé.",
+      "price_cents": 890,
+      "min_quantity": 1,
+      "art_kind": "display",
+      "image_url": "/catalog/display-mesa-personalizado.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "display",
+        "mesa",
+        "decoração"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "bandeirola-personalizada",
+      "name": "Bandeirola Personalizada",
+      "category": "Mesa & festa",
+      "description": "Cordão decorativo com bandeirolas personalizadas para nome, parabéns ou composição temática.",
+      "price_cents": 2490,
+      "min_quantity": 1,
+      "art_kind": "display",
+      "image_url": "/catalog/bandeirola-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "bandeirola",
+        "parabéns",
+        "decoração"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "wrapper-cupcake-personalizado",
+      "name": "Wrapper para Cupcake",
+      "category": "Mesa & festa",
+      "description": "Saia decorativa para cupcake, recortada e personalizada para combinar com os demais itens.",
+      "price_cents": 180,
+      "min_quantity": 6,
+      "art_kind": "display",
+      "image_url": "/catalog/wrapper-cupcake-personalizado.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "wrapper",
+        "cupcake",
+        "mesa"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "plaquinha-personalizada",
+      "name": "Plaquinha Personalizada",
+      "category": "Mesa & festa",
+      "description": "Plaquinha temática para fotos, mesa, frases ou identificação de doces e lembranças.",
+      "price_cents": 1290,
+      "min_quantity": 1,
+      "art_kind": "display",
+      "image_url": "/catalog/plaquinha-personalizada.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "plaquinha",
+        "mesa",
+        "foto"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "flor-papel-3d",
+      "name": "Flor de Papel 3D",
+      "category": "Flores & acabamentos",
+      "description": "Flor de papel montada em camadas para aplicação em topos, caixas, displays e composições especiais.",
+      "price_cents": 350,
+      "min_quantity": 5,
+      "art_kind": "flower",
+      "image_url": "/catalog/flor-papel-3d.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "flor",
+        "3D",
+        "acabamento"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    },
+    {
+      "slug": "aplique-3d-camadas",
+      "name": "Aplique 3D em Camadas",
+      "category": "Flores & acabamentos",
+      "description": "Aplique decorativo em camadas para adicionar relevo e acabamento premium a caixas, displays e topos.",
+      "price_cents": 290,
+      "min_quantity": 10,
+      "art_kind": "flower",
+      "image_url": "/catalog/aplique-3d-camadas.svg",
+      "featured": false,
+      "badge": "",
+      "tags": [
+        "aplique",
+        "3D",
+        "camadas"
+      ],
+      "customization_fields": [],
+      "production_time": "5 a 10 dias úteis",
+      "stock_status": "sob_encomenda"
+    }
+  ]
+}
