@@ -47,9 +47,11 @@ jobs:
               comments = json.load(response)
 
           parts = {}
+          mids = {}
           split7 = {}
           for comment in comments:
               body = str(comment.get('body') or '').strip()
+
               m = re.match(r'^PART-(0[1-6]|08)\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
@@ -57,6 +59,15 @@ jobs:
                       raise SystemExit(f'parte duplicada: {key}')
                   parts[key] = ''.join(m.group(2).split())
                   continue
+
+              m = re.match(r'^MID-(0[1-9])\n([A-Za-z0-9+/=\s]+)$', body)
+              if m:
+                  key = m.group(1)
+                  if key in mids:
+                      raise SystemExit(f'mid duplicado: {key}')
+                  mids[key] = ''.join(m.group(2).split())
+                  continue
+
               m = re.match(r'^PART-07([AB])\n([A-Za-z0-9+/=\s]+)$', body)
               if m:
                   key = m.group(1)
@@ -64,26 +75,40 @@ jobs:
                       raise SystemExit(f'parte 07{key} duplicada')
                   split7[key] = ''.join(m.group(2).split())
 
-          expected = {'01', '02', '03', '04', '05', '06', '08'}
-          if set(parts) != expected or set(split7) != {'A', 'B'}:
+          expected_parts = {'01', '02', '03', '04', '05', '06', '08'}
+          expected_mids = {f'{n:02d}' for n in range(1, 10)}
+          if set(parts) != expected_parts or set(mids) != expected_mids or set(split7) != {'A', 'B'}:
               raise SystemExit(
-                  f'partes inválidas: padrão={sorted(parts)}, split7={sorted(split7)}; '
-                  f'esperado padrão={sorted(expected)}, split7=[A, B]'
+                  f'partes inválidas: padrão={sorted(parts)}, mids={sorted(mids)}, split7={sorted(split7)}'
               )
 
           lengths = {k: len(v) for k, v in sorted(parts.items())}
+          mid_lengths = {k: len(v) for k, v in sorted(mids.items())}
           split_lengths = {k: len(v) for k, v in sorted(split7.items())}
-          print(f'comprimentos padrão={lengths}; split7={split_lengths}')
-          expected_lengths = {'01':26617,'02':26617,'03':26617,'04':26617,'05':26617,'06':26617,'08':26621}
+          print(f'comprimentos padrão={lengths}; mids={mid_lengths}; split7={split_lengths}')
+
+          expected_lengths = {'01':12000,'02':12000,'03':12000,'04':12000,'05':12000,'06':12000,'08':20234}
+          expected_mid = {'01':12000,'02':12000,'03':12000,'04':12000,'05':12000,'06':12000,'07':12000,'08':3702,'09':6387}
           expected_split = {'A':13308,'B':13309}
-          if lengths != expected_lengths or split_lengths != expected_split:
+          if lengths != expected_lengths or mid_lengths != expected_mid or split_lengths != expected_split:
               raise SystemExit(
-                  f'comprimentos inválidos; esperado padrão={expected_lengths}, split7={expected_split}'
+                  f'comprimentos inválidos; esperado padrão={expected_lengths}, mids={expected_mid}, split7={expected_split}'
               )
 
-          encoded = ''.join(parts[f'{n:02d}'] for n in range(1, 7)) + split7['A'] + split7['B'] + parts['08']
-          print(f'base64 total={len(encoded)}')
+          encoded = (
+              ''.join(parts[f'{n:02d}'] for n in range(1, 7))
+              + ''.join(mids[f'{n:02d}'] for n in range(1, 9))
+              + split7['A'] + split7['B']
+              + mids['09']
+              + parts['08']
+          )
+          if len(encoded) != 212940:
+              raise SystemExit(f'base64 total inválido: {len(encoded)} != 212940')
+
           raw = base64.b64decode(encoded, validate=True)
+          if len(raw) != 159704:
+              raise SystemExit(f'payload inválido: {len(raw)} bytes != 159704')
+
           digest = hashlib.sha256(raw).hexdigest()
           expected_sha = '82981d318cc598270eff063b20cd87898f2816c1ccc6f28d21d11769d0807882'
           print(f'payload: {len(raw)} bytes / sha256={digest}')
