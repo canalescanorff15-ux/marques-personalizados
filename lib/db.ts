@@ -495,14 +495,27 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     const rows = await sql`SELECT * FROM site_settings WHERE id=1 LIMIT 1`;
     if (!rows[0]) return fallbackSiteSettings;
     const row = rows[0] as Record<string, unknown>;
+    const legacyBrandNames=new Set(['Marques Papelaria','K&F Papelaria Criativa','Marques Personalizados']);
+    const currentBrand=String(row.brand_name||'').trim();
+    const legacyBrand=legacyBrandNames.has(currentBrand);
+    const hasLegacyBrand=(value:unknown)=>{const text=String(value||'');return [...legacyBrandNames].some(name=>text.includes(name));};
+    const legacyValue=(value:unknown,legacy:string,fallback:string)=>String(value||fallback)===legacy?fallback:String(value||fallback);
     return {
       ...fallbackSiteSettings,
       ...row,
-      brand_name: String(row.brand_name || fallbackSiteSettings.brand_name),
-      brand_initial: String(row.brand_initial || fallbackSiteSettings.brand_initial),
+      brand_name: legacyBrand ? fallbackSiteSettings.brand_name : String(row.brand_name || fallbackSiteSettings.brand_name),
+      brand_initial: legacyBrand ? fallbackSiteSettings.brand_initial : String(row.brand_initial || fallbackSiteSettings.brand_initial),
       whatsapp_number: String(row.whatsapp_number || fallbackSiteSettings.whatsapp_number),
-      logo_url: normalizePublicUrl(String(row.logo_url || fallbackSiteSettings.logo_url)),
+      logo_url: normalizePublicUrl(legacyBrand || String(row.logo_url||'').includes('kf-logo') ? fallbackSiteSettings.logo_url : String(row.logo_url || fallbackSiteSettings.logo_url)),
       hero_image_url: normalizePublicUrl(String(row.hero_image_url || fallbackSiteSettings.hero_image_url)),
+      hero_eyebrow: legacyBrand || hasLegacyBrand(row.hero_eyebrow) ? fallbackSiteSettings.hero_eyebrow : legacyValue(row.hero_eyebrow,'Papelaria personalizada • Feita sob encomenda',fallbackSiteSettings.hero_eyebrow),
+      hero_title: legacyValue(row.hero_title,'Detalhes que marcam a festa.',fallbackSiteSettings.hero_title),
+      hero_highlight: legacyValue(row.hero_highlight,'marcam',fallbackSiteSettings.hero_highlight),
+      hero_description: legacyValue(row.hero_description,'Topos de bolo, caixas, lembrancinhas, flores e kits personalizados com acabamento profissional.',fallbackSiteSettings.hero_description),
+      about_title: legacyValue(row.about_title,'Papelaria feita para impressionar de perto.',fallbackSiteSettings.about_title),
+      about_text: legacyValue(row.about_text,'Cada peça é pensada para o tema, para a montagem e para a experiência final da festa, com atenção à composição, corte e acabamento.',fallbackSiteSettings.about_text),
+      bio_title: legacyBrand || hasLegacyBrand(row.bio_title) ? fallbackSiteSettings.bio_title : legacyValue(row.bio_title,'Papelaria personalizada para momentos únicos.',fallbackSiteSettings.bio_title),
+      bio_description: legacyBrand || hasLegacyBrand(row.bio_description) ? fallbackSiteSettings.bio_description : legacyValue(row.bio_description,'Veja o catálogo, conheça as coleções e peça seu orçamento pelo WhatsApp.',fallbackSiteSettings.bio_description),
       instagram_url: normalizeExternalHttpsUrl(String(row.instagram_url || fallbackSiteSettings.instagram_url)),
       facebook_url: normalizeExternalHttpsUrl(String(row.facebook_url || fallbackSiteSettings.facebook_url)),
       tiktok_url: normalizeExternalHttpsUrl(String(row.tiktok_url || fallbackSiteSettings.tiktok_url)),
@@ -511,8 +524,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       google_business_url: normalizeExternalHttpsUrl(String(row.google_business_url || fallbackSiteSettings.google_business_url)),
       google_review_url: normalizeExternalHttpsUrl(String(row.google_review_url || fallbackSiteSettings.google_review_url)),
       location: String(row.location || fallbackSiteSettings.location),
-      seo_title: String(row.seo_title || fallbackSiteSettings.seo_title),
-      seo_description: String(row.seo_description || fallbackSiteSettings.seo_description),
+      seo_title: legacyBrand || hasLegacyBrand(row.seo_title) ? fallbackSiteSettings.seo_title : String(row.seo_title || fallbackSiteSettings.seo_title),
+      seo_description: legacyBrand || hasLegacyBrand(row.seo_description) ? fallbackSiteSettings.seo_description : legacyValue(row.seo_description,'Catálogo de topos de bolo, caixinhas milk, lembrancinhas, flores e papelaria personalizada premium.',fallbackSiteSettings.seo_description),
       announcement_link: normalizePublicUrl(String(row.announcement_link || '')),
       announcement_start_at: row.announcement_start_at ? new Date(row.announcement_start_at as string).toISOString() : '',
       announcement_end_at: row.announcement_end_at ? new Date(row.announcement_end_at as string).toISOString() : '',

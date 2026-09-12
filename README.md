@@ -49,7 +49,7 @@ CI, backups e drills não instalam mais uma árvore transitiva arbitrária quand
 
 O workflow semanal `media-recovery-drill.yml` prova que o espelho de mídia é restaurável sem tocar no bucket público. Ele usa um bucket `DRILL_S3_*` isolado, restaura os objetos para um prefixo temporário, valida `source-sha256` antes e depois da gravação, registra recibo append-only no Neon e remove o material temporário. O deep health e a Central de Operação mostram a freshness desse ensaio.
 
-# Marques Papelaria — Catálogo Premium V6
+# Merlin Encantos em Papel — Catálogo Premium V6
 
 > **V6.49 — DR Namespace Isolation & Remote Backup Attestation**  
 > Backup de banco e mídia possuem namespaces separados no cofre; retenção e recovery drill são confinados ao namespace correto. Schema runtime **26**.
@@ -63,7 +63,7 @@ Antes de qualquer mutação administrativa crítica, o servidor persiste um **au
 
 `npm run media:backup-offsite` espelha `catalog/` para `${BACKUP_S3_PREFIX}/media/catalog/`, relê cada objeto e confere SHA-256. `npm run media:restore` é dry-run; ele verifica SHA-256 inclusive de objetos já existentes. A reposição real exige `DATABASE_URL`, `--apply --confirm=RESTAURAR-MIDIA`, pula chaves tombstonadas e recria objetos ausentes **ou repara objetos divergentes** depois de validar o conteúdo do cofre. O workflow `.github/workflows/media-backup.yml` pode executar diariamente.
 
-# Marques Papelaria — Catálogo Premium V6
+# Merlin Encantos em Papel — Catálogo Premium V6
 
 > **V6.36 — Automated Recovery Drill**  
 > O último backup offsite passa por ensaio real semanal em um Neon isolado: download, verificação strict, restore, `db:verify` e recibo append-only. Schema runtime **23**.
@@ -72,7 +72,7 @@ Antes de qualquer mutação administrativa crítica, o servidor persiste um **au
 
 Use um `DRILL_DATABASE_URL` separado do Neon operacional. O workflow `.github/workflows/recovery-drill.yml` recusa o mesmo host do banco de produção, baixa o backup offsite mais recente, valida criptografia/assinatura, aplica restore real no banco de drill, executa `db:verify` e registra o sucesso em `recovery_drill_receipts`. `RECOVERY_DRILL_MAX_AGE_HOURS` define a idade máxima aceita (48–720 h; padrão 192).
 
-# Marques Papelaria — Catálogo Premium V6
+# Merlin Encantos em Papel — Catálogo Premium V6
 
 > **V6.36 — Backup Freshness & Recovery Readiness**  
 > Cada backup offsite validado gera um recibo append-only no Neon. A Central de Operação e o deep health detectam backup ausente/velho; o deploy gate pode exigir freshness antes de promover uma release. Schema runtime **22**.
@@ -537,3 +537,13 @@ npm run backup:verify -- caminho/backup.encrypted.json --strict
 Restore real em produção exige envelope criptografado; backups plaintext antigos podem ser inspecionados em staging/dry-run, mas devem ser convertidos para um backup V6.32 antes de uso em produção.
 
 Schema runtime permanece **20**.
+
+## V6.60 — comparador de inspirações
+
+O catálogo de inspirações permite selecionar até quatro referências e compará-las em `/comparar-inspiracoes`. A seleção fica apenas no navegador, pode ser alterada ou limpa a qualquer momento e segue para o Monte seu Kit através do parâmetro `inspiracoes`, sem criar preço estimado nem alterar o schema do banco.
+
+Validação dedicada:
+
+```bash
+npm run check:inspiration-compare
+```

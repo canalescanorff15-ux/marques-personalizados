@@ -51,11 +51,11 @@ ALTER TABLE products ADD COLUMN IF NOT EXISTS deleted_at timestamptz;
 
 CREATE TABLE IF NOT EXISTS site_settings (
   id smallint PRIMARY KEY DEFAULT 1 CHECK (id = 1),
-  brand_name text NOT NULL DEFAULT 'Marques Papelaria',
+  brand_name text NOT NULL DEFAULT 'Merlin Encantos em Papel',
   brand_initial text NOT NULL DEFAULT 'M',
   logo_url text NOT NULL DEFAULT '',
   hero_image_url text NOT NULL DEFAULT '',
-  hero_eyebrow text NOT NULL DEFAULT 'Papelaria personalizada • Feita sob encomenda',
+  hero_eyebrow text NOT NULL DEFAULT 'Merlin • Encantos em Papel • Feita sob encomenda',
   hero_title text NOT NULL DEFAULT 'Detalhes que marcam a festa.',
   hero_highlight text NOT NULL DEFAULT 'marcam',
   hero_description text NOT NULL DEFAULT 'Topos de bolo, caixas, lembrancinhas, flores e kits personalizados com acabamento profissional.',
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS site_settings (
   announcement_end_at timestamptz,
   about_title text NOT NULL DEFAULT 'Papelaria feita para impressionar de perto.',
   about_text text NOT NULL DEFAULT 'Cada peça é pensada para o tema, para a montagem e para a experiência final da festa, com atenção à composição, corte e acabamento.',
-  seo_title text NOT NULL DEFAULT 'Marques Papelaria | Papelaria Personalizada Premium',
-  seo_description text NOT NULL DEFAULT 'Topos de bolo, caixas, lembrancinhas, flores e papelaria personalizada premium.',
+  seo_title text NOT NULL DEFAULT 'Merlin Encantos em Papel | Papelaria Personalizada',
+  seo_description text NOT NULL DEFAULT 'Catálogo de inspirações, topos de bolo, caixas, kits, lembrancinhas e papelaria personalizada da Merlin Encantos em Papel.',
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
@@ -86,14 +86,28 @@ ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS youtube_url text NOT NULL DEF
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS google_business_url text NOT NULL DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS google_review_url text NOT NULL DEFAULT '';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS social_default_hashtags text NOT NULL DEFAULT '#papelariapersonalizada #festapersonalizada';
-ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS bio_title text NOT NULL DEFAULT 'Papelaria personalizada para momentos únicos.';
-ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS bio_description text NOT NULL DEFAULT 'Veja o catálogo, conheça as coleções e peça seu orçamento pelo WhatsApp.';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS bio_title text NOT NULL DEFAULT 'Merlin — Encantos em Papel para momentos únicos.';
+ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS bio_description text NOT NULL DEFAULT 'Planejar • Personalizar • Encantar. Veja inspirações, monte seu kit e peça seu orçamento pelo WhatsApp.';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS monthly_sales_goal_cents bigint NOT NULL DEFAULT 0;
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS pricing_hourly_rate_cents bigint NOT NULL DEFAULT 2000 CHECK (pricing_hourly_rate_cents >= 0);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS pricing_overhead_percent integer NOT NULL DEFAULT 10 CHECK (pricing_overhead_percent BETWEEN 0 AND 100);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS pricing_waste_percent integer NOT NULL DEFAULT 10 CHECK (pricing_waste_percent BETWEEN 0 AND 100);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS pricing_target_margin_percent integer NOT NULL DEFAULT 45 CHECK (pricing_target_margin_percent BETWEEN 0 AND 90);
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS pricing_payment_fee_percent integer NOT NULL DEFAULT 0 CHECK (pricing_payment_fee_percent BETWEEN 0 AND 30);
+
+
+-- Branding oficial: migra instalações existentes das marcas anteriores sem exigir reset do banco.
+UPDATE site_settings
+SET brand_name='Merlin Encantos em Papel',
+    brand_initial='M',
+    logo_url='/merlin-logo.webp',
+    hero_eyebrow='Merlin • Encantos em Papel • Feita sob encomenda',
+    seo_title='Merlin Encantos em Papel | Papelaria Personalizada',
+    seo_description='Catálogo de inspirações, topos de bolo, caixas, kits, lembrancinhas e papelaria personalizada da Merlin Encantos em Papel.',
+    bio_title='Merlin — Encantos em Papel para momentos únicos.',
+    bio_description='Planejar • Personalizar • Encantar. Veja inspirações, monte seu kit e peça seu orçamento pelo WhatsApp.',
+    updated_at=now()
+WHERE brand_name IN ('Marques Papelaria','K&F Papelaria Criativa','Marques Personalizados');
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_template_first_contact text NOT NULL DEFAULT 'Olá, {nome}! Tudo bem? Aqui é da {marca}. Recebi sua solicitação sobre {interesse}{data}. Vou te ajudar a montar a melhor opção para o seu evento.';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_template_follow_up text NOT NULL DEFAULT 'Oi, {nome}! Passando para acompanhar seu pedido de {interesse}{data}. Ficou alguma dúvida ou quer que eu ajuste alguma opção para você?';
 ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS whatsapp_template_quote_ready text NOT NULL DEFAULT 'Oi, {nome}! Seu orçamento de {interesse} está pronto{valor}. Posso te explicar os detalhes e próximos passos por aqui.';

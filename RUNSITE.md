@@ -153,7 +153,7 @@ Em produção, `ADMIN_PASSWORD_HASH` Scrypt e `ADMIN_TOTP_SECRET` são obrigató
 Fallbacks configuráveis pelo painel:
 
 ```env
-NEXT_PUBLIC_SITE_NAME=Marques Papelaria
+NEXT_PUBLIC_SITE_NAME=Merlin Encantos em Papel
 NEXT_PUBLIC_INSTAGRAM_URL=https://instagram.com/...
 NEXT_PUBLIC_LOCATION=Santa Inês - MA
 NEXT_PUBLIC_CONTACT_EMAIL=

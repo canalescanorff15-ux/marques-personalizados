@@ -1,14 +1,14 @@
 import { DEFAULT_WHATSAPP_TEMPLATES } from './whatsapp-templates';
 import { normalizeExternalHttpsUrl,normalizeSiteOrigin } from './public-url';
 export const fallbackSiteSettings = {
-  brand_name: process.env.NEXT_PUBLIC_SITE_NAME || 'Marques Papelaria',
+  brand_name: process.env.NEXT_PUBLIC_SITE_NAME || 'Merlin Encantos em Papel',
   brand_initial: 'M',
-  logo_url: '',
+  logo_url: '/merlin-logo.webp',
   hero_image_url: '',
-  hero_eyebrow: 'Papelaria personalizada • Feita sob encomenda',
-  hero_title: 'Detalhes que marcam a festa.',
-  hero_highlight: 'marcam',
-  hero_description: 'Topos de bolo, caixas, lembrancinhas, flores e kits personalizados com acabamento profissional, composição premium e produção pensada para transformar cada tema em algo realmente único.',
+  hero_eyebrow: 'Merlin • Encantos em Papel • Feita sob encomenda',
+  hero_title: 'Sua ideia vira uma festa com identidade.',
+  hero_highlight: 'identidade',
+  hero_description: 'Topos, caixas, kits, lembrancinhas e detalhes personalizados para transformar referências, temas e histórias em uma comemoração única.',
   whatsapp_number: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '',
   instagram_url: normalizeExternalHttpsUrl(process.env.NEXT_PUBLIC_INSTAGRAM_URL),
   facebook_url: normalizeExternalHttpsUrl(process.env.NEXT_PUBLIC_FACEBOOK_URL),
@@ -18,8 +18,8 @@ export const fallbackSiteSettings = {
   google_business_url: normalizeExternalHttpsUrl(process.env.NEXT_PUBLIC_GOOGLE_BUSINESS_URL),
   google_review_url: normalizeExternalHttpsUrl(process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL),
   social_default_hashtags: '#papelariapersonalizada #festapersonalizada',
-  bio_title: 'Papelaria personalizada para momentos únicos.',
-  bio_description: 'Veja o catálogo, conheça as coleções e peça seu orçamento pelo WhatsApp.',
+  bio_title: 'Merlin — Encantos em Papel para momentos únicos.',
+  bio_description: 'Planejar • Personalizar • Encantar. Veja inspirações, monte seu kit e peça seu orçamento pelo WhatsApp.',
   monthly_sales_goal_cents: 0,
   pricing_hourly_rate_cents: 2000,
   pricing_overhead_percent: 10,
@@ -33,10 +33,10 @@ export const fallbackSiteSettings = {
   announcement_link: '',
   announcement_start_at: '',
   announcement_end_at: '',
-  about_title: 'Papelaria feita para impressionar de perto.',
-  about_text: 'Cada peça é pensada para o tema, para a montagem e para a experiência final da festa, com atenção à composição, corte e acabamento.',
-  seo_title: `${process.env.NEXT_PUBLIC_SITE_NAME || 'Marques Papelaria'} | Papelaria Personalizada Premium`,
-  seo_description: 'Catálogo de topos de bolo, caixinhas milk, lembrancinhas, flores e papelaria personalizada premium.'
+  about_title: 'Papelaria criada para combinar com a sua história.',
+  about_text: 'Cada pedido começa por uma ideia e ganha forma com composição, corte, camadas e acabamento pensados para a sua comemoração.',
+  seo_title: `${process.env.NEXT_PUBLIC_SITE_NAME || 'Merlin Encantos em Papel'} | Papelaria Personalizada`,
+  seo_description: 'Catálogo de inspirações, topos de bolo, caixas, kits, lembrancinhas e papelaria personalizada da Merlin Encantos em Papel.'
 };
 
 export const fallbackCategories = [

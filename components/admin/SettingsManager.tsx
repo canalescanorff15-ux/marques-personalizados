@@ -18,7 +18,7 @@ const WHATSAPP_TEMPLATE_FIELDS:{key:WhatsappTemplateField;label:string;help:stri
   {key:'whatsapp_template_approval',label:'Arte pronta para aprovação',help:'Avisar que a arte está aguardando aprovação antes da produção.'},
   {key:'whatsapp_template_ready',label:'Pedido pronto',help:'Avisar que o pedido terminou e combinar entrega ou retirada.'},
  ];
-const WHATSAPP_PREVIEW_VARS={nome:'Ana',marca:'Marques Papelaria',interesse:'Topo Safari + Caixinhas Milk',data:' para o evento de 18/10/2026',valor:' no valor de R$ 280,00',saldo:'R$ 180,00',link_avaliacao:'https://g.page/r/exemplo/review',localizacao:'Santa Inês - MA'};
+const WHATSAPP_PREVIEW_VARS={nome:'Ana',marca:'Merlin Encantos em Papel',interesse:'Topo Safari + Caixinhas Milk',data:' para o evento de 18/10/2026',valor:' no valor de R$ 280,00',saldo:'R$ 180,00',link_avaliacao:'https://g.page/r/exemplo/review',localizacao:'Santa Inês - MA'};
 export default function SettingsManager({settings,setSettings,onDirtyChange}:{settings:SiteSettings;setSettings:React.Dispatch<React.SetStateAction<SiteSettings>>;onDirtyChange?:(dirty:boolean)=>void}){
   const [form,setForm]=useState(settings); const [loading,setLoading]=useState(false); const [dirty,setDirty]=useState(false); useEffect(()=>{onDirtyChange?.(dirty);},[dirty,onDirtyChange]); useEffect(()=>()=>onDirtyChange?.(false),[onDirtyChange]); const [uploading,setUploading]=useState<'logo'|'hero'|null>(null); const [error,setError]=useState(''); const [message,setMessage]=useState('');
   function set<K extends keyof SiteSettings>(k:K,v:SiteSettings[K]){setForm(p=>({...p,[k]:v}));setDirty(true);}

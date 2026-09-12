@@ -120,6 +120,8 @@ jobs:
         run: npm run check:media-recovery-drill
       - name: Guaranteed critical audit contract
         run: npm run check:critical-audit
+      - name: Guided kit builder contract
+        run: npm run check:kit-builder
       - name: Public flow contract
         run: npm run check:public-flow
       - name: TypeScript
