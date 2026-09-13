@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, CakeSlice, Check, Gift, Heart, Layers3, MessageC
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import JsonLd from '@/components/JsonLd';
 import InspirationFavoriteButton from '@/components/InspirationFavoriteButton';
 import InspirationShareButton from '@/components/InspirationShareButton';
 import InspirationQuickQuote from '@/components/InspirationQuickQuote';
@@ -15,7 +16,6 @@ import { getInspirationByCode, getRelatedInspirations, type InspirationModel } f
 import { inspirationPaletteCollections } from '@/lib/inspiration-filters';
 import { whatsappUrl } from '@/lib/links';
 import { siteUrl } from '@/lib/config';
-import { jsonLd as serializeJsonLd } from '@/lib/seo';
 
 type Props={params:Promise<{code:string}>};
 
@@ -45,7 +45,7 @@ export default async function InspirationDetailPage({params}:Props){
   const canonical=siteUrl?`${siteUrl}/inspiracoes/${model.code}`:undefined;
   const creativeWork={"@context":"https://schema.org","@type":"CreativeWork",name:model.title,identifier:model.code,description:model.description,url:canonical,creator:{"@type":"Organization",name:settings.brand_name}};
   const breadcrumbs={"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:'Início',item:siteUrl||undefined},{"@type":"ListItem",position:2,name:'Inspirações',item:siteUrl?`${siteUrl}/inspiracoes`:undefined},{"@type":"ListItem",position:3,name:model.title,item:canonical}]};
-  return <main className="premium-site kf-theme inspiration-detail-page"><Header settings={settings}/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(creativeWork)}}/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:serializeJsonLd(breadcrumbs)}}/>
+  return <main className="premium-site kf-theme inspiration-detail-page"><Header settings={settings}/><JsonLd data={creativeWork}/><JsonLd data={breadcrumbs}/>
     <section className="inspiration-detail-hero"><div className="container"><Link className="back-link inspiration-detail-back" href="/inspiracoes"><ArrowLeft size={16}/> Voltar às inspirações</Link><div className="inspiration-detail-grid">
       <div className={`inspiration-detail-art palette-${model.palette}`}><span className="inspiration-orbit orbit-one"/><span className="inspiration-orbit orbit-two"/><span className="inspiration-petal petal-one"/><span className="inspiration-petal petal-two"/><span className="inspiration-detail-kind">{visualIcon(model)}</span><span className="inspiration-detail-monogram">{initials(model.title)}</span><small>{model.code}</small><InspirationFavoriteButton code={model.code}/></div>
       <div className="inspiration-detail-copy"><div className="eyebrow"><Sparkles size={14}/> Modelo de inspiração • sob encomenda</div><div className="inspiration-detail-title-row"><div><span>{model.code}</span><h1>{model.title}</h1></div><InspirationFavoriteButton code={model.code}/></div><p className="inspiration-detail-description">{model.description}</p>
