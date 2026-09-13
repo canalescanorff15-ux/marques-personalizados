@@ -1,0 +1,78 @@
+/* V6.73 — acabamento fino da Home: hero mais limpa, header mais leve e menos ruído visual */
+
+/* Header: ganhar espaço real e impedir a marca de disputar largura com o menu. */
+.kf-site-header .nav{gap:clamp(12px,1.6vw,24px)!important}
+.kf-brand{max-width:220px}
+.kf-brand-logo{width:50px!important;height:46px!important}
+.kf-brand .brand-copy{max-width:166px!important}
+.kf-brand .brand-copy strong{font-size:.94rem!important;line-height:1.02!important}
+.kf-brand .brand-copy small{display:none!important}
+.kf-site-header .nav-links{gap:clamp(12px,1.2vw,20px)!important}
+.kf-site-header .nav-links>a:not(.btn){font-size:.65rem!important;letter-spacing:.072em!important}
+.nav-project{display:none!important}
+.nav-tools{gap:6px!important}
+.nav-tools .nav-cta{padding-inline:16px!important}
+
+/* Hero: remove a sensação de mockup montado e valoriza apenas a marca. */
+.home-v673 .premium-hero .hero-grid{align-items:center!important}
+.home-v673 .hero-visual{height:410px!important;max-width:530px!important}
+.home-v673 .hero-frame-line{inset:6% 2% 5% 11%!important;border-color:rgba(201,119,112,.18)!important;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,0))}
+.home-v673 .hero-card.main{inset:12px 6px 10px 48px!important;background:#fffaf7!important;border:1px solid rgba(126,79,58,.11)!important;box-shadow:0 28px 72px rgba(91,51,39,.11)!important}
+.home-v673 .kf-logo-card>img{width:100%!important;height:100%!important;object-fit:contain!important;filter:none!important}
+.home-v673 .hero-card.main::after{box-shadow:inset 0 0 0 1px rgba(255,255,255,.65)!important}
+.home-v673 .hero-image-label{left:16px!important;bottom:14px!important;background:rgba(255,250,247,.92)!important;color:#76534a!important;border:1px solid rgba(126,79,58,.10)!important;backdrop-filter:blur(10px)!important}
+.home-v673 .hero-badge{width:110px!important;height:110px!important;right:-2px!important;bottom:27px!important;padding:18px!important;background:rgba(255,252,249,.97)!important;border-color:rgba(201,119,112,.30)!important;box-shadow:0 16px 42px rgba(91,51,39,.10)!important}
+.home-v673 .hero-badge span,.home-v673 .hero-badge small{color:#95746a!important}
+.home-v673 .hero-badge strong{color:#c97770!important;font-size:1.02rem!important}
+.home-v673 .hero-actions{gap:9px!important}
+.home-v673 .home-hero-whatsapp{margin-left:2px!important;color:#77574f!important}
+.home-v673 .trust-row{gap:14px!important}
+.home-v673 .trust-row span{font-size:.64rem!important;color:#8c7169!important}
+
+/* Pequeno refinamento geral: menos caixas altas e mais ritmo editorial. */
+.home-v673 .inspiration-showcase,
+.home-v673 .premium-categories,
+.home-v673 .home-start,
+.home-v673 .home-catalog-preview,
+.home-v673 .home-craft,
+.home-v673 .home-briefing{scroll-margin-top:72px}
+.home-v673 .home-product-card,
+.home-v673 .home-category-grid .editorial-category{box-shadow:0 10px 28px rgba(92,53,41,.035)}
+.home-v673 .home-product-card:hover,
+.home-v673 .home-category-grid .editorial-category:hover{box-shadow:0 18px 42px rgba(92,53,41,.09)}
+.home-v673 .home-final-cta .cta-box{box-shadow:0 18px 50px rgba(111,65,51,.06)}
+
+@media(max-width:1240px){
+  .kf-site-header .nav{grid-template-columns:auto 1fr auto!important;gap:10px!important}
+  .kf-brand{max-width:190px}
+  .kf-brand-logo{width:46px!important;height:43px!important}
+  .kf-brand .brand-copy{max-width:135px!important}
+  .kf-brand .brand-copy strong{font-size:.84rem!important;white-space:normal!important}
+  .kf-site-header .nav-links{gap:10px!important}
+  .kf-site-header .nav-links>a:not(.btn){font-size:.61rem!important}
+  .nav-tools .nav-cta{padding-inline:13px!important}
+}
+
+@media(max-width:1040px){
+  .kf-site-header .nav-links,.nav-tools{display:none!important}
+  .mobile-header-tools{display:flex!important}
+  .kf-brand{max-width:none}
+  .kf-brand .brand-copy{max-width:180px!important}
+  .kf-brand .brand-copy strong{font-size:.92rem!important;white-space:nowrap!important}
+}
+
+@media(max-width:820px){
+  .home-v673 .hero-visual{height:360px!important;max-width:500px!important;margin-inline:auto}
+  .home-v673 .hero-card.main{inset:8px 8px 8px 42px!important}
+  .home-v673 .hero-badge{right:0!important;bottom:20px!important}
+}
+
+@media(max-width:620px){
+  .kf-brand .brand-copy strong{white-space:normal!important;font-size:.86rem!important}
+  .home-v673 .hero-visual{height:320px!important}
+  .home-v673 .hero-card.main{inset:6px 4px 6px 28px!important}
+  .home-v673 .hero-frame-line{inset:5% 1% 4% 7%!important}
+  .home-v673 .hero-badge{width:96px!important;height:96px!important;padding:13px!important;right:-2px!important;bottom:16px!important}
+  .home-v673 .hero-image-label{font-size:.49rem!important;padding:6px 8px!important}
+  .home-v673 .home-hero-whatsapp{width:100%;justify-content:center;border:1px solid rgba(126,79,58,.14);padding:12px!important;margin:0!important;background:rgba(255,255,255,.55)}
+}
