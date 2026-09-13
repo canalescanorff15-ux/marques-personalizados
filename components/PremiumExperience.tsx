@@ -57,7 +57,7 @@ export default function PremiumExperience(){
     initialReveal.forEach(register);
 
     const mutations=initialReveal.length?new MutationObserver(records=>{
-      for(const record of records)for(const node of records.length?record.addedNodes:[])registerTree(node);
+      for(const record of records)for(const node of record.addedNodes)registerTree(node);
     }):null;
     mutations?.observe(document.body,{childList:true,subtree:true});
     const sizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(scheduleScroll):null;
