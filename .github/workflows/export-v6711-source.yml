@@ -1,0 +1,42 @@
+name: Export V6.71.1 source
+
+on:
+  push:
+    branches:
+      - export-v6-71-1-source
+    paths:
+      - '.github/workflows/export-v6711-source.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout exact production commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: 79a7280cdc70bcb31bc304d6af22a43f150cdfb8
+          fetch-depth: 1
+
+      - name: Build exact source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='79a7280cdc70bcb31bc304d6af22a43f150cdfb8'
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "$expected"
+          mkdir -p /tmp/merlin-export
+          git archive --format=zip --prefix='merlin-encantos-em-papel-v6-71-1/' -o /tmp/merlin-export/merlin-encantos-em-papel-v6-71-1-site-completo.zip HEAD
+          (cd /tmp/merlin-export && sha256sum merlin-encantos-em-papel-v6-71-1-site-completo.zip > SHA256.txt)
+          printf '%s\n' "$actual" > /tmp/merlin-export/COMMIT.txt
+
+      - name: Upload source package
+        uses: actions/upload-artifact@v4
+        with:
+          name: merlin-v6-71-1-production-source
+          path: /tmp/merlin-export/*
+          if-no-files-found: error
+          retention-days: 7
