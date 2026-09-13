@@ -53,15 +53,15 @@ Cadastre em **Site configuration → Environment variables**. Nunca faça commit
 
 ### Identidade de release
 
-- `APP_RELEASE_ID` — idealmente o SHA/ID imutável da publicação.
-- `APP_RELEASE_COMMIT` — SHA do commit.
-- `APP_DEPLOYED_AT` — ISO-8601.
+No Netlify, **não é necessário preencher manualmente** `APP_RELEASE_ID`, `APP_RELEASE_COMMIT` nem `APP_DEPLOYED_AT`. O build captura `COMMIT_REF`, usa a versão do `package.json` como ID padrão e grava o horário real da compilação no bundle. Isso evita metadados congelados entre deploys.
+
+Essas três variáveis continuam suportadas apenas como overrides explícitos para outros ambientes ou procedimentos especiais de release.
 
 ## 3. Cloudflare R2 para imagens
 
 Crie um bucket **Standard** para mídia, por exemplo `merlin-media`.
 
-Use uma API Token R2 com acesso somente ao bucket necessário e configure:
+Use uma API Token R2 com acesso somente ao bucket necessário e configure inicialmente:
 
 ```env
 S3_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
@@ -69,12 +69,27 @@ S3_BUCKET=merlin-media
 S3_ACCESS_KEY_ID=<R2_ACCESS_KEY_ID>
 S3_SECRET_ACCESS_KEY=<R2_SECRET_ACCESS_KEY>
 S3_PUBLIC_BASE_URL=https://<origem-publica-do-bucket>
-S3_REQUIRED=1
+S3_REQUIRED=0
 ```
 
 `S3_PUBLIC_BASE_URL` pode ser a URL pública r2.dev habilitada para o bucket ou, preferencialmente no futuro, um domínio próprio. Não inclua `/` final.
 
 O upload administrativo continua em `/api/admin/upload`. O arquivo é validado em memória, enviado ao R2 e verificado por `HEAD` + SHA-256; nenhum upload depende do disco persistente do Netlify.
+
+### Ativação segura do R2
+
+Não mude `S3_REQUIRED` para `1` apenas porque as cinco variáveis foram cadastradas. Siga esta ordem:
+
+1. mantenha `S3_REQUIRED=0`;
+2. faça um deploy com as credenciais do bucket de mídia;
+3. entre no Admin → Biblioteca de mídia;
+4. clique em **Testar R2**;
+5. o diagnóstico cria uma sentinela efêmera em `catalog/_diagnostic/` e comprova `PutObject`, `HeadObject`, `ListObjectsV2`, `DeleteObject` e a ausência do objeto após a exclusão;
+6. o teste nunca retorna access key, secret key, endpoint privado ou conteúdo das credenciais;
+7. somente depois de todas as etapas ficarem verdes, altere `S3_REQUIRED=1` e faça o deploy de ativação;
+8. confirme `/api/health?mode=deep` e faça um upload real pequeno pelo Admin.
+
+Se a configuração estiver ausente, parcial, inválida ou sem alguma permissão, o diagnóstico falha fechado e o catálogo continua funcionando com URLs externas enquanto `S3_REQUIRED=0`.
 
 ## 4. Backups no R2
 
@@ -105,7 +120,8 @@ A V6.71 adiciona `npm run check:netlify`, que protege contra:
 - Node diferente do contrato;
 - remoção da camada S3-compatible;
 - upload que dependa de gravação persistente em disco;
-- ausência das variáveis documentadas para Neon, autenticação e R2.
+- ausência das variáveis documentadas para Neon, autenticação e R2;
+- remoção do diagnóstico completo de capacidade do R2 antes da ativação obrigatória.
 
 ## 6. Primeiro deploy
 
@@ -116,10 +132,12 @@ Depois que o deploy ficar verde:
 3. Abra `/api/health?mode=deep`.
 4. Teste `/admin/login`.
 5. Faça login com MFA.
-6. Envie uma imagem pequena pelo Admin.
-7. Confirme que ela aparece na biblioteca e no catálogo.
-8. Crie um pedido de teste pelo site e confirme a entrada no CRM.
-9. Execute `npm run check:deploy -- https://<seu-site>.netlify.app --require-storage` de uma máquina/CI com acesso ao domínio.
+6. Com `S3_REQUIRED=0`, execute **Testar R2** na Biblioteca de mídia.
+7. Só após o diagnóstico verde, use `S3_REQUIRED=1`.
+8. Envie uma imagem pequena pelo Admin.
+9. Confirme que ela aparece na biblioteca e no catálogo.
+10. Crie um pedido de teste pelo site e confirme a entrada no CRM.
+11. Execute `npm run check:deploy -- https://<seu-site>.netlify.app --require-storage` de uma máquina/CI com acesso ao domínio.
 
 ## 7. Mudança de domínio
 

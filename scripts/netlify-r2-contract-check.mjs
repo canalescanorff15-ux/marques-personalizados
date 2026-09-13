@@ -34,9 +34,25 @@ const storage=read('lib/storage.ts');
 for(const key of ['S3_ENDPOINT','S3_BUCKET','S3_ACCESS_KEY_ID','S3_SECRET_ACCESS_KEY','S3_PUBLIC_BASE_URL'])assert(storage.includes(key),`Storage não lê ${key}`);
 assert(/forcePathStyle\s*:\s*true/.test(storage),'Storage S3 deve manter path-style compatível com R2');
 
+assert(exists('lib/storage-diagnostic.ts'),'Diagnóstico de capacidade do R2 ausente');
+assert(exists('app/api/admin/storage/diagnostic/route.ts'),'Endpoint administrativo de diagnóstico do R2 ausente');
+const diagnostic=read('lib/storage-diagnostic.ts');
+for(const command of ['PutObjectCommand','HeadObjectCommand','ListObjectsV2Command','DeleteObjectCommand'])assert(diagnostic.includes(command),`Diagnóstico R2 não prova ${command}`);
+for(const stage of ["'put'","'head'","'list'","'delete'","'confirm_delete'","'cleanup_delete'"])assert(diagnostic.includes(stage),`Diagnóstico R2 sem etapa ${stage}`);
+assert(diagnostic.includes('catalog/_diagnostic/'),'Diagnóstico R2 deve usar namespace efêmero isolado dentro de catalog/');
+assert(diagnostic.includes('AbortController'),'Diagnóstico R2 deve limitar cada operação externa por timeout cancelável');
+assert(!/S3_SECRET_ACCESS_KEY|S3_ACCESS_KEY_ID/.test(diagnostic),'Diagnóstico R2 não deve manipular nem expor credenciais diretamente');
+const diagnosticRoute=read('app/api/admin/storage/diagnostic/route.ts');
+assert(diagnosticRoute.includes('isAdmin()'),'Diagnóstico R2 deve exigir sessão administrativa');
+assert(diagnosticRoute.includes('sameOriginRequest(request)'),'Diagnóstico R2 deve exigir same-origin');
+assert(diagnosticRoute.includes("runtime='nodejs'"),'Diagnóstico R2 deve rodar em Node.js');
+assert(diagnosticRoute.includes("'cache-control':'private, no-store'"),'Resposta do diagnóstico R2 deve ser privada e sem cache');
+
 const manager=read('components/admin/MediaManager.tsx');
 const picker=read('components/admin/MediaPicker.tsx');
 assert(manager.includes('Cloudflare R2 nas variáveis do Netlify'),'MediaManager deve orientar Netlify + R2');
+assert(manager.includes("'/api/admin/storage/diagnostic'"),'MediaManager deve oferecer teste real da conexão R2');
+assert(manager.includes('Testar R2'),'MediaManager deve expor ação clara de diagnóstico R2');
 assert(picker.includes('Cloudflare R2 nas variáveis do Netlify'),'MediaPicker deve orientar Netlify + R2');
 assert(!/RunSite/i.test(manager+picker),'UI administrativa de mídia não deve citar a plataforma legada');
 
@@ -56,4 +72,4 @@ if(failures.length){
   for(const f of failures)console.error(`- ${f}`);
   process.exit(1);
 }
-console.log('Netlify/R2 Contract: OK — Next.js híbrido + Neon + storage S3-compatible fail-safe e pronto para ativação do Cloudflare R2.');
+console.log('Netlify/R2 Contract: OK — Next.js híbrido + Neon + storage S3-compatible fail-safe, com diagnóstico Put/Head/List/Delete antes da ativação do Cloudflare R2.');
