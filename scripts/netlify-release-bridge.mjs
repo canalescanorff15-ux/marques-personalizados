@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { readFileSync, rmSync } from 'node:fs';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -48,6 +48,16 @@ try{
   const deployId=typeof data?.deploy_id==='string'?data.deploy_id:'';
   const buildId=typeof data?.id==='string'?data.id:'';
   if(!deployId||!buildId)throw new Error('Release bridge: Netlify accepted the upload but did not return build/deploy identifiers.');
+
+  const diagnostic={
+    ok:true,
+    targetSha:TARGET_SHA,
+    buildId,
+    deployId,
+    startedAt:new Date().toISOString()
+  };
+  mkdirSync('.next/static',{recursive:true});
+  writeFileSync('.next/static/merlin-release-bridge.json',JSON.stringify(diagnostic,null,2));
 
   console.log(`Release bridge: production build started for verified source ${TARGET_SHA}.`);
   console.log(`Release bridge: build=${buildId} deploy=${deployId}`);
