@@ -9,14 +9,23 @@ export default function PremiumExperience(){
     const finePointer=window.matchMedia('(hover: hover) and (pointer: fine)');
     root.classList.add('motion-ready');
 
-    const updateScroll=()=>{
+    let scrollFrame=0,pointerFrame=0;
+    let pointerX=0,pointerY=0;
+    const writeScroll=()=>{
+      scrollFrame=0;
       const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);
       root.style.setProperty('--scroll-progress',max>0?String(Math.min(1,Math.max(0,window.scrollY/max))):'0');
     };
+    const scheduleScroll=()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(writeScroll);};
+    const writePointer=()=>{
+      pointerFrame=0;
+      root.style.setProperty('--pointer-x',`${pointerX}px`);
+      root.style.setProperty('--pointer-y',`${pointerY}px`);
+    };
     const onPointer=(event:PointerEvent)=>{
       if(!finePointer.matches||reduced.matches)return;
-      root.style.setProperty('--pointer-x',`${event.clientX}px`);
-      root.style.setProperty('--pointer-y',`${event.clientY}px`);
+      pointerX=event.clientX;pointerY=event.clientY;
+      if(!pointerFrame)pointerFrame=requestAnimationFrame(writePointer);
     };
 
     let observer:IntersectionObserver|null=null;
@@ -46,25 +55,27 @@ export default function PremiumExperience(){
 
     const mutations=new MutationObserver(records=>{
       for(const record of records)for(const node of record.addedNodes)registerTree(node);
-      updateScroll();
     });
     mutations.observe(document.body,{childList:true,subtree:true});
+    const sizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(scheduleScroll):null;
+    sizeObserver?.observe(document.body);
 
     const onMotionChange=()=>{
       if(reduced.matches){observer?.disconnect();observer=null;document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(revealImmediately);}
       root.classList.toggle('motion-reduced',reduced.matches);
     };
-    onMotionChange();updateScroll();
-    window.addEventListener('scroll',updateScroll,{passive:true});
-    window.addEventListener('resize',updateScroll,{passive:true});
+    onMotionChange();writeScroll();
+    window.addEventListener('scroll',scheduleScroll,{passive:true});
+    window.addEventListener('resize',scheduleScroll,{passive:true});
     if(finePointer.matches)window.addEventListener('pointermove',onPointer,{passive:true});
     reduced.addEventListener?.('change',onMotionChange);
 
     return()=>{
-      observer?.disconnect();mutations.disconnect();
+      observer?.disconnect();mutations.disconnect();sizeObserver?.disconnect();
+      if(scrollFrame)cancelAnimationFrame(scrollFrame);if(pointerFrame)cancelAnimationFrame(pointerFrame);
       root.classList.remove('motion-ready','motion-reduced');
-      window.removeEventListener('scroll',updateScroll);
-      window.removeEventListener('resize',updateScroll);
+      window.removeEventListener('scroll',scheduleScroll);
+      window.removeEventListener('resize',scheduleScroll);
       window.removeEventListener('pointermove',onPointer);
       reduced.removeEventListener?.('change',onMotionChange);
     };
