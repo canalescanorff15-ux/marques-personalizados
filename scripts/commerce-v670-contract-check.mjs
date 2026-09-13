@@ -13,7 +13,7 @@ must('components/ProductConfigurator.tsx',['PERSONALIZAÇÃO + QUANTIDADE','sugg
 must('components/QuoteListProvider.tsx',['production_time: string','quantity?:number','Abrir orçamento completo','/orcamento']);
 must('app/api/quote-list/route.ts',['production_time']);
 must('components/OrderDecisionGuide.tsx',['Planejamento sem adivinhação','POR INVESTIMENTO','POR CONVIDADOS','/orcamento?faixa=']);
-must('app/page.tsx',['OrderDecisionGuide','<OrderDecisionGuide/>']);
+must('app/page.tsx',['href="/guia-de-precos"','href="/orcamento"','href="/monte-seu-kit"']);
 must('app/guia-de-precos/page.tsx',['PREÇOS TRANSPARENTES PARA COMEÇAR','minimumOrderCents','CollectionPage','/orcamento']);
 must('components/ProductBuyingGuide.tsx',['ANTES DE PEDIR','productBuyingGuide']);
 must('lib/product-guide.ts',['valueDrivers','preparation','Kits personalizados']);
@@ -34,4 +34,4 @@ const workflow=must('.github/workflows/ci.yml',['check:catalog-commercial']);
 const pkg=JSON.parse(read('package.json'));
 if(!pkg.scripts?.['check:commerce-v670'])fail('package.json sem check:commerce-v670');
 if(!String(pkg.scripts.verify||'').includes('check:commerce-v670'))fail('verify não executa check:commerce-v670');
-console.log('COMMERCE_V670_CONTRACT_OK (orçamento, preços, filtros, quantidade, prazo e guia de compra protegidos)');
+console.log('COMMERCE_V670_CONTRACT_OK (orçamento, preços, filtros, quantidade, prazo e guia de compra protegidos; home aponta para as rotas dedicadas)');
