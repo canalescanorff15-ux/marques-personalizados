@@ -19,11 +19,11 @@ export default function WebVitalsReporter(){
   const pathname=usePathname();
   useEffect(()=>{
     if(typeof PerformanceObserver==='undefined')return;
-    const path=pathname||'/';if(path.startsWith('/admin'))return;let lcp=0,cls=0,sent=false;const observers:PerformanceObserver[]=[];
-    try{const nav=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;if(nav&&nav.responseStart>0)send('ttfb',nav.responseStart,path);}catch{}
+    const path=pathname||'/';if(path.startsWith('/admin'))return;let lcp=0,cls=0,ttfb=0,sent=false;const observers:PerformanceObserver[]=[];
+    try{const nav=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;if(nav&&nav.responseStart>0)ttfb=nav.responseStart;}catch{}
     try{const obs=new PerformanceObserver(list=>{for(const entry of list.getEntries())lcp=Math.max(lcp,entry.startTime);});obs.observe({type:'largest-contentful-paint',buffered:true} as PerformanceObserverInit);observers.push(obs);}catch{}
     try{const obs=new PerformanceObserver(list=>{for(const entry of list.getEntries() as LayoutShiftEntry[]){if(!entry.hadRecentInput)cls+=Number(entry.value||0);}});obs.observe({type:'layout-shift',buffered:true} as PerformanceObserverInit);observers.push(obs);}catch{}
-    const flush=()=>{if(sent)return;sent=true;if(lcp>0)send('lcp',lcp,path);send('cls',cls,path);};
+    const flush=()=>{if(sent)return;sent=true;if(ttfb>0)send('ttfb',ttfb,path);if(lcp>0)send('lcp',lcp,path);send('cls',cls,path);};
     const timer=setTimeout(flush,5000);const onVisibility=()=>{if(document.visibilityState==='hidden')flush();};
     document.addEventListener('visibilitychange',onVisibility);window.addEventListener('pagehide',flush,{once:true});
     return()=>{clearTimeout(timer);flush();observers.forEach(o=>o.disconnect());document.removeEventListener('visibilitychange',onVisibility);window.removeEventListener('pagehide',flush);};
