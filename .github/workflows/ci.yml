@@ -30,6 +30,8 @@ jobs:
         run: npm run check:url-safety
       - name: Platform single-source contract
         run: npm run check:platform
+      - name: Netlify and R2 deployment contract
+        run: npm run check:netlify
       - name: Supply-chain contract
         run: npm run check:supply-chain
       - name: Release identity contract
@@ -134,6 +136,12 @@ jobs:
         run: npm run check:inspiration-quote
       - name: Inspiration compare contract
         run: npm run check:inspiration-compare
+      - name: Merlin project board contract
+        run: npm run check:project-board
+      - name: Commercial catalog pricing and image contract
+        run: npm run check:catalog-commercial
+      - name: V6.70 assisted commerce and smart quote contract
+        run: npm run check:commerce-v670
       - name: Public flow contract
         run: npm run check:public-flow
       - name: TypeScript

@@ -23,6 +23,14 @@ for(const token of ["import packageJson from '../package.json' with { type: 'jso
   if(!release.includes(token))errors.push(`lib/release.ts sem contrato: ${token}`);
 }
 for(const field of ['APP_RELEASE_ID','APP_RELEASE_COMMIT','APP_DEPLOYED_AT'])if(!release.includes(field))errors.push(`getReleaseInfo não considera ${field}`);
+if(!release.includes('process.env.COMMIT_REF'))errors.push('getReleaseInfo não usa COMMIT_REF como fallback nativo do Netlify');
+
+const nextConfig=read('next.config.ts');
+if(!nextConfig.includes("process.env.APP_RELEASE_COMMIT || process.env.COMMIT_REF || ''"))errors.push('next.config.ts não captura COMMIT_REF durante o build do Netlify');
+if(!/env\s*:\s*\{[\s\S]*APP_RELEASE_COMMIT\s*:\s*buildReleaseCommit/.test(nextConfig))errors.push('next.config.ts não embute APP_RELEASE_COMMIT no bundle do Next');
+if(!nextConfig.includes("process.env.APP_DEPLOYED_AT || ''"))errors.push('next.config.ts não considera APP_DEPLOYED_AT configurado');
+if(!nextConfig.includes('new Date().toISOString()'))errors.push('next.config.ts não gera timestamp do deploy durante o build');
+if(!/env\s*:\s*\{[\s\S]*APP_DEPLOYED_AT\s*:\s*buildReleaseDeployedAt/.test(nextConfig))errors.push('next.config.ts não embute APP_DEPLOYED_AT no bundle do Next');
 
 const health=read('app/api/health/route.ts');
 if(!health.includes('getReleaseInfo()'))errors.push('health endpoint não publica identidade de release');
@@ -42,4 +50,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log(`Release Contract Check: OK — package.json é a autoridade da versão (${pkg.version}) e APIs/manifest/gate permanecem sincronizados.`);
+console.log(`Release Contract Check: OK — package.json é a autoridade da versão (${pkg.version}), commit e timestamp do deploy são capturados no build do Netlify e APIs/manifest/gate permanecem sincronizados.`);

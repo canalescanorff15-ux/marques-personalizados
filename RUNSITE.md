@@ -1,3 +1,5 @@
+> **Nota V6.71:** Runsite passa a ser tratado como plataforma legada/rollback. O caminho recomendado para custo inicial zero é Netlify + Neon + Cloudflare R2, preservando o **Backup V9** e o schema 27. Consulte `NETLIFY.md`.
+
 ## V6.50 — deploy do lifecycle cross-system de mídia
 
 Antes do deploy execute `npm run db:setup && npm run db:verify`, seguido de `npm run check:media-lifecycle && npm run check:media-dr && npm run check:backup-v9 && npm run check:restore`. O **schema 27** cria leases transitórias que serializam upload/delete/restore de mídia com o Neon; o **Backup V9** continua atual e não deve conter essas leases. Garanta no Storage primário permissões para `HeadObject`, `PutObject`, `DeleteObject` e listagem no namespace `catalog/`. Depois do deploy, faça um upload, confirme attestation por `HeadObject`, faça exclusão/retry controlado e verifique o deep-health sem leases expiradas ou tombstones pendentes. Restore do banco deve ser recusado enquanto houver lifecycle ativo; `media:restore --apply` exige Neon/schema 27 e revalida tombstones sob lease. Node `22.23.2`, npm `10.9.8`, schema `27`.

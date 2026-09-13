@@ -12,6 +12,7 @@ import { parseMediaLifecycleLease,type MediaLifecycleLease } from './media-lifec
 import { normalizeExternalHttpsUrl,normalizePublicUrl } from './public-url';
 import { adminCreateIdFromKey,assertIdempotentReplay,CreateUniqueConflictError,type AdminCreateScope } from './idempotency';
 import platformContract from '../platform-contract.json' with { type: 'json' };
+import { catalogCategoryImage,catalogProductImage,getStarterCategory,getStarterProduct,starterCatalogCategories,starterCatalogProducts } from './catalog-merchandising';
 
 export type ProductCustomizationField = {
   id: string;
@@ -238,9 +239,18 @@ type SqlQueryParams=Parameters<SqlClient['query']>[1];
 function asRows(value:unknown):DbRow[]{return Array.isArray(value)?value.filter((row):row is DbRow=>Boolean(row)&&typeof row==='object'&&!Array.isArray(row)):[];}
 function errorText(error:unknown){return error instanceof Error?error.message:String(error);}
 function missingColumn(error:unknown,column:string){const text=errorText(error).toLowerCase();return text.includes('column')&&text.includes(column.toLowerCase())&&text.includes('does not exist');}
-function normalizeProduct(row:DbRow):Product{const base=row as unknown as Product;const imageUrls=Array.isArray(row.image_urls)?row.image_urls.filter((value):value is string=>typeof value==='string').map(value=>normalizePublicUrl(value)).filter(Boolean):[];return {...base,category_id:typeof row.category_id==='string'?row.category_id:null,image_urls:imageUrls,tags:Array.isArray(row.tags)?row.tags.filter((value):value is string=>typeof value==='string'):[],badge:String(row.badge||''),customization_fields:Array.isArray(row.customization_fields)?row.customization_fields as ProductCustomizationField[]:[],publish_at:row.publish_at?new Date(String(row.publish_at)).toISOString():null,unpublish_at:row.unpublish_at?new Date(String(row.unpublish_at)).toISOString():null,deleted_at:row.deleted_at?new Date(String(row.deleted_at)).toISOString():null};}
+function normalizeProduct(row:DbRow):Product{
+  const base=row as unknown as Product;const starter=getStarterProduct(String(row.slug||''));
+  const rawImages=Array.isArray(row.image_urls)?row.image_urls.filter((value):value is string=>typeof value==='string').map(value=>normalizePublicUrl(value)).filter(Boolean):[];
+  const category=String(row.category||starter?.category||'');
+  const starterPrice=starter?.price_cents??null;const parsedPrice=row.price_cents===null||row.price_cents===undefined?null:Number(row.price_cents);
+  const priceCents=Number.isFinite(parsedPrice as number)?parsedPrice as number:starterPrice;
+  const rawMin=row.min_quantity===null||row.min_quantity===undefined?null:Number(row.min_quantity);
+  const minQuantity=Number.isFinite(rawMin as number)&&Number(rawMin)>0?Number(rawMin):starter?.min_quantity??null;
+  return {...base,category,category_id:typeof row.category_id==='string'?row.category_id:null,description:String(row.description||starter?.description||''),price_cents:priceCents,image_urls:catalogProductImage(String(row.slug||''),category,rawImages),tags:Array.isArray(row.tags)?row.tags.filter((value):value is string=>typeof value==='string'):(starter?.tags||[]),featured:typeof row.featured==='boolean'?row.featured:Boolean(starter?.featured),badge:String(row.badge||starter?.badge||''),min_quantity:minQuantity,production_time:String(row.production_time||starter?.production_time||''),customization_fields:Array.isArray(row.customization_fields)?row.customization_fields as ProductCustomizationField[]:(starter?.customization_fields||[]) as ProductCustomizationField[],publish_at:row.publish_at?new Date(String(row.publish_at)).toISOString():null,unpublish_at:row.unpublish_at?new Date(String(row.unpublish_at)).toISOString():null,deleted_at:row.deleted_at?new Date(String(row.deleted_at)).toISOString():null};
+}
 function normalizeProducts(rows:DbRow[]):Product[]{return rows.map(normalizeProduct);}
-function normalizeCategory(row:DbRow):Category{const base=row as unknown as Category;const image=normalizePublicUrl(typeof row.image_url==='string'?row.image_url:'');return{...base,image_url:image||null};}
+function normalizeCategory(row:DbRow):Category{const base=row as unknown as Category;const starter=getStarterCategory(String(row.slug||''))||getStarterCategory(String(row.name||''));const raw=normalizePublicUrl(typeof row.image_url==='string'?row.image_url:'');return{...base,name:String(row.name||starter?.name||''),description:String(row.description||starter?.description||''),image_url:catalogCategoryImage(String(row.slug||''),String(row.name||''),raw||null)};}
 function normalizeInquiry(row:DbRow):Inquiry{const base=row as unknown as Inquiry;const eventBrief=row.event_brief&&typeof row.event_brief==='object'&&!Array.isArray(row.event_brief)?row.event_brief as InquiryEventBrief:{};return {...base,quote_items:Array.isArray(row.quote_items)?row.quote_items as InquiryQuoteItem[]:[],event_brief:eventBrief,quoted_value_cents:row.quoted_value_cents==null?null:Number(row.quoted_value_cents),paid_cents:Number(row.paid_cents||0),payment_status:(row.payment_status||'pendente') as Inquiry['payment_status'],production_status:(row.production_status||'nao_iniciado') as Inquiry['production_status'],production_due_at:row.production_due_at?new Date(String(row.production_due_at)).toISOString():null,review_requested_at:row.review_requested_at?new Date(String(row.review_requested_at)).toISOString():null,repurchase_contacted_at:row.repurchase_contacted_at?new Date(String(row.repurchase_contacted_at)).toISOString():null,repurchase_contact_year:row.repurchase_contact_year==null?null:Number(row.repurchase_contact_year),repurchase_next_anniversary:row.repurchase_next_anniversary?String(row.repurchase_next_anniversary):undefined,repurchase_cycle_year:row.repurchase_cycle_year==null?undefined:Number(row.repurchase_cycle_year),anonymized_at:row.anonymized_at?new Date(String(row.anonymized_at)).toISOString():null,version:Math.max(1,Number(row.version||1))};}
 function normalizeInquiries(rows:DbRow[]):Inquiry[]{return rows.map(normalizeInquiry);}
 function normalizeMarketingCampaign(row:DbRow):MarketingCampaign{const base=row as unknown as MarketingCampaign;return {...base,starts_at:row.starts_at?new Date(String(row.starts_at)).toISOString():null,ends_at:row.ends_at?new Date(String(row.ends_at)).toISOString():null,goal_leads:Number(row.goal_leads||0),goal_revenue_cents:Number(row.goal_revenue_cents||0),spend_cents:Number(row.spend_cents||0)};}
@@ -339,11 +349,8 @@ export async function bulkUpdateProducts(refs:ProductVersionRef[],action:Product
 
 export async function getCategories(includeInactive = false): Promise<Category[]> {
   const sql = getSql();
-  if (!sql) return fallbackCategories.map((name, i) => ({
-    id: `demo-cat-${i+1}`,
-    slug: name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
-    name, description: '', image_url: null, active: true, sort_order: i+1,
-    created_at: new Date().toISOString(), updated_at: new Date().toISOString()
+  if (!sql) return starterCatalogCategories.map((category, i) => ({
+    id: `demo-cat-${i+1}`,slug:category.slug,name:category.name,description:category.description,image_url:category.image_url,active:true,sort_order:category.sort_order,created_at:new Date().toISOString(),updated_at:new Date().toISOString()
   }));
   const rows = includeInactive
     ? await sql`SELECT * FROM categories ORDER BY sort_order ASC, name ASC`
@@ -856,26 +863,11 @@ export async function anonymizePrivacySubject(identityType:PrivacyIdentityType,v
   try{const rows=await query(sql,`SELECT marques_anonymize_privacy_subject($1,$2,$3,$4) AS result`,[phone,email,phoneHash,emailHash]);const raw=rows[0]?.result&&typeof rows[0].result==='object'?rows[0].result as Record<string,unknown>:{};return{matched:Number(raw.matched||0),anonymized:Number(raw.anonymized||0),activity_deleted:Number(raw.activity_deleted||0),snapshots_deleted:Number(raw.snapshots_deleted||0)};}catch(error){const text=errorText(error);const match=text.match(/PRIVACY_ACTIVE_INQUIRIES:(\d+)/);if(match)throw new Error(`PRIVACY_ACTIVE_INQUIRIES:${match[1]}`);throw error;}
 }
 
-export const demoProducts: Product[] = [
-  {
-    id:'00000000-0000-4000-8000-000000000001',slug:'topo-premium-camadas',name:'Topo Premium em Camadas',category:'Topos de bolo',category_id:null,
-    description:'Topo personalizado com composição em múltiplas camadas, acabamento 3D e identidade visual exclusiva.',price_cents:null,
-    image_urls:['/placeholder-topo.svg'],featured:true,active:true,stock_status:'sob_encomenda',tags:['premium','3D','personalizado'],sort_order:1,
-    min_quantity:1,production_time:'Consulte o prazo para a sua data',seo_title:'',seo_description:'',badge:'Destaque',customization_fields:[{id:'nome',label:'Nome',type:'text',required:false,placeholder:'Nome para personalizar',options:[]},{id:'idade',label:'Idade',type:'number',required:false,placeholder:'',options:[]}],publish_at:null,unpublish_at:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()
-  },
-  {
-    id:'00000000-0000-4000-8000-000000000002',slug:'caixinha-milk-premium',name:'Caixinha Milk Premium',category:'Caixinhas Milk',category_id:null,
-    description:'Caixinha personalizada com impressão de alta qualidade, corte preciso e acabamento reforçado.',price_cents:null,
-    image_urls:['/placeholder-milk.svg'],featured:true,active:true,stock_status:'sob_encomenda',tags:['festa','lembrancinha'],sort_order:2,
-    min_quantity:10,production_time:'Consulte o prazo para a sua quantidade',seo_title:'',seo_description:'',badge:'',customization_fields:[],publish_at:null,unpublish_at:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()
-  },
-  {
-    id:'00000000-0000-4000-8000-000000000003',slug:'kit-lembrancinhas',name:'Kit de Lembrancinhas',category:'Lembrancinhas',category_id:null,
-    description:'Conjunto personalizado para festas, com peças combinando entre si e acabamento profissional.',price_cents:null,
-    image_urls:['/placeholder-kit.svg'],featured:false,active:true,stock_status:'sob_encomenda',tags:['kit','festa'],sort_order:3,
-    min_quantity:10,production_time:'Consulte o prazo para a sua quantidade',seo_title:'',seo_description:'',badge:'',customization_fields:[],publish_at:null,unpublish_at:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()
-  }
-];
+export const demoProducts: Product[] = starterCatalogProducts.map((item,index)=>({
+  id:`00000000-0000-4000-8000-${String(index+1).padStart(12,'0')}`,slug:item.slug,name:item.name,category:item.category,category_id:null,
+  description:item.description,price_cents:item.price_cents,image_urls:[item.image_url],featured:Boolean(item.featured),active:true,stock_status:item.stock_status as Product['stock_status'],tags:[...item.tags],sort_order:index+1,
+  min_quantity:item.min_quantity,production_time:item.production_time,seo_title:'',seo_description:'',badge:item.badge,customization_fields:item.customization_fields as ProductCustomizationField[],publish_at:null,unpublish_at:null,created_at:new Date().toISOString(),updated_at:new Date().toISOString()
+}));
 
 
 export type Faq={id:string;question:string;answer:string;active:boolean;sort_order:number;created_at:string;updated_at:string};
@@ -1047,15 +1039,17 @@ export async function consumeDistributedRateLimit(scope:string,keyHash:string,li
 }
 
 function cleanSearch(value:string){return (value||'').trim().replace(/[\\%_]+/g,' ').replace(/\s+/g,' ').slice(0,100);}
-export async function getPublicCatalogPage(opts:{page?:number;pageSize?:number;category?:string;query?:string;sort?:CatalogSort;ids?:string[];stock?:Product['stock_status'];customizable?:boolean;tag?:string}={}):Promise<CatalogPage>{
+export async function getPublicCatalogPage(opts:{page?:number;pageSize?:number;category?:string;query?:string;sort?:CatalogSort;ids?:string[];stock?:Product['stock_status'];customizable?:boolean;minPriceCents?:number;maxPriceCents?:number;tag?:string}={}):Promise<CatalogPage>{
   const sql=getSql(); const page=Math.min(250,Math.max(1,opts.page||1));const pageSize=Math.min(36,Math.max(1,opts.pageSize||18));
-  if(!sql){let data=[...demoProducts];if(opts.category)data=data.filter(p=>p.category===opts.category);const q=cleanSearch(opts.query||'').toLowerCase();if(q)data=data.filter(p=>`${p.name} ${p.category} ${p.description} ${p.tags.join(' ')}`.toLowerCase().includes(q));if(opts.ids?.length)data=data.filter(p=>opts.ids!.includes(p.id));if(opts.stock)data=data.filter(p=>p.stock_status===opts.stock);if(opts.customizable)data=data.filter(p=>p.customization_fields.length>0);if(opts.tag)data=data.filter(p=>p.tags.some(tag=>tag.toLocaleLowerCase('pt-BR')===opts.tag!.toLocaleLowerCase('pt-BR')));const total=data.length;return{items:data.slice((page-1)*pageSize,page*pageSize),total,page,page_size:pageSize,has_more:page*pageSize<total};}
+  if(!sql){let data=[...demoProducts];if(opts.category)data=data.filter(p=>p.category===opts.category);const q=cleanSearch(opts.query||'').toLowerCase();if(q)data=data.filter(p=>`${p.name} ${p.category} ${p.description} ${p.tags.join(' ')}`.toLowerCase().includes(q));if(opts.ids?.length)data=data.filter(p=>opts.ids!.includes(p.id));if(opts.stock)data=data.filter(p=>p.stock_status===opts.stock);if(opts.customizable)data=data.filter(p=>p.customization_fields.length>0);if(opts.minPriceCents!==undefined)data=data.filter(p=>p.price_cents!==null&&p.price_cents>=opts.minPriceCents!);if(opts.maxPriceCents!==undefined)data=data.filter(p=>p.price_cents!==null&&p.price_cents<=opts.maxPriceCents!);if(opts.tag)data=data.filter(p=>p.tags.some(tag=>tag.toLocaleLowerCase('pt-BR')===opts.tag!.toLocaleLowerCase('pt-BR')));const total=data.length;return{items:data.slice((page-1)*pageSize,page*pageSize),total,page,page_size:pageSize,has_more:page*pageSize<total};}
   const q=cleanSearch(opts.query||''); const conditions=['p.active=true','c.active=true','(p.publish_at IS NULL OR p.publish_at<=now())','(p.unpublish_at IS NULL OR p.unpublish_at>now())'];const params:unknown[]=[];let n=1;
   if(opts.category){conditions.push(`c.slug=$${n++}`);params.push(opts.category);}
   if(q){conditions.push(`(p.name ILIKE $${n} OR p.description ILIKE $${n} OR p.category ILIKE $${n} OR array_to_string(p.tags,' ') ILIKE $${n})`);params.push(`%${q}%`);n++;}
   if(opts.ids?.length){conditions.push(`p.id=ANY($${n++}::uuid[])`);params.push(opts.ids.slice(0,60));}
   if(opts.stock){conditions.push(`p.stock_status=$${n++}`);params.push(opts.stock);}
   if(opts.customizable){conditions.push(`jsonb_array_length(COALESCE(p.customization_fields,'[]'::jsonb))>0`);}
+  if(opts.minPriceCents!==undefined){conditions.push(`p.price_cents>=$${n++}`);params.push(opts.minPriceCents);}
+  if(opts.maxPriceCents!==undefined){conditions.push(`p.price_cents<=$${n++}`);params.push(opts.maxPriceCents);}
   if(opts.tag){conditions.push(`EXISTS(SELECT 1 FROM unnest(p.tags) tag_value WHERE lower(tag_value)=lower($${n++}))`);params.push(opts.tag.slice(0,40));}
   const order=opts.sort==='novos'?'p.created_at DESC':opts.sort==='preco'?'p.price_cents ASC NULLS LAST,p.name ASC':opts.sort==='nome'?'p.name ASC':'p.featured DESC,p.sort_order ASC,p.created_at DESC';
   const offset=(page-1)*pageSize;
@@ -1067,7 +1061,7 @@ export async function getPublicCatalogPage(opts:{page?:number;pageSize?:number;c
     if(!rows.length&&page>1){const count=await query(sql,`SELECT COUNT(*)::int total FROM products p JOIN categories c ON c.id=p.category_id WHERE ${conditions.join(' AND ')}`,params);total=Number(count[0]?.total||0);}
     return{items:normalizeProducts(rows),total,page,page_size:pageSize,has_more:offset+rows.length<total};
   }
-  catch(error){if(!missingColumn(error,'category_id')&&!missingColumn(error,'publish_at')&&!missingColumn(error,'unpublish_at'))throw error;const legacy=['p.active=true',`EXISTS(SELECT 1 FROM categories c WHERE c.name=p.category AND c.active=true)`];const ps:unknown[]=[];let m=1;if(opts.category){legacy.push(`p.category=(SELECT name FROM categories WHERE slug=$${m++} AND active=true LIMIT 1)`);ps.push(opts.category);}if(q){legacy.push(`(p.name ILIKE $${m} OR p.description ILIKE $${m} OR p.category ILIKE $${m} OR array_to_string(p.tags,' ') ILIKE $${m})`);ps.push(`%${q}%`);m++;}if(opts.ids?.length){legacy.push(`p.id=ANY($${m++}::uuid[])`);ps.push(opts.ids.slice(0,60));}if(opts.stock){legacy.push(`p.stock_status=$${m++}`);ps.push(opts.stock);}if(opts.customizable){legacy.push(`jsonb_array_length(COALESCE(p.customization_fields,'[]'::jsonb))>0`);}if(opts.tag){legacy.push(`EXISTS(SELECT 1 FROM unnest(p.tags) tag_value WHERE lower(tag_value)=lower($${m++}))`);ps.push(opts.tag.slice(0,40));}const rows=await query(sql,`SELECT p.*,COUNT(*) OVER()::int AS __total FROM products p WHERE ${legacy.join(' AND ')} ORDER BY ${order} LIMIT $${m++} OFFSET $${m++}`,[...ps,pageSize,offset]);let total=Number(rows[0]?.__total||0);if(!rows.length&&page>1){const count=await query(sql,`SELECT COUNT(*)::int total FROM products p WHERE ${legacy.join(' AND ')}`,ps);total=Number(count[0]?.total||0);}return{items:normalizeProducts(rows),total,page,page_size:pageSize,has_more:offset+rows.length<total};}
+  catch(error){if(!missingColumn(error,'category_id')&&!missingColumn(error,'publish_at')&&!missingColumn(error,'unpublish_at'))throw error;const legacy=['p.active=true',`EXISTS(SELECT 1 FROM categories c WHERE c.name=p.category AND c.active=true)`];const ps:unknown[]=[];let m=1;if(opts.category){legacy.push(`p.category=(SELECT name FROM categories WHERE slug=$${m++} AND active=true LIMIT 1)`);ps.push(opts.category);}if(q){legacy.push(`(p.name ILIKE $${m} OR p.description ILIKE $${m} OR p.category ILIKE $${m} OR array_to_string(p.tags,' ') ILIKE $${m})`);ps.push(`%${q}%`);m++;}if(opts.ids?.length){legacy.push(`p.id=ANY($${m++}::uuid[])`);ps.push(opts.ids.slice(0,60));}if(opts.stock){legacy.push(`p.stock_status=$${m++}`);ps.push(opts.stock);}if(opts.customizable){legacy.push(`jsonb_array_length(COALESCE(p.customization_fields,'[]'::jsonb))>0`);}if(opts.minPriceCents!==undefined){legacy.push(`p.price_cents>=$${m++}`);ps.push(opts.minPriceCents);}if(opts.maxPriceCents!==undefined){legacy.push(`p.price_cents<=$${m++}`);ps.push(opts.maxPriceCents);}if(opts.tag){legacy.push(`EXISTS(SELECT 1 FROM unnest(p.tags) tag_value WHERE lower(tag_value)=lower($${m++}))`);ps.push(opts.tag.slice(0,40));}const rows=await query(sql,`SELECT p.*,COUNT(*) OVER()::int AS __total FROM products p WHERE ${legacy.join(' AND ')} ORDER BY ${order} LIMIT $${m++} OFFSET $${m++}`,[...ps,pageSize,offset]);let total=Number(rows[0]?.__total||0);if(!rows.length&&page>1){const count=await query(sql,`SELECT COUNT(*)::int total FROM products p WHERE ${legacy.join(' AND ')}`,ps);total=Number(count[0]?.total||0);}return{items:normalizeProducts(rows),total,page,page_size:pageSize,has_more:offset+rows.length<total};}
 }
 export async function getHomeCuratedProducts(limit=18){const page=await getPublicCatalogPage({page:1,pageSize:Math.min(24,limit),sort:'curadoria'});return page.items;}
 export async function getPublicProductsByCategory(slug:string,limit=18){return (await getPublicCatalogPage({category:slug,pageSize:limit})).items;}
@@ -1186,7 +1180,7 @@ export async function getPublicTagBySlug(slug:string){const safe=slugifyText(slu
 
 export async function getPublicPopularTags(limit=8,categorySlug?:string):Promise<{tag:string;count:number}[]>{
   const sql=getSql();const safeLimit=Math.min(12,Math.max(1,limit));
-  if(!sql){const categoryName=categorySlug?fallbackCategories.find(name=>name.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')===categorySlug)||'':'';const counts=new Map<string,{tag:string;count:number}>();for(const product of demoProducts){if(categoryName&&product.category!==categoryName)continue;for(const tag of product.tags){const key=tag.toLocaleLowerCase('pt-BR');const item=counts.get(key)||{tag,count:0};item.count++;counts.set(key,item);}}return [...counts.values()].sort((a,b)=>b.count-a.count||a.tag.localeCompare(b.tag,'pt-BR')).slice(0,safeLimit);}
+  if(!sql){const categoryName=categorySlug?(getStarterCategory(categorySlug)?.name||''):'';const counts=new Map<string,{tag:string;count:number}>();for(const product of demoProducts){if(categoryName&&product.category!==categoryName)continue;for(const tag of product.tags){const key=tag.toLocaleLowerCase('pt-BR');const item=counts.get(key)||{tag,count:0};item.count++;counts.set(key,item);}}return [...counts.values()].sort((a,b)=>b.count-a.count||a.tag.localeCompare(b.tag,'pt-BR')).slice(0,safeLimit);}
   try{const rows=await query(sql,`SELECT tag_value AS tag,COUNT(*)::int count FROM products p JOIN categories c ON c.id=p.category_id CROSS JOIN LATERAL unnest(p.tags) tag_value WHERE p.active=true AND c.active=true AND (p.publish_at IS NULL OR p.publish_at<=now()) AND (p.unpublish_at IS NULL OR p.unpublish_at>now()) AND length(trim(tag_value))>1 AND ($2::text IS NULL OR c.slug=$2) GROUP BY tag_value ORDER BY count DESC,tag_value ASC LIMIT $1`,[safeLimit,categorySlug||null]);return rows.map(row=>({tag:String(row.tag),count:Number(row.count)}));}catch{return [];}
 }
 
