@@ -1,6 +1,6 @@
 {
   "name": "marques-catalogo-premium",
-  "version": "6.50.0",
+  "version": "6.71.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
