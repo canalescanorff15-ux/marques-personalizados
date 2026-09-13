@@ -16,7 +16,7 @@ export default function SafeImage({
   width,
   height,
   fill,
-  sizes='(max-width: 760px) 92vw, (max-width: 1200px) 50vw, 560px',
+  sizes='(max-width: 620px) 92vw, (max-width: 980px) 46vw, 33vw',
   quality=76,
   unoptimized,
   onError,
