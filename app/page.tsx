@@ -1,5 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import './home-v672.css';
+import './home-v673.css';
 import './home-v680.css';
 import { ArrowDown, ArrowUpRight, CalendarDays, CheckCircle2, Gem, ImageIcon, Layers3, MessageCircle, PackagePlus, Palette, Scissors, ShieldCheck, Sparkles, Star, WandSparkles } from 'lucide-react';
 import Header from '@/components/Header';
