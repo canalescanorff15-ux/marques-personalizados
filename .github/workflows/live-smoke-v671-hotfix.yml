@@ -29,7 +29,8 @@ jobs:
             '/admin/login'
           )
           for route in "${routes[@]}"; do
-            body="/tmp$(echo "$route" | tr '/' '_' | tr -cd '[:alnum:]_').html"
+            safe="$(echo "$route" | tr '/' '_' | tr -cd '[:alnum:]_')"
+            body="/tmp/smoke_${safe:-root}.html"
             code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o "$body" -w '%{http_code}' "$base$route")"
             echo "$route -> HTTP $code"
             test "$code" = '200'
