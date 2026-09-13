@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function PremiumExperience(){
+  const pathname=usePathname();
   useEffect(()=>{
     const root=document.documentElement;
     const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -41,7 +43,8 @@ export default function PremiumExperience(){
       node.querySelectorAll<HTMLElement>('[data-reveal]').forEach(register);
     };
 
-    if('IntersectionObserver' in window&&!reduced.matches){
+    const initialReveal=[...document.querySelectorAll<HTMLElement>('[data-reveal]')];
+    if(initialReveal.length&&'IntersectionObserver' in window&&!reduced.matches){
       observer=new IntersectionObserver(entries=>{
         for(const entry of entries){
           if(entry.isIntersecting){
@@ -51,12 +54,12 @@ export default function PremiumExperience(){
         }
       },{threshold:.1,rootMargin:'0px 0px -28px'});
     }
-    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(register);
+    initialReveal.forEach(register);
 
-    const mutations=new MutationObserver(records=>{
-      for(const record of records)for(const node of record.addedNodes)registerTree(node);
-    });
-    mutations.observe(document.body,{childList:true,subtree:true});
+    const mutations=initialReveal.length?new MutationObserver(records=>{
+      for(const record of records)for(const node of records.length?record.addedNodes:[])registerTree(node);
+    }):null;
+    mutations?.observe(document.body,{childList:true,subtree:true});
     const sizeObserver=typeof ResizeObserver!=='undefined'?new ResizeObserver(scheduleScroll):null;
     sizeObserver?.observe(document.body);
 
@@ -71,7 +74,7 @@ export default function PremiumExperience(){
     reduced.addEventListener?.('change',onMotionChange);
 
     return()=>{
-      observer?.disconnect();mutations.disconnect();sizeObserver?.disconnect();
+      observer?.disconnect();mutations?.disconnect();sizeObserver?.disconnect();
       if(scrollFrame)cancelAnimationFrame(scrollFrame);if(pointerFrame)cancelAnimationFrame(pointerFrame);
       root.classList.remove('motion-ready','motion-reduced');
       window.removeEventListener('scroll',scheduleScroll);
@@ -79,6 +82,6 @@ export default function PremiumExperience(){
       window.removeEventListener('pointermove',onPointer);
       reduced.removeEventListener?.('change',onMotionChange);
     };
-  },[]);
+  },[pathname]);
   return <><div className="scroll-progress" aria-hidden="true"/><div className="pointer-aura" aria-hidden="true"/></>;
 }
