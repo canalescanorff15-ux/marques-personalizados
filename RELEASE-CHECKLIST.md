@@ -1,3 +1,13 @@
+## V6.71 — checklist operacional atual
+
+- package version obrigatória: `6.71.1`;
+- Node `22.23.2`, npm `10.9.8`, schema runtime 27;
+- validar CI completo, TypeScript, build, E2E HTTP e smoke local antes da promoção;
+- após o deploy, confirmar `/`, `/catalogo`, `/guia-de-precos`, `/orcamento`, `/meu-projeto`, `/admin/login`, `/api/health` e `/api/catalog`;
+- confirmar release em `/api/health` e commit via `APP_RELEASE_COMMIT` ou fallback `COMMIT_REF`;
+- **Backup V9 (`marques-catalog-v9`)** permanece o formato atual de backup/restore;
+- storage S3-compatible/R2 pode permanecer `S3_REQUIRED=0` somente enquanto uploads remotos não forem exigidos.
+
 ## V6.50 — Cross-System Media Lease & Verified Completion
 
 - [ ] `package.json` está em `6.50.0`, `platform-contract.json` está no schema **27** e o **Backup V9** continua sendo o formato vigente.

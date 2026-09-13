@@ -23,6 +23,7 @@ for(const token of ["import packageJson from '../package.json' with { type: 'jso
   if(!release.includes(token))errors.push(`lib/release.ts sem contrato: ${token}`);
 }
 for(const field of ['APP_RELEASE_ID','APP_RELEASE_COMMIT','APP_DEPLOYED_AT'])if(!release.includes(field))errors.push(`getReleaseInfo não considera ${field}`);
+if(!release.includes('process.env.COMMIT_REF'))errors.push('getReleaseInfo não usa COMMIT_REF como fallback nativo do Netlify');
 
 const health=read('app/api/health/route.ts');
 if(!health.includes('getReleaseInfo()'))errors.push('health endpoint não publica identidade de release');
@@ -42,4 +43,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log(`Release Contract Check: OK — package.json é a autoridade da versão (${pkg.version}) e APIs/manifest/gate permanecem sincronizados.`);
+console.log(`Release Contract Check: OK — package.json é a autoridade da versão (${pkg.version}), COMMIT_REF cobre o commit do Netlify e APIs/manifest/gate permanecem sincronizados.`);

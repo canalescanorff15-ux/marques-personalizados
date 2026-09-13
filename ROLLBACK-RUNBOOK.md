@@ -1,3 +1,7 @@
+## V6.71 — contrato atual de rollback
+
+A operação corrente é **V6.71.1**, schema runtime 27. Em incidente de aplicação, reverta primeiro para o último deploy Netlify conhecido como `ready` e confirme `/api/health` antes de qualquer ação de dados. Não execute restore de banco para corrigir regressão apenas de código. O **Backup V9 (`marques-catalog-v9`)** permanece o formato atual; restore destrutivo exige as salvaguardas e confirmações já descritas neste runbook. O commit publicado deve ser identificado por `APP_RELEASE_COMMIT` ou pelo fallback `COMMIT_REF` do Netlify.
+
 ## V6.50 → V6.49 — lifecycle cross-system
 
 O contrato atual é app **6.50.0**, **schema runtime 27** e **Backup V9**. O schema 27 é aditivo, mas remove deliberadamente `marques_reserve_media_delete` e `marques_reactivate_media`, porque esses atalhos não protegiam o intervalo entre commit no Neon e I/O no S3. **Não reintroduza essas funções só para fazer a V6.49 voltar a mutar mídia.** Em rollback emergencial, preserve schema 27, tombstones e leases; prefira desabilitar temporariamente upload/delete/restore de mídia e corrigir por roll-forward. Leases são transitórias e não pertencem ao Backup V9. Antes de restore de banco, resolva qualquer lease ativa/expirada apontada pelo deep-health.
