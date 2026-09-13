@@ -6,6 +6,7 @@ import './home-v673.css';
 import './catalog-v674.css';
 import './catalog-v675.css';
 import './catalog-v676.css';
+import './quote-v677.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
