@@ -5,12 +5,17 @@ import { Heart, Menu, MessageCircle, PackagePlus, Search, Sparkles } from 'lucid
 import type { SiteSettings } from '@/lib/db';
 import { whatsappUrl } from '@/lib/links';
 import GlobalSearch from './GlobalSearch';
-import SafeImage from './SafeImage';
 import { QuoteListTrigger } from './QuoteListProvider';
 
 export default function Header({settings}:{settings:SiteSettings}){
   const [compact,setCompact]=useState(false);
-  useEffect(()=>{const onScroll=()=>setCompact(window.scrollY>24);onScroll();window.addEventListener('scroll',onScroll,{passive:true});return()=>window.removeEventListener('scroll',onScroll);},[]);
+  useEffect(()=>{
+    let frame=0;let last=false;
+    const update=()=>{frame=0;const next=window.scrollY>24;if(next!==last){last=next;setCompact(next);}};
+    const onScroll=()=>{if(!frame)frame=requestAnimationFrame(update);};
+    update();window.addEventListener('scroll',onScroll,{passive:true});
+    return()=>{window.removeEventListener('scroll',onScroll);if(frame)cancelAnimationFrame(frame);};
+  },[]);
   const wa=whatsappUrl(settings.whatsapp_number,'Olá! Vim pelo catálogo da Merlin Encantos em Papel e gostaria de fazer um orçamento.');
   const now=Date.now();
   const campaignStart=settings.announcement_start_at?new Date(settings.announcement_start_at).getTime():null;
@@ -23,7 +28,7 @@ export default function Header({settings}:{settings:SiteSettings}){
     <header className={`site-header kf-site-header ${compact?'is-compact':''}`}>
       <div className="container nav">
         <Link className="brand kf-brand" href="/" aria-label={settings.brand_name}>
-          <span className="kf-brand-logo"><SafeImage src={logo} alt=""/></span>
+          <span className="kf-brand-logo"><img src={logo} alt="" width={54} height={50} decoding="async" onError={event=>{const image=event.currentTarget;if(image.dataset.fallback==='1')return;image.dataset.fallback='1';image.src='/merlin-logo.webp';}}/></span>
           <span className="brand-copy"><strong>Merlin Encantos em Papel</strong><small>planejar • personalizar • encantar</small></span>
         </Link>
         <nav className="nav-links" aria-label="Principal">
