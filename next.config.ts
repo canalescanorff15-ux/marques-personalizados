@@ -34,12 +34,17 @@ const securityHeaders = [
 ];
 
 const buildReleaseCommit = String(process.env.APP_RELEASE_COMMIT || process.env.COMMIT_REF || '').trim();
+const configuredDeployTime = String(process.env.APP_DEPLOYED_AT || '').trim();
+const buildReleaseDeployedAt = configuredDeployTime && !Number.isNaN(Date.parse(configuredDeployTime))
+  ? new Date(configuredDeployTime).toISOString()
+  : new Date().toISOString();
 
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   env: {
-    APP_RELEASE_COMMIT: buildReleaseCommit
+    APP_RELEASE_COMMIT: buildReleaseCommit,
+    APP_DEPLOYED_AT: buildReleaseDeployedAt
   },
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
   async headers() {
