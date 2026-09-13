@@ -40,25 +40,33 @@ jobs:
           curl -L --max-time 30 --retry 3 --fail --silent --show-error "$base/catalogo" -o /tmp/catalog.html
           grep -Eqi 'Catálogo|catalogo|Merlin' /tmp/catalog.html
 
-      - name: Verify production health and release identity
+      - name: Verify production health, release identity and storage readiness
         shell: bash
         run: |
           set -euo pipefail
           base='https://merlin-encantos-em-papel.netlify.app'
-          expected_commit='8fb32454481fabc02c1b8a496a9daf077b85ff64'
+          expected_commit='181a3f94103d3ace83a840768e9c58375bf01c1c'
+          minimum_deploy_time='2026-09-13T01:33:00Z'
           code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/health.json -w '%{http_code}' "$base/api/health")"
           echo "/api/health -> HTTP $code"
           test "$code" = '200'
           cat /tmp/health.json
-          EXPECTED_COMMIT="$expected_commit" node - <<'NODE'
+          EXPECTED_COMMIT="$expected_commit" MINIMUM_DEPLOY_TIME="$minimum_deploy_time" node - <<'NODE'
           const fs=require('fs');
           const x=JSON.parse(fs.readFileSync('/tmp/health.json','utf8'));
-          if(!x?.ok) throw new Error('health is not ready');
+          if(!x?.ok || x?.mode!=='ready') throw new Error('health is not ready');
           if(x?.release?.version!=='6.71.1') throw new Error(`unexpected release version: ${x?.release?.version}`);
+          if(x?.release?.id!=='v6.71.1') throw new Error(`unexpected release id: ${x?.release?.id}`);
           if(x?.release?.commit!==process.env.EXPECTED_COMMIT) throw new Error(`unexpected release commit: ${x?.release?.commit}`);
+          const deployedAt=Date.parse(String(x?.release?.deployed_at||''));
+          const minimum=Date.parse(process.env.MINIMUM_DEPLOY_TIME);
+          if(!Number.isFinite(deployedAt)||deployedAt<minimum||deployedAt>Date.now()+5*60*1000) throw new Error(`unexpected deployed_at: ${x?.release?.deployed_at}`);
           if(x?.schema?.version!==27 || !x?.schema?.ok) throw new Error('schema 27 is not healthy');
           if(!x?.database?.ok) throw new Error('database is not healthy');
-          console.log('release identity OK:', x.release.version, x.release.commit);
+          if(x?.integrity && !x.integrity.ok) throw new Error('database integrity is not healthy');
+          if(x?.storage?.configured!==false || x?.storage?.required!==false || x?.storage?.state!=='not-configured') throw new Error(`unexpected storage readiness: ${JSON.stringify(x?.storage)}`);
+          console.log('release identity OK:', x.release.version, x.release.id, x.release.commit, x.release.deployed_at);
+          console.log('storage remains safely optional until R2 activation');
           NODE
 
       - name: Verify production catalog API
