@@ -1,0 +1,112 @@
+/* V6.80 — Home premium compacta: menos rolagem, mais curadoria e leitura rápida */
+
+/* Desktop: as amostras principais cabem em uma única faixa. */
+.home-v680 .inspiration-showcase{padding:58px 0 60px!important}
+.home-v680 .inspiration-showcase .inspiration-head{margin-bottom:24px!important}
+.home-v680 .inspiration-showcase.is-compact .inspiration-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
+.home-v680 .inspiration-showcase.is-compact .inspiration-art{aspect-ratio:1/.72!important}
+.home-v680 .inspiration-showcase .inspiration-more{margin-top:16px!important;padding-top:18px!important}
+
+.home-v680 .premium-categories{padding:56px 0 60px!important}
+.home-v680 .premium-categories .catalog-head{margin-bottom:24px!important}
+.home-v680 .home-category-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important}
+.home-v680 .home-category-grid .editorial-category,
+.home-v680 .home-category-grid .editorial-category:nth-child(n){grid-column:auto!important;min-height:205px!important}
+.home-v680 .home-category-grid .category-card-art{min-height:205px!important}
+.home-v680 .home-category-grid .category-copy{padding:18px!important}
+.home-v680 .home-category-grid .category-copy strong{font-size:1.42rem!important}
+
+/* Mantém as seções comerciais, mas reduz espaços mortos entre elas. */
+.home-v680 .home-start{padding:58px 0!important}
+.home-v680 .home-catalog-preview{padding:60px 0!important}
+.home-v680 .home-craft{padding:60px 0!important}
+.home-v680 .home-testimonials{padding:56px 0!important}
+.home-v680 .home-briefing{padding:58px 0!important}
+.home-v680 .home-final-cta{padding:48px 0 56px!important}
+.home-v680 .section-index{margin-bottom:24px!important}
+
+@media(max-width:1100px){
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid,
+  .home-v680 .home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+/* Mobile: blocos de descoberta viram trilhos horizontais, evitando páginas intermináveis. */
+@media(max-width:700px){
+  .home-v680 .inspiration-showcase,
+  .home-v680 .premium-categories,
+  .home-v680 .home-start,
+  .home-v680 .home-catalog-preview,
+  .home-v680 .home-craft,
+  .home-v680 .home-testimonials,
+  .home-v680 .home-briefing{padding-block:46px!important}
+
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid,
+  .home-v680 .home-category-grid,
+  .home-v680 .home-product-grid,
+  .home-v680 .home-testimonials .testimonial-grid,
+  .home-v680 .home-craft .craft-grid{
+    display:flex!important;
+    grid-template-columns:none!important;
+    gap:10px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:1px 1px 10px!important;
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:1px;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(126,79,58,.25) transparent;
+  }
+
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid::-webkit-scrollbar,
+  .home-v680 .home-category-grid::-webkit-scrollbar,
+  .home-v680 .home-product-grid::-webkit-scrollbar,
+  .home-v680 .home-testimonials .testimonial-grid::-webkit-scrollbar,
+  .home-v680 .home-craft .craft-grid::-webkit-scrollbar{height:5px}
+
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid::-webkit-scrollbar-thumb,
+  .home-v680 .home-category-grid::-webkit-scrollbar-thumb,
+  .home-v680 .home-product-grid::-webkit-scrollbar-thumb,
+  .home-v680 .home-testimonials .testimonial-grid::-webkit-scrollbar-thumb,
+  .home-v680 .home-craft .craft-grid::-webkit-scrollbar-thumb{background:rgba(126,79,58,.22);border-radius:999px}
+
+  .home-v680 .inspiration-card{flex:0 0 min(82vw,330px)!important;scroll-snap-align:start}
+  .home-v680 .home-category-grid .editorial-category,
+  .home-v680 .home-category-grid .editorial-category:nth-child(n){flex:0 0 min(82vw,330px)!important;min-height:190px!important;scroll-snap-align:start}
+  .home-v680 .home-category-grid .category-card-art{min-height:190px!important}
+  .home-v680 .home-product-card{flex:0 0 min(74vw,285px)!important;scroll-snap-align:start}
+  .home-v680 .home-testimonials .testimonial-grid article{flex:0 0 min(82vw,330px)!important;min-height:190px!important;scroll-snap-align:start}
+  .home-v680 .home-craft .craft-grid article{flex:0 0 min(76vw,300px)!important;min-height:165px!important;scroll-snap-align:start}
+
+  .home-v680 .home-preview-head{margin-bottom:22px!important}
+  .home-v680 .home-product-image{aspect-ratio:1/.82}
+  .home-v680 .home-craft .craft-head{margin-bottom:22px!important}
+  .home-v680 .home-testimonial-layout{gap:22px!important}
+  .home-v680 .home-testimonials .testimonial-grid{margin-top:0!important}
+
+  /* CTA e briefing ficam compactos, mas continuam totalmente visíveis. */
+  .home-v680 .home-briefing .merlin-briefing-copy{padding:24px 20px!important}
+  .home-v680 .home-briefing .merlin-briefing-grid article{min-height:88px!important;padding:14px!important}
+  .home-v680 .home-final-cta{padding:40px 0 48px!important}
+  .home-v680 .home-final-cta .cta-box{padding:27px 21px!important}
+}
+
+@media(max-width:430px){
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid,
+  .home-v680 .home-product-grid{display:flex!important;grid-template-columns:none!important}
+  .home-v680 .inspiration-card{flex-basis:86vw!important}
+  .home-v680 .home-category-grid .editorial-category,
+  .home-v680 .home-category-grid .editorial-category:nth-child(n){flex-basis:86vw!important}
+  .home-v680 .home-product-card{flex-basis:78vw!important}
+  .home-v680 .home-testimonials .testimonial-grid article{flex-basis:86vw!important}
+  .home-v680 .home-craft .craft-grid article{flex-basis:82vw!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .home-v680 .inspiration-showcase.is-compact .inspiration-grid,
+  .home-v680 .home-category-grid,
+  .home-v680 .home-product-grid,
+  .home-v680 .home-testimonials .testimonial-grid,
+  .home-v680 .home-craft .craft-grid{scroll-behavior:auto}
+}
