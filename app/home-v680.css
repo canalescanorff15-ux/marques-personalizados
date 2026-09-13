@@ -27,6 +27,21 @@
 .home-v680 .home-final-cta{padding:48px 0 56px!important}
 .home-v680 .section-index{margin-bottom:24px!important}
 
+/* Depois da área inicial, o navegador pode adiar pintura/layout até a seção se aproximar da tela. */
+@supports (content-visibility:auto){
+  .home-v680 .home-start,
+  .home-v680 .home-catalog-preview,
+  .home-v680 .home-craft,
+  .home-v680 .home-testimonials,
+  .home-v680 .home-briefing,
+  .home-v680 .home-final-cta{
+    content-visibility:auto;
+    contain-intrinsic-size:auto 540px;
+  }
+  .home-v680 .home-catalog-preview{contain-intrinsic-size:auto 640px}
+  .home-v680 .home-final-cta{contain-intrinsic-size:auto 360px}
+}
+
 @media(max-width:1100px){
   .home-v680 .inspiration-showcase.is-compact .inspiration-grid,
   .home-v680 .home-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
