@@ -1,4 +1,4 @@
-name: V6.71 Production Smoke Hotfix
+name: V6.71.1 Production Smoke
 
 on:
   push:
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   smoke:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
       - name: Verify public production routes
@@ -40,16 +40,26 @@ jobs:
           curl -L --max-time 30 --retry 3 --fail --silent --show-error "$base/catalogo" -o /tmp/catalog.html
           grep -Eqi 'Catálogo|catalogo|Merlin' /tmp/catalog.html
 
-      - name: Verify production health API
+      - name: Verify production health and release identity
         shell: bash
         run: |
           set -euo pipefail
           base='https://merlin-encantos-em-papel.netlify.app'
+          expected_commit='ed0fa7489949107332919a8b0eb0882680093055'
           code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/health.json -w '%{http_code}' "$base/api/health")"
           echo "/api/health -> HTTP $code"
           test "$code" = '200'
           cat /tmp/health.json
-          node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/health.json','utf8'));if(!x || typeof x!=='object') process.exit(1);"
+          EXPECTED_COMMIT="$expected_commit" node - <<'NODE'
+          const fs=require('fs');
+          const x=JSON.parse(fs.readFileSync('/tmp/health.json','utf8'));
+          if(!x?.ok) throw new Error('health is not ready');
+          if(x?.release?.version!=='6.71.1') throw new Error(`unexpected release version: ${x?.release?.version}`);
+          if(x?.release?.commit!==process.env.EXPECTED_COMMIT) throw new Error(`unexpected release commit: ${x?.release?.commit}`);
+          if(x?.schema?.version!==27 || !x?.schema?.ok) throw new Error('schema 27 is not healthy');
+          if(!x?.database?.ok) throw new Error('database is not healthy');
+          console.log('release identity OK:', x.release.version, x.release.commit);
+          NODE
 
       - name: Verify production catalog API
         shell: bash
