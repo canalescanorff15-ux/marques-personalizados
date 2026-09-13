@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './premium.css';
-import './home-v672.css';
-import './home-v673.css';
+import './shell-v681.css';
 import './catalog-v674.css';
 import './catalog-v675.css';
 import './catalog-v676.css';
