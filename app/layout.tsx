@@ -3,6 +3,7 @@ import './globals.css';
 import './premium.css';
 import './home-v672.css';
 import './home-v673.css';
+import './catalog-v674.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
