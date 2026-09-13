@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import './premium.css';
 import './shell-v681.css';
-import './catalog-v674.css';
-import './catalog-v675.css';
 import './catalog-v676.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
