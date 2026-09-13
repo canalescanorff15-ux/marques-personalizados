@@ -1,0 +1,38 @@
+/* V6.77 — checkout enxuto: menos repetição entre planejador, drawer e envio */
+
+.quote-mobile-checkout{display:none}
+
+/* Quando o cliente já revisou o orçamento completo, o drawer vira somente a etapa final. */
+body:has(.quote-workspace-page) .quote-drawer-items{max-height:31vh}
+body:has(.quote-workspace-page) .quote-drawer .quote-brief-grid{display:none}
+body:has(.quote-workspace-page) .quote-drawer .drawer-form-title strong{display:none}
+body:has(.quote-workspace-page) .quote-drawer .drawer-form-title::after{content:"Seus produtos e o briefing já foram revisados. Confirme seus dados de contato para registrar o pedido e seguir para o atendimento.";color:#a2a7ab;font-size:.7rem;line-height:1.55;max-width:430px}
+body:has(.quote-workspace-page) .quote-drawer .quote-secondary-actions>a[href="/orcamento"]{display:none}
+body:has(.quote-workspace-page) .quote-drawer-form{padding-top:15px}
+body:has(.quote-workspace-page) .quote-drawer-form .row-2:first-of-type{margin-top:2px}
+
+@media(max-width:760px){
+  body:has(.quote-workspace-page){padding-bottom:154px}
+  .quote-mobile-checkout{position:fixed;z-index:116;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));min-height:66px;padding:8px 8px 8px 13px;border:1px solid rgba(126,79,58,.18);border-radius:18px;background:rgba(255,251,247,.97);box-shadow:0 18px 45px rgba(82,49,38,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between;gap:10px;color:#5d4037}
+  body:has(.merlin-mobile-dock) .quote-mobile-checkout{bottom:82px}
+  body:has(.quote-drawer) .quote-mobile-checkout{display:none}
+  .quote-mobile-checkout-copy{display:flex;align-items:center;gap:9px;min-width:0}
+  .quote-mobile-checkout-copy>svg{flex:0 0 auto;color:#bc756b}
+  .quote-mobile-checkout-copy>span{display:grid;gap:1px;min-width:0}
+  .quote-mobile-checkout-copy small{font-size:.48rem;font-weight:900;letter-spacing:.08em;color:#a27c72;white-space:nowrap}
+  .quote-mobile-checkout-copy strong{font-family:var(--display);font-size:1.03rem;font-weight:600;color:#5a3d35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .quote-mobile-checkout>button{min-height:46px;padding:0 13px;border:0;border-radius:13px;background:#6d493e;color:#fff8f4;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:inherit;font-size:.65rem;font-weight:900;box-shadow:0 8px 20px rgba(82,49,38,.16)}
+  .quote-mobile-checkout>button svg:last-child{opacity:.72}
+  body:has(.quote-workspace-page) .quote-drawer-items{max-height:25vh}
+  body:has(.quote-workspace-page) .quote-drawer-form{padding-bottom:max(26px,env(safe-area-inset-bottom))}
+}
+
+@media(max-width:420px){
+  .quote-mobile-checkout{left:7px;right:7px;padding-left:10px}
+  .quote-mobile-checkout-copy small{font-size:.44rem;letter-spacing:.06em}
+  .quote-mobile-checkout-copy strong{font-size:.94rem}
+  .quote-mobile-checkout>button{padding:0 11px}
+  .quote-mobile-checkout>button span{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){.quote-mobile-checkout{backdrop-filter:none;-webkit-backdrop-filter:none}}
