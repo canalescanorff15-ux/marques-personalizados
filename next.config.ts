@@ -33,9 +33,14 @@ const securityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' }
 ];
 
+const buildReleaseCommit = String(process.env.APP_RELEASE_COMMIT || process.env.COMMIT_REF || '').trim();
+
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
+  env: {
+    APP_RELEASE_COMMIT: buildReleaseCommit
+  },
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
   async headers() {
     return [
