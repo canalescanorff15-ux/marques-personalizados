@@ -1,3 +1,7 @@
+## V6.71 — Netlify production, catálogo público e observabilidade de release
+
+A linha operacional atual é **V6.71.1**. O storefront Next.js híbrido está publicado no Netlify, com Neon como banco e storage S3-compatible preparado para Cloudflare R2. O hotfix restaura a rota pública `/catalogo`, e a identidade de release passa a usar a versão do `package.json` com fallback automático para `COMMIT_REF` do Netlify. O **Backup V9 (`marques-catalog-v9`)** permanece o contrato atual de recuperação, com schema runtime **27**. Runtime: Node.js **22.23.2**, npm **10.9.8**. Antes de promoção, execute o CI completo, valide `/api/health` e faça smoke das rotas públicas críticas.
+
 ## V6.50 — lifecycle de mídia cross-system com lease
 
 A V6.50 fecha a janela entre transação do Neon e I/O no S3. Upload, exclusão e **restore de mídia** usam leases tokenizadas; a gravação só é liberada após `HeadObject` confirmar tamanho/hash e a exclusão só conclui após confirmar ausência. Falhas deixam a URL em quarentena e aparecem no deep-health. Restore do banco e I/O de mídia compartilham um lock global para não reconstruir referências enquanto há efeito externo em andamento. O **Backup V9** continua atual e inclui tombstones permanentes, mas nunca serializa `media_lifecycle_leases`, pois leases são estado efêmero. O IAM do Storage primário precisa permitir `PutObject`, `DeleteObject`, `ListObjectsV2` e `HeadObject` no namespace `catalog/`. Runtime: Node.js **22.23.2**, npm **10.9.8**, schema **27**.

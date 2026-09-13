@@ -1,3 +1,11 @@
+### Manutenção V6.71 — Netlify Production + Catalog Route + Release Observability (2026-09-12)
+- publicação híbrida no Netlify validada com Next.js Server Handler, Neon saudável e acesso público sem SSO obrigatório;
+- hotfix adiciona `app/catalogo/page.tsx`, restaurando `/catalogo` em produção sem alterar as rotas individuais de produto;
+- smoke de produção valida Home, catálogo, guia de preços, orçamento, Meu Projeto, Admin, `/api/health` e `/api/catalog`;
+- identidade técnica passa para app **6.71.1** e usa `COMMIT_REF` como fallback do commit real do Netlify;
+- `package-lock.json` e `package-lock.sha256` permanecem sincronizados e reproduzíveis;
+- **Backup V9 (`marques-catalog-v9`)** e schema runtime **27** permanecem vigentes; storage R2 continua opcional até a configuração das credenciais.
+
 ### Manutenção V6.50 — Hotfix CI E2E Admin Fail-Closed (2026-09-10)
 - o rate limit administrativo continua fail-closed em produção real, mas o E2E stateless pode usar bucket local somente quando `GITHUB_ACTIONS=true` e `MARQUES_CI_STATELESS_AUTH=1`;
 - o contrato HTTP passa a impedir que esse bypass de teste seja ampliado para ambientes fora do GitHub Actions;
