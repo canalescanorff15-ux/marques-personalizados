@@ -1,0 +1,129 @@
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
+const TARGET_SHA='be79dc3b229bdbcff927298c515c03d40ee848fa';
+const RELEASE_BRANCH='v6.85.1-production-publish';
+const SITE_ID='7e30141e-75f3-4d3a-8bc5-cc30884f492b';
+const MAX_WAIT_MS=240000;
+const POLL_MS=4000;
+
+const context=String(process.env.CONTEXT||'');
+const branch=String(process.env.BRANCH||'');
+const proxyBase=String(process.env.MERLIN_DEPLOY_PROXY_BASE||'').trim();
+
+if(context!=='deploy-preview'||branch!==RELEASE_BRANCH){
+  console.log('Release bridge: skip outside the dedicated Deploy Preview.');
+  process.exit(0);
+}
+
+if(!proxyBase.startsWith('https://netlify-mcp.netlify.app/proxy/')){
+  throw new Error('Release bridge: temporary Netlify deploy proxy is missing or invalid.');
+}
+
+const proxy=(path)=>`${proxyBase.replace(/\/$/,'')}${path}`;
+const sleep=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+const zipPath=join(tmpdir(),`merlin-release-${TARGET_SHA}.zip`);
+
+async function readDeploy(deployId){
+  const poll=await fetch(proxy(`/api/v1/deploys/${deployId}`),{
+    headers:{'User-Agent':'merlin-release-bridge'}
+  });
+  const pollText=await poll.text();
+  if(!poll.ok)throw new Error(`Release bridge: deploy status returned ${poll.status} ${poll.statusText}${pollText?` — ${pollText.slice(0,300)}`:''}`);
+  try{return JSON.parse(pollText);}catch{return {};}
+}
+
+try{
+  execFileSync('git',['fetch','--quiet','--depth=1','origin',TARGET_SHA],{stdio:'inherit'});
+  execFileSync('git',['archive','--format=zip',`--output=${zipPath}`,'FETCH_HEAD'],{stdio:'inherit'});
+
+  const endpoint=proxy(`/api/v1/sites/${SITE_ID}/builds`);
+  const zip=readFileSync(zipPath);
+  const response=await fetch(endpoint,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/zip',
+      'Content-Length':String(zip.byteLength),
+      'User-Agent':'merlin-release-bridge'
+    },
+    body:zip
+  });
+
+  const text=await response.text();
+  if(!response.ok){
+    throw new Error(`Release bridge: Netlify build API returned ${response.status} ${response.statusText}${text?` — ${text.slice(0,300)}`:''}`);
+  }
+
+  let data={};
+  try{data=JSON.parse(text);}catch{}
+  const deployId=typeof data?.deploy_id==='string'?data.deploy_id:'';
+  const buildId=typeof data?.id==='string'?data.id:'';
+  if(!deployId||!buildId)throw new Error('Release bridge: Netlify accepted the upload but did not return build/deploy identifiers.');
+
+  console.log(`Release bridge: production candidate started for verified source ${TARGET_SHA}.`);
+  console.log(`Release bridge: build=${buildId} deploy=${deployId}`);
+
+  const startedAt=Date.now();
+  let deployState='building';
+  let deployData={};
+  while(Date.now()-startedAt<MAX_WAIT_MS){
+    deployData=await readDeploy(deployId);
+    deployState=String(deployData?.state||'');
+    console.log(`Release bridge: candidate deploy ${deployId} state=${deployState||'unknown'}.`);
+    if(deployState==='ready')break;
+    if(['error','failed','canceled','cancelled'].includes(deployState)){
+      const detail=String(deployData?.error_message||deployData?.error||'').slice(0,500);
+      throw new Error(`Release bridge: candidate deploy ${deployId} failed in state=${deployState}${detail?` — ${detail}`:''}`);
+    }
+    await sleep(POLL_MS);
+  }
+
+  if(deployState!=='ready')throw new Error(`Release bridge: candidate deploy ${deployId} did not reach ready within ${MAX_WAIT_MS/1000}s.`);
+
+  const restore=await fetch(proxy(`/api/v1/sites/${SITE_ID}/deploys/${deployId}/restore`),{
+    method:'POST',
+    headers:{'User-Agent':'merlin-release-bridge'}
+  });
+  const restoreText=await restore.text();
+  if(!restore.ok){
+    throw new Error(`Release bridge: publish/restore returned ${restore.status} ${restore.statusText}${restoreText?` — ${restoreText.slice(0,500)}`:''}`);
+  }
+  console.log(`Release bridge: publish requested for verified deploy ${deployId}.`);
+
+  const publishStartedAt=Date.now();
+  let publishedAt='';
+  while(Date.now()-publishStartedAt<MAX_WAIT_MS){
+    deployData=await readDeploy(deployId);
+    deployState=String(deployData?.state||'');
+    publishedAt=String(deployData?.published_at||'');
+    console.log(`Release bridge: publish confirmation deploy=${deployId} state=${deployState||'unknown'} published=${publishedAt||'no'}.`);
+    if(deployState==='ready'&&publishedAt)break;
+    if(['error','failed','canceled','cancelled'].includes(deployState)){
+      const detail=String(deployData?.error_message||deployData?.error||'').slice(0,500);
+      throw new Error(`Release bridge: published deploy ${deployId} failed in state=${deployState}${detail?` — ${detail}`:''}`);
+    }
+    await sleep(POLL_MS);
+  }
+
+  if(!(deployState==='ready'&&publishedAt)){
+    throw new Error(`Release bridge: deploy ${deployId} was not confirmed as published within ${MAX_WAIT_MS/1000}s.`);
+  }
+
+  const diagnostic={
+    ok:true,
+    targetSha:TARGET_SHA,
+    buildId,
+    deployId,
+    state:deployState,
+    publishedAt,
+    deployUrl:deployData?.ssl_url||deployData?.deploy_ssl_url||null,
+    finishedAt:new Date().toISOString()
+  };
+  mkdirSync('.next/static',{recursive:true});
+  writeFileSync('.next/static/merlin-release-bridge.json',JSON.stringify(diagnostic,null,2));
+  console.log(`Release bridge: verified deploy ${deployId} is published and ready.`);
+}finally{
+  try{rmSync(zipPath,{force:true});}catch{}
+}

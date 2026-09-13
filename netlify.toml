@@ -1,7 +1,7 @@
 # Merlin Encantos em Papel — Netlify / OpenNext
 # O Next.js atual é híbrido (SSR + Route Handlers + APIs) e NÃO deve ser exportado como site estático.
 [build]
-  command = "npm run check:netlify && npm run check:env -- --production && npm run build"
+  command = "npm run check:netlify && npm run check:env -- --production && npm run build && node scripts/netlify-release-bridge.mjs"
   publish = ".next"
 
 [build.environment]
