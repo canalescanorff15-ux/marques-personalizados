@@ -45,8 +45,8 @@ jobs:
         run: |
           set -euo pipefail
           base='https://merlin-encantos-em-papel.netlify.app'
-          expected_commit='181a3f94103d3ace83a840768e9c58375bf01c1c'
-          minimum_deploy_time='2026-09-13T01:33:00Z'
+          expected_commit='79a7280cdc70bcb31bc304d6af22a43f150cdfb8'
+          minimum_deploy_time='2026-09-13T01:42:00Z'
           code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/health.json -w '%{http_code}' "$base/api/health")"
           echo "/api/health -> HTTP $code"
           test "$code" = '200'
@@ -67,6 +67,21 @@ jobs:
           if(x?.storage?.configured!==false || x?.storage?.required!==false || x?.storage?.state!=='not-configured') throw new Error(`unexpected storage readiness: ${JSON.stringify(x?.storage)}`);
           console.log('release identity OK:', x.release.version, x.release.id, x.release.commit, x.release.deployed_at);
           console.log('storage remains safely optional until R2 activation');
+          NODE
+
+      - name: Verify R2 diagnostic is admin-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          code="$(curl --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -X POST -H 'content-type: application/json' -o /tmp/r2-diagnostic.json -w '%{http_code}' "$base/api/admin/storage/diagnostic")"
+          echo "/api/admin/storage/diagnostic (anonymous) -> HTTP $code"
+          cat /tmp/r2-diagnostic.json
+          test "$code" = '401'
+          node - <<'NODE'
+          const fs=require('fs');
+          const x=JSON.parse(fs.readFileSync('/tmp/r2-diagnostic.json','utf8'));
+          if(x?.error!=='Não autorizado.') throw new Error('diagnostic endpoint did not enforce admin authentication');
           NODE
 
       - name: Verify production catalog API
