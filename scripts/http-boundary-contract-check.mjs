@@ -30,16 +30,28 @@ for(const token of ['isMultipartFormData(request)','readMultipartFormDataWithinL
 if(upload.includes('request.formData()'))errors.push('upload não pode materializar multipart diretamente antes do bounded ingress');
 const restore=read('app/api/admin/restore/route.ts');for(const token of ['readTextBodyWithinLimit(request,MAX_BYTES)',"throw new Error('BACKUP_TOO_LARGE')",'36 MB'])if(!restore.includes(token))errors.push(`restore sem bounded ingress: ${token}`);if(restore.includes('request.text()'))errors.push('restore não pode materializar backup diretamente antes do limite');
 
-const csp=read('lib/admin-csp.ts');
-for(const token of ["'strict-dynamic'","script-src-attr 'none'","connect-src 'self'","frame-src 'none'","frame-ancestors 'none'"])if(!csp.includes(token))errors.push(`admin CSP sem ${token}`);
-const scriptLine=csp.split(/\r?\n/).find(line=>line.includes("script-src 'self'"))||'';
-if(scriptLine.includes("'unsafe-inline'"))errors.push('admin script-src não pode conter unsafe-inline');
+const adminCsp=read('lib/admin-csp.ts');
+for(const token of ["'strict-dynamic'","script-src-attr 'none'","connect-src 'self'","frame-src 'none'","frame-ancestors 'none'"])if(!adminCsp.includes(token))errors.push(`admin CSP sem ${token}`);
+const adminScriptLine=adminCsp.split(/\r?\n/).find(line=>line.includes("script-src 'self'"))||'';
+if(adminScriptLine.includes("'unsafe-inline'"))errors.push('admin script-src não pode conter unsafe-inline');
+
+const publicCsp=read('lib/public-csp.ts');
+for(const token of ["'strict-dynamic'","script-src-attr 'none'","connect-src 'self' https: wss:","frame-src 'none'","frame-ancestors 'none'","upgrade-insecure-requests"])if(!publicCsp.includes(token))errors.push(`public CSP sem ${token}`);
+const publicScriptLine=publicCsp.split(/\r?\n/).find(line=>line.includes("script-src 'self'"))||'';
+if(publicScriptLine.includes("'unsafe-inline'"))errors.push('public script-src não pode conter unsafe-inline');
+
 const proxy=read('proxy.ts');
-for(const token of ["randomBytes(18)","requestHeaders.set('x-nonce',nonce)","requestHeaders.set('content-security-policy',csp)","response.headers.set('Content-Security-Policy',csp)","matcher:['/admin/:path*']","X-Robots-Tag","private, no-store"])if(!proxy.includes(token))errors.push(`proxy admin sem ${token}`);
+for(const token of ["randomBytes(18)","buildAdminContentSecurityPolicy","buildPublicContentSecurityPolicy","request.nextUrl.pathname.startsWith('/admin')","requestHeaders.set('x-nonce',nonce)","requestHeaders.set('content-security-policy',csp)","response.headers.set('Content-Security-Policy',csp)","X-Robots-Tag","private, no-store","(?!api|_next/static|_next/image"])if(!proxy.includes(token))errors.push(`proxy CSP sem ${token}`);
+if(proxy.includes("matcher:['/admin/:path*']"))errors.push('proxy CSP não pode ficar restrito apenas ao Admin');
 const loginLayout=read('app/admin/login/layout.tsx');if(!loginLayout.includes("dynamic='force-dynamic'"))errors.push('login admin precisa de renderização dinâmica para nonce');
 
+const jsonLdComponent=read('components/JsonLd.tsx');
+for(const token of ["headers()","get('x-nonce')","nonce={nonce}","application/ld+json"])if(!jsonLdComponent.includes(token))errors.push(`JsonLd nonce sem ${token}`);
+
 const next=read('next.config.ts');
-for(const token of ["script-src-attr 'none'","frame-src 'none'","X-Permitted-Cross-Domain-Policies","Origin-Agent-Cluster"])if(!next.includes(token))errors.push(`next headers sem ${token}`);
+for(const token of ["X-Permitted-Cross-Domain-Policies","Origin-Agent-Cluster","Permissions-Policy","Cross-Origin-Opener-Policy","Strict-Transport-Security"])if(!next.includes(token))errors.push(`next headers sem ${token}`);
+if(next.includes("script-src 'self' 'unsafe-inline'"))errors.push('next.config não pode reintroduzir CSP pública com script unsafe-inline');
+if(next.includes("key: 'Content-Security-Policy'"))errors.push('CSP de páginas deve ser por requisição no proxy, não header estático duplicado');
 
 if(errors.length){console.error(`HTTP Boundary Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('HTTP Boundary Contract: OK — origem confiável, ingress binário/textual limitado e CSP nonce no Admin.');
+console.log('HTTP Boundary Contract: OK — origem confiável, ingress limitado e CSP nonce por requisição no Admin e páginas públicas.');
