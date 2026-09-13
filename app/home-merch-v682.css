@@ -1,0 +1,18 @@
+/* V6.82 — acabamento comercial usado apenas na Home. */
+
+.home-product-card{border-radius:14px!important;overflow:hidden!important}
+.home-product-image{background:#f6eee8!important}
+.home-product-image img{filter:saturate(.97) contrast(1.01)}
+
+.home-v680.kf-theme .editorial-category{border-radius:18px!important;background:#fffaf6!important;border:1px solid rgba(126,79,58,.15)!important;box-shadow:0 16px 42px rgba(91,55,44,.07)!important}
+.home-v680.kf-theme .editorial-category .category-card-art{background:#f6eee8!important}
+.home-v680.kf-theme .editorial-category .category-card-art img{filter:saturate(.97) contrast(1.01)!important}
+.home-v680.kf-theme .editorial-category:hover .category-card-art img{filter:saturate(1.02) contrast(1.015)!important;transform:scale(1.02)!important}
+.home-v680.kf-theme .editorial-category .category-overlay{background:linear-gradient(180deg,rgba(255,250,246,0) 46%,rgba(255,250,246,.76) 70%,rgba(255,250,246,.98) 100%)!important}
+.home-v680.kf-theme .editorial-category .category-copy>small{color:#b06f64!important}
+.home-v680.kf-theme .editorial-category .category-copy strong{color:#55362e!important;text-shadow:0 1px 0 rgba(255,255,255,.45)}
+.home-v680.kf-theme .editorial-category .category-copy p{color:#826c64!important}
+.home-v680.kf-theme .editorial-category .category-link{color:#8d5d52!important}
+
+@media(max-width:820px){.home-v680.kf-theme .editorial-category{border-radius:16px!important}}
+@media(prefers-reduced-motion:reduce){.home-v680.kf-theme .editorial-category .category-card-art img{transition:none!important}}
