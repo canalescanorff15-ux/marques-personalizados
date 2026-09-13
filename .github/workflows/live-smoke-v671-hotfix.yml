@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           base='https://merlin-encantos-em-papel.netlify.app'
-          expected_commit='ed0fa7489949107332919a8b0eb0882680093055'
+          expected_commit='8fb32454481fabc02c1b8a496a9daf077b85ff64'
           code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/health.json -w '%{http_code}' "$base/api/health")"
           echo "/api/health -> HTTP $code"
           test "$code" = '200'
