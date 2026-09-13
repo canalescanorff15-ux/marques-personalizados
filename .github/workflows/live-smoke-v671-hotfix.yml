@@ -1,0 +1,68 @@
+name: V6.71 Production Smoke Hotfix
+
+on:
+  push:
+    branches:
+      - hotfix-v6-71-catalog-route
+    paths:
+      - '.github/workflows/live-smoke-v671-hotfix.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Verify public production routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          routes=(
+            '/'
+            '/catalogo'
+            '/guia-de-precos'
+            '/orcamento'
+            '/meu-projeto'
+            '/admin/login'
+          )
+          for route in "${routes[@]}"; do
+            body="/tmp$(echo "$route" | tr '/' '_' | tr -cd '[:alnum:]_').html"
+            code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o "$body" -w '%{http_code}' "$base$route")"
+            echo "$route -> HTTP $code"
+            test "$code" = '200'
+          done
+          curl -L --max-time 30 --retry 3 --fail --silent --show-error "$base/" -o /tmp/home.html
+          grep -qi 'Merlin' /tmp/home.html
+          curl -L --max-time 30 --retry 3 --fail --silent --show-error "$base/catalogo" -o /tmp/catalog.html
+          grep -Eqi 'Catálogo|catalogo|Merlin' /tmp/catalog.html
+
+      - name: Verify production health API
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/health.json -w '%{http_code}' "$base/api/health")"
+          echo "/api/health -> HTTP $code"
+          test "$code" = '200'
+          cat /tmp/health.json
+          node -e "const fs=require('fs');const x=JSON.parse(fs.readFileSync('/tmp/health.json','utf8'));if(!x || typeof x!=='object') process.exit(1);"
+
+      - name: Verify production catalog API
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='https://merlin-encantos-em-papel.netlify.app'
+          code="$(curl -L --max-time 30 --retry 3 --retry-delay 2 --silent --show-error -o /tmp/catalog.json -w '%{http_code}' "$base/api/catalog")"
+          echo "/api/catalog -> HTTP $code"
+          test "$code" = '200'
+          node - <<'NODE'
+          const fs=require('fs');
+          const x=JSON.parse(fs.readFileSync('/tmp/catalog.json','utf8'));
+          const arr=Array.isArray(x)?x:(Array.isArray(x.items)?x.items:(Array.isArray(x.products)?x.products:null));
+          if(!arr) throw new Error('Catalog API did not return an item array');
+          console.log('catalog items:', arr.length);
+          if(arr.length < 1) throw new Error('Catalog API returned no products');
+          NODE
