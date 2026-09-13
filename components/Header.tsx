@@ -5,6 +5,7 @@ import { Heart, Menu, MessageCircle, PackagePlus, Search, Sparkles } from 'lucid
 import type { SiteSettings } from '@/lib/db';
 import { whatsappUrl } from '@/lib/links';
 import GlobalSearch from './GlobalSearch';
+import SafeImage from './SafeImage';
 import { QuoteListTrigger } from './QuoteListProvider';
 
 export default function Header({settings}:{settings:SiteSettings}){
@@ -28,7 +29,7 @@ export default function Header({settings}:{settings:SiteSettings}){
     <header className={`site-header kf-site-header ${compact?'is-compact':''}`}>
       <div className="container nav">
         <Link className="brand kf-brand" href="/" aria-label={settings.brand_name}>
-          <span className="kf-brand-logo"><img src={logo} alt="" width={54} height={50} decoding="async" onError={event=>{const image=event.currentTarget;if(image.dataset.fallback==='1')return;image.dataset.fallback='1';image.src='/merlin-logo.webp';}}/></span>
+          <span className="kf-brand-logo"><SafeImage src={logo} fallback="/merlin-logo.webp" alt="" width={54} height={50} sizes="54px" priority/></span>
           <span className="brand-copy"><strong>Merlin Encantos em Papel</strong><small>planejar • personalizar • encantar</small></span>
         </Link>
         <nav className="nav-links" aria-label="Principal">
