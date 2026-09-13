@@ -46,7 +46,12 @@ const nextConfig: NextConfig = {
     APP_RELEASE_COMMIT: buildReleaseCommit,
     APP_DEPLOYED_AT: buildReleaseDeployedAt
   },
-  images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    formats: ['image/avif','image/webp'],
+    qualities: [75,76,82],
+    minimumCacheTTL: 3600
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
