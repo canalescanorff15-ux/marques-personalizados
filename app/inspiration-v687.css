@@ -1,0 +1,29 @@
+/* V6.87 — artes conceituais de papelaria: ilustrações vetoriais leves, sem IP externo. */
+.inspiration-artwork{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;pointer-events:none;z-index:2}
+.inspiration-artwork svg{width:88%;height:88%;overflow:visible;filter:drop-shadow(0 14px 18px rgba(74,45,37,.11))}
+.inspiration-artwork svg>*{transform-box:fill-box;transform-origin:center}
+.inspiration-artwork .ia-shadow{fill:rgba(62,39,33,.12)}
+.inspiration-artwork .ia-back{fill:rgba(255,255,255,.28);stroke:rgba(255,255,255,.68);stroke-width:2}
+.inspiration-artwork .ia-paper{fill:#fffaf6;stroke:rgba(106,69,58,.16);stroke-width:2;stroke-linejoin:round}
+.inspiration-artwork .ia-ink{fill:rgba(93,57,47,.78);stroke:rgba(255,255,255,.26);stroke-width:1.5;stroke-linejoin:round}
+.inspiration-artwork .ia-accent{fill:rgba(197,112,103,.82);stroke:rgba(255,255,255,.32);stroke-width:1.5;stroke-linejoin:round}
+.inspiration-artwork .ia-stem{fill:none;stroke:rgba(91,106,75,.72);stroke-width:4;stroke-linecap:round}
+.palette-sage .inspiration-artwork .ia-accent{fill:rgba(105,128,91,.84)}
+.palette-lilac .inspiration-artwork .ia-accent{fill:rgba(146,106,160,.8)}
+.palette-sky .inspiration-artwork .ia-accent{fill:rgba(91,142,170,.84)}
+.palette-cocoa .inspiration-artwork .ia-accent{fill:rgba(162,113,80,.82)}
+.palette-candy .inspiration-artwork .ia-accent{fill:rgba(215,112,141,.8)}
+.palette-terracotta .inspiration-artwork .ia-accent{fill:rgba(173,91,61,.84)}
+.palette-blackgold .inspiration-artwork .ia-back{fill:rgba(229,189,129,.1);stroke:rgba(229,189,129,.34)}
+.palette-blackgold .inspiration-artwork .ia-paper{fill:#f1dfbf;stroke:rgba(229,189,129,.34)}
+.palette-blackgold .inspiration-artwork .ia-ink{fill:#8d683e;stroke:rgba(255,255,255,.08)}
+.palette-blackgold .inspiration-artwork .ia-accent{fill:#d3a75f;stroke:rgba(255,255,255,.12)}
+.palette-blackgold .inspiration-artwork .ia-stem{stroke:#b99963}
+.inspiration-artwork-label{position:absolute;right:12px;top:11px;padding:5px 7px;border:1px solid rgba(255,255,255,.36);background:rgba(255,250,246,.64);backdrop-filter:blur(5px);color:rgba(86,54,45,.72);font-size:.48rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.palette-blackgold .inspiration-artwork-label{background:rgba(30,25,21,.52);color:#e8c98f;border-color:rgba(229,189,129,.2)}
+.inspiration-art>.inspiration-artwork~small{z-index:7}
+.inspiration-art>.inspiration-favorite{z-index:9}
+.inspiration-art::before,.inspiration-art::after{opacity:.42}
+.inspiration-card:hover .inspiration-artwork svg{transform:translateY(-2px) scale(1.018);transition:transform .28s ease}
+@media(prefers-reduced-motion:reduce){.inspiration-card:hover .inspiration-artwork svg{transform:none;transition:none}}
+@media(max-width:620px){.inspiration-artwork svg{width:92%;height:92%}.inspiration-artwork-label{display:none}}
