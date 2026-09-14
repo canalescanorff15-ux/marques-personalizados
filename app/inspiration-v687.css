@@ -1,4 +1,4 @@
-/* V6.87 — artes conceituais de papelaria: ilustrações vetoriais leves, sem IP externo. */
+/* V6.87–V6.88 — artes conceituais de papelaria: ilustrações vetoriais leves, sem IP externo. */
 .inspiration-artwork{position:absolute;inset:0;display:grid;place-items:center;overflow:hidden;pointer-events:none;z-index:2}
 .inspiration-artwork svg{width:88%;height:88%;overflow:visible;filter:drop-shadow(0 14px 18px rgba(74,45,37,.11))}
 .inspiration-artwork svg>*{transform-box:fill-box;transform-origin:center}
@@ -25,5 +25,19 @@
 .inspiration-art>.inspiration-favorite{z-index:9}
 .inspiration-art::before,.inspiration-art::after{opacity:.42}
 .inspiration-card:hover .inspiration-artwork svg{transform:translateY(-2px) scale(1.018);transition:transform .28s ease}
+
+/* V6.88 — a mesma linguagem visual continua na ficha, comparação e curadoria guiada. */
+.inspiration-detail-art>.inspiration-artwork{inset:4%;z-index:3}
+.inspiration-detail-art>.inspiration-artwork svg{width:94%;height:94%;filter:drop-shadow(0 22px 26px rgba(74,45,37,.14))}
+.inspiration-detail-art>.inspiration-artwork~small{z-index:7}
+.inspiration-detail-art>.inspiration-artwork .inspiration-artwork-label{right:8px;top:8px}
+.inspiration-compare-art>.inspiration-artwork{inset:3%;z-index:2}
+.inspiration-compare-art>.inspiration-artwork svg{width:94%;height:94%;filter:drop-shadow(0 10px 14px rgba(74,45,37,.1))}
+.inspiration-compare-art>small{z-index:4}
+.concierge-inspiration-art>.inspiration-artwork{inset:3%;z-index:1}
+.concierge-inspiration-art>.inspiration-artwork svg{width:96%;height:96%;filter:drop-shadow(0 7px 10px rgba(74,45,37,.09))}
+.concierge-inspiration-art>span{z-index:3;padding:3px 5px;background:rgba(255,250,246,.68);backdrop-filter:blur(3px)}
+.palette-blackgold.concierge-inspiration-art>span{color:#e8c98f;background:rgba(30,25,21,.48)}
+
 @media(prefers-reduced-motion:reduce){.inspiration-card:hover .inspiration-artwork svg{transform:none;transition:none}}
-@media(max-width:620px){.inspiration-artwork svg{width:92%;height:92%}.inspiration-artwork-label{display:none}}
+@media(max-width:620px){.inspiration-artwork svg{width:92%;height:92%}.inspiration-artwork-label{display:none}.inspiration-detail-art>.inspiration-artwork{inset:1%}.inspiration-compare-art>.inspiration-artwork{inset:1%}}

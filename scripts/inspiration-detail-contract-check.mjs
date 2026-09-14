@@ -3,6 +3,8 @@ import fs from 'node:fs';
 const errors=[];
 const route=fs.readFileSync('app/inspiracoes/[code]/page.tsx','utf8');
 const cards=fs.readFileSync('components/InspirationShowcase.tsx','utf8');
+const compare=fs.readFileSync('components/InspirationCompareWorkspace.tsx','utf8');
+const concierge=fs.readFileSync('components/PartyConcierge.tsx','utf8');
 const kit=fs.readFileSync('components/KitBuilder.tsx','utf8');
 const sitemap=fs.readFileSync('app/sitemap.ts','utf8');
 const data=fs.readFileSync('lib/inspirations.ts','utf8');
@@ -20,9 +22,14 @@ if(!kit.includes("params.get('inspiracao')")||!kit.includes("params.get('inspira
 if(!sitemap.includes('inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes/${model.code}`'))errors.push('Sitemap precisa incluir as fichas individuais de inspiração.');
 if(!data.includes('export function getInspirationByCode')||!data.includes('export function getRelatedInspirations'))errors.push('Resolução e recomendação de inspirações precisam ter autoridade única em lib/inspirations.ts.');
 if(!share.includes('navigator.share')||!share.includes('navigator.clipboard'))errors.push('Compartilhamento precisa ter Web Share com fallback de cópia.');
-if(!cards.includes('<InspirationArtwork model={model}')||!artwork.includes("type Scene='garden'|'space'|'sport'|'adventure'|'package'|'kit'|'keepsake'|'celebration'"))errors.push('Cards precisam usar a arte conceitual vetorial V6.87 com cenas reconhecíveis.');
-if(cards.includes('inspiration-monogram'))errors.push('Cards de inspiração não podem voltar ao placeholder de monograma/iniciais como arte principal.');
-if(!artworkCss.includes('.inspiration-artwork')||!artworkCss.includes('.palette-blackgold .inspiration-artwork'))errors.push('Sistema visual das artes precisa preservar composição e contraste por paleta.');
+if(!cards.includes('<InspirationArtwork model={model}')||!artwork.includes("type Scene='garden'|'space'|'sport'|'adventure'|'package'|'kit'|'keepsake'|'celebration'"))errors.push('Cards precisam usar a arte conceitual vetorial com cenas reconhecíveis.');
+if(!route.includes('<InspirationArtwork model={model} label/>'))errors.push('Ficha individual precisa reutilizar a arte conceitual da inspiração.');
+if(!compare.includes('<InspirationArtwork model={model}/>'))errors.push('Comparador precisa reutilizar a arte conceitual da inspiração.');
+if(!concierge.includes('<InspirationArtwork model={model}/>'))errors.push('Curadoria guiada precisa reutilizar a arte conceitual quando cair em inspirações.');
+for(const [surface,source] of [['cards',cards],['detail',route],['compare',compare],['concierge',concierge]]){
+  if(source.includes('inspiration-monogram')||/function initials\(/.test(source)||source.includes("title.slice(0,2).toUpperCase()"))errors.push(`${surface}: não pode voltar ao placeholder de iniciais/monograma como arte principal.`);
+}
+for(const token of ['.inspiration-artwork','.palette-blackgold .inspiration-artwork','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual sem regra ${token}.`);
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, deep-link, SEO, compartilhamento e artes conceituais protegidos).');
+console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO e artes conceituais consistentes).');

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, CakeSlice, Check, Gift, Heart, Layers3, MessageCircle, PackageOpen, Palette, Sparkles, Tags } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Heart, Layers3, MessageCircle, Palette, Sparkles } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -10,17 +10,15 @@ import InspirationShareButton from '@/components/InspirationShareButton';
 import InspirationQuickQuote from '@/components/InspirationQuickQuote';
 import InspirationCompareButton from '@/components/InspirationCompareButton';
 import InspirationCompareDock from '@/components/InspirationCompareDock';
+import InspirationArtwork from '@/components/InspirationArtwork';
 import { InspirationCard } from '@/components/InspirationShowcase';
 import { getSiteSettings } from '@/lib/db';
-import { getInspirationByCode, getRelatedInspirations, type InspirationModel } from '@/lib/inspirations';
+import { getInspirationByCode, getRelatedInspirations } from '@/lib/inspirations';
 import { inspirationPaletteCollections } from '@/lib/inspiration-filters';
 import { whatsappUrl } from '@/lib/links';
 import { siteUrl } from '@/lib/config';
 
 type Props={params:Promise<{code:string}>};
-
-function initials(title:string){return title.split(/\s+/).slice(0,2).map(part=>part[0]).join('').toUpperCase();}
-function visualIcon(model:InspirationModel){if(model.group==='Topos de bolo')return <CakeSlice size={46}/>;if(model.group==='Caixas personalizadas')return <PackageOpen size={46}/>;if(model.group==='Lembranças e detalhes')return <Tags size={46}/>;if(model.group==='Kits completos')return <Gift size={46}/>;return <Sparkles size={46}/>;}
 
 export async function generateMetadata({params}:Props):Promise<Metadata>{
   const {code}=await params;
@@ -47,7 +45,7 @@ export default async function InspirationDetailPage({params}:Props){
   const breadcrumbs={"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:'Início',item:siteUrl||undefined},{"@type":"ListItem",position:2,name:'Inspirações',item:siteUrl?`${siteUrl}/inspiracoes`:undefined},{"@type":"ListItem",position:3,name:model.title,item:canonical}]};
   return <main className="premium-site kf-theme inspiration-detail-page"><Header settings={settings}/><JsonLd data={creativeWork}/><JsonLd data={breadcrumbs}/>
     <section className="inspiration-detail-hero"><div className="container"><Link className="back-link inspiration-detail-back" href="/inspiracoes"><ArrowLeft size={16}/> Voltar às inspirações</Link><div className="inspiration-detail-grid">
-      <div className={`inspiration-detail-art palette-${model.palette}`}><span className="inspiration-orbit orbit-one"/><span className="inspiration-orbit orbit-two"/><span className="inspiration-petal petal-one"/><span className="inspiration-petal petal-two"/><span className="inspiration-detail-kind">{visualIcon(model)}</span><span className="inspiration-detail-monogram">{initials(model.title)}</span><small>{model.code}</small><InspirationFavoriteButton code={model.code}/></div>
+      <div className={`inspiration-detail-art palette-${model.palette}`}><InspirationArtwork model={model} label/><small>{model.code}</small><InspirationFavoriteButton code={model.code}/></div>
       <div className="inspiration-detail-copy"><div className="eyebrow"><Sparkles size={14}/> Modelo de inspiração • sob encomenda</div><div className="inspiration-detail-title-row"><div><span>{model.code}</span><h1>{model.title}</h1></div><InspirationFavoriteButton code={model.code}/></div><p className="inspiration-detail-description">{model.description}</p>
         <div className="inspiration-detail-facts"><span><b>Peça / coleção</b>{model.category}</span><span><b>Ocasião</b>{model.occasion}</span><span><b>Estilo</b>{model.style}</span><span><b>Nível</b>{model.tier}</span><span><b>Paleta</b>{palette?.label||model.palette}</span></div>
         <div className="inspiration-detail-tags">{model.tags.map(tag=><Link key={tag} href={`/inspiracoes?busca=${encodeURIComponent(tag)}#explorar-inspiracoes`}>{tag}</Link>)}</div>
