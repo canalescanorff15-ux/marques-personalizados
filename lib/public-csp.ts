@@ -4,9 +4,12 @@ export function buildPublicContentSecurityPolicy(nonce:string,isDevelopment=fals
   const safeNonce=cleanNonce(nonce);if(!safeNonce)throw new Error('CSP_NONCE_REQUIRED');
   const directives=[
     "default-src 'self'",
-    `script-src 'self' 'nonce-${safeNonce}' 'strict-dynamic'${isDevelopment?" 'unsafe-eval'":''}`,
+    // A Home usa apenas scripts próprios do Next.js. Mantemos nonce para inline e
+    // liberamos explicitamente chunks same-origin; strict-dynamic faria browsers
+    // modernos ignorarem 'self' e pode bloquear scripts legítimos sem nonce.
+    `script-src 'self' 'nonce-${safeNonce}'${isDevelopment?" 'unsafe-eval'":''}`,
     "script-src-attr 'none'",
-    // Componentes públicos ainda usam style={} do React; scripts permanecem nonce-only.
+    // Componentes públicos ainda usam style={} do React; scripts permanecem sem unsafe-inline.
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
