@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { isCanonicalTelemetryOrigin } from '@/lib/client-telemetry';
 
 type Bucket='good'|'needs'|'poor';
 type LayoutShiftEntry=PerformanceEntry&{hadRecentInput?:boolean;value?:number};
@@ -11,6 +12,7 @@ function bucket(metric:'lcp'|'cls'|'ttfb',value:number):Bucket{
   return value<=800?'good':value<=1800?'needs':'poor';
 }
 function send(metric:'lcp'|'cls'|'ttfb',value:number,path:string){
+  if(!isCanonicalTelemetryOrigin())return;
   const body=JSON.stringify({event:`vital_${metric}_${bucket(metric,value)}`,path});
   try{if(navigator.sendBeacon){navigator.sendBeacon('/api/events',new Blob([body],{type:'application/json'}));return;}}catch{}
   fetch('/api/events',{method:'POST',headers:{'content-type':'application/json'},body,keepalive:true}).catch(()=>{});
@@ -18,7 +20,7 @@ function send(metric:'lcp'|'cls'|'ttfb',value:number,path:string){
 export default function WebVitalsReporter(){
   const pathname=usePathname();
   useEffect(()=>{
-    if(typeof PerformanceObserver==='undefined')return;
+    if(typeof PerformanceObserver==='undefined'||!isCanonicalTelemetryOrigin())return;
     const path=pathname||'/';if(path.startsWith('/admin'))return;let lcp=0,cls=0,ttfb=0,sent=false;const observers:PerformanceObserver[]=[];
     try{const nav=performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming|undefined;if(nav&&nav.responseStart>0)ttfb=nav.responseStart;}catch{}
     try{const obs=new PerformanceObserver(list=>{for(const entry of list.getEntries())lcp=Math.max(lcp,entry.startTime);});obs.observe({type:'largest-contentful-paint',buffered:true} as PerformanceObserverInit);observers.push(obs);}catch{}
