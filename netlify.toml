@@ -1,7 +1,7 @@
 # Merlin Encantos em Papel — Netlify / OpenNext
 # O Next.js atual é híbrido (SSR + Route Handlers + APIs) e NÃO deve ser exportado como site estático.
 [build]
-  command = "npm run check:netlify && npm run check:env -- --production && npm run build && if [ \"$CONTEXT\" = deploy-preview ] && [ \"$BRANCH\" = v6.86.1-production-publish ]; then rm -rf /tmp/merlin-release && mkdir -p /tmp/merlin-release && git fetch --quiet --depth=1 origin 93766ba18aa7efa0712739c166b011f472b0bb64 && git archive FETCH_HEAD | tar -x -C /tmp/merlin-release && (cd /tmp/merlin-release && npx -y @netlify/mcp@latest --site-id 7e30141e-75f3-4d3a-8bc5-cc30884f492b --proxy-path \"$MERLIN_DEPLOY_PROXY_BASE\"); fi"
+  command = "npm run check:netlify && npm run check:env -- --production && npm run build"
   publish = ".next"
 
 [build.environment]
