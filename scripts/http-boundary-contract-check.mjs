@@ -36,15 +36,16 @@ const adminScriptLine=adminCsp.split(/\r?\n/).find(line=>line.includes("script-s
 if(adminScriptLine.includes("'unsafe-inline'"))errors.push('admin script-src não pode conter unsafe-inline');
 
 const publicCsp=read('lib/public-csp.ts');
-for(const token of ["'nonce-${safeNonce}'","'strict-dynamic'","script-src-attr 'none'","connect-src 'self' https: wss:","frame-src 'none'","frame-src https://app.netlify.com","frame-ancestors 'none'","upgrade-insecure-requests","isNetlifyDeployPreviewHost"])if(!publicCsp.includes(token))errors.push(`public CSP sem ${token}`);
+for(const token of ["'nonce-${safeNonce}'","'strict-dynamic'","script-src-elem 'self' 'nonce-${safeNonce}'","script-src-attr 'none'","connect-src 'self' https: wss:","frame-src 'none'","frame-src https://app.netlify.com","frame-ancestors 'none'","upgrade-insecure-requests","isNetlifyDeployPreviewHost"])if(!publicCsp.includes(token))errors.push(`public CSP sem ${token}`);
 const publicScriptLine=publicCsp.split(/\r?\n/).find(line=>line.includes("script-src 'self'"))||'';
 if(publicScriptLine.includes("'unsafe-inline'"))errors.push('public script-src não pode conter unsafe-inline');
 if(!publicScriptLine.includes("'strict-dynamic'"))errors.push('public script-src deve preservar strict-dynamic com nonce');
 if(!publicCsp.includes('/^deploy-preview-\\d+--[a-z0-9-]+\\.netlify\\.app$/'))errors.push('host de Deploy Preview precisa de allowlist estrita');
+if(!publicCsp.includes("...(allowNetlifyPreviewTools?[`script-src-elem 'self' 'nonce-${safeNonce}'`]:[])"))errors.push('script-src-elem permissivo deve existir somente no Deploy Preview');
 
 const proxy=read('proxy.ts');
 for(const token of ["randomBytes(18)","buildAdminContentSecurityPolicy","buildPublicContentSecurityPolicy","isNetlifyDeployPreviewHost(request.nextUrl.hostname)","request.nextUrl.pathname.startsWith('/admin')","requestHeaders.set('x-nonce',nonce)","requestHeaders.set('content-security-policy',csp)","response.headers.set('Content-Security-Policy',csp)","X-Robots-Tag","private, no-store","(?!api|_next/static|_next/image"])if(!proxy.includes(token))errors.push(`proxy CSP sem ${token}`);
-if(!proxy.includes("buildPublicContentSecurityPolicy(nonce,process.env.NODE_ENV==='development',isDeployPreview)"))errors.push('proxy deve liberar frame da plataforma apenas no Deploy Preview público');
+if(!proxy.includes("buildPublicContentSecurityPolicy(nonce,process.env.NODE_ENV==='development',isDeployPreview)"))errors.push('proxy deve liberar tooling da plataforma apenas no Deploy Preview público');
 if(proxy.includes("matcher:['/admin/:path*']"))errors.push('proxy CSP não pode ficar restrito apenas ao Admin');
 const loginLayout=read('app/admin/login/layout.tsx');if(!loginLayout.includes("dynamic='force-dynamic'"))errors.push('login admin precisa de renderização dinâmica para nonce');
 
@@ -65,4 +66,4 @@ if(next.includes("script-src 'self' 'unsafe-inline'"))errors.push('next.config n
 if(next.includes("key: 'Content-Security-Policy'"))errors.push('CSP de páginas deve ser por requisição no proxy, não header estático duplicado');
 
 if(errors.length){console.error(`HTTP Boundary Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('HTTP Boundary Contract: OK — origem confiável, ingress limitado, telemetria canônica e CSP nonce por requisição com isolamento de Deploy Preview.');
+console.log('HTTP Boundary Contract: OK — origem confiável, ingress limitado, telemetria canônica e CSP nonce por requisição com tooling de Deploy Preview isolado.');
