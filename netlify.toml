@@ -8,4 +8,11 @@
   NODE_VERSION = "22.23.2"
   NETLIFY_NEXT_SKEW_PROTECTION = "true"
 
+# Diagnóstico temporário V6.86: gera um relatório Lighthouse navegável no próprio preview.
+# Remover antes do merge final se o plugin já estiver instalado pelo painel do Netlify.
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+  [plugins.inputs.audits]
+    output_path = "reports/lighthouse.html"
+
 # Não adicione rewrite global /* -> /index.html: ele quebraria o runtime Next.js/OpenNext.
