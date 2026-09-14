@@ -7,6 +7,8 @@ const kit=fs.readFileSync('components/KitBuilder.tsx','utf8');
 const sitemap=fs.readFileSync('app/sitemap.ts','utf8');
 const data=fs.readFileSync('lib/inspirations.ts','utf8');
 const share=fs.readFileSync('components/InspirationShareButton.tsx','utf8');
+const artwork=fs.readFileSync('components/InspirationArtwork.tsx','utf8');
+const artworkCss=fs.readFileSync('app/inspiration-v687.css','utf8');
 
 if(!route.includes('getInspirationByCode(code)')||!route.includes('return notFound()'))errors.push('Ficha individual precisa resolver o código e retornar 404 real para inspiração inválida.');
 if(!route.includes('getRelatedInspirations(model,4)'))errors.push('Ficha individual precisa oferecer inspirações relacionadas.');
@@ -18,6 +20,9 @@ if(!kit.includes("params.get('inspiracao')")||!kit.includes("params.get('inspira
 if(!sitemap.includes('inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes/${model.code}`'))errors.push('Sitemap precisa incluir as fichas individuais de inspiração.');
 if(!data.includes('export function getInspirationByCode')||!data.includes('export function getRelatedInspirations'))errors.push('Resolução e recomendação de inspirações precisam ter autoridade única em lib/inspirations.ts.');
 if(!share.includes('navigator.share')||!share.includes('navigator.clipboard'))errors.push('Compartilhamento precisa ter Web Share com fallback de cópia.');
+if(!cards.includes('<InspirationArtwork model={model}')||!artwork.includes("type Scene='garden'|'space'|'sport'|'adventure'|'package'|'kit'|'keepsake'|'celebration'"))errors.push('Cards precisam usar a arte conceitual vetorial V6.87 com cenas reconhecíveis.');
+if(cards.includes('inspiration-monogram'))errors.push('Cards de inspiração não podem voltar ao placeholder de monograma/iniciais como arte principal.');
+if(!artworkCss.includes('.inspiration-artwork')||!artworkCss.includes('.palette-blackgold .inspiration-artwork'))errors.push('Sistema visual das artes precisa preservar composição e contraste por paleta.');
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, deep-link, SEO e compartilhamento protegidos).');
+console.log('Inspiration Detail Contract Check: OK (ficha, deep-link, SEO, compartilhamento e artes conceituais protegidos).');
