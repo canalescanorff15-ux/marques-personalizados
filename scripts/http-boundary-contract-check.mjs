@@ -36,9 +36,10 @@ const adminScriptLine=adminCsp.split(/\r?\n/).find(line=>line.includes("script-s
 if(adminScriptLine.includes("'unsafe-inline'"))errors.push('admin script-src não pode conter unsafe-inline');
 
 const publicCsp=read('lib/public-csp.ts');
-for(const token of ["'strict-dynamic'","script-src-attr 'none'","connect-src 'self' https: wss:","frame-src 'none'","frame-ancestors 'none'","upgrade-insecure-requests"])if(!publicCsp.includes(token))errors.push(`public CSP sem ${token}`);
+for(const token of ["'nonce-${safeNonce}'","script-src-attr 'none'","connect-src 'self' https: wss:","frame-src 'none'","frame-ancestors 'none'","upgrade-insecure-requests"])if(!publicCsp.includes(token))errors.push(`public CSP sem ${token}`);
 const publicScriptLine=publicCsp.split(/\r?\n/).find(line=>line.includes("script-src 'self'"))||'';
 if(publicScriptLine.includes("'unsafe-inline'"))errors.push('public script-src não pode conter unsafe-inline');
+if(publicScriptLine.includes("'strict-dynamic'"))errors.push("public script-src não deve usar strict-dynamic: chunks legítimos same-origin do Next precisam permanecer autorizados por 'self'");
 
 const proxy=read('proxy.ts');
 for(const token of ["randomBytes(18)","buildAdminContentSecurityPolicy","buildPublicContentSecurityPolicy","request.nextUrl.pathname.startsWith('/admin')","requestHeaders.set('x-nonce',nonce)","requestHeaders.set('content-security-policy',csp)","response.headers.set('Content-Security-Policy',csp)","X-Robots-Tag","private, no-store","(?!api|_next/static|_next/image"])if(!proxy.includes(token))errors.push(`proxy CSP sem ${token}`);
