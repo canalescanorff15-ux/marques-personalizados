@@ -1,19 +1,22 @@
 # GitHub Summary — V6.86
 
 ## Objetivo
-Recuperar a pontuação de Best Practices sem enfraquecer a política pública de scripts nem provocar bloqueios de runtime do Next.js.
+Eliminar falsos negativos de Best Practices no Deploy Preview sem enfraquecer a segurança da produção nem poluir a telemetria comercial.
+
+## Diagnóstico comprovado
+- Lighthouse 9.6.8 executado diretamente na produção V6.85: Best Practices 100.
+- O score 83 do Deploy Preview era causado por dois eventos específicos do ambiente de preview: `/api/events` respondendo 403 e o script de preview do Netlify tentando abrir `https://app.netlify.com` em frame bloqueado pela CSP.
+- Remover `strict-dynamic` não melhorou o score; a hipótese foi descartada.
 
 ## Implementado
-- nonce público continua único por requisição;
-- `script-src-attr 'none'` continua ativo;
-- scripts inline continuam sem `unsafe-inline`;
-- scripts próprios do Next.js permanecem explicitamente autorizados por `'self'`;
-- `strict-dynamic` foi removido somente da CSP pública para evitar que navegadores modernos ignorem `'self'` e bloqueiem chunks legítimos sem nonce;
-- CSP administrativa permanece inalterada e continua usando `strict-dynamic`;
-- contrato de segurança atualizado para impedir a reintrodução desse conflito na CSP pública.
+- CSP pública preserva nonce criptográfico por requisição, `strict-dynamic`, `script-src-attr 'none'` e scripts inline sem `unsafe-inline`.
+- Produção continua com `frame-src 'none'`.
+- Somente hosts no padrão estrito `deploy-preview-<n>--<site>.netlify.app` podem usar `frame-src https://app.netlify.com`, necessário para o tooling de preview do Netlify.
+- Telemetria pública e Web Vitals só são enviados quando `window.location.origin` coincide com a origem canônica configurada em `NEXT_PUBLIC_SITE_URL`; previews deixam de gerar eventos comerciais ou erros de `/api/events`.
+- Contrato HTTP/CSP ampliado para impedir regressões nessas regras.
 
 ## Preservado
-Sem mudanças em catálogo, banco, CRM, orçamento, autenticação, MFA, sessões, R2, backups, preços ou regras comerciais.
+Sem mudanças em catálogo, preços, pedidos, orçamento, Neon, CRM, autenticação, MFA, sessões, R2, backups ou regras comerciais.
 
 ## Gate
-Integrar apenas se CI completa e Deploy Preview do Netlify permanecerem verdes e o Lighthouse confirmar ausência de regressão.
+Integrar somente após CI completa verde e Deploy Preview pronto. A produção já foi medida em Best Practices 100; a validação do preview confirma apenas o isolamento do ambiente de teste.
