@@ -1,21 +1,19 @@
 import Link from 'next/link';
-import { ArrowUpRight, CakeSlice, Gem, Gift, MessageCircle, PackageOpen, PartyPopper, Sparkles, Tags, WalletCards } from 'lucide-react';
+import { ArrowUpRight, Gem, MessageCircle, PartyPopper, Sparkles, Tags, WalletCards } from 'lucide-react';
 import { featuredInspirationCodes, inspirationInvestmentCollections, inspirationModels, inspirationOccasionCollections, inspirationStyleCollections, type InspirationModel } from '@/lib/inspirations';
 import { whatsappUrl } from '@/lib/links';
 import { inspirationThemeCollections } from '@/lib/inspiration-filters';
 import InspirationFavoriteButton from './InspirationFavoriteButton';
 import InspirationCompareButton from './InspirationCompareButton';
+import InspirationArtwork from './InspirationArtwork';
 
-function initials(title:string){return title.split(/\s+/).slice(0,2).map(part=>part[0]).join('').toUpperCase();}
 function queryLink(key:string,value:string){return `/inspiracoes?${new URLSearchParams({[key]:value}).toString()}#explorar-inspiracoes`;}
-function visualIcon(model:InspirationModel){if(model.group==='Topos de bolo')return <CakeSlice size={27}/>;if(model.group==='Caixas personalizadas')return <PackageOpen size={27}/>;if(model.group==='Lembranças e detalhes')return <Tags size={27}/>;if(model.group==='Kits completos')return <Gift size={27}/>;return <Sparkles size={27}/>;}
 
 export function InspirationCard({model,whatsapp,showUtilities=true}:{model:InspirationModel;whatsapp:string;showUtilities?:boolean}){
   const wa=whatsappUrl(whatsapp,`Olá! Vi o modelo de inspiração ${model.code} — ${model.title} no catálogo da Merlin Encantos em Papel. Quero fazer algo nesse estilo e gostaria de um orçamento.`);
   return <article className="inspiration-card" data-reveal>
     <div className={`inspiration-art palette-${model.palette}`}>
-      <span className="inspiration-orbit orbit-one"/><span className="inspiration-orbit orbit-two"/><span className="inspiration-petal petal-one"/><span className="inspiration-petal petal-two"/>
-      <span className="inspiration-kind">{visualIcon(model)}</span><span className="inspiration-monogram">{initials(model.title)}</span><small>{model.code}</small>{showUtilities&&<InspirationFavoriteButton code={model.code}/>} 
+      <InspirationArtwork model={model} label={!showUtilities}/><small>{model.code}</small>{showUtilities&&<InspirationFavoriteButton code={model.code}/>} 
     </div>
     <div className="inspiration-card-copy">
       <div className="inspiration-meta"><span>{model.category}</span><span>{model.tier}</span></div>
