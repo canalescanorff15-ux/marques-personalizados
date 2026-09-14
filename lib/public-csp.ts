@@ -1,10 +1,19 @@
 function cleanNonce(value:string){return String(value||'').replace(/[^A-Za-z0-9+/_=-]/g,'').slice(0,160);}
 
-export function buildPublicContentSecurityPolicy(nonce:string,isDevelopment=false){
+export function isNetlifyDeployPreviewHost(hostname:string){
+  const host=String(hostname||'').trim().toLowerCase();
+  return /^deploy-preview-\d+--[a-z0-9-]+\.netlify\.app$/.test(host);
+}
+
+export function buildPublicContentSecurityPolicy(nonce:string,isDevelopment=false,allowNetlifyPreviewTools=false){
   const safeNonce=cleanNonce(nonce);if(!safeNonce)throw new Error('CSP_NONCE_REQUIRED');
   const directives=[
     "default-src 'self'",
     `script-src 'self' 'nonce-${safeNonce}' 'strict-dynamic'${isDevelopment?" 'unsafe-eval'":''}`,
+    // O Netlify injeta /.netlify/scripts/cdp apenas em Deploy Preview. Com
+    // strict-dynamic, host allowlists de script-src são ignoradas; por isso o
+    // preview recebe uma política de elementos separada, mantendo produção igual.
+    ...(allowNetlifyPreviewTools?[`script-src-elem 'self' 'nonce-${safeNonce}'`]:[]),
     "script-src-attr 'none'",
     // Componentes públicos ainda usam style={} do React; scripts permanecem nonce-only.
     "style-src 'self' 'unsafe-inline'",
@@ -15,7 +24,7 @@ export function buildPublicContentSecurityPolicy(nonce:string,isDevelopment=fals
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-    "frame-src 'none'",
+    allowNetlifyPreviewTools?"frame-src https://app.netlify.com":"frame-src 'none'",
     "frame-ancestors 'none'",
     "worker-src 'self' blob:",
     "manifest-src 'self'",
