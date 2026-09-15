@@ -1,0 +1,206 @@
+/* V6.92 — foco fotográfico por item
+   Usa somente as referências internas aprovadas. Fotos reais enviadas pelo admin/R2
+   não recebem estes recortes e preservam o enquadramento original. */
+
+:is(
+  a[href="/catalogo/topo-classico-personalizado"] img[src*="inspirations"],
+  a[href="/catalogo/topo-classico-personalizado"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/topo-classico-personalizado"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/topo-classico-personalizado"]) img[src*="inspirations"],
+  img[alt="Topo Clássico Personalizado"][src*="inspirations"],
+  img[alt="Topo Clássico Personalizado"][srcset*="inspirations"]
+){object-position:50% 42%!important}
+
+:is(
+  a[href="/catalogo/topo-premium-camadas"] img[src*="inspirations"],
+  a[href="/catalogo/topo-premium-camadas"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/topo-premium-camadas"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/topo-premium-camadas"]) img[src*="inspirations"],
+  img[alt="Topo Premium em Camadas"][src*="inspirations"],
+  img[alt="Topo Premium em Camadas"][srcset*="inspirations"]
+){object-position:50% 38%!important}
+
+:is(
+  a[href="/catalogo/topo-luxo-shaker"] img[src*="inspirations"],
+  a[href="/catalogo/topo-luxo-shaker"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/topo-luxo-shaker"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/topo-luxo-shaker"]) img[src*="inspirations"],
+  img[alt="Topo Luxo com Shaker"][src*="inspirations"],
+  img[alt="Topo Luxo com Shaker"][srcset*="inspirations"]
+){object-position:51% 31%!important}
+
+:is(
+  a[href="/catalogo/caixinha-milk-premium"] img[src*="inspirations"],
+  a[href="/catalogo/caixinha-milk-premium"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/caixinha-milk-premium"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/caixinha-milk-premium"]) img[src*="inspirations"],
+  img[alt="Caixinha Milk Premium"][src*="inspirations"],
+  img[alt="Caixinha Milk Premium"][srcset*="inspirations"]
+){object-position:17% 48%!important}
+
+:is(
+  a[href="/catalogo/caixa-piramide-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/caixa-piramide-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/caixa-piramide-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/caixa-piramide-personalizada"]) img[src*="inspirations"],
+  img[alt="Caixa Pirâmide Personalizada"][src*="inspirations"],
+  img[alt="Caixa Pirâmide Personalizada"][srcset*="inspirations"]
+){object-position:86% 48%!important}
+
+:is(
+  a[href="/catalogo/caixa-bala-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/caixa-bala-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/caixa-bala-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/caixa-bala-personalizada"]) img[src*="inspirations"],
+  img[alt="Caixa Bala Personalizada"][src*="inspirations"],
+  img[alt="Caixa Bala Personalizada"][srcset*="inspirations"]
+){object-position:51% 32%!important}
+
+:is(
+  a[href="/catalogo/caixa-sushi-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/caixa-sushi-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/caixa-sushi-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/caixa-sushi-personalizada"]) img[src*="inspirations"],
+  img[alt="Caixa Sushi Personalizada"][src*="inspirations"],
+  img[alt="Caixa Sushi Personalizada"][srcset*="inspirations"]
+){object-position:51% 69%!important}
+
+:is(
+  a[href="/catalogo/caixa-maleta-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/caixa-maleta-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/caixa-maleta-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/caixa-maleta-personalizada"]) img[src*="inspirations"],
+  img[alt="Caixa Maleta Personalizada"][src*="inspirations"],
+  img[alt="Caixa Maleta Personalizada"][srcset*="inspirations"]
+){object-position:16% 35%!important}
+
+:is(
+  a[href="/catalogo/tag-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/tag-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/tag-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/tag-personalizada"]) img[src*="inspirations"],
+  img[alt="Tag Personalizada"][src*="inspirations"],
+  img[alt="Tag Personalizada"][srcset*="inspirations"]
+){object-position:81% 28%!important}
+
+:is(
+  a[href="/catalogo/adesivo-personalizado"] img[src*="inspirations"],
+  a[href="/catalogo/adesivo-personalizado"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/adesivo-personalizado"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/adesivo-personalizado"]) img[src*="inspirations"],
+  img[alt="Adesivo Personalizado"][src*="inspirations"],
+  img[alt="Adesivo Personalizado"][srcset*="inspirations"]
+){object-position:57% 72%!important}
+
+:is(
+  a[href="/catalogo/topper-docinho-personalizado"] img[src*="inspirations"],
+  a[href="/catalogo/topper-docinho-personalizado"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/topper-docinho-personalizado"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/topper-docinho-personalizado"]) img[src*="inspirations"],
+  img[alt="Topper para Docinhos"][src*="inspirations"],
+  img[alt="Topper para Docinhos"][srcset*="inspirations"]
+){object-position:18% 42%!important}
+
+:is(
+  a[href="/catalogo/forminha-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/forminha-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/forminha-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/forminha-personalizada"]) img[src*="inspirations"],
+  img[alt="Forminha Personalizada"][src*="inspirations"],
+  img[alt="Forminha Personalizada"][srcset*="inspirations"]
+){object-position:50% 70%!important}
+
+:is(
+  a[href="/catalogo/kit-mini-festa"] img[src*="inspirations"],
+  a[href="/catalogo/kit-mini-festa"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/kit-mini-festa"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/kit-mini-festa"]) img[src*="inspirations"],
+  img[alt="Kit Mini Festa"][src*="inspirations"],
+  img[alt="Kit Mini Festa"][srcset*="inspirations"]
+){object-position:51% 49%!important}
+
+:is(
+  a[href="/catalogo/kit-lembrancinhas"] img[src*="inspirations"],
+  a[href="/catalogo/kit-lembrancinhas"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/kit-lembrancinhas"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/kit-lembrancinhas"]) img[src*="inspirations"],
+  img[alt="Kit Essencial de Festa"][src*="inspirations"],
+  img[alt="Kit Essencial de Festa"][srcset*="inspirations"]
+){object-position:49% 46%!important}
+
+:is(
+  a[href="/catalogo/kit-premium-festa"] img[src*="inspirations"],
+  a[href="/catalogo/kit-premium-festa"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/kit-premium-festa"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/kit-premium-festa"]) img[src*="inspirations"],
+  img[alt="Kit Premium de Festa"][src*="inspirations"],
+  img[alt="Kit Premium de Festa"][srcset*="inspirations"]
+){object-position:50% 43%!important}
+
+:is(
+  a[href="/catalogo/display-mesa-personalizado"] img[src*="inspirations"],
+  a[href="/catalogo/display-mesa-personalizado"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/display-mesa-personalizado"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/display-mesa-personalizado"]) img[src*="inspirations"],
+  img[alt="Display de Mesa Personalizado"][src*="inspirations"],
+  img[alt="Display de Mesa Personalizado"][srcset*="inspirations"]
+){object-position:50% 47%!important}
+
+:is(
+  a[href="/catalogo/bandeirola-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/bandeirola-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/bandeirola-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/bandeirola-personalizada"]) img[src*="inspirations"],
+  img[alt="Bandeirola Personalizada"][src*="inspirations"],
+  img[alt="Bandeirola Personalizada"][srcset*="inspirations"]
+){object-position:50% 26%!important}
+
+:is(
+  a[href="/catalogo/wrapper-cupcake-personalizado"] img[src*="inspirations"],
+  a[href="/catalogo/wrapper-cupcake-personalizado"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/wrapper-cupcake-personalizado"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/wrapper-cupcake-personalizado"]) img[src*="inspirations"],
+  img[alt="Wrapper para Cupcake"][src*="inspirations"],
+  img[alt="Wrapper para Cupcake"][srcset*="inspirations"]
+){object-position:50% 71%!important}
+
+:is(
+  a[href="/catalogo/plaquinha-personalizada"] img[src*="inspirations"],
+  a[href="/catalogo/plaquinha-personalizada"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/plaquinha-personalizada"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/plaquinha-personalizada"]) img[src*="inspirations"],
+  img[alt="Plaquinha Personalizada"][src*="inspirations"],
+  img[alt="Plaquinha Personalizada"][srcset*="inspirations"]
+){object-position:80% 79%!important}
+
+:is(
+  a[href="/catalogo/flor-papel-3d"] img[src*="inspirations"],
+  a[href="/catalogo/flor-papel-3d"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/flor-papel-3d"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/flor-papel-3d"]) img[src*="inspirations"],
+  img[alt="Flor de Papel 3D"][src*="inspirations"],
+  img[alt="Flor de Papel 3D"][srcset*="inspirations"]
+){object-position:28% 61%!important}
+
+:is(
+  a[href="/catalogo/aplique-3d-camadas"] img[src*="inspirations"],
+  a[href="/catalogo/aplique-3d-camadas"] img[srcset*="inspirations"],
+  .compare-card:has(a[href="/catalogo/aplique-3d-camadas"]) img[src*="inspirations"],
+  .price-guide-row:has(a[href="/catalogo/aplique-3d-camadas"]) img[src*="inspirations"],
+  img[alt="Aplique 3D em Camadas"][src*="inspirations"],
+  img[alt="Aplique 3D em Camadas"][srcset*="inspirations"]
+){object-position:53% 65%!important}
+
+:is(a[href="/categorias/topos-de-bolo"] img[src*="inspirations"],a[href="/categorias/topos-de-bolo"] img[srcset*="inspirations"]){object-position:50% 43%!important}
+:is(a[href="/categorias/caixas-personalizadas"] img[src*="inspirations"],a[href="/categorias/caixas-personalizadas"] img[srcset*="inspirations"]){object-position:52% 53%!important}
+:is(a[href="/categorias/lembrancinhas"] img[src*="inspirations"],a[href="/categorias/lembrancinhas"] img[srcset*="inspirations"]){object-position:64% 50%!important}
+:is(a[href="/categorias/kits-personalizados"] img[src*="inspirations"],a[href="/categorias/kits-personalizados"] img[srcset*="inspirations"]){object-position:50% 47%!important}
+:is(a[href="/categorias/mesa-festa"] img[src*="inspirations"],a[href="/categorias/mesa-festa"] img[srcset*="inspirations"]){object-position:50% 55%!important}
+:is(a[href="/categorias/flores-acabamentos"] img[src*="inspirations"],a[href="/categorias/flores-acabamentos"] img[srcset*="inspirations"]){object-position:50% 48%!important}
+
+@media (max-width:620px){
+  .product-image img[src*="inspirations"],
+  .product-image img[srcset*="inspirations"]{transform:scale(1.015)}
+  .product-card:hover .product-image img[src*="inspirations"],
+  .product-card:hover .product-image img[srcset*="inspirations"]{transform:scale(1.035)}
+}
