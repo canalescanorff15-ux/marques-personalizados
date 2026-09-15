@@ -36,7 +36,7 @@ export function isReferenceCatalogPhoto(url:string|undefined|null){ return Boole
 export function isIllustrativeCatalogImage(url:string|undefined|null){ return isLegacyIllustrativeCatalogImage(url)||isReferenceCatalogPhoto(url); }
 export function catalogProductImage(slug:string,category:string,current:string[]){
   const clean=current.filter(Boolean);
-  const customerMedia=clean.filter(url=>!isLegacyCatalogPlaceholder(url)&&!isLegacyIllustrativeCatalogImage(url));
+  const customerMedia=clean.filter(url=>!isLegacyCatalogPlaceholder(url)&&!isIllustrativeCatalogImage(url));
   if(customerMedia.length)return customerMedia;
   const starter=getStarterProduct(slug);
   if(starter)return [starter.image_url];
@@ -44,7 +44,7 @@ export function catalogProductImage(slug:string,category:string,current:string[]
   return categoryArt?[categoryArt]:clean;
 }
 export function catalogCategoryImage(slug:string,name:string,current:string|null|undefined){
-  if(current&&!isLegacyCatalogPlaceholder(current)&&!isLegacyIllustrativeCatalogImage(current))return current;
+  if(current&&!isLegacyCatalogPlaceholder(current)&&!isIllustrativeCatalogImage(current))return current;
   return getStarterCategory(slug)?.image_url||getStarterCategory(name)?.image_url||current||null;
 }
 export function formatCatalogMoney(cents:number|null|undefined){
