@@ -32,6 +32,7 @@ for(const dep of ['vinext','@vinext/cloudflare'])assert(pkg.dependencies?.[dep],
 for(const dep of ['vite','@vitejs/plugin-react','@vitejs/plugin-rsc','@cloudflare/vite-plugin','wrangler'])assert(pkg.devDependencies?.[dep],`devDependency ausente: ${dep}`);
 assert(pkg.type==='module','package.json deve usar type=module para Vite/vinext');
 assert(pkg.scripts?.['build:vinext']==='vinext build','build:vinext deve usar vinext build');
+assert(pkg.scripts?.['start:vinext']==='vinext start','start:vinext deve usar vinext start');
 assert(pkg.scripts?.['deploy:vinext']==='vinext-cloudflare deploy','deploy:vinext deve usar o deploy oficial do @vinext/cloudflare');
 assert(pkg.scripts?.['check:cloudflare']==='node scripts/cloudflare-workers-contract-check.mjs','check:cloudflare ausente');
 
@@ -39,7 +40,7 @@ const env=read('.env.example');
 for(const key of ['DATABASE_URL','SESSION_SECRET','PRIVACY_HASH_SECRET','ADMIN_PASSWORD_HASH','ADMIN_TOTP_SECRET','S3_ENDPOINT','S3_BUCKET','S3_ACCESS_KEY_ID','S3_SECRET_ACCESS_KEY','S3_PUBLIC_BASE_URL'])assert(env.includes(`${key}=`),`.env.example não documenta ${key}`);
 
 const ci=read('.github/workflows/cloudflare-compat.yml');
-for(const token of ['npm run check:cloudflare','npm run build:vinext','vinext-cloudflare deploy --dry-run'])assert(ci.includes(token),`Cloudflare CI sem ${token}`);
+for(const token of ['npm run check:cloudflare','npm run build:vinext','npm run deploy:vinext','--skip-build','--dry-run'])assert(ci.includes(token),`Cloudflare CI sem ${token}`);
 
 if(failures.length){
   console.error(`Cloudflare Workers Contract: FALHOU (${failures.length})`);
