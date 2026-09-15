@@ -20,22 +20,23 @@ import { whatsappUrl } from '@/lib/links';
 import InspirationCompareDock from './InspirationCompareDock';
 
 const tiers:InspirationModel['tier'][]=['Essencial','Intermediário','Premium'];
-const PAGE_SIZE=32;
+const GROUP_PAGE_SIZE=10;
+
+type VisibleByGroup=Record<string,number>;
 
 export default function InspirationExplorer({whatsapp}:{whatsapp:string}){
   const [filters,setFilters]=useState<InspirationFilters>(emptyInspirationFilters);
-  const [savedCodes,setSavedCodes]=useState<string[]>([]);const [savedOnly,setSavedOnly]=useState(false);const [visible,setVisible]=useState(PAGE_SIZE);const [ready,setReady]=useState(false);
+  const [savedCodes,setSavedCodes]=useState<string[]>([]);const [savedOnly,setSavedOnly]=useState(false);const [visibleByGroup,setVisibleByGroup]=useState<VisibleByGroup>({});const [ready,setReady]=useState(false);
   const setFilter=<K extends keyof InspirationFilters>(key:K,value:InspirationFilters[K])=>setFilters(current=>({...current,[key]:value}));
 
   useEffect(()=>{const p=new URLSearchParams(location.search);setFilters({query:p.get('busca')||'',group:p.get('grupo')||'',occasion:p.get('ocasiao')||'',style:p.get('estilo')||'',tier:p.get('nivel')||'',theme:p.get('tema')||'',palette:p.get('paleta')||'',sort:(p.get('ordem') as InspirationSort)||'catalog'});setSavedOnly(p.get('salvos')==='1');setReady(true);},[]);
   useEffect(()=>{const sync=()=>setSavedCodes(readInspirationFavorites());sync();window.addEventListener(INSPIRATION_FAVORITES_EVENT,sync);window.addEventListener('storage',sync);return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,sync);window.removeEventListener('storage',sync);};},[]);
   useEffect(()=>{if(!ready)return;const url=new URL(location.href);const mapping:[keyof InspirationFilters,string][]=[['query','busca'],['group','grupo'],['occasion','ocasiao'],['style','estilo'],['tier','nivel'],['theme','tema'],['palette','paleta']];for(const [key,param] of mapping){const value=String(filters[key]||'');value?url.searchParams.set(param,value):url.searchParams.delete(param);}filters.sort!=='catalog'?url.searchParams.set('ordem',filters.sort):url.searchParams.delete('ordem');savedOnly?url.searchParams.set('salvos','1'):url.searchParams.delete('salvos');history.replaceState(null,'',url);},[filters,savedOnly,ready]);
-  useEffect(()=>setVisible(PAGE_SIZE),[filters,savedOnly]);
+  useEffect(()=>setVisibleByGroup({}),[filters,savedOnly]);
 
   const filtered=useMemo(()=>filterInspirations(filters),[filters]);
   const results=useMemo(()=>savedOnly?filtered.filter(model=>savedCodes.includes(model.code)):filtered,[filtered,savedOnly,savedCodes]);
-  const visibleResults=results.slice(0,visible);
-  const grouped=useMemo(()=>inspirationGroups.map(name=>({name,items:visibleResults.filter(model=>model.group===name)})).filter(section=>section.items.length),[visibleResults]);
+  const grouped=useMemo(()=>inspirationGroups.map(name=>{const all=results.filter(model=>model.group===name);const limit=visibleByGroup[name]||GROUP_PAGE_SIZE;return {name,total:all.length,items:all.slice(0,limit)};}).filter(section=>section.total>0),[results,visibleByGroup]);
   const savedModels=useMemo(()=>savedCodes.map(code=>inspirationModels.find(model=>model.code===code)).filter((model):model is InspirationModel=>Boolean(model)),[savedCodes]);
   const savedMessage=useMemo(()=>{const selected=savedModels.slice(0,8);const lines=selected.map(model=>`${model.code} — ${model.title}`);if(savedModels.length>8)lines.push(`+ ${savedModels.length-8} inspiração(ões) salva(s)`);return `Olá! Separei algumas inspirações no catálogo da Merlin Encantos em Papel e gostaria de montar um orçamento combinando essas ideias:\n\n${lines.join('\n')}\n\nPodemos adaptar tema, cores e peças para a minha festa?`;},[savedModels]);
   const savedWhatsapp=whatsappUrl(whatsapp,savedMessage);
@@ -48,6 +49,7 @@ export default function InspirationExplorer({whatsapp}:{whatsapp:string}){
   function clearSaved(){writeInspirationFavorites([]);setSavedOnly(false);}
   function removeActive(key:string){if(key==='saved'){setSavedOnly(false);return;}setFilters(current=>({...current,[key]:key==='sort'?'catalog':''} as InspirationFilters));}
   function applyQuick(filtersToApply:Partial<InspirationFilters>){setFilters({...emptyInspirationFilters,...filtersToApply});setSavedOnly(false);}
+  function showMoreGroup(name:string){setVisibleByGroup(current=>({...current,[name]:(current[name]||GROUP_PAGE_SIZE)+GROUP_PAGE_SIZE}));}
   const count=(facet:InspirationFacetKey,value:string)=>facetCount(filters,facet,value);
 
   return <section className="inspiration-explorer" id="explorar-inspiracoes"><div className="container">
@@ -73,7 +75,6 @@ export default function InspirationExplorer({whatsapp}:{whatsapp:string}){
     </div>
 
     {activeFilters.length>0&&<div className="inspiration-active-summary" aria-live="polite"><span>Filtros ativos:</span>{activeFilters.map(item=><button type="button" key={`${item.key}-${item.label}`} onClick={()=>removeActive(item.key)}>{item.label}<X size={12}/></button>)}</div>}
-    {grouped.length>0?grouped.map(section=><div className="inspiration-filtered-group" key={section.name}><div className="inspiration-group-head"><div><span>{String(inspirationGroups.indexOf(section.name)+1).padStart(2,'0')}</span><h2>{section.name}</h2></div><p>{section.items.length} {section.items.length===1?'modelo nesta página':'modelos nesta página'}.</p></div><div className="inspiration-grid">{section.items.map(model=><InspirationCard model={model} whatsapp={whatsapp} key={model.code}/>)}</div></div>):<div className="inspiration-no-results"><Sparkles size={28}/><strong>{savedOnly&&savedCodes.length===0?'Você ainda não salvou inspirações.':'Nenhuma inspiração encontrou essa combinação.'}</strong><p>{savedOnly?'Toque no coração dos modelos que gostar. Depois você pode enviar todas as escolhas juntas para orçamento.':'Remova um dos filtros, experimente um atalho ou faça uma busca mais ampla. Você também pode enviar sua própria referência pelo WhatsApp.'}</p><button type="button" className="btn btn-primary" onClick={reset}>Ver todas as inspirações</button></div>}
-    {visibleResults.length<results.length&&<div className="inspiration-load-more"><p>Mostrando <strong>{visibleResults.length}</strong> de <strong>{results.length}</strong> opções.</p><button type="button" className="btn btn-secondary" onClick={()=>setVisible(value=>value+PAGE_SIZE)}>Mostrar mais inspirações</button></div>}
+    {grouped.length>0?grouped.map(section=><div className="inspiration-filtered-group" key={section.name}><div className="inspiration-group-head"><div><span>{String(inspirationGroups.indexOf(section.name)+1).padStart(2,'0')}</span><h2>{section.name}</h2></div><p>Mostrando {section.items.length} de {section.total} {section.total===1?'modelo':'modelos'}.</p></div><div className="inspiration-grid">{section.items.map(model=><InspirationCard model={model} whatsapp={whatsapp} key={model.code}/>)}</div>{section.items.length<section.total&&<div className="inspiration-load-more inspiration-load-more-group"><p>Há mais {section.total-section.items.length} {section.total-section.items.length===1?'inspiração':'inspirações'} nesta coleção.</p><button type="button" className="btn btn-secondary" onClick={()=>showMoreGroup(section.name)}>Mostrar mais em {section.name}</button></div>}</div>):<div className="inspiration-no-results"><Sparkles size={28}/><strong>{savedOnly&&savedCodes.length===0?'Você ainda não salvou inspirações.':'Nenhuma inspiração encontrou essa combinação.'}</strong><p>{savedOnly?'Toque no coração dos modelos que gostar. Depois você pode enviar todas as escolhas juntas para orçamento.':'Remova um dos filtros, experimente um atalho ou faça uma busca mais ampla. Você também pode enviar sua própria referência pelo WhatsApp.'}</p><button type="button" className="btn btn-primary" onClick={reset}>Ver todas as inspirações</button></div>}
   </div><InspirationCompareDock/></section>;
 }
