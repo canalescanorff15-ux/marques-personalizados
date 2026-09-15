@@ -21,37 +21,34 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-      - name: Normalize production metadata
+      - name: Synchronize Cloudflare operations docs
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
-          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
-          pkg.scripts['start:vinext']='vinext start';
-          pkg.scripts['deploy:vinext']='vinext-cloudflare deploy';
-          pkg.scripts['check:cloudflare']='node scripts/cloudflare-workers-contract-check.mjs';
-          if(!pkg.scripts.verify.includes('check:cloudflare'))pkg.scripts.verify=pkg.scripts.verify.replace('npm run check:netlify','npm run check:cloudflare && npm run check:netlify');
-          fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
 
-          let env=fs.readFileSync('.env.example','utf8');
-          env=env.replace('# Netlify fornece COMMIT_REF automaticamente. Não precisa criar manualmente; é fallback de APP_RELEASE_COMMIT.\nCOMMIT_REF=', '# Workers Builds fornece WORKERS_CI_COMMIT_SHA no build e ele é capturado automaticamente.\n# COMMIT_REF permanece somente para rollback legado do Netlify.\nWORKERS_CI_COMMIT_SHA=\nCOMMIT_REF=');
-          fs.writeFileSync('.env.example',env);
+          let runsite=fs.readFileSync('RUNSITE.md','utf8');
+          runsite=runsite.replace(
+            '> **Nota V6.71:** Runsite passa a ser tratado como plataforma legada/rollback. O caminho recomendado para custo inicial zero é Netlify + Neon + Cloudflare R2, preservando o **Backup V9** e o schema 27. Consulte `NETLIFY.md`.',
+            '> **Nota V6.93 (app V6.71.1):** Runsite e Netlify passam a ser plataformas legadas/rollback. A produção principal é **Cloudflare Workers + Neon + Cloudflare R2**, preservando o **Backup V9**, schema 27 e Node `22.23.2`. Consulte `CLOUDFLARE.md`; `NETLIFY.md` fica somente para rollback.'
+          );
+          fs.writeFileSync('RUNSITE.md',runsite);
 
-          let readme=fs.readFileSync('README.md','utf8');
-          if(!readme.startsWith('## V6.93 — Cloudflare Workers')){
-            const intro=`## V6.93 — Cloudflare Workers como produção principal\n\nA infraestrutura principal migra para **GitHub → Cloudflare Workers (vinext) → Neon + R2**, mantendo o Netlify somente como rollback temporário. O pacote da aplicação continua em **V6.71.1**, Node.js **22.23.2**, npm **10.9.8**, schema runtime **27** e Backup **V9 (marques-catalog-v9)**. Static Assets e Workers Cache reduzem execução dinâmica; KV e Cloudflare Images não são obrigatórios nesta release. O gate específico está em \`npm run check:cloudflare\` e a operação completa em \`CLOUDFLARE.md\`.\n\n`;
-            readme=intro+readme;
-            fs.writeFileSync('README.md',readme);
+          let checklist=fs.readFileSync('RELEASE-CHECKLIST.md','utf8');
+          checklist=checklist.replace('## V6.71 — checklist operacional atual','## V6.71 — checklist operacional atual (infra V6.93 Cloudflare Workers)');
+          checklist=checklist.replace('- confirmar release em `/api/health` e commit via `APP_RELEASE_COMMIT` ou fallback `COMMIT_REF`;','- confirmar release em `/api/health` e commit via `APP_RELEASE_COMMIT`, fallback de build `WORKERS_CI_COMMIT_SHA` ou `COMMIT_REF` somente no rollback Netlify;');
+          if(!checklist.split('\n## ')[0].includes('check:cloudflare')){
+            checklist=checklist.replace('- validar CI completo, TypeScript, build, E2E HTTP e smoke local antes da promoção;','- validar CI completo, `npm run check:cloudflare`, TypeScript, build Next, build vinext, dry-run de deploy Workers, E2E HTTP e smoke local antes da promoção;');
           }
+          fs.writeFileSync('RELEASE-CHECKLIST.md',checklist);
           NODE
-          npm install --package-lock-only --ignore-scripts --no-fund --no-audit
-      - name: Commit final metadata
+      - name: Commit synchronized docs
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package.json package-lock.json .env.example README.md
+          git add RUNSITE.md RELEASE-CHECKLIST.md
           if git diff --cached --quiet; then
-            echo 'No metadata changes to commit.'
+            echo 'No docs changes to commit.'
           else
-            git commit -m 'V6.93: finalizar metadados de produção Cloudflare'
+            git commit -m 'V6.93: sincronizar checklist e runbook Cloudflare'
             git push origin HEAD:v6.93-cloudflare-workers
           fi
