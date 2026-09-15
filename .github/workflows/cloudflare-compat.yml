@@ -1,0 +1,40 @@
+name: Cloudflare Workers Compatibility
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main, v6.93-cloudflare-workers]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: cloudflare-compat-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-workers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: npm ci --ignore-scripts --no-fund --no-audit
+      - name: Security audit
+        run: npm audit --audit-level=high
+      - name: Cloudflare Workers contract
+        run: npm run check:cloudflare
+      - name: TypeScript
+        run: npm run typecheck
+      - name: Build Next.js reference path
+        run: npm run build
+      - name: Build Cloudflare Workers path
+        run: npm run build:vinext
+      - name: Cloudflare deployment dry-run
+        run: npm run deploy:vinext -- --skip-build --dry-run

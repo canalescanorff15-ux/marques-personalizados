@@ -1,4 +1,4 @@
-> **Nota V6.71:** Runsite passa a ser tratado como plataforma legada/rollback. O caminho recomendado para custo inicial zero é Netlify + Neon + Cloudflare R2, preservando o **Backup V9** e o schema 27. Consulte `NETLIFY.md`.
+> **Nota V6.93 (app V6.71.1):** Runsite e Netlify passam a ser plataformas legadas/rollback. A produção principal é **Cloudflare Workers + Neon + Cloudflare R2**, preservando o **Backup V9**, schema 27 e Node `22.23.2`. Consulte `CLOUDFLARE.md`; `NETLIFY.md` fica somente para rollback.
 
 ## V6.50 — deploy do lifecycle cross-system de mídia
 

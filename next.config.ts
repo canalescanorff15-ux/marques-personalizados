@@ -15,7 +15,10 @@ const securityHeaders = [
   { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' }
 ];
 
-const buildReleaseCommit = String(process.env.APP_RELEASE_COMMIT || process.env.COMMIT_REF || '').trim();
+// APP_RELEASE_COMMIT continua sendo a autoridade explícita. Workers Builds fornece
+// WORKERS_CI_COMMIT_SHA automaticamente; COMMIT_REF permanece apenas como fallback
+// da trilha legada do Netlify.
+const buildReleaseCommit = String(process.env.APP_RELEASE_COMMIT || process.env.WORKERS_CI_COMMIT_SHA || process.env.COMMIT_REF || '').trim();
 const configuredDeployTime = String(process.env.APP_DEPLOYED_AT || '').trim();
 const buildReleaseDeployedAt = configuredDeployTime && !Number.isNaN(Date.parse(configuredDeployTime))
   ? new Date(configuredDeployTime).toISOString()

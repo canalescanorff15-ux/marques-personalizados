@@ -8,3 +8,6 @@ backups
 .DS_Store
 
 *.tsbuildinfo
+/dist/
+.vinext/
+.wrangler/

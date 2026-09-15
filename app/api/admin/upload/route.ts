@@ -16,7 +16,7 @@ export async function POST(request:Request){
   if(!(await isAdmin()))return Response.json({error:'Não autorizado.'},{status:401});
   if(!sameOriginRequest(request))return Response.json({error:'Origem inválida.'},{status:403});
   try{
-    const c=storageConfig(),client=storageClient();if(!client||!c.configured)return Response.json({error:'Storage de mídia não configurado. Use uma URL de imagem ou configure o Cloudflare R2 no Netlify.',code:'STORAGE_NOT_CONFIGURED',can_use_external_url:true},{status:503});
+    const c=storageConfig(),client=storageClient();if(!client||!c.configured)return Response.json({error:'Storage de mídia não configurado. Use uma URL de imagem ou configure o Cloudflare R2 nas variáveis e segredos do ambiente de produção.',code:'STORAGE_NOT_CONFIGURED',can_use_external_url:true},{status:503});
     if(!isMultipartFormData(request))return Response.json({error:'Envie a imagem como multipart/form-data.'},{status:415});
     const form=await readMultipartFormDataWithinLimit(request,MAX_MULTIPART_BYTES);const file=form.get('file');if(!(file instanceof File))return Response.json({error:'Arquivo ausente.'},{status:400});
     if(file.size>MAX_FILE_BYTES)return Response.json({error:'Imagem maior que 8 MB.'},{status:413});
