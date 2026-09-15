@@ -21,6 +21,9 @@ for(const slug of ['mini','essencial','completo','premium'])if(!presetSlugs.incl
 for(const token of ["localStorage.setItem(DRAFT_KEY","localStorage.removeItem(DRAFT_KEY","readInspirationFavorites()","source:'concierge'","desired_categories:desiredCategories","items:[]","/api/inquiries","compositionText"]){if(!component.includes(token))errors.push(`KitBuilder sem contrato: ${token}`);}
 if(!component.includes("inspirationCodes.length>=6"))errors.push('KitBuilder não limita referências visuais a 6');
 if(!component.includes("activePieces.length"))errors.push('KitBuilder não bloqueia envio sem peças');
+if(!component.includes("import InspirationArtwork from './InspirationArtwork'"))errors.push('KitBuilder não reutiliza a arte oficial das inspirações');
+if((component.match(/<InspirationArtwork model=\{model\}\/\>/g)||[]).length<2)errors.push('KitBuilder não exibe a arte oficial em selecionadas e sugestões');
+if(!component.includes('kit-inspiration-thumb'))errors.push('KitBuilder perdeu o contêiner visual das referências');
 if(!page.includes('<KitBuilder/>'))errors.push('rota /monte-seu-kit não monta o KitBuilder');
 if(!header.includes('href="/monte-seu-kit"'))errors.push('header não expõe /monte-seu-kit');
 const homeRendersHeader=home.includes('<Header')||home.includes('<Header ');
@@ -30,6 +33,7 @@ const directHomeKit=home.includes('href="/monte-seu-kit"')||home.includes("href=
 const composedHomeKit=(homeRendersHeader&&header.includes('href="/monte-seu-kit"'))||(homeRendersDock&&mobileDock.includes('/monte-seu-kit'))||(homeRendersShowcase&&showcase.includes('/monte-seu-kit'));
 if(!directHomeKit&&!composedHomeKit)errors.push('home não oferece caminho renderizado para /monte-seu-kit');
 if(!inspirations.includes('/monte-seu-kit?usar_salvos=1'))errors.push('favoritos de inspiração não integram com o construtor de kit');
+if(!showcase.includes('/monte-seu-kit?inspiracao='))errors.push('cards de inspiração não oferecem atalho direto para o construtor de kit');
 if(!sitemap.includes('/monte-seu-kit'))errors.push('sitemap não inclui /monte-seu-kit');
 
 if(errors.length){
@@ -37,4 +41,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log(`Kit Builder Contract: OK — ${pieceIds.length} tipos de peça, 4 presets, rascunho local, inspirações e CRM/WhatsApp integrados.`);
+console.log(`Kit Builder Contract: OK — ${pieceIds.length} tipos de peça, 4 presets, rascunho local, artes de inspiração e CRM/WhatsApp integrados.`);
