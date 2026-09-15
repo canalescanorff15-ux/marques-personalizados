@@ -1,0 +1,40 @@
+name: Bootstrap Cloudflare Workers
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [v6.93-cloudflare-workers]
+    paths:
+      - .github/workflows/bootstrap-cloudflare.yml
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: v6.93-cloudflare-workers
+          fetch-depth: 0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .nvmrc
+      - name: Check vinext compatibility
+        run: npx --yes vinext@latest check > vinext-check.txt 2>&1 || true
+      - name: Initialize vinext for Cloudflare Workers
+        env:
+          CI: '1'
+        run: npx --yes vinext@latest init --platform=cloudflare --skip-check
+      - name: Record generated setup
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json vite.config.* wrangler.json* vinext-check.txt .gitignore 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+          else
+            git commit -m 'V6.93: gerar configuração Cloudflare com vinext oficial'
+            git push origin HEAD:v6.93-cloudflare-workers
+          fi
