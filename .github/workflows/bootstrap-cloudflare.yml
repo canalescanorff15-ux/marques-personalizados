@@ -28,8 +28,11 @@ jobs:
           CI: '1'
           npm_config_legacy_peer_deps: 'true'
         run: npx --yes vinext@latest init --platform=cloudflare --skip-check
-      - name: Align React Server Components runtime
-        run: npm install --save-exact react@19.2.8 react-dom@19.2.8 react-server-dom-webpack@19.2.8
+      - name: Align Workers dependency graph
+        run: |
+          npm install --save-exact --legacy-peer-deps react@19.2.8 react-dom@19.2.8 react-server-dom-webpack@19.2.8
+          npm install --save-dev --save-exact --legacy-peer-deps @types/node@22.20.1
+          npm install --package-lock-only --ignore-scripts --no-fund --no-audit
       - name: Record generated setup
         run: |
           git config user.name 'github-actions[bot]'
