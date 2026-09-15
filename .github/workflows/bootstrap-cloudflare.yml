@@ -26,7 +26,10 @@ jobs:
       - name: Initialize vinext for Cloudflare Workers
         env:
           CI: '1'
+          npm_config_legacy_peer_deps: 'true'
         run: npx --yes vinext@latest init --platform=cloudflare --skip-check
+      - name: Align React Server Components runtime
+        run: npm install --save-exact react@19.2.8 react-dom@19.2.8 react-server-dom-webpack@19.2.8
       - name: Record generated setup
         run: |
           git config user.name 'github-actions[bot]'
