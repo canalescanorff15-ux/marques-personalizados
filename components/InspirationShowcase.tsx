@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowUpRight, Gem, MessageCircle, PartyPopper, Sparkles, Tags, WalletCards } from 'lucide-react';
+import { ArrowUpRight, Gem, MessageCircle, PackagePlus, PartyPopper, Sparkles, Tags, WalletCards } from 'lucide-react';
 import { featuredInspirationCodes, inspirationInvestmentCollections, inspirationModels, inspirationOccasionCollections, inspirationStyleCollections, type InspirationModel } from '@/lib/inspirations';
 import { whatsappUrl } from '@/lib/links';
 import { inspirationThemeCollections } from '@/lib/inspiration-filters';
@@ -19,7 +19,7 @@ export function InspirationCard({model,whatsapp,showUtilities=true}:{model:Inspi
       <div className="inspiration-meta"><span>{model.category}</span><span>{model.tier}</span></div>
       <h3>{model.title}</h3><p>{model.description}</p>
       <div className="inspiration-tags">{model.tags.slice(0,3).map(tag=><span key={tag}>{tag}</span>)}</div>
-      <div className="inspiration-actions">{wa&&<a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={15}/> Quero nesse estilo</a>}<Link prefetch={false} href={`/inspiracoes/${encodeURIComponent(model.code)}`}>Ver detalhes <ArrowUpRight size={14}/></Link>{showUtilities&&<InspirationCompareButton code={model.code} compact/>}</div>
+      <div className="inspiration-actions">{wa&&<a href={wa} target="_blank" rel="noreferrer"><MessageCircle size={15}/> Quero nesse estilo</a>}<Link prefetch={false} href={`/monte-seu-kit?inspiracao=${encodeURIComponent(model.code)}`}><PackagePlus size={14}/> Usar no kit</Link><Link prefetch={false} href={`/inspiracoes/${encodeURIComponent(model.code)}`}>Ver detalhes <ArrowUpRight size={14}/></Link>{showUtilities&&<InspirationCompareButton code={model.code} compact/>}</div>
     </div>
   </article>;
 }
