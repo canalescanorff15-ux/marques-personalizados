@@ -1,3 +1,7 @@
+## V6.93 — Cloudflare Workers como produção principal
+
+A infraestrutura principal migra para **GitHub → Cloudflare Workers (vinext) → Neon + R2**, mantendo o Netlify somente como rollback temporário. O pacote da aplicação continua em **V6.71.1**, Node.js **22.23.2**, npm **10.9.8**, schema runtime **27** e Backup **V9 (marques-catalog-v9)**. Static Assets e Workers Cache reduzem execução dinâmica; KV e Cloudflare Images não são obrigatórios nesta release. O gate específico está em `npm run check:cloudflare` e a operação completa em `CLOUDFLARE.md`.
+
 ## V6.71 — Netlify production, catálogo público e observabilidade de release
 
 A linha operacional atual é **V6.71.1**. O storefront Next.js híbrido está publicado no Netlify, com Neon como banco e storage S3-compatible preparado para Cloudflare R2. O hotfix restaura a rota pública `/catalogo`, e a identidade de release passa a usar a versão do `package.json` com fallback automático para `COMMIT_REF` do Netlify. O **Backup V9 (`marques-catalog-v9`)** permanece o contrato atual de recuperação, com schema runtime **27**. Runtime: Node.js **22.23.2**, npm **10.9.8**. Antes de promoção, execute o CI completo, valide `/api/health` e faça smoke das rotas públicas críticas.
