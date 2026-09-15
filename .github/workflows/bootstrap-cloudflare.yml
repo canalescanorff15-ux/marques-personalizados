@@ -21,28 +21,37 @@ jobs:
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: .nvmrc
-      - name: Normalize Cloudflare scripts
+      - name: Normalize production metadata
         run: |
           node --input-type=module <<'NODE'
           import fs from 'node:fs';
-          const file='package.json';
-          const pkg=JSON.parse(fs.readFileSync(file,'utf8'));
+          const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
+          pkg.scripts['start:vinext']='vinext start';
           pkg.scripts['deploy:vinext']='vinext-cloudflare deploy';
           pkg.scripts['check:cloudflare']='node scripts/cloudflare-workers-contract-check.mjs';
-          if(!pkg.scripts.verify.includes('check:cloudflare')){
-            pkg.scripts.verify=pkg.scripts.verify.replace('npm run check:netlify','npm run check:cloudflare && npm run check:netlify');
+          if(!pkg.scripts.verify.includes('check:cloudflare'))pkg.scripts.verify=pkg.scripts.verify.replace('npm run check:netlify','npm run check:cloudflare && npm run check:netlify');
+          fs.writeFileSync('package.json',JSON.stringify(pkg,null,2)+'\n');
+
+          let env=fs.readFileSync('.env.example','utf8');
+          env=env.replace('# Netlify fornece COMMIT_REF automaticamente. Não precisa criar manualmente; é fallback de APP_RELEASE_COMMIT.\nCOMMIT_REF=', '# Workers Builds fornece WORKERS_CI_COMMIT_SHA no build e ele é capturado automaticamente.\n# COMMIT_REF permanece somente para rollback legado do Netlify.\nWORKERS_CI_COMMIT_SHA=\nCOMMIT_REF=');
+          fs.writeFileSync('.env.example',env);
+
+          let readme=fs.readFileSync('README.md','utf8');
+          if(!readme.startsWith('## V6.93 — Cloudflare Workers')){
+            const intro=`## V6.93 — Cloudflare Workers como produção principal\n\nA infraestrutura principal migra para **GitHub → Cloudflare Workers (vinext) → Neon + R2**, mantendo o Netlify somente como rollback temporário. O pacote da aplicação continua em **V6.71.1**, Node.js **22.23.2**, npm **10.9.8**, schema runtime **27** e Backup **V9 (marques-catalog-v9)**. Static Assets e Workers Cache reduzem execução dinâmica; KV e Cloudflare Images não são obrigatórios nesta release. O gate específico está em \`npm run check:cloudflare\` e a operação completa em \`CLOUDFLARE.md\`.\n\n`;
+            readme=intro+readme;
+            fs.writeFileSync('README.md',readme);
           }
-          fs.writeFileSync(file,JSON.stringify(pkg,null,2)+'\n');
           NODE
           npm install --package-lock-only --ignore-scripts --no-fund --no-audit
-      - name: Commit normalized package
+      - name: Commit final metadata
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package.json package-lock.json
+          git add package.json package-lock.json .env.example README.md
           if git diff --cached --quiet; then
-            echo 'No package changes to commit.'
+            echo 'No metadata changes to commit.'
           else
-            git commit -m 'V6.93: normalizar scripts de deploy Cloudflare'
+            git commit -m 'V6.93: finalizar metadados de produção Cloudflare'
             git push origin HEAD:v6.93-cloudflare-workers
           fi
