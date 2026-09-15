@@ -1,11 +1,16 @@
 import starterCatalog from '../data/starter-catalog.json';
+import photoReferences from '../data/catalog-photo-references.json';
 
 export type StarterCatalogProduct = (typeof starterCatalog.products)[number];
 export type StarterCatalogCategory = (typeof starterCatalog.categories)[number];
 
+type PhotoReferenceMap=Record<string,string>;
+const categoryPhotoReferences=photoReferences.categories as PhotoReferenceMap;
+const productPhotoReferences=photoReferences.products as PhotoReferenceMap;
+
 export const catalogPricingNote = starterCatalog.pricing_note;
-export const starterCatalogProducts = starterCatalog.products as StarterCatalogProduct[];
-export const starterCatalogCategories = starterCatalog.categories as StarterCatalogCategory[];
+export const starterCatalogProducts = starterCatalog.products.map(product=>({...product,image_url:productPhotoReferences[product.slug]||product.image_url})) as StarterCatalogProduct[];
+export const starterCatalogCategories = starterCatalog.categories.map(category=>({...category,image_url:categoryPhotoReferences[category.slug]||category.image_url})) as StarterCatalogCategory[];
 
 const legacyCategoryAliases: Record<string,string> = {
   'caixinhas-milk': 'caixas-personalizadas',
@@ -26,17 +31,20 @@ export function getStarterCategory(value:string){
   return categoryBySlug.get(key)||categoryByName.get(key);
 }
 export function isLegacyCatalogPlaceholder(url:string){ return /^\/placeholder-(?:topo|milk|kit)\.svg$/i.test(url); }
-export function isIllustrativeCatalogImage(url:string|undefined|null){ return Boolean(url&&url.startsWith('/catalog/')); }
+function isLegacyIllustrativeCatalogImage(url:string|undefined|null){ return Boolean(url&&url.startsWith('/catalog/')&&/\.svg(?:$|\?)/i.test(url)); }
+export function isReferenceCatalogPhoto(url:string|undefined|null){ return Boolean(url&&url.startsWith('/inspirations/reais/')&&/\.webp(?:$|\?)/i.test(url)); }
+export function isIllustrativeCatalogImage(url:string|undefined|null){ return isLegacyIllustrativeCatalogImage(url)||isReferenceCatalogPhoto(url); }
 export function catalogProductImage(slug:string,category:string,current:string[]){
   const clean=current.filter(Boolean);
-  if(clean.length&&clean.some(url=>!isLegacyCatalogPlaceholder(url)))return clean;
+  const customerMedia=clean.filter(url=>!isLegacyCatalogPlaceholder(url)&&!isLegacyIllustrativeCatalogImage(url));
+  if(customerMedia.length)return customerMedia;
   const starter=getStarterProduct(slug);
   if(starter)return [starter.image_url];
   const categoryArt=getStarterCategory(category)?.image_url;
   return categoryArt?[categoryArt]:clean;
 }
 export function catalogCategoryImage(slug:string,name:string,current:string|null|undefined){
-  if(current&&!isLegacyCatalogPlaceholder(current))return current;
+  if(current&&!isLegacyCatalogPlaceholder(current)&&!isLegacyIllustrativeCatalogImage(current))return current;
   return getStarterCategory(slug)?.image_url||getStarterCategory(name)?.image_url||current||null;
 }
 export function formatCatalogMoney(cents:number|null|undefined){
