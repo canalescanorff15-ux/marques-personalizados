@@ -24,28 +24,19 @@ if(!sitemap.includes('inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes
 if(!data.includes('export function getInspirationByCode')||!data.includes('export function getRelatedInspirations'))errors.push('Resolução e recomendação de inspirações precisam ter autoridade única em lib/inspirations.ts.');
 if(!share.includes('navigator.share')||!share.includes('navigator.clipboard'))errors.push('Compartilhamento precisa ter Web Share com fallback de cópia.');
 
-if(!cards.includes('<InspirationArtwork model={model}'))errors.push('Cards precisam usar a referência fotográfica oficial.');
-if(!route.includes('<InspirationArtwork model={model} label/>'))errors.push('Ficha individual precisa reutilizar a referência fotográfica da inspiração.');
-if(!compare.includes('<InspirationArtwork model={model}/>'))errors.push('Comparador precisa reutilizar a referência fotográfica da inspiração.');
-if(!concierge.includes('<InspirationArtwork model={model}/>'))errors.push('Curadoria guiada precisa reutilizar a referência fotográfica quando cair em inspirações.');
-if(!artwork.includes("type PhotoKey='topper'|'firstBirthday'|'boxes'|'woodland'|'ballerina'|'keepsake'"))errors.push('InspirationArtwork precisa manter as seis famílias fotográficas oficiais.');
-if(!artwork.includes('<img src={photo.src}')||artwork.includes('<svg'))errors.push('InspirationArtwork precisa renderizar fotografia real, não voltar para SVG conceitual.');
+if(!cards.includes('<InspirationArtwork model={model}'))errors.push('Cards precisam usar a referência visual oficial.');
+if(!route.includes('<InspirationArtwork model={model} label/>'))errors.push('Ficha individual precisa reutilizar a referência da inspiração.');
+if(!compare.includes('<InspirationArtwork model={model}/>'))errors.push('Comparador precisa reutilizar a referência da inspiração.');
+if(!concierge.includes('<InspirationArtwork model={model}/>'))errors.push('Curadoria guiada precisa reutilizar a referência quando cair em inspirações.');
+if(!artwork.includes('const codePhotos:Record<string,PhotoDefinition>'))errors.push('InspirationArtwork precisa manter mapeamento explícito por código.');
+if(!artwork.includes('<img src={photo.src}')||artwork.includes('<svg'))errors.push('InspirationArtwork precisa renderizar fotografia real quando houver arquivo exclusivo.');
+if(!artwork.includes('Imagem exclusiva em produção'))errors.push('Inspiração ainda sem foto própria precisa usar placeholder neutro, não fotografia repetida.');
+if(artwork.includes('function photoKeyFor')||artwork.includes('fallbackOrder')||artwork.includes('photos[photoKeyFor(model)]'))errors.push('InspirationArtwork não pode voltar ao fallback fotográfico compartilhado.');
 
-const photoAssets=[
-  'public/inspirations/reais/topo-floral-dourado.webp',
-  'public/inspirations/reais/mesa-primeiro-aniversario.webp',
-  'public/inspirations/reais/caixas-florais-personalizadas.webp',
-  'public/inspirations/reais/cupcakes-floresta.webp',
-  'public/inspirations/reais/topo-bailarina-rosa.webp',
-  'public/inspirations/reais/lembrancas-botanicas-verde-dourado.webp',
-];
-for(const asset of photoAssets){
-  if(!fs.existsSync(asset)||fs.statSync(asset).size<1000)errors.push(`Referência fotográfica ausente ou inválida: ${asset}`);
-}
 for(const [surface,source] of [['cards',cards],['detail',route],['compare',compare],['concierge',concierge]]){
   if(source.includes('inspiration-monogram')||/function initials\(/.test(source)||source.includes("title.slice(0,2).toUpperCase()"))errors.push(`${surface}: não pode voltar ao placeholder de iniciais/monograma como arte principal.`);
 }
 for(const token of ['.inspiration-artwork','.inspiration-artwork.inspiration-photo img','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork','.kit-inspiration-thumb>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual fotográfico sem regra ${token}.`);
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO e referências fotográficas reais consistentes).');
+console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO, unicidade e placeholder neutro consistentes).');
