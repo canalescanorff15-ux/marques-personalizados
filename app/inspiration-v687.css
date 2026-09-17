@@ -46,3 +46,17 @@
 @media(max-width:1050px){.kit-selected-inspirations{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.kit-selected-inspirations{grid-template-columns:1fr}.kit-inspiration-thumb{width:58px;height:58px}.kit-selected-inspirations button,.kit-inspiration-suggestions>button{grid-template-columns:58px minmax(0,1fr) 18px}}
 @media(max-width:620px){.inspiration-artwork-label{display:none}.inspiration-detail-art>.inspiration-artwork,.inspiration-compare-art>.inspiration-artwork{inset:0}}
+
+
+/* V6.95 — INSP sem fotografia exclusiva nunca reutiliza imagem de outro modelo. */
+.inspiration-artwork.inspiration-pending{background:
+  radial-gradient(circle at 20% 18%,rgba(255,255,255,.72),transparent 24%),
+  linear-gradient(145deg,#f7ede8,#eadbd2);color:#6d4d43;padding:20px;text-align:center}
+.inspiration-pending-card{display:grid;place-items:center;gap:8px;width:min(84%,320px);padding:26px 18px;border:1px solid rgba(126,79,58,.16);background:rgba(255,250,246,.74);box-shadow:0 18px 45px rgba(91,55,44,.07)}
+.inspiration-pending-card span{font-size:.54rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:#b06f64}
+.inspiration-pending-card strong{font-family:var(--display);font-size:clamp(1.15rem,2.5vw,1.7rem);font-weight:500;line-height:1.05;color:#5a3c33}
+.inspiration-pending-card small{max-width:220px;font-size:.63rem;line-height:1.45;color:#8d746b}
+.kit-inspiration-thumb .inspiration-pending-card{width:100%;height:100%;padding:4px;gap:2px;border:0;box-shadow:none}
+.kit-inspiration-thumb .inspiration-pending-card strong{font-family:inherit;font-size:.38rem;line-height:1.05}
+.kit-inspiration-thumb .inspiration-pending-card small{display:none}
+.kit-inspiration-thumb .inspiration-pending-card span{font-size:.32rem}
