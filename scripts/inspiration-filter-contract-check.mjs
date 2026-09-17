@@ -31,7 +31,7 @@ for(const feature of ['facetCount','filterInspirations','inspirationQuickFilters
   assert(explorer.includes(feature),`recurso não integrado ao explorador: ${feature}`);
 }
 
-const exclusiveCodes=[...Array.from({length:10},(_,index)=>`INSP-${String(index+1).padStart(3,'0')}`),...Array.from({length:10},(_,index)=>`INSP-${String(index+41).padStart(3,'0')}`)];
+const exclusiveCodes=[...Array.from({length:10},(_,index)=>`INSP-${String(index+1).padStart(3,'0')}`),...Array.from({length:10},(_,index)=>`INSP-${String(index+41).padStart(3,'0')}`),...Array.from({length:6},(_,index)=>`INSP-${String(index+113).padStart(3,'0')}`)];
 for(const code of exclusiveCodes){
   const expectedPath=`/inspirations/reais/${code.toLowerCase()}.webp`;
   assert(artwork.includes(`'${code}'`),`imagem exclusiva não mapeada: ${code}`);
