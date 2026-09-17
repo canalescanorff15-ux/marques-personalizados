@@ -51,3 +51,14 @@
   .product-premium-page .product-signature{border-radius:16px}
 }
 @media(prefers-reduced-motion:reduce){.kf-theme .editorial-category .category-card-art img{transition:none!important}}
+
+
+/* V6.95 — raiz /catalogo volta a ser vitrine pública, não ficha individual. */
+.catalog-premium-page .catalog-root-hero{min-height:560px;background:radial-gradient(circle at 82% 24%,rgba(201,121,112,.15),transparent 25%),linear-gradient(145deg,#fff8f3,#f2e4dc);border-bottom-color:rgba(126,79,58,.13);color:#55362e}
+.catalog-premium-page .catalog-root-hero .back-link,.catalog-premium-page .catalog-root-hero p,.catalog-premium-page .catalog-root-hero .category-meta{color:#806a62}
+.catalog-premium-page .catalog-root-hero .category-kicker,.catalog-premium-page .catalog-root-hero .category-meta a{color:#b06f64}
+.catalog-premium-page .catalog-root-hero .category-meta i{background:rgba(176,111,100,.35)}
+.catalog-premium-page .catalog-root-listing{background:linear-gradient(180deg,#fffaf6,#f8eee8);color:#55362e}
+.catalog-premium-page .catalog-root-listing .section-title{color:#55362e}
+.catalog-premium-page .catalog-root-listing .muted{color:#846d65}
+@media(max-width:620px){.catalog-premium-page .catalog-root-hero{min-height:510px}.catalog-premium-page .catalog-root-hero h1{font-size:clamp(3.25rem,16vw,5rem);line-height:.88}}
