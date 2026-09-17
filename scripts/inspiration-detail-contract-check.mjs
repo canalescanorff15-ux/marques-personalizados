@@ -1,4 +1,5 @@
 import './inspiration-image-uniqueness-check.mjs';
+import './inspiration-image-quality-check.mjs';
 import fs from 'node:fs';
 
 const errors=[];
@@ -39,4 +40,4 @@ for(const [surface,source] of [['cards',cards],['detail',route],['compare',compa
 for(const token of ['.inspiration-artwork','.inspiration-artwork.inspiration-photo img','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork','.kit-inspiration-thumb>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual fotográfico sem regra ${token}.`);
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO, unicidade e placeholder neutro consistentes).');
+console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO, unicidade, qualidade e placeholder neutro consistentes).');
