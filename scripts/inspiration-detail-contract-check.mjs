@@ -32,10 +32,23 @@ if(!artwork.includes('Imagem exclusiva em produção'))errors.push('INSP sem fot
 if(artwork.includes('photoKeyFor')||artwork.includes('fallbackOrder'))errors.push('InspirationArtwork não pode reutilizar famílias fotográficas como fallback.');
 if(!artwork.includes('<img src={src}')||artwork.includes('<svg'))errors.push('InspirationArtwork precisa renderizar fotografia real quando houver arquivo exclusivo.');
 
+const mapped=[...artwork.matchAll(/'(INSP-\d{3})':\{src:'([^']+)'/g)].map(([,code,src])=>({code,src}));
+const bySrc=new Map();
+for(const item of mapped){
+  if(bySrc.has(item.src))errors.push(`Imagem repetida: ${bySrc.get(item.src)} e ${item.code} usam ${item.src}.`);
+  else bySrc.set(item.src,item.code);
+}
+for(const quarantined of ['INSP-009','INSP-049','INSP-119']){
+  if(mapped.some(item=>item.code===quarantined))errors.push(`${quarantined} não pode ser mapeada até existir foto exclusiva visualmente aprovada no repositório.`);
+}
+for(const required of ['INSP-102','INSP-113','INSP-114','INSP-115','INSP-116','INSP-117','INSP-118']){
+  if(!mapped.some(item=>item.code===required))errors.push(`${required} foi validada e precisa permanecer no mapeamento exclusivo.`);
+}
+
 for(const [surface,source] of [['cards',cards],['detail',route],['compare',compare],['concierge',concierge]]){
   if(source.includes('inspiration-monogram')||/function initials\(/.test(source)||source.includes("title.slice(0,2).toUpperCase()"))errors.push(`${surface}: não pode voltar ao placeholder de iniciais/monograma como arte principal.`);
 }
 for(const token of ['.inspiration-artwork','.inspiration-artwork.inspiration-photo img','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork','.kit-inspiration-thumb>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual fotográfico sem regra ${token}.`);
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO e referências exclusivas consistentes).');
+console.log(`Inspiration Detail Contract Check: OK (${mapped.length} referências exclusivas, sem reutilização de arquivo e quarentena aplicada).`);
