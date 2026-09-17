@@ -1,3 +1,4 @@
+import './inspiration-image-uniqueness-check.mjs';
 import fs from 'node:fs';
 
 const errors=[];
