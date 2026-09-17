@@ -1,31 +1,51 @@
 import type { Metadata } from 'next';
-import { ArrowLeft, Check, Layers3, MessageCircle, Sparkles } from 'lucide-react';
-import { notFound } from 'next/navigation';
+import { ArrowUpRight, PackageSearch } from 'lucide-react';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ProductGallery from '@/components/ProductGallery';
-import SafeImage from '@/components/SafeImage';
-import QuoteForm from '@/components/QuoteForm';
-import ProductConfigurator from '@/components/ProductConfigurator';
-import ProductOrderPlanner from '@/components/ProductOrderPlanner';
-import ProductBuyingGuide from '@/components/ProductBuyingGuide';
-import ShareProductButton from '@/components/ShareProductButton';
+import CatalogClient from '@/components/CatalogClient';
 import JsonLd from '@/components/JsonLd';
-import { CompareButton } from '@/components/CompareProvider';
-import RecentlyViewedTracker from '@/components/RecentlyViewedTracker';
-import { getCategories, getProductBySlug, getRelatedPublicProducts, getSiteSettings } from '@/lib/db';
+import { getCategories, getPublicCatalogPage, getPublicPopularTags, getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
-import { isAdmin } from '@/lib/auth';
-import { slugifyText } from '@/lib/seo';
-import { catalogPriceContext,formatCatalogMoney,isIllustrativeCatalogImage,minimumOrderLabel } from '@/lib/catalog-merchandising';
-type Props={params:Promise<{slug:string}>;searchParams?:Promise<{preview?:string}>};
-function digits(v:string){return v.replace(/\D/g,'');}
-export async function generateMetadata({params,searchParams}:Props):Promise<Metadata>{const {slug}=await params;const preview=(await searchParams)?.preview==='1';const canPreview=preview&&(await isAdmin());const [p,s]=await Promise.all([getProductBySlug(slug,Boolean(canPreview)),getSiteSettings()]);if(!p)return{title:'Produto não encontrado'};const title=p.seo_title||`${p.name} | ${s.brand_name}`;const description=p.seo_description||p.description.slice(0,170);const image=p.image_urls[0];return{title,description,robots:preview?{index:false,follow:false}:undefined,alternates:!preview&&siteUrl?{canonical:`${siteUrl}/catalogo/${p.slug}`}:{},openGraph:{title,description,type:'website',images:image?[image]:undefined},twitter:{card:'summary_large_image',title,description,images:image?[image]:undefined}};}
+
 export const dynamic='force-dynamic';
-export default async function ProductPage({params,searchParams}:Props){
-  const {slug}=await params;const preview=(await searchParams)?.preview==='1';const canPreview=preview&&(await isAdmin());const [product,settings,categories]=await Promise.all([getProductBySlug(slug,Boolean(canPreview)),getSiteSettings(),getCategories()]);if(!product)return notFound();const categoryRecord=categories.find(c=>c.name===product.category);const related=await getRelatedPublicProducts(product,3);const phone=digits(settings.whatsapp_number);const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent(`Olá! Vi no catálogo o produto “${product.name}” (${product.price_cents===null?'valor sob orçamento':`a partir de ${formatCatalogMoney(product.price_cents)}`}) e gostaria de confirmar meu orçamento.`)}`:'';
-  const productJsonLd={"@context":"https://schema.org","@type":"Product",name:product.name,description:product.description,image:product.image_urls,url:siteUrl?`${siteUrl}/catalogo/${product.slug}`:undefined,brand:{"@type":"Brand",name:settings.brand_name},offers:product.price_cents!==null?{"@type":"Offer",priceCurrency:'BRL',price:(product.price_cents/100).toFixed(2),availability:product.stock_status==='indisponivel'?'https://schema.org/OutOfStock':product.stock_status==='sob_encomenda'?'https://schema.org/PreOrder':'https://schema.org/InStock',eligibleQuantity:{'@type':'QuantitativeValue',minValue:Math.max(1,product.min_quantity||1)}}:undefined};
-  const breadcrumbJsonLd={"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:'Início',item:siteUrl||undefined},{"@type":"ListItem",position:2,name:product.category,item:siteUrl?`${siteUrl}/#catalogo`:undefined},{"@type":"ListItem",position:3,name:product.name,item:siteUrl?`${siteUrl}/catalogo/${product.slug}`:undefined}]};
-  return <main className="premium-site product-premium-page"><RecentlyViewedTracker slug={product.slug}/><Header settings={settings}/>{canPreview&&<div className="preview-banner">PRÉVIA ADMINISTRATIVA • este produto ainda pode estar oculto ou fora da janela de publicação</div>}<JsonLd data={productJsonLd}/><JsonLd data={breadcrumbJsonLd}/><section className="product-page"><div className="container"><Link className="back-link" href="/#catalogo"><ArrowLeft size={16}/> Voltar ao catálogo</Link><div className="product-page-grid"><ProductGallery images={product.image_urls} name={product.name}/><div className="product-page-info"><div className="product-eyebrow-row">{categoryRecord?<Link className="eyebrow product-category-link" href={`/categorias/${categoryRecord.slug}`}>{product.category}</Link>:<div className="eyebrow">{product.category}</div>}{product.badge&&<span className="product-badge">{product.badge}</span>}</div><h1>{product.name}</h1><div className="price product-page-price"><small>{product.price_cents===null?'VALOR':'A PARTIR DE'}</small>{formatCatalogMoney(product.price_cents)}<span className="catalog-price-context">{catalogPriceContext(product.price_cents,product.min_quantity)}</span>{minimumOrderLabel(product.price_cents,product.min_quantity)&&<span className="catalog-minimum-total">{minimumOrderLabel(product.price_cents,product.min_quantity)}</span>}</div><p className="catalog-price-disclaimer">Preço inicial de referência. Tema, quantidade, número de camadas, acabamento, urgência e frete podem alterar o orçamento final.</p>{isIllustrativeCatalogImage(product.image_urls[0])&&<p className="catalog-illustrative-note">Imagem ilustrativa do formato — a arte final é personalizada para o seu tema.</p>}<p className="product-page-description">{product.description}</p><div className="product-facts large"><span><b>Status</b>{product.stock_status==='disponivel'?'Disponível':product.stock_status==='indisponivel'?'Indisponível':'Sob encomenda'}</span>{product.min_quantity&&<span><b>Pedido mínimo</b>{product.min_quantity} unidade(s)</span>}{product.production_time&&<span><b>Prazo</b>{product.production_time}</span>}{product.customization_fields.length>0&&<span><b>Personalização</b>{product.customization_fields.length} campo(s) configurável(is)</span>}</div>{product.tags.length>0&&<div className="tags product-theme-links" aria-label="Temas deste produto">{product.tags.map(t=><Link className="tag" key={t} href={`/temas/${slugifyText(t)}`}>{t}</Link>)}</div>}<div className="product-premium-notes"><span><Check size={15}/> Personalização de tema e cores</span><span><Layers3 size={15}/> Composição pensada para o formato</span><span><Sparkles size={15}/> Acabamento sob encomenda</span></div>{product.customization_fields.length>0?<ProductConfigurator product={product}/>:<ProductOrderPlanner product={product}/>}<div className="product-primary-actions">{wa&&<a className="btn" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={17}/> WhatsApp</a>}<CompareButton product={product} className="btn"/><ShareProductButton name={product.name}/></div></div></div><section className="product-signature"><div><small>01</small><strong>Referência</strong><p>Use este modelo como ponto de partida para definir tema, cores e composição.</p></div><div><small>02</small><strong>Personalização</strong><p>Nome, idade, quantidade e detalhes são ajustados ao seu evento.</p></div><div><small>03</small><strong>Produção</strong><p>O prazo é confirmado de acordo com agenda, complexidade e quantidade.</p></div></section><ProductBuyingGuide product={product}/><div className="product-quote"><div><div className="eyebrow">Orçamento deste item</div><h2>Personalize para o seu evento.</h2><p className="muted">Se quiser apenas esta peça, preencha abaixo. Para combinar vários produtos, use “Minha lista” no topo.</p></div><QuoteForm categories={categories} product={product}/></div>{related.length>0&&<section className="related-section"><div className="eyebrow">Complete a composição</div><h2>Peças que combinam com esta referência.</h2><div className="related-grid">{related.map(item=><Link prefetch={false} href={`/catalogo/${item.slug}`} className="related-card" key={item.id}><div><SafeImage src={item.image_urls[0]} alt={item.name} loading="lazy" decoding="async"/></div><span>{item.category}</span><strong>{item.name}</strong></Link>)}</div></section>}</div></section><a className="product-mobile-cta" href={product.customization_fields.length>0?'#personalizacao-produto':'#planejar-pedido'}>Planejar quantidade</a><Footer settings={settings}/></main>;
+
+export async function generateMetadata():Promise<Metadata>{
+  const settings=await getSiteSettings();
+  const title=`Catálogo | ${settings.brand_name}`;
+  const description='Explore topos de bolo, caixas, lembrancinhas, kits e papelaria personalizada. Use os filtros para encontrar a peça ideal para o seu evento.';
+  return {title,description,alternates:siteUrl?{canonical:`${siteUrl}/catalogo`}:{},openGraph:{title,description,type:'website',url:siteUrl?`${siteUrl}/catalogo`:undefined}};
+}
+
+export default async function CatalogPage(){
+  const [settings,categories,catalog,popularTags]=await Promise.all([
+    getSiteSettings(),
+    getCategories(),
+    getPublicCatalogPage({page:1,pageSize:18,sort:'curadoria'}),
+    getPublicPopularTags(10),
+  ]);
+  const collectionLd={
+    '@context':'https://schema.org','@type':'CollectionPage',name:`Catálogo | ${settings.brand_name}`,
+    description:'Catálogo completo de papelaria personalizada com peças sob encomenda para festas e celebrações.',
+    url:siteUrl?`${siteUrl}/catalogo`:undefined,
+    isPartOf:siteUrl?{'@type':'WebSite',name:settings.brand_name,url:siteUrl}:undefined,
+  };
+  const breadcrumbLd={'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[
+    {'@type':'ListItem',position:1,name:'Início',item:siteUrl||undefined},
+    {'@type':'ListItem',position:2,name:'Catálogo',item:siteUrl?`${siteUrl}/catalogo`:undefined},
+  ]};
+  return <main className="premium-site category-premium-page">
+    <Header settings={settings}/><JsonLd data={collectionLd}/><JsonLd data={breadcrumbLd}/>
+    <section className="category-hero"><div className="container category-hero-inner">
+      <div className="category-kicker">CATÁLOGO COMPLETO</div>
+      <h1>Peças para montar sua festa.</h1>
+      <p>Explore os produtos, filtre por coleção, tema, faixa de preço ou disponibilidade e abra cada peça para conferir detalhes e personalização.</p>
+      <div className="category-meta"><span><PackageSearch size={16}/>{catalog.total} {catalog.total===1?'peça':'peças'}</span><i/><span>{categories.length} coleções</span><i/><a href="#itens">Explorar catálogo <ArrowUpRight size={15}/></a></div>
+      <div className="catalog-page-shortcuts"><Link className="btn btn-primary" href="/inspiracoes">Ver inspirações</Link><Link className="btn" href="/monte-seu-kit">Montar meu kit</Link></div>
+    </div></section>
+    <section className="category-listing" id="itens"><div className="container"><div className="section-index"><span>01</span><i/><small>PRODUTOS</small></div>
+      <CatalogClient products={catalog.items} total={catalog.total} hasMore={catalog.has_more} categories={categories} popularTags={popularTags} whatsapp={settings.whatsapp_number}/>
+    </div></section>
+    <Footer settings={settings}/>
+  </main>;
 }
