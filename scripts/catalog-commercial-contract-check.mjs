@@ -37,7 +37,7 @@ const detail=read('app/catalogo/[slug]/page.tsx');
 for(const token of ['Preço inicial de referência','frete podem alterar','Imagem ilustrativa do formato','catalogPriceContext'])if(!detail.includes(token))fail(`produto sem aviso comercial: ${token}`);
 const catalogIndex=read('app/catalogo/page.tsx');
 if(catalogIndex.includes('params:Promise<{slug:string}>')||catalogIndex.includes('getProductBySlug(')||catalogIndex.includes('return notFound()'))fail('/catalogo ainda está implementado como página de produto individual');
-for(const token of ['getProducts()','getCategories()','href={`/catalogo/${product.slug}`}','Catálogo completo'])if(!catalogIndex.includes(token))fail(`/catalogo sem requisito de vitrine: ${token}`);
+for(const token of ['CatalogClient','getPublicCatalogPage','getPublicPopularTags','getCategories()','CATÁLOGO COMPLETO'])if(!catalogIndex.includes(token))fail(`/catalogo sem requisito de vitrine: ${token}`);
 const seed=read('scripts/seed-db.mjs');
 for(const token of ['starter-catalog.json','price_cents','Merlin Encantos em Papel','ON CONFLICT'])if(!seed.includes(token))fail(`seed não protege ${token}`);
 const home=read('app/page.tsx');
