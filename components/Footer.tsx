@@ -1,8 +1,20 @@
 import Link from 'next/link';
-import { Mail, MapPin, PackagePlus, Sparkles } from 'lucide-react';
+import { Layers3, Mail, MapPin, Sparkles } from 'lucide-react';
 import type { SiteSettings } from '@/lib/db';
 import SocialLinks from './SocialLinks';
 import SafeImage from './SafeImage';
+
 export default function Footer({settings}:{settings:SiteSettings}){
-  return <footer className="footer premium-footer kf-footer"><div className="container premium-footer-top"><div className="footer-brand-block"><span className="kf-footer-logo"><SafeImage src={settings.logo_url||'/merlin-logo.webp'} alt=""/></span><div><strong>{settings.brand_name}</strong><p>Planejar, personalizar e encantar: papelaria criada sob encomenda para transformar ideias, temas e histórias em detalhes especiais.</p><SocialLinks settings={settings} className="footer-social-links"/></div></div><div className="footer-contact-grid"><div><small>ATELIÊ</small><span><MapPin size={14}/>{settings.location}</span></div><div><small>MONTE SEU PEDIDO</small><Link href="/orcamento"><PackagePlus size={14}/> Revisar meu orçamento</Link><Link href="/monte-seu-kit"><PackagePlus size={14}/> Escolher peças e quantidades</Link></div><div><small>INSPIRAÇÕES</small><Link href="/inspiracoes"><Sparkles size={14}/> Ver modelos e estilos</Link></div>{settings.contact_email&&<div><small>E-MAIL</small><a href={`mailto:${settings.contact_email}`}><Mail size={14}/>{settings.contact_email}</a></div>}</div></div><div className="container footer-grid"><div><span>© {new Date().getFullYear()} {settings.brand_name}. Todos os direitos reservados.</span></div><div className="footer-links"><Link href="/inspiracoes">Inspirações</Link><Link href="/monte-seu-kit">Monte seu kit</Link><Link href="/guia-de-precos">Preços</Link><Link href="/orcamento">Meu orçamento</Link><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos</Link><Link href="/#inicio">Voltar ao topo ↑</Link></div></div></footer>;
+  return <footer className="footer premium-footer kf-footer">
+    <div className="container premium-footer-top">
+      <div className="footer-brand-block"><span className="kf-footer-logo"><SafeImage src={settings.logo_url||'/merlin-logo.webp'} alt=""/></span><div><strong>{settings.brand_name}</strong><p>Topos de bolo personalizados, do modelo essencial ao Elite com shaker e acetato. Produção sob encomenda, pensada para o tema e o tamanho do seu bolo.</p><SocialLinks settings={settings} className="footer-social-links"/></div></div>
+      <div className="footer-contact-grid">
+        <div><small>ATELIÊ</small><span><MapPin size={14}/>{settings.location}</span></div>
+        <div><small>ESCOLHA SEU TOPO</small><Link href="/catalogo"><Layers3 size={14}/> Ver níveis de acabamento</Link><Link href="/monte-seu-topo"><Layers3 size={14}/> Montar meu topo</Link></div>
+        <div><small>INSPIRAÇÕES</small><Link href="/inspiracoes"><Sparkles size={14}/> Ver temas e estilos</Link></div>
+        {settings.contact_email&&<div><small>E-MAIL</small><a href={`mailto:${settings.contact_email}`}><Mail size={14}/>{settings.contact_email}</a></div>}
+      </div>
+    </div>
+    <div className="container footer-grid"><div><span>© {new Date().getFullYear()} {settings.brand_name}. Todos os direitos reservados.</span></div><div className="footer-links"><Link href="/catalogo">Topos</Link><Link href="/inspiracoes">Inspirações</Link><Link href="/monte-seu-topo">Monte seu topo</Link><Link href="/guia-de-precos">Níveis & preços</Link><Link href="/orcamento">Orçamento</Link><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos</Link><Link href="/#inicio">Voltar ao topo ↑</Link></div></div>
+  </footer>;
 }
