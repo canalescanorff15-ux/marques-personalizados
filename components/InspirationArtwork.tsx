@@ -21,13 +21,6 @@ const codePhotos:Record<string,PhotoDefinition>={
   'INSP-047':{src:'/inspirations/reais/insp-047.webp',focus:'50% 50%'},
   'INSP-048':{src:'/inspirations/reais/insp-048.webp',focus:'50% 50%'},
   'INSP-050':{src:'/inspirations/reais/insp-050.webp',focus:'50% 50%'},
-  'INSP-102':{src:'/inspirations/reais/insp-102.webp',focus:'50% 50%'},
-  'INSP-113':{src:'/inspirations/reais/insp-113.webp',focus:'50% 50%'},
-  'INSP-114':{src:'/inspirations/reais/insp-114.webp',focus:'50% 50%'},
-  'INSP-115':{src:'/inspirations/reais/insp-115.webp',focus:'50% 50%'},
-  'INSP-116':{src:'/inspirations/reais/insp-116.webp',focus:'50% 50%'},
-  'INSP-117':{src:'/inspirations/reais/insp-117.webp',focus:'50% 50%'},
-  'INSP-118':{src:'/inspirations/reais/insp-118.webp',focus:'50% 50%'},
 };
 
 export default function InspirationArtwork({model,className='',label=false,detail=false}:{model:InspirationModel;className?:string;label?:boolean;detail?:boolean}){
