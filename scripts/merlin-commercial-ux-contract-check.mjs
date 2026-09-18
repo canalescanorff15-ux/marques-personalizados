@@ -1,25 +1,23 @@
 import fs from 'node:fs';
 
-function read(file){return fs.readFileSync(file,'utf8');}
-function assert(ok,message){if(!ok)throw new Error(message);}
-
-const page=read('app/page.tsx');
+const errors=[];
+const read=file=>fs.readFileSync(file,'utf8');
+const home=read('app/page.tsx');
+const header=read('components/Header.tsx');
 const dock=read('components/MerlinMobileDock.tsx');
 const footer=read('components/Footer.tsx');
-const css=read('app/premium.css');
+const catalog=read('lib/topper-catalog.ts');
 
-for(const needle of ['event-pathways-primary','merlin-briefing-section','MerlinMobileDock whatsapp={settings.whatsapp_number}']){
-  assert(page.includes(needle),`home sem melhoria comercial: ${needle}`);
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
+  if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
+  if(!header.includes(route))errors.push(`header sem caminho comercial: ${route}`);
 }
-for(const item of ['Data do evento','Tema e cores','Peças e quantidades','Referências']){
-  assert(page.includes(item),`briefing incompleto: ${item}`);
-}
-for(const item of ['/inspiracoes','/monte-seu-kit','Orçamento']){
-  assert(dock.includes(item),`dock móvel incompleto: ${item}`);
-}
-assert(footer.includes('Escolher peças e quantidades'),'footer sem atalho para montar pedido');
-assert(footer.includes('Ver modelos e estilos'),'footer sem atalho de inspirações');
-assert(css.includes('/* V6.57 — conversão, briefing e navegação móvel Merlin */'),'bloco visual V6.57 ausente');
-assert(css.includes('body:has(.merlin-mobile-dock) .premium-site .floating-wa{display:none}'),'dock móvel conflita com botão flutuante do WhatsApp');
-assert(css.includes('@media(prefers-reduced-motion:reduce)'),'redução de movimento não preservada');
-console.log('merlin-commercial-ux-contract-check: OK — jornada, briefing, footer e dock móvel protegidos.');
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento'])if(!dock.includes(route))errors.push(`dock móvel sem caminho: ${route}`);
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/guia-de-precos','/orcamento'])if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
+for(const token of ['Topo Essencial','Topo em Camadas 3D','Topo Premium','Topo Shaker','Topo com Acetato','Topo Elite Shaker + Acetato'])if(!catalog.includes(token))errors.push(`nível comercial ausente: ${token}`);
+for(const source of [home,header,dock,footer])if(source.includes('href="/monte-seu-kit"'))errors.push('fluxo público ainda contém link para Monte seu Kit');
+if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não comunica os dois acabamentos avançados');
+if(!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home não orienta o cliente sobre adequação ao bolo');
+
+if(errors.length){console.error(`Merlin Topper Commercial UX: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('Merlin Topper Commercial UX: OK — jornada pública focada em escolher nível, inspiração, briefing e orçamento.');
