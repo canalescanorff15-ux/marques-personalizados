@@ -1,3 +1,4 @@
+import './inspiration-image-quality-check.mjs';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 
