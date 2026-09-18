@@ -4,6 +4,7 @@ const errors=[];
 const exists=p=>fs.existsSync(p);
 const read=p=>fs.readFileSync(p,'utf8');
 const nextConfig=read('next.config.ts');
+const publicCss=read('app/public-v710.css');
 
 for(const file of [
   'components/PublicTopperHeader.tsx',
@@ -51,9 +52,19 @@ if(exists('components/InspirationFavoriteButton.tsx')){
 
 if(nextConfig.includes("source: '/inspiracoes/:code'"))errors.push('redirect global ainda bloqueia os detalhes atuais de inspirações');
 
+if(!publicCss.includes('/* V7.12 — sistema visual público unificado */'))errors.push('camada visual V7.12 ausente');
+for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.tsx','app/catalogo/[slug]/page.tsx','app/monte-seu-topo/page.tsx','app/orcamento/page.tsx','app/guia-de-precos/page.tsx','app/privacidade/page.tsx','app/termos/page.tsx']){
+  if(!read(page).includes('public-v712'))errors.push(`${page} ainda não entrou no sistema visual V7.12`);
+}
+if(!read('components/Footer.tsx').includes('public-v712-footer'))errors.push('rodapé ainda não entrou no sistema visual V7.12');
+if(!read('app/page.tsx').includes('TopperLevelVisual'))errors.push('home precisa exibir visuais reais dos níveis');
+if(!read('app/catalogo/[slug]/page.tsx').includes('TopperLevelVisual'))errors.push('detalhe do nível precisa exibir a referência visual do acabamento');
+if(read('app/privacidade/page.tsx').includes('Minha Lista'))errors.push('privacidade ainda descreve armazenamento legado');
+if(read('app/termos/page.tsx').includes('“a partir de”'))errors.push('termos ainda descrevem preço legado');
+
 if(errors.length){
   console.error(`V7.10 Public Redesign Contract: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.11 Public Redesign Contract: OK — navegação pública, galeria, filtros móveis, favoritos e detalhes alinhados à referência aprovada.');
+console.log('V7.12 Public Redesign Contract: OK — identidade pública unificada, fluxos atuais e páginas institucionais alinhados.');
