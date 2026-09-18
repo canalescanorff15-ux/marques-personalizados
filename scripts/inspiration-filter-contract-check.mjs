@@ -16,7 +16,7 @@ if(new Set(themes).size!==themes.length)errors.push('slugs de tema duplicados');
 
 for(const token of ['topperThemes','topperLevels','/monte-seu-topo?tema=','/monte-seu-topo?nivel='])if(!page.includes(token))errors.push(`página de inspirações sem recurso: ${token}`);
 for(const old of ['InspirationExplorer','inspirationModels','inspirationGroups','inspirationThemeCollections'])if(page.includes(old))errors.push(`galeria pública ainda depende do sistema antigo: ${old}`);
-if(!page.includes('somente a topos de bolo')&&!page.includes('somente a topos'))errors.push('página não comunica claramente o novo escopo de topos');
+if(!page.includes('temas e estilos pensados para topos de bolo'))errors.push('página não comunica claramente o novo escopo de topos');
 
 if(errors.length){console.error(`Topper Inspiration Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
 console.log(`Topper Inspiration Contract: OK — ${themes.length} famílias de tema e ${levels.length} níveis direcionam ao briefing de topo.`);
