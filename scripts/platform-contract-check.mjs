@@ -11,7 +11,9 @@ if(!semver.test(String(platform.nodeVersion||'')))errors.push('nodeVersion deve 
 if(!semver.test(String(platform.npmVersion||'')))errors.push('npmVersion deve ser SemVer exato');
 if(!/^node:[^@\s]+@sha256:[0-9a-f]{64}$/i.test(String(platform.dockerImage||'')))errors.push('dockerImage deve conter tag + digest SHA-256 imutável');
 if(!/^ubuntu-\d{2}\.\d{2}$/.test(String(platform.githubRunner||'')))errors.push('githubRunner deve fixar uma imagem Ubuntu versionada');
-const nvmMajor=read('.nvmrc').trim();\nconst expectedNodeMajor=String(platform.nodeVersion).split('.')[0];\nif(nvmMajor!==expectedNodeMajor)errors.push(`.nvmrc deve selecionar a linha Node ${expectedNodeMajor} para o bootstrap do Cloudflare`);
+const nvmMajor=read('.nvmrc').trim();
+const expectedNodeMajor=String(platform.nodeVersion).split('.')[0];
+if(nvmMajor!==expectedNodeMajor)errors.push(`.nvmrc deve selecionar a linha Node ${expectedNodeMajor} para o bootstrap do Cloudflare`);
 if(pkg.packageManager!==`npm@${platform.npmVersion}`)errors.push('packageManager diverge de platform.npmVersion');
 const release=read('lib/release.ts');
 if(!release.includes("platformContract from '../platform-contract.json'"))errors.push('lib/release.ts não consome platform-contract.json');
