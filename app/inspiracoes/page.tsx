@@ -15,7 +15,7 @@ export const metadata:Metadata={
 
 export default async function InspirationsPage(){
   const settings=await getSiteSettings();
-  return <main className="merlin-public public-inspirations-page">
+  return <main className="merlin-public public-inspirations-page public-v712">
     <Header settings={settings}/>
 
     <section className="public-inspiration-banner">

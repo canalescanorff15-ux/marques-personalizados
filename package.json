@@ -79,7 +79,7 @@
     "check:kit-builder": "node scripts/kit-builder-contract-check.mjs",
     "check:inspiration-filters": "node scripts/inspiration-filter-contract-check.mjs",
     "check:branding": "node scripts/branding-contract-check.mjs",
-    "check:merlin-commercial": "node scripts/merlin-commercial-ux-contract-check.mjs",
+    "check:merlin-commercial": "node scripts/merlin-commercial-ux-contract-check.mjs && node scripts/public-redesign-contract-check.mjs",
     "check:topper-inspirations": "node scripts/topper-inspiration-gallery-contract-check.mjs",
     "check:inspiration-detail": "node scripts/inspiration-detail-contract-check.mjs",
     "check:inspiration-quote": "node scripts/inspiration-quote-contract-check.mjs",
@@ -92,7 +92,8 @@
     "build:vinext": "vinext build",
     "start:vinext": "vinext start",
     "deploy:vinext": "vinext-cloudflare deploy",
-    "check:cloudflare": "node scripts/cloudflare-workers-contract-check.mjs"
+    "check:cloudflare": "node scripts/cloudflare-workers-contract-check.mjs",
+    "check:public-redesign": "node scripts/public-redesign-contract-check.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1127.0",

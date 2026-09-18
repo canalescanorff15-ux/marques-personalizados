@@ -6,6 +6,7 @@ import './catalog-v676.css';
 import './catalog-photo-focus-v692.css';
 import './inspiration-v687.css';
 import './public-v710.css';
+import './public-v712.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
