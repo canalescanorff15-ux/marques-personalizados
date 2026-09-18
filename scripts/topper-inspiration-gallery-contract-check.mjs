@@ -4,6 +4,8 @@ const errors=[];
 const inspirationFile='lib/topper-inspirations.ts';
 const pageFile='app/inspiracoes/page.tsx';
 const builderFile='components/TopperBuilder.tsx';
+const galleryFile='components/TopperInspirationGallery.tsx';
+const detailFile='app/inspiracoes/[code]/page.tsx';
 
 if(!fs.existsSync(inspirationFile))errors.push('arquivo lib/topper-inspirations.ts ausente');
 else{
@@ -24,9 +26,17 @@ else{
 }
 if(fs.existsSync(pageFile)){
   const page=fs.readFileSync(pageFile,'utf8');
-  if(!page.includes('topperInspirations'))errors.push('página de inspirações não usa a coleção topperInspirations');
-  if(!page.includes('Quero esse modelo'))errors.push('galeria precisa ter CTA “Quero esse modelo”');
+  if(!page.includes('TopperInspirationGallery'))errors.push('página de inspirações não usa o componente da galeria');
 }
+if(fs.existsSync(galleryFile)){
+  const gallery=fs.readFileSync(galleryFile,'utf8');
+  if(!gallery.includes('topperInspirations'))errors.push('galeria não usa a coleção topperInspirations');
+  if(!gallery.includes('Ver detalhes'))errors.push('galeria precisa ter ação “Ver detalhes”');
+}else errors.push('componente TopperInspirationGallery ausente');
+if(fs.existsSync(detailFile)){
+  const detail=fs.readFileSync(detailFile,'utf8');
+  if(!detail.includes('Quero esse modelo'))errors.push('detalhe precisa ter CTA “Quero esse modelo”');
+}else errors.push('detalhe de inspiração ausente');
 if(fs.existsSync(builderFile)){
   const builder=fs.readFileSync(builderFile,'utf8');
   if(!builder.includes("params.get('inspiracao')"))errors.push('Monte seu topo não lê o parâmetro inspiracao');
