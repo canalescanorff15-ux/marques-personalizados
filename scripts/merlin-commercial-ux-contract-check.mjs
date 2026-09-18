@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
@@ -36,8 +37,8 @@ for(const [name,source] of [['home',home],['catalogo',catalogPage],['inspiracoes
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
 else{
-  const gallery=fs.readFileSync(topperInspirationContract,'utf8');
-  if(!gallery.includes('12 inspirações exclusivas'))errors.push('contrato da galeria de inspirações não está ativo');
+  const galleryCheck=spawnSync(process.execPath,[topperInspirationContract],{encoding:'utf8'});
+  if(galleryCheck.status!==0)errors.push((galleryCheck.stderr||galleryCheck.stdout||'contrato da galeria falhou').trim());
 }
 
 if(errors.length){console.error(`Merlin Topper Commercial UX: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
