@@ -8,7 +8,7 @@ const schema=Number(platform.schemaVersion);
 const version=String(pkg.version||'');
 const [major,minor]=version.split('.');
 const short=`${major}.${minor}`;
-const node=read('.nvmrc').trim();
+const node=String(platform.nodeVersion);
 const npm=String(pkg.packageManager||'').replace(/^npm@/,'');
 const docs={README:read('README.md'),CHANGELOG:read('CHANGELOG.md'),CHECKLIST:read('RELEASE-CHECKLIST.md'),ROLLBACK:read('ROLLBACK-RUNBOOK.md'),RUNSITE:read('RUNSITE.md')};
 
