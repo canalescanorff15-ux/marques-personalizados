@@ -110,4 +110,8 @@ Enquanto a migração não estiver homologada, `netlify.toml` e `NETLIFY.md` con
 - alvo de produção: `main` com a revisão responsiva V7.14;
 - commit funcional validado: `63d19a52e5f81340f2c2bfd204c7ce2daeb87596`;
 - o push de promoção deve ser consumido pelo Cloudflare Workers Builds conectado à branch `main`;
-- após publicar, validar `/`, `/inspiracoes`, `/monte-seu-topo`, `/links` e confirmar os breakpoints de 390 px e 1024 px antes de considerar a release concluída.\n### Bootstrap Node no Workers Builds\n\nO `.nvmrc` usa `22` para selecionar a linha Node 22 no bootstrap do Workers Builds e permitir o reaproveitamento da versão pré-instalada pela imagem do Cloudflare. O alvo reproduzível continua sendo `22.23.2` em `platform-contract.json`, no Docker e na validação do runtime/CI. Isso evita que o Workers Builds tente reinstalar desnecessariamente o Node exato antes de instalar as dependências.\n\n
+- após publicar, validar `/`, `/inspiracoes`, `/monte-seu-topo`, `/links` e confirmar os breakpoints de 390 px e 1024 px antes de considerar a release concluída.
+### Bootstrap Node no Workers Builds
+
+O `.nvmrc` usa `22` para selecionar a linha Node 22 no bootstrap do Workers Builds e permitir o reaproveitamento da versão pré-instalada pela imagem do Cloudflare. O alvo reproduzível continua sendo `22.23.2` em `platform-contract.json`, no Docker e na validação do runtime/CI. Isso evita que o Workers Builds tente reinstalar desnecessariamente o Node exato antes de instalar as dependências.
+\n
