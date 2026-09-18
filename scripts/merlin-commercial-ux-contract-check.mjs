@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
 const home=read('app/page.tsx');
-const header=read('components/Header.tsx');
+const header=read('components/PublicTopperHeader.tsx');
 const dock=read('components/MerlinMobileDock.tsx');
 const footer=read('components/Footer.tsx');
 const catalog=read('lib/topper-catalog.ts');
