@@ -1,2 +1,3 @@
 'use client';
-export { default } from './PublicTopperHeader';
+import PublicTopperHeader from './PublicTopperHeader';
+export default PublicTopperHeader;
