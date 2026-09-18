@@ -26,6 +26,15 @@ if(!topperDetail.includes('topperLevelBySlug'))errors.push('rota /catalogo/[slug
 if(!topperDetail.includes("redirect('/catalogo')"))errors.push('slug de produto legado precisa redirecionar para o catálogo de topos.');
 if(!categoryPage.includes("redirect('/catalogo')"))errors.push('categorias antigas precisam redirecionar para /catalogo.');
 if(!themePage.includes("redirect('/inspiracoes')"))errors.push('temas antigos precisam redirecionar para /inspiracoes.');
+for(const token of [
+  "{ source: '/monte-seu-kit', destination: '/monte-seu-topo', permanent: true }",
+  "{ source: '/categorias/:path*', destination: '/catalogo', permanent: true }",
+  "{ source: '/temas/:path*', destination: '/inspiracoes', permanent: true }",
+  "{ source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true }",
+  "{ source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }",
+  "{ source: '/inspiracoes/:code', destination: '/inspiracoes', permanent: true }"
+])if(!nextConfig.includes(token))errors.push(`redirect HTTP permanente ausente: ${token}`);
+
 
 for(const file of ['public/pwa-icon-192.png','public/pwa-icon-512.png','public/pwa-maskable-512.png','public/apple-touch-icon.png']){
   if(!fs.existsSync(file)||fs.statSync(file).size<1000)errors.push(`PWA: ${file} ausente ou inválido.`);
