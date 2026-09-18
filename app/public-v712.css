@@ -153,3 +153,78 @@
   .public-v712 .topper-level-grid>a{transition:none}
   .public-v712 .topper-level-grid>a:hover{transform:none}
 }
+
+
+/* V7.13 — páginas auxiliares e estados públicos */
+.public-links-page{min-height:100vh;background:var(--public-bg)}
+.public-links-hero{padding:54px 0 34px;background:radial-gradient(circle at 86% 18%,rgba(237,64,130,.13),transparent 27%),linear-gradient(110deg,#fff 0%,#fff8fb 64%,#fdebf2 100%);border-bottom:1px solid var(--public-line)}
+.public-links-hero-inner{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:34px;align-items:center}
+.public-links-brand{display:grid;grid-template-columns:112px minmax(0,1fr);gap:22px;align-items:center}
+.public-links-logo{display:grid;place-items:center;width:112px;height:112px;overflow:hidden;border:1px solid #efdce5;border-radius:28px;background:#fff;box-shadow:0 14px 36px rgba(92,48,67,.08)}
+.public-links-logo img{width:100%;height:100%;object-fit:contain}
+.public-links-brand h1{margin:8px 0 10px;color:var(--public-text);font-size:clamp(2.2rem,4.3vw,4.3rem);line-height:.95;letter-spacing:-.05em}
+.public-links-brand p{max-width:720px;margin:0 0 14px;color:var(--public-muted);line-height:1.7}
+.public-links-actions{display:grid;gap:10px}
+.public-links-actions>a{min-height:48px;justify-content:center}
+.public-links-whatsapp{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:12px;background:#188a55;color:#fff;font-weight:900}
+.public-links-content{padding:42px 0 76px;background:#fff}
+.public-links-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);gap:20px;align-items:start}
+.public-links-panel{overflow:hidden;border:1px solid var(--public-line);border-radius:24px;background:#fff;box-shadow:0 12px 34px rgba(92,48,67,.055)}
+.public-links-panel-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 24px;background:#fff8fb;border-bottom:1px solid var(--public-line)}
+.public-links-panel-head small{color:var(--public-pink);font-weight:900;letter-spacing:.09em}
+.public-links-panel-head h2{margin:4px 0 0;color:var(--public-text);font-size:1.45rem}
+.public-links-panel-head>svg{color:var(--public-pink)}
+.public-links-list{display:grid}
+.public-links-list>a{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 20px;border-bottom:1px solid var(--public-line);transition:background .18s ease}
+.public-links-list>a:last-child{border-bottom:0}
+.public-links-list>a:hover{background:#fff8fb}
+.public-links-list>a>span{display:grid;gap:3px}
+.public-links-list small{color:#a46b82;font-size:.63rem;font-weight:900;letter-spacing:.08em}
+.public-links-list strong{color:var(--public-text)}
+.public-links-list em{color:var(--public-muted);font-size:.7rem;font-style:normal}
+.public-links-shortcuts>a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:13px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--public-line)}
+.public-links-shortcuts>a:last-child{border-bottom:0}
+.public-links-shortcuts>a>svg:first-child{color:var(--public-pink)}
+.public-links-shortcuts span{display:grid;gap:3px}
+.public-links-shortcuts strong{color:var(--public-text)}
+.public-links-shortcuts small{color:var(--public-muted);line-height:1.45}
+
+.public-state-page{min-height:100svh;display:grid;place-items:center;padding:28px;background:radial-gradient(circle at 82% 18%,rgba(237,64,130,.11),transparent 28%),linear-gradient(145deg,#fff 0%,#fff9fb 58%,#fdebf2 100%);color:#192033}
+.public-state-card{width:min(720px,100%);padding:clamp(28px,5vw,52px);border:1px solid #efdde5;border-radius:28px;background:rgba(255,255,255,.94);box-shadow:0 24px 64px rgba(92,48,67,.11);text-align:center}
+.public-state-code{display:inline-grid;place-items:center;min-width:72px;height:38px;margin-bottom:14px;border:1px solid #efcbd8;border-radius:999px;background:#fff4f8;color:#c91862;font-size:.8rem;font-weight:950;letter-spacing:.12em}
+.public-state-card .public-kicker{justify-content:center}
+.public-state-card h1{margin:12px 0 14px;font-size:clamp(2.2rem,5vw,4.6rem);line-height:.96;letter-spacing:-.055em}
+.public-state-card>p{max-width:590px;margin:0 auto;color:#586174;line-height:1.75}
+.public-state-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px}
+.public-state-actions>a,.public-state-actions>button{min-height:46px}
+.public-state-icon{display:grid;place-items:center;width:54px;height:54px;margin:0 auto 14px;border:1px solid #efcbd8;border-radius:16px;background:#fff4f8;color:#c91862}
+.public-loading-state .public-state-card{display:grid;gap:18px}
+.public-state-loading-mark{display:grid;place-items:center;width:62px;height:62px;margin:0 auto;border-radius:18px;background:#c91862;color:#fff;font-size:1.45rem;font-weight:950;box-shadow:0 12px 30px rgba(201,24,98,.18)}
+.public-state-loading-copy{display:grid;gap:4px}
+.public-state-loading-copy span{color:#9d647c;font-size:.72rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.public-state-loading-copy strong{font-size:1.2rem}
+.public-state-skeletons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.public-state-skeletons i{height:74px;border-radius:14px;background:linear-gradient(90deg,#f7edf1 25%,#fff8fb 45%,#f7edf1 65%);background-size:200% 100%;animation:publicStateShimmer 1.25s linear infinite}
+@keyframes publicStateShimmer{to{background-position:-200% 0}}
+
+@media(max-width:820px){
+  .public-links-hero-inner,.public-links-grid{grid-template-columns:1fr}
+  .public-links-actions{grid-template-columns:1fr 1fr}
+  .public-links-whatsapp{grid-column:1/-1}
+}
+@media(max-width:560px){
+  .public-links-brand{grid-template-columns:78px minmax(0,1fr);gap:14px}
+  .public-links-logo{width:78px;height:78px;border-radius:20px}
+  .public-links-actions{grid-template-columns:1fr}
+  .public-links-whatsapp{grid-column:auto}
+  .public-links-panel{border-radius:19px}
+  .public-state-page{padding:16px}
+  .public-state-card{padding:28px 20px;border-radius:22px}
+  .public-state-actions{display:grid}
+  .public-state-skeletons{grid-template-columns:1fr}
+  .public-state-skeletons i{height:48px}
+}
+@media(prefers-reduced-motion:reduce){
+  .public-links-list>a{transition:none}
+  .public-state-skeletons i{animation:none}
+}
