@@ -1,0 +1,58 @@
+name: TEMP rebuild inspiration HQ
+permissions:
+  contents: write
+on:
+  push:
+    branches: [v6.95-final-quality-catalog]
+    paths:
+      - .github/workflows/rebuild-inspiration-hq.yml
+jobs:
+  rebuild:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Install super-resolution runtime
+        run: pip install --disable-pip-version-check opencv-contrib-python-headless==4.10.0.84 pillow==11.3.0
+      - name: Download pinned EDSR x4 model
+        run: curl --fail --location --retry 3 --output /tmp/EDSR_x4.pb https://raw.githubusercontent.com/Saafke/EDSR_Tensorflow/06c7bd65b0305c2955328f8f2721ea86c341f660/models/EDSR_x4.pb
+      - name: Rebuild mapped inspiration photos
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import cv2
+          from PIL import Image
+          import numpy as np
+
+          codes=['001','002','003','004','005','006','007','008','010','041','042','043','044','045','046','047','048','050']
+          sr=cv2.dnn_superres.DnnSuperResImpl_create()
+          sr.readModel('/tmp/EDSR_x4.pb')
+          sr.setModel('edsr',4)
+          root=Path('public/inspirations/reais')
+          for code in codes:
+              target=root/f'insp-{code}.webp'
+              low=cv2.imread(str(target),cv2.IMREAD_COLOR)
+              if low is None:
+                  raise SystemExit(f'Não foi possível ler {target}')
+              high=sr.upsample(low)
+              rgb=cv2.cvtColor(high,cv2.COLOR_BGR2RGB)
+              image=Image.fromarray(rgb)
+              for quality in (86,90,94,97,100):
+                  image.save(target,'WEBP',quality=quality,method=6)
+                  if target.stat().st_size >= 90*1024:
+                      break
+              if target.stat().st_size < 90*1024:
+                  raise SystemExit(f'{target} ficou abaixo de 90 KB')
+              print(target, image.size, target.stat().st_size)
+          PY
+      - name: Commit rebuilt assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/inspirations/reais/insp-*.webp
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: reconstruir inspirações em alta resolução"
+          git push origin HEAD:v6.95-final-quality-catalog
