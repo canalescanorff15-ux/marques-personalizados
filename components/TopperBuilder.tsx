@@ -5,6 +5,7 @@ import { CheckCircle2, Layers3, Send, Sparkles } from 'lucide-react';
 import { fetchJson } from '@/lib/client';
 import { getAttribution } from '@/lib/attribution-client';
 import { topperLevels } from '@/lib/topper-catalog';
+import TopperLevelVisual from '@/components/TopperLevelVisual';
 
 type InquiryResponse={ok:boolean;persisted?:boolean;whatsapp_url?:string};
 function makeRequestId(){if(globalThis.crypto?.randomUUID)return globalThis.crypto.randomUUID();const b=new Uint8Array(16);globalThis.crypto.getRandomValues(b);b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;const h=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;}
@@ -56,6 +57,7 @@ export default function TopperBuilder(){
     </section>
 
     <section className="kit-builder-step"><div className="kit-step-heading"><span>02</span><div><small>PERSONALIZAÇÃO</small><h2>Conte como será o seu topo.</h2><p>Não precisa ter tudo decidido. Uma referência, tema ou paleta já é suficiente para começar.</p></div></div>
+      <TopperLevelVisual level={selected} className="topper-builder-selected-visual"/>
       <div className="kit-brief-grid">
         <label>Tema<input maxLength={120} placeholder="Ex.: safari, floral, futebol..." value={form.theme} onChange={e=>set('theme',e.target.value)}/></label>
         <label>Nome no topo<input maxLength={120} value={form.celebrant_name} onChange={e=>set('celebrant_name',e.target.value)}/></label>

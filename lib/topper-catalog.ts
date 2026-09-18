@@ -8,6 +8,7 @@ export type TopperLevel={
   complexity:string;
   features:string[];
   materials:string[];
+  image:string;
   highlight?:boolean;
 };
 
@@ -18,7 +19,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Quem está começando e quer um topo bonito, personalizado e mais econômico.',
     complexity:'1 camada principal',
     features:['Nome e idade','2 a 4 elementos temáticos','Composição limpa','Recorte preciso'],
-    materials:['Papel fotográfico ou matte','Hastes para aplicação']
+    materials:['Papel fotográfico ou matte','Hastes para aplicação'],
+    image:'/topper-levels/top-01-simples.svg'
   },
   {
     slug:'camadas-3d',code:'TOP-02',name:'Topo Básico 3D',eyebrow:'VOLUME SEM EXAGERO',
@@ -26,7 +28,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Quem quer mais presença e profundidade no bolo sem chegar ao nível premium.',
     complexity:'2 a 3 camadas',
     features:['Efeito 3D','Nome em destaque','Elementos sobrepostos','Mais profundidade'],
-    materials:['Papel fotográfico/matte','Color Plus','Fita banana']
+    materials:['Papel fotográfico/matte','Color Plus','Fita banana'],
+    image:'/topper-levels/top-02-basico-3d.svg'
   },
   {
     slug:'premium',code:'TOP-03',name:'Topo Premium',eyebrow:'MAIS DETALHES',
@@ -34,7 +37,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Quem quer um topo de maior impacto visual e acabamento de ateliê.',
     complexity:'3 a 5 camadas',
     features:['Multicamadas','Elementos maiores e menores','Detalhes metalizados quando combinarem','Composição mais trabalhada'],
-    materials:['Papéis fotográficos e Color Plus','Papel especial opcional','Fita banana']
+    materials:['Papéis fotográficos e Color Plus','Papel especial opcional','Fita banana'],
+    image:'/topper-levels/top-03-premium.svg'
   },
   {
     slug:'shaker',code:'TOP-04',name:'Topo Shaker',eyebrow:'EFEITO INTERATIVO',
@@ -42,7 +46,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Quem quer movimento, brilho e um detalhe diferente no bolo.',
     complexity:'Premium + módulo shaker',
     features:['Janela shaker','Confetes ou elementos internos','Camadas 3D','Acabamento fechado e limpo'],
-    materials:['Papel fotográfico/Color Plus','Acetato na janela','Espuma ou fita de volume','Elementos shaker']
+    materials:['Papel fotográfico/Color Plus','Acetato na janela','Espuma ou fita de volume','Elementos shaker'],
+    image:'/topper-levels/top-04-shaker.svg'
   },
   {
     slug:'acetato',code:'TOP-05',name:'Topo com Acetato',eyebrow:'EFEITO FLUTUANTE',
@@ -50,7 +55,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Temas modernos, delicados ou elegantes que combinam com efeito leve e transparente.',
     complexity:'Premium + estrutura em acetato',
     features:['Elementos flutuantes','Profundidade sem poluição visual','Nome ou detalhe suspenso','Visual moderno'],
-    materials:['Acetato transparente','Papel fotográfico/Color Plus','Fita banana quando necessário']
+    materials:['Acetato transparente','Papel fotográfico/Color Plus','Fita banana quando necessário'],
+    image:'/topper-levels/top-05-acetato.svg'
   },
   {
     slug:'elite-shaker-acetato',code:'TOP-06',name:'Topo Elite Shaker + Acetato',eyebrow:'NOSSO TOPO MAIS COMPLETO',
@@ -58,7 +64,8 @@ export const topperLevels:TopperLevel[]=[
     idealFor:'Quem quer o máximo de impacto, profundidade e acabamento que conseguimos oferecer em um topo de bolo.',
     complexity:'4 a 6+ camadas + shaker + acetato',
     features:['Shaker integrado','Acetato estrutural','Multicamadas avançadas','Efeito 3D','Elementos independentes','Composição premium para fotos'],
-    materials:['Acetato','Papéis especiais conforme o projeto','Fita banana/espuma 3D','Elementos shaker','Hastes e reforços estruturais']
+    materials:['Acetato','Papéis especiais conforme o projeto','Fita banana/espuma 3D','Elementos shaker','Hastes e reforços estruturais'],
+    image:'/topper-levels/top-06-elite-shaker-acetato.svg'
   }
 ];
 
