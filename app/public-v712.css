@@ -228,3 +228,60 @@
   .public-links-list>a{transition:none}
   .public-state-skeletons i{animation:none}
 }
+
+
+/* V7.14 — revisão responsiva final */
+.public-v712{overflow-x:clip}
+.public-v712 .public-shell>*{min-width:0}
+.public-v712 input,.public-v712 select,.public-v712 textarea{max-width:100%}
+.public-v712 img{max-width:100%}
+.public-v712 .public-links-brand>div,.public-v712 .public-links-panel,.public-v712 .public-gallery-results,.public-v712 .product-page-info,.public-v712 .kit-builder-shell{min-width:0}
+
+@media(max-width:1024px){
+  .public-mobile-filter-trigger{display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;width:100%;margin-bottom:14px;border:1px solid #efcad8;border-radius:12px;background:#fff;color:#c91862;font-weight:850;cursor:pointer}
+  .public-filter-backdrop{display:block;position:fixed;inset:0;z-index:88;border:0;background:rgba(25,32,51,.45);backdrop-filter:blur(2px);cursor:default}
+  .public-gallery-layout{grid-template-columns:1fr}
+  .public-gallery-filters{position:fixed;z-index:89;top:0;right:0;bottom:0;width:min(430px,92vw);max-height:100dvh;overflow:auto;grid-template-columns:1fr!important;align-content:start;gap:16px;padding:18px;border-radius:20px 0 0 20px;box-shadow:-22px 0 60px rgba(25,32,51,.2);transform:translateX(105%);transition:transform .2s ease}
+  .public-gallery-filters.is-open{transform:translateX(0)}
+  .public-filter-heading{position:sticky;top:-18px;z-index:2;margin:-18px -18px 0;padding:18px;border-bottom:1px solid var(--public-line);background:#fff}
+  .public-filter-heading>div{flex:1}
+  .public-filter-close{display:grid;width:44px;height:44px;place-items:center;margin-left:auto;border:1px solid var(--public-line);border-radius:12px;background:#fff;color:var(--public-text);cursor:pointer}
+  .public-filter-apply{display:flex;position:sticky;bottom:-18px;min-height:48px;align-items:center;justify-content:center;margin:4px -18px -18px;padding:0 18px;border:0;border-top:1px solid #efcad8;background:var(--public-pink);color:#fff;font-weight:900;cursor:pointer}
+  .public-inspiration-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .public-v712 .product-page-grid{grid-template-columns:1fr}
+  .public-v712 .product-page-visual{position:static}
+}
+
+@media(max-width:768px){
+  .public-v712 .container{width:min(100% - 28px,1180px)}
+  .public-v712 .kit-builder-step,.public-v712 .kit-builder-final,.public-v712 .product-page-info{padding:22px}
+  .public-v712 .kit-preset-grid,.public-v712 .kit-brief-grid,.public-v712 .kit-contact-two{grid-template-columns:1fr}
+  .public-v712 .kit-builder-hero-actions{display:grid}
+  .public-v712 .kit-builder-hero-actions .btn{width:100%;justify-content:center}
+}
+
+@media(max-width:390px){
+  .public-shell{width:min(100% - 20px,1600px)}
+  .public-v712 .container{width:min(100% - 20px,1180px)}
+  .public-inspiration-grid{grid-template-columns:1fr}
+  .public-banner-summary{display:grid;justify-items:start;align-items:start}
+  .public-banner-summary a{margin:10px 0 0}
+  .public-v712 .premium-hero .hero-copy-column h1,.public-v712 .inspiration-page-hero h1,.public-v712 .kit-builder-hero h1,.public-v712 .price-guide-hero h1{font-size:2.2rem;line-height:.98}
+  .public-v712 .hero-actions,.public-v712 .kit-builder-hero-actions,.public-v712 .home-final-actions,.public-v712 .public-detail-actions,.public-v712 .public-state-actions,.public-v712 .public-links-actions{display:grid;grid-template-columns:1fr;width:100%}
+  .public-v712 .hero-actions .btn,.public-v712 .kit-builder-hero-actions .btn,.public-v712 .home-final-actions .btn,.public-v712 .public-detail-actions>a,.public-v712 .public-state-actions>a,.public-v712 .public-state-actions>button,.public-v712 .public-links-actions>a{width:100%;justify-content:center}
+  .public-links-brand{grid-template-columns:1fr;justify-items:start}
+  .public-links-logo{width:72px;height:72px}
+  .public-links-panel-head{padding:18px}
+  .public-links-list>a,.public-links-shortcuts>a{padding-inline:16px}
+  .public-header-top-inner{gap:8px}
+  .public-brand small{display:none}
+  .public-menu-toggle span{display:none}
+  .public-header-search{padding-left:11px}
+  .public-header-search button{padding-inline:11px}
+  .public-state-card h1{font-size:2rem}
+  .public-v712 .legal-content{padding:24px 18px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .public-gallery-filters{transition:none}
+}
