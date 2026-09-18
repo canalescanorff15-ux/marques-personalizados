@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import type { SiteSettings } from '@/lib/db';
 import { whatsappUrl } from '@/lib/links';
 import { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
+import { TOPPER_DRAFT_EVENT, hasTopperDraft, readTopperDraft } from '@/lib/topper-draft';
 import SafeImage from './SafeImage';
 
 const navItems=[
@@ -21,16 +22,19 @@ const navItems=[
 export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const pathname=usePathname();
   const [favoriteCount,setFavoriteCount]=useState(0);
+  const [orderCount,setOrderCount]=useState(0);
   const [menuOpen,setMenuOpen]=useState(false);
   const wa=whatsappUrl(settings.whatsapp_number,'Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.');
   const logo=settings.logo_url||'/merlin-logo.webp';
 
   useEffect(()=>{
-    const sync=()=>setFavoriteCount(readInspirationFavorites().length);
-    sync();
-    window.addEventListener(INSPIRATION_FAVORITES_EVENT,sync);
-    window.addEventListener('storage',sync);
-    return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,sync);window.removeEventListener('storage',sync);};
+    const syncFavorites=()=>setFavoriteCount(readInspirationFavorites().length);
+    const syncDraft=()=>setOrderCount(hasTopperDraft(readTopperDraft())?1:0);
+    syncFavorites();syncDraft();
+    window.addEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);
+    window.addEventListener(TOPPER_DRAFT_EVENT,syncDraft);
+    window.addEventListener('storage',syncFavorites);
+    return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);window.removeEventListener(TOPPER_DRAFT_EVENT,syncDraft);window.removeEventListener('storage',syncFavorites);};
   },[]);
 
   const activeHref=useMemo(()=>{
@@ -59,7 +63,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
 
         <div className="public-header-actions">
           <Link href="/inspiracoes?favoritos=1" className="public-header-action"><Heart size={19}/><span>Meus Favoritos<small>{favoriteCount} salvo{favoriteCount===1?'':'s'}</small></span></Link>
-          <Link href="/monte-seu-topo" className="public-header-action"><ShoppingBag size={19}/><span>Meu Pedido<small>topo sob orçamento</small></span></Link>
+          <Link href="/monte-seu-topo" className="public-header-action"><ShoppingBag size={19}/><span>Meu Pedido<small>{orderCount}/1 topo em rascunho</small></span></Link>
           {wa&&<a href={wa} target="_blank" rel="noreferrer" className="public-header-whatsapp"><MessageCircle size={18}/> WhatsApp</a>}
           <button type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
         </div>
