@@ -5,6 +5,7 @@ import { CheckCircle2, Layers3, Send, Sparkles } from 'lucide-react';
 import { fetchJson } from '@/lib/client';
 import { getAttribution } from '@/lib/attribution-client';
 import { topperLevels } from '@/lib/topper-catalog';
+import { topperInspirationBySlug } from '@/lib/topper-inspirations';
 import TopperLevelVisual from '@/components/TopperLevelVisual';
 
 type InquiryResponse={ok:boolean;persisted?:boolean;whatsapp_url?:string};
@@ -13,17 +14,20 @@ function todayLocal(){const d=new Date();return `${d.getFullYear()}-${String(d.g
 
 export default function TopperBuilder(){
   const [level,setLevel]=useState('essencial');
+  const [inspirationSlug,setInspirationSlug]=useState('');
   const [form,setForm]=useState({name:'',whatsapp:'',email:'',event_date:'',theme:'',celebrant_name:'',celebrant_age:'',cake_size:'',colors:'',reference:'',notes:''});
   const [loading,setLoading]=useState(false),[error,setError]=useState(''),[done,setDone]=useState(false);
   const requestId=useRef(makeRequestId());
   const selected=useMemo(()=>topperLevels.find(item=>item.slug===level)||topperLevels[0],[level]);
+  const selectedInspiration=useMemo(()=>topperInspirationBySlug(inspirationSlug),[inspirationSlug]);
 
-  useEffect(()=>{const params=new URLSearchParams(location.search);const requested=params.get('nivel');if(requested&&topperLevels.some(item=>item.slug===requested))setLevel(requested);const theme=params.get('tema');if(theme)setForm(current=>({...current,theme}));},[]);
+  useEffect(()=>{const params=new URLSearchParams(location.search);const requested=params.get('nivel');const validRequested=Boolean(requested&&topperLevels.some(item=>item.slug===requested));if(validRequested&&requested)setLevel(requested);const inspiration=params.get('inspiracao');const picked=inspiration?topperInspirationBySlug(inspiration):null;if(picked){setInspirationSlug(picked.slug);if(!validRequested)setLevel(picked.levelSlug);setForm(current=>({...current,theme:params.get('tema')||picked.title,reference:'Quero adaptar uma inspiração do site'}));return;}const theme=params.get('tema');if(theme)setForm(current=>({...current,theme}));},[]);
 
   function set(key:keyof typeof form,value:string){setForm(current=>({...current,[key]:value}));}
   const summary=useMemo(()=>[
     'Pedido de topo de bolo personalizado',
     `Modelo: ${selected.code} — ${selected.name}`,
+    selectedInspiration&&`Inspiração: ${selectedInspiration.code} — ${selectedInspiration.title}`,
     form.theme&&`Tema: ${form.theme}`,
     form.celebrant_name&&`Nome: ${form.celebrant_name}`,
     form.celebrant_age&&`Idade: ${form.celebrant_age}`,
@@ -31,7 +35,7 @@ export default function TopperBuilder(){
     form.colors&&`Cores: ${form.colors}`,
     form.reference&&`Referência própria: ${form.reference}`,
     form.notes&&`Observações: ${form.notes}`
-  ].filter(Boolean).join('\n'),[selected,form]);
+  ].filter(Boolean).join('\n'),[selected,selectedInspiration,form]);
 
   async function submit(e:React.FormEvent){e.preventDefault();if(loading)return;setLoading(true);setError('');
     try{
@@ -57,6 +61,7 @@ export default function TopperBuilder(){
     </section>
 
     <section className="kit-builder-step"><div className="kit-step-heading"><span>02</span><div><small>PERSONALIZAÇÃO</small><h2>Conte como será o seu topo.</h2><p>Não precisa ter tudo decidido. Uma referência, tema ou paleta já é suficiente para começar.</p></div></div>
+      {selectedInspiration&&<div className="topper-builder-inspiration"><img src={selectedInspiration.image} alt={`Inspiração escolhida: ${selectedInspiration.title}`}/><div><small>INSPIRAÇÃO ESCOLHIDA • {selectedInspiration.code}</small><strong>{selectedInspiration.title}</strong><p>Vamos adaptar nome, idade, cores e detalhes para o seu pedido.</p></div></div>}
       <TopperLevelVisual level={selected} className="topper-builder-selected-visual"/>
       <div className="kit-brief-grid">
         <label>Tema<input maxLength={120} placeholder="Ex.: safari, floral, futebol..." value={form.theme} onChange={e=>set('theme',e.target.value)}/></label>
