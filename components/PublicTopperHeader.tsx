@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Heart, Menu, MessageCircle, Search, ShoppingBag } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import type { SiteSettings } from '@/lib/db';
@@ -12,11 +12,12 @@ import SafeImage from './SafeImage';
 
 const navItems=[
   {href:'/',label:'Início'},
+  {href:'/#sobre',label:'Sobre Nós'},
   {href:'/catalogo',label:'Nossos Topos'},
   {href:'/inspiracoes',label:'Inspirações'},
   {href:'/monte-seu-topo',label:'Monte seu Topo'},
-  {href:'/guia-de-precos',label:'Níveis & Preços'},
-  {href:'/orcamento',label:'Contato'}
+  {href:'/#duvidas',label:'Dúvidas'},
+  {href:'/#contato',label:'Contato'}
 ];
 
 export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
@@ -24,6 +25,8 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const [favoriteCount,setFavoriteCount]=useState(0);
   const [orderCount,setOrderCount]=useState(0);
   const [menuOpen,setMenuOpen]=useState(false);
+  const menuButtonRef=useRef<HTMLButtonElement>(null);
+  const mobileMenuRef=useRef<HTMLElement>(null);
   const wa=whatsappUrl(settings.whatsapp_number,'Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.');
   const logo=settings.logo_url||'/merlin-logo.webp';
 
@@ -36,6 +39,20 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
     window.addEventListener('storage',syncFavorites);
     return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);window.removeEventListener(TOPPER_DRAFT_EVENT,syncDraft);window.removeEventListener('storage',syncFavorites);};
   },[]);
+
+  useEffect(()=>{
+    if(!menuOpen)return;
+    const firstLink=mobileMenuRef.current?.querySelector<HTMLAnchorElement>('a');
+    firstLink?.focus();
+    const onKeyDown=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){
+        setMenuOpen(false);
+        requestAnimationFrame(()=>menuButtonRef.current?.focus());
+      }
+    };
+    window.addEventListener('keydown',onKeyDown);
+    return()=>window.removeEventListener('keydown',onKeyDown);
+  },[menuOpen]);
 
   const activeHref=useMemo(()=>{
     if(pathname.startsWith('/inspiracoes'))return '/inspiracoes';
@@ -65,7 +82,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
           <Link href="/inspiracoes?favoritos=1" className="public-header-action"><Heart size={19}/><span>Meus Favoritos<small>{favoriteCount} salvo{favoriteCount===1?'':'s'}</small></span></Link>
           <Link href="/monte-seu-topo" className="public-header-action"><ShoppingBag size={19}/><span>Meu Pedido<small>{orderCount}/1 topo em rascunho</small></span></Link>
           {wa&&<a href={wa} target="_blank" rel="noreferrer" className="public-header-whatsapp"><MessageCircle size={18}/> WhatsApp</a>}
-          <button type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
+          <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
         </div>
       </div>
     </div>
@@ -78,7 +95,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
       </div>
     </div>
 
-    {menuOpen&&<nav id="public-mobile-menu" className="public-mobile-menu" aria-label="Navegação móvel">
+    {menuOpen&&<nav ref={mobileMenuRef} id="public-mobile-menu" className="public-mobile-menu" aria-label="Navegação móvel">
       <div className="public-shell">{navItems.map(item=><Link key={item.href} href={item.href} onClick={()=>setMenuOpen(false)}>{item.label}</Link>)}<Link href="/inspiracoes?favoritos=1" onClick={()=>setMenuOpen(false)}>Meus Favoritos ({favoriteCount})</Link></div>
     </nav>}
   </header>;
