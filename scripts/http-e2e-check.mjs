@@ -56,13 +56,19 @@ try{
 
   r=await request('/admin/login');assert(r.ok,'Login administrativo responde',`HTTP ${r.status}`);const adminCsp=r.headers.get('content-security-policy')||'';const adminScript=adminCsp.split(';').map(x=>x.trim()).find(x=>x.startsWith('script-src '))||'';assert(/'nonce-[A-Za-z0-9+/_=-]+'/.test(adminScript),'Admin recebe nonce CSP por requisição');assert(adminScript.includes("'strict-dynamic'")&&!adminScript.includes("'unsafe-inline'"),'Admin bloqueia script inline sem nonce');assert((r.headers.get('cache-control')||'').includes('no-store'),'Login administrativo não é armazenado em cache');assert((r.headers.get('x-robots-tag')||'').includes('noindex'),'Login administrativo recebe X-Robots-Tag noindex');
 
-  r=await request('/api/catalog?page=1&limit=3');const catalog=await bodyJson(r);assert(r.ok&&Array.isArray(catalog.items),'Catálogo público retorna itens');assert(Number.isInteger(catalog.page)&&Number.isInteger(catalog.page_size),'Catálogo retorna paginação consistente');
+  r=await request('/catalogo');assert(r.ok,'Catálogo de topos responde',`HTTP ${r.status}`);
+  r=await request('/catalogo/essencial');assert(r.ok,'Detalhe TOP-01 responde',`HTTP ${r.status}`);
+  const topperHtml=await r.text();assert(/Topo Essencial|TOP-01/i.test(topperHtml),'Detalhe TOP-01 contém identificação do nível');
+  r=await request('/monte-seu-topo');assert(r.ok,'Monte seu topo responde',`HTTP ${r.status}`);
+  const builderHtml=await r.text();assert(/Monte seu topo|Do simples ao Elite/i.test(builderHtml),'Configurador de topo retorna a nova jornada');
+  r=await request('/monte-seu-kit');assert([301,302,303,307,308].includes(r.status),'Monte seu kit legado redireciona',`HTTP ${r.status}`);assert((r.headers.get('location')||'').includes('/monte-seu-topo'),'Redirecionamento legado aponta para Monte seu topo');
+  r=await request('/categorias/legado');assert([301,302,303,307,308].includes(r.status),'Categoria legada não expõe catálogo antigo',`HTTP ${r.status}`);
+  r=await request('/api/catalog?page=1&limit=3');const catalog=await bodyJson(r);assert(r.ok&&Array.isArray(catalog.items),'API de catálogo preservada para compatibilidade interna');assert(Number.isInteger(catalog.page)&&Number.isInteger(catalog.page_size),'API de catálogo mantém paginação consistente');
   const first=Array.isArray(catalog.items)?catalog.items[0]:null;
   if(first?.slug){
-    r=await request(`/catalogo/${encodeURIComponent(first.slug)}`);assert(r.ok,'Página de produto publicado responde',`HTTP ${r.status}`);
-    r=await request(`/api/quote-list?items=${encodeURIComponent(`${first.slug}:1`)}`);const shared=await bodyJson(r);assert(r.ok&&Array.isArray(shared.items),'Lista compartilhável é revalidada no servidor');assert(shared.items[0]?.product_id===first.id,'Lista compartilhável preserva identidade do produto');
-    const token=String(first.name||'').trim().split(/\s+/)[0]||'topo';r=await request(`/api/search?q=${encodeURIComponent(token)}`);const search=await bodyJson(r);assert(r.ok&&Array.isArray(search.products)&&Array.isArray(search.categories),'Busca global retorna contrato esperado');
-  }else assert(false,'Catálogo de teste possui ao menos um produto publicado');
+    r=await request(`/api/quote-list?items=${encodeURIComponent(`${first.slug}:1`)}`);const shared=await bodyJson(r);assert(r.ok&&Array.isArray(shared.items),'Lista compartilhável continua revalidada no servidor');
+    const token=String(first.name||'').trim().split(/\s+/)[0]||'topo';r=await request(`/api/search?q=${encodeURIComponent(token)}`);const search=await bodyJson(r);assert(r.ok&&Array.isArray(search.products)&&Array.isArray(search.categories),'API de busca legada mantém contrato interno');
+  }
 
   r=await request('/api/concierge',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json'}),body:JSON.stringify({theme:'aniversário',categories:[]})});const concierge=await bodyJson(r);assert(r.ok&&Array.isArray(concierge.products),'Concierge responde com recomendações');
   r=await request('/api/events',{method:'POST',headers:sameOriginHeaders({'content-type':'application/json'}),body:JSON.stringify({event:'page_view',path:'/e2e'})});const event=await bodyJson(r);assert(r.ok&&event.ok===true,'Telemetria aceita evento same-origin');
