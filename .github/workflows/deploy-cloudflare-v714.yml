@@ -1,0 +1,74 @@
+name: V7.14 Direct Cloudflare Deploy
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [v7.14-cloudflare-direct-deploy]
+    paths:
+      - .github/workflows/deploy-cloudflare-v714.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Detect stored Cloudflare credentials
+        id: cloudflare_creds
+        env:
+          TOKEN_A: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TOKEN_B: ${{ secrets.CF_API_TOKEN }}
+          ACCOUNT_A: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ACCOUNT_B: ${{ secrets.CF_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          token=""
+          account=""
+          if [ -n "$TOKEN_A" ]; then token="$TOKEN_A"; elif [ -n "$TOKEN_B" ]; then token="$TOKEN_B"; fi
+          if [ -n "$ACCOUNT_A" ]; then account="$ACCOUNT_A"; elif [ -n "$ACCOUNT_B" ]; then account="$ACCOUNT_B"; fi
+          if [ -n "$token" ] && [ -n "$account" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            echo "CLOUDFLARE_API_TOKEN=$token" >> "$GITHUB_ENV"
+            echo "CLOUDFLARE_ACCOUNT_ID=$account" >> "$GITHUB_ENV"
+            echo "Cloudflare credentials: AVAILABLE"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Cloudflare credentials: NOT_CONFIGURED"
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install dependencies
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        run: npm ci --ignore-scripts --no-fund --no-audit
+
+      - name: Validate Cloudflare target
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        run: npm run check:cloudflare
+
+      - name: TypeScript
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        run: npm run typecheck
+
+      - name: Build Cloudflare Workers path
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        run: npm run build:vinext
+
+      - name: Deploy V7.14 to Cloudflare Workers
+        if: steps.cloudflare_creds.outputs.available == 'true'
+        run: npm run deploy:vinext -- --skip-build
+
+      - name: Fail when credentials are unavailable
+        if: steps.cloudflare_creds.outputs.available != 'true'
+        run: |
+          echo "No supported Cloudflare API credential pair is configured in GitHub Secrets."
+          exit 1
