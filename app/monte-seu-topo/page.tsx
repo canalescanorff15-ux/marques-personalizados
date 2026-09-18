@@ -13,7 +13,7 @@ export const metadata:Metadata={
 
 export default async function TopperBuilderPage(){
   const settings=await getSiteSettings();
-  return <main className="premium-site kf-theme kit-builder-page">
+  return <main className="premium-site kf-theme kit-builder-page public-v712">
     <Header settings={settings}/>
     <section className="kit-builder-hero"><div className="container"><div className="kit-builder-hero-copy">
       <div className="eyebrow"><Layers3 size={14}/> Topos de bolo sob encomenda</div>
