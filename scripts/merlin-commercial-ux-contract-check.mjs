@@ -27,7 +27,7 @@ if(imageRefs.length!==6)errors.push(`linha de topos precisa declarar 6 imagens o
 if(new Set(imageRefs).size!==imageRefs.length)errors.push('cada nível precisa usar uma imagem oficial exclusiva');
 for(const image of imageRefs){const file=`public${image}`;if(!fs.existsSync(file))errors.push(`asset oficial ausente: ${file}`);}
 if(!catalogPage.includes('TopperLevelVisual'))errors.push('catálogo não reutiliza a referência visual oficial do nível');
-if(!inspirationsPage.includes('TopperLevelVisual'))errors.push('inspirações não reutilizam a referência visual oficial do nível');
+if(!inspirationsPage.includes('TopperInspirationGallery'))errors.push('inspirações não usam a galeria pública de topos');
 if(!builder.includes('TopperLevelVisual'))errors.push('Monte seu topo não reutiliza a referência visual oficial do nível');
 for(const source of [home,header,dock,footer])if(source.includes('href="/monte-seu-kit"'))errors.push('fluxo público ainda contém link para Monte seu Kit');
 if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não comunica os dois acabamentos avançados');
