@@ -16,6 +16,7 @@ const topperInspirationContract='scripts/topper-inspiration-gallery-contract-che
 const publicRedesignContract='scripts/public-redesign-contract-check.mjs';
 const topperDraftContract='scripts/topper-draft-contract-check.mjs';
 const publicAuxiliaryContract='scripts/public-auxiliary-contract-check.mjs';
+const publicResponsiveContract='scripts/public-responsive-v714-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -54,6 +55,12 @@ if(!fs.existsSync(publicAuxiliaryContract))errors.push('contrato das rotas públ
 else{
   const auxiliaryCheck=spawnSync(process.execPath,[publicAuxiliaryContract],{encoding:'utf8'});
   if(auxiliaryCheck.status!==0)errors.push((auxiliaryCheck.stderr||auxiliaryCheck.stdout||'contrato das rotas públicas auxiliares falhou').trim());
+}
+
+if(!fs.existsSync(publicResponsiveContract))errors.push('contrato responsivo V7.14 ausente');
+else{
+  const responsiveCheck=spawnSync(process.execPath,[publicResponsiveContract],{encoding:'utf8'});
+  if(responsiveCheck.status!==0)errors.push((responsiveCheck.stderr||responsiveCheck.stdout||'contrato responsivo V7.14 falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
