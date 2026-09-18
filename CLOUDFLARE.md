@@ -104,3 +104,11 @@ Workers Builds fornece `WORKERS_CI_COMMIT_SHA` no build. Para o runtime, a aplic
 ## Rollback
 
 Enquanto a migração não estiver homologada, `netlify.toml` e `NETLIFY.md` continuam no repositório. Não apague Neon, R2, buckets ou dados para fazer rollback: a troca de hospedagem não altera as autoridades de dados.
+
+## Promoção V7.14
+
+- alvo de produção: `main` com a revisão responsiva V7.14;
+- commit funcional validado: `63d19a52e5f81340f2c2bfd204c7ce2daeb87596`;
+- o push de promoção deve ser consumido pelo Cloudflare Workers Builds conectado à branch `main`;
+- após publicar, validar `/`, `/inspiracoes`, `/monte-seu-topo`, `/links` e confirmar os breakpoints de 390 px e 1024 px antes de considerar a release concluída.
+
