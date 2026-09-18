@@ -15,7 +15,7 @@ export default async function HomePage(){
   const [settings,testimonials]=await Promise.all([getSiteSettings(),getTestimonials()]);
   const phone=digits(settings.whatsapp_number);
   const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.')}`:'';
-  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do essencial ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
+  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do simples ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
   return <main className="premium-site kf-theme home-v672 home-v673 home-v680">
     <Header settings={settings}/><JsonLd data={organizationJsonLd}/>
 
@@ -25,7 +25,7 @@ export default async function HomePage(){
       <p className="hero-copy">Começamos focados no que podemos fazer com mais cuidado: topos de bolo sob encomenda. Você escolhe o nível, o tema e as cores; nós adaptamos a composição para o seu bolo.</p>
       <div className="hero-actions"><Link className="btn btn-primary btn-luxury" href="/catalogo">Ver níveis de topo <Layers3 size={17}/></Link><Link className="btn btn-ghost" href="/monte-seu-topo">Montar meu topo <ArrowUpRight size={16}/></Link><Link className="btn btn-ghost" href="/guia-de-precos">Níveis & preços</Link><Link className="btn btn-ghost" href="/orcamento">Pedir orçamento</Link>{wa&&<a className="home-hero-whatsapp" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={16}/> WhatsApp</a>}</div>
       <div className="trust-row"><span><CheckCircle2 size={15}/> Projeto personalizado</span><span><Scissors size={15}/> Corte e montagem artesanal</span><span><Sparkles size={15}/> Shaker e acetato nos modelos avançados</span></div>
-    </div><div className="hero-visual kf-hero-visual" data-reveal><div className="hero-card main kf-logo-card"><img src={settings.logo_url||'/merlin-logo.webp'} alt={settings.brand_name}/><span className="hero-image-label">MERLIN • ENCANTOS EM PAPEL</span></div><div className="hero-badge"><span>linha com</span><strong>{topperLevels.length} níveis</strong><small>do essencial ao Elite</small></div></div></div></section>
+    </div><div className="hero-visual kf-hero-visual" data-reveal><div className="hero-card main kf-logo-card"><img src={settings.logo_url||'/merlin-logo.webp'} alt={settings.brand_name}/><span className="hero-image-label">MERLIN • ENCANTOS EM PAPEL</span></div><div className="hero-badge"><span>linha com</span><strong>{topperLevels.length} níveis</strong><small>do simples ao Elite</small></div></div></div></section>
 
     <section className="category-showcase premium-categories home-categories" id="topos"><div className="container">
       <div className="section-index" data-reveal><span>01</span><i/><small>NÍVEIS DE TOPO</small></div>
