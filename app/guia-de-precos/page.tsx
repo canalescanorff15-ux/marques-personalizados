@@ -7,7 +7,7 @@ import { getSiteSettings } from '@/lib/db';
 import { topperLevels } from '@/lib/topper-catalog';
 
 export const dynamic='force-dynamic';
-export const metadata:Metadata={title:'Níveis e preços de topos | Merlin Encantos em Papel',description:'Entenda os níveis de acabamento dos topos de bolo, do Essencial ao Elite com shaker e acetato. Valores são confirmados em orçamento.'};
+export const metadata:Metadata={title:'Níveis e preços de topos | Merlin Encantos em Papel',description:'Entenda os níveis de acabamento dos topos de bolo, do Simples ao Elite com shaker e acetato. Valores são confirmados em orçamento.'};
 
 export default async function PriceGuidePage(){
  const settings=await getSiteSettings();
