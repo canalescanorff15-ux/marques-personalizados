@@ -1,37 +1,32 @@
 import fs from 'node:fs';
 import path from 'node:path';
-const root=process.cwd();
-const fail=(msg)=>{console.error(`COMMERCE_V670_CONTRACT_FAIL: ${msg}`);process.exit(1)};
-const read=(file)=>{const p=path.join(root,file);if(!fs.existsSync(p))fail(`arquivo ausente: ${file}`);return fs.readFileSync(p,'utf8')};
-const must=(file,tokens)=>{const text=read(file);for(const token of tokens)if(!text.includes(token))fail(`${file} sem ${token}`);return text};
 
-must('lib/quote-planning.ts',['estimateQuote','evaluateBudget','evaluateDeadline','suggestProductQuantity','quoteReadiness','businessDaysUntil']);
-must('app/orcamento/page.tsx',['QuoteWorkspace','robots:{index:false','Meu orçamento']);
-must('components/QuoteWorkspace.tsx',['PLANEJADOR DE ORÇAMENTO','ESTIMATIVA INICIAL','evaluateBudget','evaluateDeadline','quoteReadiness','Continuar para envio','/guia-de-precos']);
-must('components/ProductOrderPlanner.tsx',['SIMULADOR INICIAL','suggestProductQuantity','ESTIMATIVA MÍNIMA','addProduct(product,{},quantitySafe)']);
-must('components/ProductConfigurator.tsx',['PERSONALIZAÇÃO + QUANTIDADE','suggestProductQuantity','quantitySafe','addProduct(product,cleaned,quantitySafe)']);
-must('components/QuoteListProvider.tsx',['production_time: string','quantity?:number','Abrir orçamento completo','/orcamento']);
-must('app/api/quote-list/route.ts',['production_time']);
-must('components/OrderDecisionGuide.tsx',['Planejamento sem adivinhação','POR INVESTIMENTO','POR CONVIDADOS','/orcamento?faixa=']);
-must('app/page.tsx',['href="/guia-de-precos"','href="/orcamento"','href="/monte-seu-kit"']);
-must('app/guia-de-precos/page.tsx',['PREÇOS TRANSPARENTES PARA COMEÇAR','minimumOrderCents','CollectionPage','/orcamento']);
-must('components/ProductBuyingGuide.tsx',['ANTES DE PEDIR','productBuyingGuide']);
-must('lib/product-guide.ts',['valueDrivers','preparation','Kits personalizados']);
-const catalog=must('components/CatalogClient.tsx',['priceBands','priceBand','Preço inicial','min_price','max_price','preco']);
-if(!catalog.includes("value:'150-mais'"))fail('filtro de preço sem faixa superior');
-must('app/api/catalog/route.ts',['min_price','max_price','minPriceCents','maxPriceCents']);
-must('lib/db.ts',['minPriceCents?:number','maxPriceCents?:number']);
-must('components/Header.tsx',['/guia-de-precos','href="/orcamento"']);
-must('components/Footer.tsx',['/guia-de-precos','/orcamento']);
-must('components/MerlinMobileDock.tsx',['href="/orcamento"']);
-const product=must('app/catalogo/[slug]/page.tsx',['ProductOrderPlanner','ProductBuyingGuide','eligibleQuantity','planejar-pedido']);
-if(product.includes("import AddToQuoteButton"))fail('produto ainda depende do fluxo antigo AddToQuoteButton');
-const sitemap=must('app/sitemap.ts',['/guia-de-precos']);
-if(sitemap.includes("path:'/orcamento'"))fail('/orcamento é privado/local e não deve entrar no sitemap');
-const css=must('app/premium.css',['V6.70 — comércio assistido','quote-workspace-page','price-guide-page','product-order-planner','product-buying-guide','order-decision-guide']);
-if(!css.includes('@media(max-width:760px)'))fail('V6.70 sem responsividade mobile');
-const workflow=must('.github/workflows/ci.yml',['check:catalog-commercial']);
+const root=process.cwd();
+const errors=[];
+const read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const must=(file,tokens)=>{const text=read(file);for(const token of tokens)if(!text.includes(token))errors.push(`${file} sem ${token}`);return text;};
+
+const catalog=must('lib/topper-catalog.ts',['TOP-01','TOP-02','TOP-03','TOP-04','TOP-05','TOP-06','shaker','acetato']);
+const home=must('app/page.tsx',['href="/catalogo"','href="/guia-de-precos"','href="/orcamento"','href="/monte-seu-topo"']);
+const price=must('app/guia-de-precos/page.tsx',['topperLevels.map','Sob orçamento','shaker','acetato','/monte-seu-topo']);
+const detail=must('app/catalogo/[slug]/page.tsx',['topperLevelBySlug','level.features','level.materials','/monte-seu-topo?nivel=']);
+const builder=must('components/TopperBuilder.tsx',["'/api/inquiries'","cake_size","desired_categories:['Topos de bolo']","product_name:selected.name"]);
+const header=must('components/Header.tsx',['/guia-de-precos','href="/orcamento"','href="/monte-seu-topo"']);
+const footer=must('components/Footer.tsx',['/guia-de-precos','/orcamento','/monte-seu-topo']);
+const dock=must('components/MerlinMobileDock.tsx',['href="/orcamento"','href="/monte-seu-topo"']);
+const sitemap=must('app/sitemap.ts',['/guia-de-precos','/monte-seu-topo','topperLevels.map']);
+
+if(catalog.includes('price_cents'))errors.push('linha de níveis não deve inventar preço fixo');
+if(price.match(/R\$\s*\d/))errors.push('guia de níveis não deve publicar preço não validado');
+for(const source of [home,header,footer,dock])if(source.includes('href="/monte-seu-kit"'))errors.push('jornada pública ainda oferece Monte seu Kit');
+if(detail.includes('getProductBySlug'))errors.push('detalhe público ainda resolve produto legado do banco');
+if(!builder.includes("source:'site'"))errors.push('briefing de topo precisa manter atribuição de origem site');
+
 const pkg=JSON.parse(read('package.json'));
-if(!pkg.scripts?.['check:commerce-v670'])fail('package.json sem check:commerce-v670');
-if(!String(pkg.scripts.verify||'').includes('check:commerce-v670'))fail('verify não executa check:commerce-v670');
-console.log('COMMERCE_V670_CONTRACT_OK (orçamento, preços, filtros, quantidade, prazo e guia de compra protegidos; home aponta para as rotas dedicadas)');
+if(!pkg.scripts?.['check:commerce-v670'])errors.push('package.json sem check:commerce-v670');
+if(!String(pkg.scripts.verify||'').includes('check:commerce-v670'))errors.push('verify não executa check:commerce-v670');
+const workflow=read('.github/workflows/ci.yml');
+if(!workflow.includes('check:commerce-v670'))errors.push('CI não executa o contrato comercial');
+
+if(errors.length){console.error(`TOPPER_COMMERCE_CONTRACT_FAIL (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('TOPPER_COMMERCE_CONTRACT_OK — catálogo, briefing, preços sob orçamento e navegação exclusiva de topos protegidos.');

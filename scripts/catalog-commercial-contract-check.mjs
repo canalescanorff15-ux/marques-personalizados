@@ -1,44 +1,28 @@
 import fs from 'node:fs';
-import path from 'node:path';
-const root=process.cwd();
-const fail=(msg)=>{console.error(`CATALOG_COMMERCIAL_CONTRACT_FAIL: ${msg}`);process.exit(1)};
-const read=(file)=>fs.readFileSync(path.join(root,file),'utf8');
-const catalog=JSON.parse(read('data/starter-catalog.json'));
-const photoRefs=JSON.parse(read('data/catalog-photo-references.json'));
-const focusCss=read('app/catalog-photo-focus-v692.css');
-if(!Array.isArray(catalog.categories)||catalog.categories.length!==6)fail('catálogo inicial deve possuir 6 categorias comerciais');
-if(!Array.isArray(catalog.products)||catalog.products.length!==21)fail('catálogo inicial deve possuir 21 produtos');
-const assertPhoto=(scope,slug,url)=>{if(!String(url||'').startsWith('/inspirations/reais/')||!/\.webp$/i.test(String(url||'')))fail(`${scope} sem referência fotográfica WebP: ${slug}`);const asset=path.join(root,'public',String(url).replace(/^\//,''));if(!fs.existsSync(asset))fail(`referência fotográfica ausente: ${url}`)};
-const slugs=new Set();
-for(const category of catalog.categories){
-  if(!category.slug||!category.name||String(category.description||'').trim().length<30)fail(`categoria incompleta: ${category.slug||category.name}`);
-  assertPhoto('categoria',category.slug,photoRefs.categories?.[category.slug]);
-  if(!focusCss.includes(`/categorias/${category.slug}`))fail(`categoria sem foco fotográfico próprio: ${category.slug}`);
-}
-for(const product of catalog.products){
-  if(slugs.has(product.slug))fail(`slug duplicado: ${product.slug}`);slugs.add(product.slug);
-  if(!Number.isInteger(product.price_cents)||product.price_cents<=0)fail(`preço inválido: ${product.slug}`);
-  if(!Number.isInteger(product.min_quantity)||product.min_quantity<1)fail(`quantidade mínima inválida: ${product.slug}`);
-  assertPhoto('produto',product.slug,photoRefs.products?.[product.slug]);
-  if(!focusCss.includes(`/catalogo/${product.slug}`))fail(`produto sem foco fotográfico próprio: ${product.slug}`);
-}
-if(Object.keys(photoRefs.categories||{}).length!==catalog.categories.length)fail('mapa fotográfico de categorias possui itens extras ou faltantes');
-if(Object.keys(photoRefs.products||{}).length!==catalog.products.length)fail('mapa fotográfico de produtos possui itens extras ou faltantes');
-for(const token of ['object-position','src*="inspirations"','srcset*="inspirations"'])if(!focusCss.includes(token))fail(`foco fotográfico sem proteção ${token}`);
-const layout=read('app/layout.tsx');
-if(!layout.includes("./catalog-photo-focus-v692.css"))fail('layout não carrega curadoria de foco V6.92');
-const merchandising=read('lib/catalog-merchandising.ts');
-for(const token of ['formatCatalogMoney','catalogPriceContext','minimumOrderLabel','isIllustrativeCatalogImage','isReferenceCatalogPhoto','isLegacyIllustrativeCatalogImage','customerMedia','catalog-photo-references.json'])if(!merchandising.includes(token))fail(`helper ausente: ${token}`);
-if(!merchandising.includes('!isIllustrativeCatalogImage(url)'))fail('referência interna pode ser confundida com mídia real do admin');
-if(!merchandising.includes('!isIllustrativeCatalogImage(current)'))fail('categoria não preserva corretamente mídia real do admin');
-const client=read('components/CatalogClient.tsx');
-for(const token of ['A PARTIR DE','catalogPriceContext','Imagem ilustrativa','minimumOrderLabel'])if(!client.includes(token))fail(`CatalogClient sem ${token}`);
+
+const errors=[];
+const read=file=>fs.readFileSync(file,'utf8');
+const data=read('lib/topper-catalog.ts');
+const catalog=read('app/catalogo/page.tsx');
 const detail=read('app/catalogo/[slug]/page.tsx');
-for(const token of ['Preço inicial de referência','frete podem alterar','Imagem ilustrativa do formato','catalogPriceContext'])if(!detail.includes(token))fail(`produto sem aviso comercial: ${token}`);
-const seed=read('scripts/seed-db.mjs');
-for(const token of ['starter-catalog.json','price_cents','Merlin Encantos em Papel','ON CONFLICT'])if(!seed.includes(token))fail(`seed não protege ${token}`);
+const prices=read('app/guia-de-precos/page.tsx');
 const home=read('app/page.tsx');
-if(!home.includes('href="/guia-de-precos"'))fail('home sem acesso direto ao guia de preços');
-if(!home.includes('href="/catalogo"'))fail('home sem acesso direto ao catálogo completo');
-const guide=read('components/StarterPriceGuide.tsx');for(const token of ['Preços para começar','A partir de','Montar meu kit'])if(!guide.includes(token))fail(`guia de preços sem ${token}`);
-console.log(`CATALOG_COMMERCIAL_CONTRACT_OK (${catalog.products.length} produtos e ${catalog.categories.length} categorias com referência WebP e foco próprio; mídia real do admin prevalece e referências internas permanecem substituíveis)`);
+
+const codes=[...data.matchAll(/code:'(TOP-\d{2})'/g)].map(match=>match[1]);
+const slugs=[...data.matchAll(/slug:'([^']+)',code:'TOP-/g)].map(match=>match[1]);
+if(codes.length!==6)errors.push(`catálogo público precisa ter 6 níveis; encontrou ${codes.length}`);
+if(new Set(codes).size!==codes.length)errors.push('códigos TOP duplicados');
+if(new Set(slugs).size!==slugs.length)errors.push('slugs TOP duplicados');
+for(const code of ['TOP-01','TOP-02','TOP-03','TOP-04','TOP-05','TOP-06'])if(!codes.includes(code))errors.push(`código ausente: ${code}`);
+for(const token of ['shaker','acetato','elite-shaker-acetato'])if(!data.includes(token))errors.push(`acabamento/nível ausente: ${token}`);
+
+if(!catalog.includes('topperLevels.map'))errors.push('catálogo raiz não renderiza a linha de topos');
+if(catalog.includes('getPublicCatalogPage')||catalog.includes('starterCatalogProducts'))errors.push('catálogo público ainda depende do catálogo misto antigo');
+if(!detail.includes('topperLevelBySlug')||!detail.includes("redirect('/catalogo')"))errors.push('detalhe não está limitado aos seis níveis de topo');
+if(!prices.includes('topperLevels.map')||!prices.includes('Sob orçamento'))errors.push('guia de preços não reflete os níveis com orçamento real');
+if(!prices.includes('shaker')||!prices.includes('acetato'))errors.push('guia de preços não explica acabamentos avançados');
+if(!home.includes('href="/catalogo"')||!home.includes('href="/guia-de-precos"')&&!home.includes('/guia-de-precos'))errors.push('home não oferece acesso ao catálogo/guia');
+if(!home.includes('topperLevels.map'))errors.push('home não apresenta a escada de produtos');
+
+if(errors.length){console.error(`Topper Catalog Commercial Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('Topper Catalog Commercial Contract: OK — 6 níveis únicos, sem catálogo misto e preços sem invenção.');

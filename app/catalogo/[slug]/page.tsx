@@ -1,31 +1,32 @@
 import type { Metadata } from 'next';
-import { ArrowLeft, Check, Layers3, MessageCircle, Sparkles } from 'lucide-react';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { ArrowLeft, ArrowUpRight, Layers3, Sparkles } from 'lucide-react';
+import { redirect } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import ProductGallery from '@/components/ProductGallery';
-import SafeImage from '@/components/SafeImage';
-import QuoteForm from '@/components/QuoteForm';
-import ProductConfigurator from '@/components/ProductConfigurator';
-import ProductOrderPlanner from '@/components/ProductOrderPlanner';
-import ProductBuyingGuide from '@/components/ProductBuyingGuide';
-import ShareProductButton from '@/components/ShareProductButton';
-import JsonLd from '@/components/JsonLd';
-import { CompareButton } from '@/components/CompareProvider';
-import RecentlyViewedTracker from '@/components/RecentlyViewedTracker';
-import { getCategories, getProductBySlug, getRelatedPublicProducts, getSiteSettings } from '@/lib/db';
-import { siteUrl } from '@/lib/config';
-import { isAdmin } from '@/lib/auth';
-import { slugifyText } from '@/lib/seo';
-import { catalogPriceContext,formatCatalogMoney,isIllustrativeCatalogImage,minimumOrderLabel } from '@/lib/catalog-merchandising';
-type Props={params:Promise<{slug:string}>;searchParams?:Promise<{preview?:string}>};
-function digits(v:string){return v.replace(/\D/g,'');}
-export async function generateMetadata({params,searchParams}:Props):Promise<Metadata>{const {slug}=await params;const preview=(await searchParams)?.preview==='1';const canPreview=preview&&(await isAdmin());const [p,s]=await Promise.all([getProductBySlug(slug,Boolean(canPreview)),getSiteSettings()]);if(!p)return{title:'Produto não encontrado'};const title=p.seo_title||`${p.name} | ${s.brand_name}`;const description=p.seo_description||p.description.slice(0,170);const image=p.image_urls[0];return{title,description,robots:preview?{index:false,follow:false}:undefined,alternates:!preview&&siteUrl?{canonical:`${siteUrl}/catalogo/${p.slug}`}:{},openGraph:{title,description,type:'website',images:image?[image]:undefined},twitter:{card:'summary_large_image',title,description,images:image?[image]:undefined}};}
+import { getSiteSettings } from '@/lib/db';
+import { topperLevelBySlug } from '@/lib/topper-catalog';
+
+type Props={params:Promise<{slug:string}>};
+
+export async function generateMetadata({params}:Props):Promise<Metadata>{
+ const {slug}=await params;const level=topperLevelBySlug(slug);
+ if(!level)return{title:'Topos de bolo | Merlin Encantos em Papel'};
+ return{title:`${level.name} | Merlin Encantos em Papel`,description:level.description};
+}
+
 export const dynamic='force-dynamic';
-export default async function ProductPage({params,searchParams}:Props){
-  const {slug}=await params;const preview=(await searchParams)?.preview==='1';const canPreview=preview&&(await isAdmin());const [product,settings,categories]=await Promise.all([getProductBySlug(slug,Boolean(canPreview)),getSiteSettings(),getCategories()]);if(!product)return notFound();const categoryRecord=categories.find(c=>c.name===product.category);const related=await getRelatedPublicProducts(product,3);const phone=digits(settings.whatsapp_number);const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent(`Olá! Vi no catálogo o produto “${product.name}” (${product.price_cents===null?'valor sob orçamento':`a partir de ${formatCatalogMoney(product.price_cents)}`}) e gostaria de confirmar meu orçamento.`)}`:'';
-  const productJsonLd={"@context":"https://schema.org","@type":"Product",name:product.name,description:product.description,image:product.image_urls,url:siteUrl?`${siteUrl}/catalogo/${product.slug}`:undefined,brand:{"@type":"Brand",name:settings.brand_name},offers:product.price_cents!==null?{"@type":"Offer",priceCurrency:'BRL',price:(product.price_cents/100).toFixed(2),availability:product.stock_status==='indisponivel'?'https://schema.org/OutOfStock':product.stock_status==='sob_encomenda'?'https://schema.org/PreOrder':'https://schema.org/InStock',eligibleQuantity:{'@type':'QuantitativeValue',minValue:Math.max(1,product.min_quantity||1)}}:undefined};
-  const breadcrumbJsonLd={"@context":"https://schema.org","@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:'Início',item:siteUrl||undefined},{"@type":"ListItem",position:2,name:product.category,item:siteUrl?(categoryRecord?`${siteUrl}/categorias/${categoryRecord.slug}`:`${siteUrl}/catalogo`):undefined},{"@type":"ListItem",position:3,name:product.name,item:siteUrl?`${siteUrl}/catalogo/${product.slug}`:undefined}]};
-  return <main className="premium-site product-premium-page"><RecentlyViewedTracker slug={product.slug}/><Header settings={settings}/>{canPreview&&<div className="preview-banner">PRÉVIA ADMINISTRATIVA • este produto ainda pode estar oculto ou fora da janela de publicação</div>}<JsonLd data={productJsonLd}/><JsonLd data={breadcrumbJsonLd}/><section className="product-page"><div className="container"><Link className="back-link" href="/catalogo"><ArrowLeft size={16}/> Voltar ao catálogo</Link><div className="product-page-grid"><ProductGallery images={product.image_urls} name={product.name}/><div className="product-page-info"><div className="product-eyebrow-row">{categoryRecord?<Link className="eyebrow product-category-link" href={`/categorias/${categoryRecord.slug}`}>{product.category}</Link>:<div className="eyebrow">{product.category}</div>}{product.badge&&<span className="product-badge">{product.badge}</span>}</div><h1>{product.name}</h1><div className="price product-page-price"><small>{product.price_cents===null?'VALOR':'A PARTIR DE'}</small>{formatCatalogMoney(product.price_cents)}<span className="catalog-price-context">{catalogPriceContext(product.price_cents,product.min_quantity)}</span>{minimumOrderLabel(product.price_cents,product.min_quantity)&&<span className="catalog-minimum-total">{minimumOrderLabel(product.price_cents,product.min_quantity)}</span>}</div><p className="catalog-price-disclaimer">Preço inicial de referência. Tema, quantidade, número de camadas, acabamento, urgência e frete podem alterar o orçamento final.</p>{isIllustrativeCatalogImage(product.image_urls[0])&&<p className="catalog-illustrative-note">Imagem ilustrativa do formato — a arte final é personalizada para o seu tema.</p>}<p className="product-page-description">{product.description}</p><div className="product-facts large"><span><b>Status</b>{product.stock_status==='disponivel'?'Disponível':product.stock_status==='indisponivel'?'Indisponível':'Sob encomenda'}</span>{product.min_quantity&&<span><b>Pedido mínimo</b>{product.min_quantity} unidade(s)</span>}{product.production_time&&<span><b>Prazo</b>{product.production_time}</span>}{product.customization_fields.length>0&&<span><b>Personalização</b>{product.customization_fields.length} campo(s) configurável(is)</span>}</div>{product.tags.length>0&&<div className="tags product-theme-links" aria-label="Temas deste produto">{product.tags.map(t=><Link className="tag" key={t} href={`/temas/${slugifyText(t)}`}>{t}</Link>)}</div>}<div className="product-premium-notes"><span><Check size={15}/> Personalização de tema e cores</span><span><Layers3 size={15}/> Composição pensada para o formato</span><span><Sparkles size={15}/> Acabamento sob encomenda</span></div>{product.customization_fields.length>0?<ProductConfigurator product={product}/>:<ProductOrderPlanner product={product}/>}<div className="product-primary-actions">{wa&&<a className="btn" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={17}/> WhatsApp</a>}<CompareButton product={product} className="btn"/><ShareProductButton name={product.name}/></div></div></div><section className="product-signature"><div><small>01</small><strong>Referência</strong><p>Use este modelo como ponto de partida para definir tema, cores e composição.</p></div><div><small>02</small><strong>Personalização</strong><p>Nome, idade, quantidade e detalhes são ajustados ao seu evento.</p></div><div><small>03</small><strong>Produção</strong><p>O prazo é confirmado de acordo com agenda, complexidade e quantidade.</p></div></section><ProductBuyingGuide product={product}/><div className="product-quote"><div><div className="eyebrow">Orçamento deste item</div><h2>Quer pedir somente esta peça?</h2><p className="muted">Preencha abaixo para enviar direto. Para combinar vários produtos, continue usando “Minha lista”.</p></div><QuoteForm categories={categories} product={product}/></div>{related.length>0&&<section className="related-section"><div className="eyebrow">Complete a composição</div><h2>Peças que combinam com esta referência.</h2><div className="related-grid">{related.map(item=><Link prefetch={false} href={`/catalogo/${item.slug}`} className="related-card" key={item.id}><div><SafeImage src={item.image_urls[0]} alt={item.name} loading="lazy" decoding="async"/></div><span>{item.category}</span><strong>{item.name}</strong></Link>)}</div></section>}</div></section><a className="product-mobile-cta" href={product.customization_fields.length>0?'#personalizacao-produto':'#planejar-pedido'}>{product.customization_fields.length>0?'Personalizar e calcular':'Planejar quantidade'}</a><Footer settings={settings}/></main>;
+
+export default async function TopperLevelPage({params}:Props){
+ const {slug}=await params;const level=topperLevelBySlug(slug);
+ if(!level)redirect('/catalogo');
+ const settings=await getSiteSettings();
+ return <main className="premium-site product-premium-page"><Header settings={settings}/><section className="product-page"><div className="container">
+  <Link className="back-link" href="/catalogo"><ArrowLeft size={16}/> Voltar aos níveis</Link>
+  <div className="product-page-grid"><div className="product-page-info"><div className="eyebrow">{level.code} • {level.eyebrow}</div><h1>{level.name}</h1><p className="product-page-description">{level.description}</p><div className="product-facts large"><span><b>Complexidade</b>{level.complexity}</span><span><b>Valor</b>Sob orçamento</span><span><b>Produção</b>Sob encomenda</span></div>
+  <div className="product-premium-notes">{level.features.map(feature=><span key={feature}><Layers3 size={15}/>{feature}</span>)}</div>
+  <div className="product-signature"><div><small>01</small><strong>Ideal para</strong><p>{level.idealFor}</p></div><div><small>02</small><strong>Materiais possíveis</strong><p>{level.materials.join(' • ')}</p></div><div><small>03</small><strong>Personalização</strong><p>Tema, nome, idade, cores e tamanho são definidos para o seu bolo.</p></div></div>
+  <div className="product-primary-actions"><Link className="btn btn-primary" href={`/monte-seu-topo?nivel=${level.slug}`}>Montar este topo <ArrowUpRight size={16}/></Link><Link className="btn" href="/inspiracoes"><Sparkles size={16}/> Escolher tema</Link></div>
+  </div></div>
+ </div></section><Footer settings={settings}/></main>;
 }

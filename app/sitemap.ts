@@ -1,6 +1,18 @@
 import type { MetadataRoute } from 'next';
-import { getCategories, getPublicTags, getSitemapProducts } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
-import { slugifyText } from '@/lib/seo';
-import { inspirationModels } from '@/lib/inspirations';
-export default async function sitemap():Promise<MetadataRoute.Sitemap>{if(!siteUrl)return[];const [products,categories,tags]=await Promise.all([getSitemapProducts(),getCategories(),getPublicTags(300)]);return[{url:siteUrl,lastModified:new Date(),changeFrequency:'weekly',priority:1},{url:`${siteUrl}/inspiracoes`,lastModified:new Date('2026-09-12'),changeFrequency:'weekly',priority:.9},...inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes/${model.code}`,lastModified:new Date('2026-09-12'),changeFrequency:'monthly' as const,priority:.62})),{url:`${siteUrl}/monte-seu-kit`,lastModified:new Date('2026-09-11'),changeFrequency:'weekly',priority:.9},{url:`${siteUrl}/guia-de-precos`,lastModified:new Date('2026-09-12'),changeFrequency:'weekly',priority:.82},{url:`${siteUrl}/privacidade`,lastModified:new Date('2026-09-08'),changeFrequency:'yearly',priority:.2},{url:`${siteUrl}/termos`,lastModified:new Date('2026-09-08'),changeFrequency:'yearly',priority:.2},...categories.map(c=>({url:`${siteUrl}/categorias/${c.slug}`,lastModified:new Date(c.updated_at),changeFrequency:'monthly' as const,priority:.5})),...tags.map(t=>({url:`${siteUrl}/temas/${slugifyText(t.tag)}`,lastModified:new Date(),changeFrequency:'monthly' as const,priority:.45})),...products.map(p=>({url:`${siteUrl}/catalogo/${p.slug}`,lastModified:new Date(p.updated_at),changeFrequency:'monthly' as const,priority:p.featured?.8:.6}))];}
+import { topperLevels } from '@/lib/topper-catalog';
+
+export default function sitemap():MetadataRoute.Sitemap{
+ if(!siteUrl)return[];
+ const now=new Date();
+ return [
+  {url:siteUrl,lastModified:now,changeFrequency:'weekly',priority:1},
+  {url:`${siteUrl}/catalogo`,lastModified:now,changeFrequency:'weekly',priority:.95},
+  ...topperLevels.map(level=>({url:`${siteUrl}/catalogo/${level.slug}`,lastModified:now,changeFrequency:'monthly' as const,priority:.82})),
+  {url:`${siteUrl}/inspiracoes`,lastModified:now,changeFrequency:'weekly',priority:.9},
+  {url:`${siteUrl}/monte-seu-topo`,lastModified:now,changeFrequency:'weekly',priority:.92},
+  {url:`${siteUrl}/guia-de-precos`,lastModified:now,changeFrequency:'weekly',priority:.82},
+  {url:`${siteUrl}/privacidade`,lastModified:now,changeFrequency:'yearly',priority:.2},
+  {url:`${siteUrl}/termos`,lastModified:now,changeFrequency:'yearly',priority:.2}
+ ];
+}
