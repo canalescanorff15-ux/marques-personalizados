@@ -31,7 +31,7 @@ for(const feature of ['facetCount','filterInspirations','inspirationQuickFilters
   assert(explorer.includes(feature),`recurso não integrado ao explorador: ${feature}`);
 }
 
-const exclusiveCodes=[...Array.from({length:10},(_,index)=>`INSP-${String(index+1).padStart(3,'0')}`),...Array.from({length:10},(_,index)=>`INSP-${String(index+41).padStart(3,'0')}`)];
+const exclusiveCodes=['INSP-001','INSP-002','INSP-003','INSP-004','INSP-005','INSP-006','INSP-007','INSP-008','INSP-010','INSP-041','INSP-042','INSP-043','INSP-044','INSP-045','INSP-046','INSP-047','INSP-048','INSP-050'];
 for(const code of exclusiveCodes){
   const expectedPath=`/inspirations/reais/${code.toLowerCase()}.webp`;
   assert(artwork.includes(`'${code}'`),`imagem exclusiva não mapeada: ${code}`);

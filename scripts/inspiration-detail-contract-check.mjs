@@ -1,4 +1,6 @@
+import './inspiration-image-quality-check.mjs';
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 
 const errors=[];
 const route=fs.readFileSync('app/inspiracoes/[code]/page.tsx','utf8');
@@ -17,34 +19,47 @@ if(!route.includes('getRelatedInspirations(model,4)'))errors.push('Ficha individ
 if(!route.includes('whatsappUrl(settings.whatsapp_number'))errors.push('Ficha individual precisa gerar orçamento contextual pelo WhatsApp oficial.');
 if(!route.includes('/monte-seu-kit?inspiracao='))errors.push('Ficha individual precisa permitir levar a referência diretamente ao Monte seu Kit.');
 if(!route.includes('CreativeWork')||!route.includes('BreadcrumbList'))errors.push('Ficha individual precisa publicar metadados estruturados sem fingir que a inspiração é produto pronto.');
-if(!cards.includes('`/inspiracoes/${encodeURIComponent(model.code)}`'))errors.push('Cards do catálogo precisam abrir a ficha individual, não apenas refiltrar o catálogo.');
-if(!kit.includes("params.get('inspiracao')")||!kit.includes("params.get('inspiracoes')"))errors.push('Monte seu Kit precisa aceitar uma ou várias inspirações por deep-link.');
-if(!sitemap.includes('inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes/${model.code}`'))errors.push('Sitemap precisa incluir as fichas individuais de inspiração.');
-if(!data.includes('export function getInspirationByCode')||!data.includes('export function getRelatedInspirations'))errors.push('Resolução e recomendação de inspirações precisam ter autoridade única em lib/inspirations.ts.');
-if(!share.includes('navigator.share')||!share.includes('navigator.clipboard'))errors.push('Compartilhamento precisa ter Web Share com fallback de cópia.');
+if(!cards.includes('`/inspiracoes/${encodeURIComponent(model.code)}`'))errors.push('Cards do catálogo precisam abrir a ficha individual.');
+if(!kit.includes("params.get('inspiracao')")||!kit.includes("params.get('inspiracoes')"))errors.push('Monte seu Kit precisa aceitar deep-link de inspirações.');
+if(!sitemap.includes('inspirationModels.map(model=>({url:`${siteUrl}/inspiracoes/${model.code}`'))errors.push('Sitemap precisa incluir fichas individuais.');
+if(!data.includes('export function getInspirationByCode')||!data.includes('export function getRelatedInspirations'))errors.push('Resolução/recomendação precisam ter autoridade única.');
+if(!share.includes('navigator.share')||!share.includes('navigator.clipboard'))errors.push('Compartilhamento precisa ter Web Share com fallback.');
 
-if(!cards.includes('<InspirationArtwork model={model}'))errors.push('Cards precisam usar a referência fotográfica oficial.');
-if(!route.includes('<InspirationArtwork model={model} label/>'))errors.push('Ficha individual precisa reutilizar a referência fotográfica da inspiração.');
-if(!compare.includes('<InspirationArtwork model={model}/>'))errors.push('Comparador precisa reutilizar a referência fotográfica da inspiração.');
-if(!concierge.includes('<InspirationArtwork model={model}/>'))errors.push('Curadoria guiada precisa reutilizar a referência fotográfica quando cair em inspirações.');
-if(!artwork.includes("type PhotoKey='topper'|'firstBirthday'|'boxes'|'woodland'|'ballerina'|'keepsake'"))errors.push('InspirationArtwork precisa manter as seis famílias fotográficas oficiais.');
-if(!artwork.includes('<img src={photo.src}')||artwork.includes('<svg'))errors.push('InspirationArtwork precisa renderizar fotografia real, não voltar para SVG conceitual.');
+if(!cards.includes('<InspirationArtwork model={model}'))errors.push('Cards precisam usar InspirationArtwork.');
+if(!route.includes('<InspirationArtwork model={model} label/>')&&!route.includes('<InspirationArtwork model={model} label detail/>'))errors.push('Ficha individual precisa reutilizar InspirationArtwork.');
+if(!compare.includes('<InspirationArtwork model={model}/>'))errors.push('Comparador precisa reutilizar InspirationArtwork.');
+if(!concierge.includes('<InspirationArtwork model={model}/>'))errors.push('Curadoria precisa reutilizar InspirationArtwork.');
+if(!artwork.includes('const codePhotos:Record<string,PhotoDefinition>'))errors.push('Mapeamento explícito por código ausente.');
+if(!artwork.includes('Imagem exclusiva em produção'))errors.push('INSP sem foto própria precisa usar placeholder neutro.');
+if(artwork.includes('photoKeyFor')||artwork.includes('fallbackOrder'))errors.push('Fallback fotográfico compartilhado é proibido.');
+if(!artwork.includes('<img src={src}')||artwork.includes('<svg'))errors.push('Foto real precisa ser renderizada quando mapeada.');
 
-const photoAssets=[
-  'public/inspirations/reais/topo-floral-dourado.webp',
-  'public/inspirations/reais/mesa-primeiro-aniversario.webp',
-  'public/inspirations/reais/caixas-florais-personalizadas.webp',
-  'public/inspirations/reais/cupcakes-floresta.webp',
-  'public/inspirations/reais/topo-bailarina-rosa.webp',
-  'public/inspirations/reais/lembrancas-botanicas-verde-dourado.webp',
-];
-for(const asset of photoAssets){
-  if(!fs.existsSync(asset)||fs.statSync(asset).size<1000)errors.push(`Referência fotográfica ausente ou inválida: ${asset}`);
+const mapped=[...artwork.matchAll(/'(INSP-\d{3})':\{src:'([^']+)'/g)].map(([,code,src])=>({code,src}));
+const bySrc=new Map();
+const byHash=new Map();
+for(const item of mapped){
+  if(bySrc.has(item.src))errors.push(`Imagem repetida: ${bySrc.get(item.src)} e ${item.code} usam ${item.src}.`);
+  else bySrc.set(item.src,item.code);
+
+  const assetPath=`public${item.src}`;
+  if(!fs.existsSync(assetPath)){
+    errors.push(`${item.code}: arquivo mapeado não existe no repositório (${assetPath}).`);
+    continue;
+  }
+  const bytes=fs.readFileSync(assetPath);
+  const hash=crypto.createHash('sha256').update(bytes).digest('hex');
+  if(byHash.has(hash))errors.push(`Duplicata binária: ${byHash.get(hash)} e ${item.code} têm o mesmo SHA-256.`);
+  else byHash.set(hash,item.code);
 }
+
+for(const quarantined of ['INSP-009','INSP-049','INSP-102','INSP-113','INSP-114','INSP-115','INSP-116','INSP-117','INSP-118','INSP-119']){
+  if(mapped.some(item=>item.code===quarantined))errors.push(`${quarantined} permanece em quarentena até o arquivo visualmente aprovado estar versionado.`);
+}
+
 for(const [surface,source] of [['cards',cards],['detail',route],['compare',compare],['concierge',concierge]]){
-  if(source.includes('inspiration-monogram')||/function initials\(/.test(source)||source.includes("title.slice(0,2).toUpperCase()"))errors.push(`${surface}: não pode voltar ao placeholder de iniciais/monograma como arte principal.`);
+  if(source.includes('inspiration-monogram')||/function initials\(/.test(source)||source.includes("title.slice(0,2).toUpperCase()"))errors.push(`${surface}: não pode voltar ao placeholder de iniciais/monograma.`);
 }
-for(const token of ['.inspiration-artwork','.inspiration-artwork.inspiration-photo img','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork','.kit-inspiration-thumb>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual fotográfico sem regra ${token}.`);
+for(const token of ['.inspiration-artwork','.inspiration-artwork.inspiration-photo img','.inspiration-detail-art>.inspiration-artwork','.inspiration-compare-art>.inspiration-artwork','.concierge-inspiration-art>.inspiration-artwork','.kit-inspiration-thumb>.inspiration-artwork'])if(!artworkCss.includes(token))errors.push(`Sistema visual sem regra ${token}.`);
 
 if(errors.length){console.error(`Inspiration Detail Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error(`- ${error}`);process.exit(1);}
-console.log('Inspiration Detail Contract Check: OK (ficha, catálogo, comparador, curadoria, SEO e referências fotográficas reais consistentes).');
+console.log(`Inspiration Detail Contract Check: OK (${mapped.length} referências exclusivas; caminhos e hashes únicos; arquivos presentes).`);
