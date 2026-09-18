@@ -22,10 +22,15 @@ export function readInspirationFavorites(){
 
 export function writeInspirationFavorites(codes:string[]){
   if(typeof window==='undefined')return {ok:false,codes:[] as string[],reason:'unavailable' as const};
-  const next=[...new Set(codes.filter(Boolean))].slice(0,FAVORITES_LIMIT);
+  const requested=[...new Set(codes.filter(Boolean))];
+  const next=requested.slice(0,FAVORITES_LIMIT);
   try{
     localStorage.setItem(INSPIRATION_FAVORITES_KEY,JSON.stringify(next));
     window.dispatchEvent(new CustomEvent(INSPIRATION_FAVORITES_EVENT,{detail:next}));
+    if(requested.length>FAVORITES_LIMIT){
+      window.dispatchEvent(new CustomEvent(INSPIRATION_FAVORITES_ERROR_EVENT,{detail:{message:'Você atingiu o limite de 24 favoritos.'}}));
+      return {ok:false,codes:next,reason:'limit' as const};
+    }
     return {ok:true,codes:next,reason:null};
   }catch{
     const current=readInspirationFavorites();
@@ -51,7 +56,8 @@ export default function InspirationFavoriteButton({code}:{code:string}){
     const current=readInspirationFavorites();
     const result=writeInspirationFavorites(saved?current.filter(item=>item!==code):[...current,code]);
     if(result.ok){setSaved(result.codes.includes(code));setMessage(result.codes.includes(code)?'Salvo nos favoritos.':'Removido dos favoritos.');window.setTimeout(()=>setMessage(''),1800);}
+    else if(result.reason==='limit'){setMessage('Limite de 24 favoritos atingido.');window.setTimeout(()=>setMessage(''),3000);}
   }
 
-  return <span className="favorite-control"><button type="button" className={`inspiration-favorite${saved?' is-saved':''}`} aria-pressed={saved} aria-label={saved?'Remover dos favoritos':'Adicionar aos favoritos'} title={saved?'Remover dos favoritos':'Salvar inspiração'} onClick={toggle}><Heart size={18} fill={saved?'currentColor':'none'}/></button>{message&&<span className="sr-only" role="status">{message}</span>}</span>;
+  return <span className="favorite-control"><button type="button" className={`inspiration-favorite${saved?' is-saved':''}`} aria-pressed={saved} aria-label={saved?'Remover dos favoritos':'Adicionar aos favoritos'} title={saved?'Remover dos favoritos':'Salvar inspiração'} onClick={toggle}><Heart size={18} fill={saved?'currentColor':'none'}/></button>{message&&<span className="favorite-feedback" role="status">{message}</span>}</span>;
 }
