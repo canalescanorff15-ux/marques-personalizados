@@ -3,6 +3,7 @@ import fs from 'node:fs';
 const errors=[];
 const exists=p=>fs.existsSync(p);
 const read=p=>fs.readFileSync(p,'utf8');
+const nextConfig=read('next.config.ts');
 
 for(const file of [
   'components/PublicTopperHeader.tsx',
@@ -41,6 +42,8 @@ if(exists('components/InspirationFavoriteButton.tsx')){
   if(!f.includes('try')||!f.includes('catch'))errors.push('favoritos precisam tratar armazenamento indisponível');
   if(!f.includes('kf_inspiration_favorites_v1'))errors.push('chave legada de favoritos precisa ser preservada');
 }
+
+if(nextConfig.includes("source: '/inspiracoes/:code'"))errors.push('redirect global ainda bloqueia os detalhes atuais de inspirações');
 
 if(errors.length){
   console.error(`V7.10 Public Redesign Contract: FALHOU (${errors.length})`);
