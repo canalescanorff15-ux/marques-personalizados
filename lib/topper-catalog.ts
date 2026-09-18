@@ -13,17 +13,17 @@ export type TopperLevel={
 
 export const topperLevels:TopperLevel[]=[
   {
-    slug:'essencial',code:'TOP-01',name:'Topo Essencial',eyebrow:'SIMPLES E BONITO',
-    description:'Composição leve com nome, idade e poucos elementos principais do tema.',
-    idealFor:'Quem quer um topo personalizado, limpo e econômico.',
+    slug:'essencial',code:'TOP-01',name:'Topo Simples',eyebrow:'SIMPLES, BONITO E PERSONALIZADO',
+    description:'Topo direto e personalizado, com nome, idade e poucos elementos principais do tema.',
+    idealFor:'Quem está começando e quer um topo bonito, personalizado e mais econômico.',
     complexity:'1 camada principal',
     features:['Nome e idade','2 a 4 elementos temáticos','Composição limpa','Recorte preciso'],
     materials:['Papel fotográfico ou matte','Hastes para aplicação']
   },
   {
-    slug:'camadas-3d',code:'TOP-02',name:'Topo em Camadas 3D',eyebrow:'MAIS VOLUME',
+    slug:'camadas-3d',code:'TOP-02',name:'Topo Básico 3D',eyebrow:'VOLUME SEM EXAGERO',
     description:'Elementos sobrepostos com fita banana para criar profundidade sem exagerar na quantidade de peças.',
-    idealFor:'Festas que pedem mais presença no bolo sem chegar ao nível premium.',
+    idealFor:'Quem quer mais presença e profundidade no bolo sem chegar ao nível premium.',
     complexity:'2 a 3 camadas',
     features:['Efeito 3D','Nome em destaque','Elementos sobrepostos','Mais profundidade'],
     materials:['Papel fotográfico/matte','Color Plus','Fita banana']
@@ -54,8 +54,8 @@ export const topperLevels:TopperLevel[]=[
   },
   {
     slug:'elite-shaker-acetato',code:'TOP-06',name:'Topo Elite Shaker + Acetato',eyebrow:'NOSSO TOPO MAIS COMPLETO',
-    description:'O topo de maior nível: multicamadas, shaker, acetato e composição cenográfica equilibrada, seguindo o padrão do prompt premium em desenvolvimento.',
-    idealFor:'Quem quer o máximo de impacto, profundidade e acabamento dentro da linha de topos.',
+    description:'Nosso topo mais completo: multicamadas, shaker e acetato combinados em uma composição premium, seguindo o padrão do prompt avançado em desenvolvimento.',
+    idealFor:'Quem quer o máximo de impacto, profundidade e acabamento que conseguimos oferecer em um topo de bolo.',
     complexity:'4 a 6+ camadas + shaker + acetato',
     features:['Shaker integrado','Acetato estrutural','Multicamadas avançadas','Efeito 3D','Elementos independentes','Composição premium para fotos'],
     materials:['Acetato','Papéis especiais conforme o projeto','Fita banana/espuma 3D','Elementos shaker','Hastes e reforços estruturais']
