@@ -7,7 +7,7 @@ import { getAttribution } from '@/lib/attribution-client';
 import { topperLevels } from '@/lib/topper-catalog';
 
 type InquiryResponse={ok:boolean;persisted?:boolean;whatsapp_url?:string};
-function makeRequestId(){if(globalThis.crypto?.randomUUID)return globalThis.crypto.randomUUID();return `topo-${Date.now()}-${Math.random().toString(16).slice(2)}`;}
+function makeRequestId(){if(globalThis.crypto?.randomUUID)return globalThis.crypto.randomUUID();const b=new Uint8Array(16);globalThis.crypto.getRandomValues(b);b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;const h=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;}
 function todayLocal(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
 
 export default function TopperBuilder(){
