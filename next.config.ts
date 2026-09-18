@@ -43,8 +43,7 @@ const nextConfig: NextConfig = {
       { source: '/categorias/:path*', destination: '/catalogo', permanent: true },
       { source: '/temas/:path*', destination: '/inspiracoes', permanent: true },
       { source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true },
-      { source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true },
-      { source: '/inspiracoes/:code', destination: '/inspiracoes', permanent: true }
+      { source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }
     ];
   },
   async headers() {
