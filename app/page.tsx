@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowUpRight, CheckCircle2, Layers3, MessageCircle, Scissors, Sparkles, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import TopperLevelVisual from '@/components/TopperLevelVisual';
 import MerlinMobileDock from '@/components/MerlinMobileDock';
 import JsonLd from '@/components/JsonLd';
 import { getSiteSettings, getTestimonials } from '@/lib/db';
@@ -16,7 +17,7 @@ export default async function HomePage(){
   const phone=digits(settings.whatsapp_number);
   const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.')}`:'';
   const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do simples ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
-  return <main className="premium-site kf-theme home-v672 home-v673 home-v680">
+  return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712">
     <Header settings={settings}/><JsonLd data={organizationJsonLd}/>
 
     <section className="hero premium-hero kf-hero" id="inicio"><div className="container hero-grid"><div className="hero-copy-column" data-reveal>
@@ -30,7 +31,7 @@ export default async function HomePage(){
     <section className="category-showcase premium-categories home-categories" id="topos"><div className="container">
       <div className="section-index" data-reveal><span>01</span><i/><small>NÍVEIS DE TOPO</small></div>
       <div className="catalog-head" data-reveal><div><div className="eyebrow">Escolha pelo acabamento</div><h2 className="section-title">Comece simples.<br/><em>Evolua até o Elite.</em></h2></div><p className="muted">A diferença entre os modelos está na quantidade de camadas, profundidade e acabamentos como shaker e acetato.</p></div>
-      <div className="category-grid editorial-grid home-category-grid">{topperLevels.map((level,i)=><Link className="category-card editorial-category" href={`/catalogo/${level.slug}`} key={level.slug} data-reveal><div className="category-card-art"><span>{level.code}</span><div className="category-overlay"/></div><div className="category-copy"><small>{String(i+1).padStart(2,'0')}</small><strong>{level.name}</strong><span>{level.complexity}</span><span className="category-link">Ver detalhes <ArrowUpRight size={15}/></span></div></Link>)}</div>
+      <div className="category-grid editorial-grid home-category-grid">{topperLevels.map((level,i)=><Link className="category-card editorial-category" href={`/catalogo/${level.slug}`} key={level.slug} data-reveal><div className="category-card-art public-level-art"><TopperLevelVisual level={level} compact/><span>{level.code}</span><div className="category-overlay"/></div><div className="category-copy"><small>{String(i+1).padStart(2,'0')}</small><strong>{level.name}</strong><span>{level.complexity}</span><span className="category-link">Ver detalhes <ArrowUpRight size={15}/></span></div></Link>)}</div>
     </div></section>
 
     <section className="event-pathways kf-order-pathways home-start"><div className="container"><div className="section-index" data-reveal><span>02</span><i/><small>COMO PEDIR</small></div><div className="event-pathways-shell" data-reveal><div className="event-pathways-copy"><div className="eyebrow">Pedido direto e sem complicação</div><h2>Três passos.<br/><em>Um topo feito para o seu bolo.</em></h2><p>Escolha o nível, informe tema/nome/idade e envie o briefing para orçamento.</p></div><div className="event-pathways-primary"><Link href="/catalogo"><small>01 • NÍVEL</small><strong>Escolher o tipo de topo</strong><span>Ver opções <ArrowUpRight size={15}/></span></Link><Link href="/inspiracoes"><small>02 • ESTILO</small><strong>Escolher tema e linguagem</strong><span>Ver ideias <ArrowUpRight size={15}/></span></Link><Link href="/monte-seu-topo"><small>03 • BRIEFING</small><strong>Montar meu topo</strong><span>Enviar pedido <ArrowUpRight size={15}/></span></Link></div></div></div></section>
