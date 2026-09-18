@@ -46,3 +46,24 @@
 @media(max-width:1050px){.kit-selected-inspirations{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.kit-selected-inspirations{grid-template-columns:1fr}.kit-inspiration-thumb{width:58px;height:58px}.kit-selected-inspirations button,.kit-inspiration-suggestions>button{grid-template-columns:58px minmax(0,1fr) 18px}}
 @media(max-width:620px){.inspiration-artwork-label{display:none}.inspiration-detail-art>.inspiration-artwork,.inspiration-compare-art>.inspiration-artwork{inset:0}}
+
+
+/* V6.98 — referências visuais oficiais dos níveis de topo */
+.topper-level-visual{margin:0;display:grid;gap:10px}
+.topper-level-visual-frame{position:relative;overflow:hidden;aspect-ratio:1/1;border:1px solid rgba(137,96,68,.16);border-radius:22px;background:#f5ebe3;box-shadow:0 16px 36px rgba(90,58,43,.08)}
+.topper-level-visual-frame img{display:block;width:100%;height:100%;object-fit:cover}
+.topper-level-visual-frame>span{position:absolute;left:12px;top:12px;padding:6px 8px;border:1px solid rgba(255,255,255,.56);border-radius:999px;background:rgba(62,43,35,.64);backdrop-filter:blur(8px);color:#fffaf6;font-size:.52rem;font-weight:900;letter-spacing:.08em}
+.topper-level-visual figcaption{display:grid;gap:2px}
+.topper-level-visual figcaption strong{font-size:.92rem;color:var(--kf-ink,#4e382f)}
+.topper-level-visual figcaption small{color:#9b837a;font-size:.7rem}
+.inspiration-investment-grid.topper-level-grid>a{align-items:start}
+.inspiration-investment-grid.topper-level-grid>a>.topper-level-visual{grid-column:1/-1;width:100%;margin-bottom:5px}
+.inspiration-investment-grid.topper-level-grid>a>.topper-level-visual.compact .topper-level-visual-frame{border-radius:16px}
+.topper-builder-selected-visual{width:min(520px,100%);margin:0 auto 22px}
+.topper-builder-selected-visual .topper-level-visual-frame{aspect-ratio:16/10}
+.topper-builder-selected-visual .topper-level-visual-frame img{object-fit:cover}
+@media(max-width:680px){
+  .inspiration-investment-grid.topper-level-grid>a>.topper-level-visual{margin-bottom:2px}
+  .topper-level-visual-frame{border-radius:16px}
+  .topper-builder-selected-visual{margin-bottom:16px}
+}
