@@ -14,9 +14,10 @@ else{
   if(new Set(codes).size!==codes.length)errors.push('códigos das inspirações precisam ser únicos');
   if(images.length!==17)errors.push(`cada inspiração precisa declarar imagem; encontrou ${images.length}`);
   if(new Set(images).size!==images.length)errors.push('cada inspiração precisa usar imagem exclusiva');
-  const webpImages=images.filter(image=>image.endsWith('.webp'));
-  if(webpImages.length<6)errors.push(`V7.00 precisa ter ao menos 6 inspirações reais em WebP; encontrou ${webpImages.length}`);
+  const realImages=images.filter(image=>image.startsWith('https://merlin-topper-assets.floot.app/_cdn/static/')&&/\.(?:png|webp)$/i.test(image));
+  if(realImages.length<6)errors.push(`V7.00 precisa ter ao menos 6 inspirações reais hospedadas em alta qualidade; encontrou ${realImages.length}`);
   for(const image of images){
+    if(/^https:\/\//.test(image))continue;
     const file=`public${image}`;
     if(!fs.existsSync(file))errors.push(`asset de inspiração ausente: ${file}`);
   }
@@ -37,4 +38,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Topper Inspiration Gallery Contract: OK — 17 inspirações exclusivas, 6+ WebPs reais, CTA e handoff para Monte seu topo.');
+console.log('Topper Inspiration Gallery Contract: OK — 17 inspirações exclusivas, 6+ imagens reais em alta qualidade, CTA e handoff para Monte seu topo.');
