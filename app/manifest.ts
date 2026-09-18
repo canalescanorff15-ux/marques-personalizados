@@ -25,7 +25,8 @@ export default async function manifest():Promise<MetadataRoute.Manifest>{
     shortcuts:[
       {name:'Inspirações',short_name:'Inspirações',url:'/inspiracoes',icons:[{src:'/pwa-icon-192.png',sizes:'192x192',type:'image/png'}]},
       {name:'Topos',short_name:'Topos',url:'/catalogo',icons:[{src:'/pwa-icon-192.png',sizes:'192x192',type:'image/png'}]},
-      {name:'Monte seu topo',short_name:'Montar topo',url:'/monte-seu-topo',icons:[{src:'/pwa-icon-192.png',sizes:'192x192',type:'image/png'}]}
+      {name:'Monte seu topo',short_name:'Montar topo',url:'/monte-seu-topo',icons:[{src:'/pwa-icon-192.png',sizes:'192x192',type:'image/png'}]},
+      {name:'Pedir orçamento',short_name:'Orçamento',url:'/orcamento',icons:[{src:'/pwa-icon-192.png',sizes:'192x192',type:'image/png'}]}
     ]
   };
 }
