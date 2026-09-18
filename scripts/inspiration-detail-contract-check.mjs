@@ -51,11 +51,8 @@ for(const item of mapped){
   else byHash.set(hash,item.code);
 }
 
-for(const quarantined of ['INSP-009','INSP-049','INSP-119']){
+for(const quarantined of ['INSP-009','INSP-049','INSP-102','INSP-113','INSP-114','INSP-115','INSP-116','INSP-117','INSP-118','INSP-119']){
   if(mapped.some(item=>item.code===quarantined))errors.push(`${quarantined} permanece em quarentena até o arquivo visualmente aprovado estar versionado.`);
-}
-for(const required of ['INSP-102','INSP-113','INSP-114','INSP-115','INSP-116','INSP-117','INSP-118']){
-  if(!mapped.some(item=>item.code===required))errors.push(`${required} foi validada e precisa permanecer no mapeamento exclusivo.`);
 }
 
 for(const [surface,source] of [['cards',cards],['detail',route],['compare',compare],['concierge',concierge]]){
