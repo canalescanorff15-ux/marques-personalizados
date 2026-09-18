@@ -37,6 +37,16 @@ const nextConfig: NextConfig = {
     qualities: [75,76,82],
     minimumCacheTTL: 3600
   },
+  async redirects() {
+    return [
+      { source: '/monte-seu-kit', destination: '/monte-seu-topo', permanent: true },
+      { source: '/categorias/:path*', destination: '/catalogo', permanent: true },
+      { source: '/temas/:path*', destination: '/inspiracoes', permanent: true },
+      { source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true },
+      { source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true },
+      { source: '/inspiracoes/:code', destination: '/inspiracoes', permanent: true }
+    ];
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },
