@@ -5,6 +5,7 @@ import './shell-v681.css';
 import './catalog-v676.css';
 import './catalog-photo-focus-v692.css';
 import './inspiration-v687.css';
+import './public-v710.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
@@ -16,7 +17,7 @@ import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 
 const topperDescription='Topos de bolo personalizados sob encomenda, do modelo Simples ao Elite com shaker e acetato.';
-export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fff7f2'};
+export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fffafb'};
 
 export async function generateMetadata():Promise<Metadata>{
  const s=await getSiteSettings();
