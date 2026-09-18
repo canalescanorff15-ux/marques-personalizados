@@ -5,7 +5,7 @@ import SocialLinks from './SocialLinks';
 import SafeImage from './SafeImage';
 
 export default function Footer({settings}:{settings:SiteSettings}){
-  return <footer className="footer premium-footer kf-footer">
+  return <footer className="footer premium-footer kf-footer public-v712-footer">
     <div className="container premium-footer-top">
       <div className="footer-brand-block"><span className="kf-footer-logo"><SafeImage src={settings.logo_url||'/merlin-logo.webp'} alt=""/></span><div><strong>{settings.brand_name}</strong><p>Topos de bolo personalizados, do modelo simples ao Elite com shaker e acetato. Produção sob encomenda, pensada para o tema e o tamanho do seu bolo.</p><SocialLinks settings={settings} className="footer-social-links"/></div></div>
       <div className="footer-contact-grid">
