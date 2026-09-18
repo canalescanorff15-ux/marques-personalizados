@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Heart, Layers3, Search, SlidersHorizontal, X } from 'lucide-react';
 import { topperInspirations } from '@/lib/topper-inspirations';
 import { topperLevels } from '@/lib/topper-catalog';
@@ -50,6 +50,9 @@ export default function TopperInspirationGallery(){
   const [favoriteCodes,setFavoriteCodes]=useState<string[]>([]);
   const [visible,setVisible]=useState(PAGE_SIZE);
   const [ready,setReady]=useState(false);
+  const [filterOpen,setFilterOpen]=useState(false);
+  const filterTriggerRef=useRef<HTMLButtonElement>(null);
+  const filterCloseRef=useRef<HTMLButtonElement>(null);
 
   const categories=useMemo(()=>[...new Set(topperInspirations.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,'pt-BR')),[ ]);
 
@@ -65,6 +68,29 @@ export default function TopperInspirationGallery(){
     window.addEventListener('storage',onFavorites);
     return()=>{window.removeEventListener('popstate',onPop);window.removeEventListener(INSPIRATION_FAVORITES_EVENT,onFavorites);window.removeEventListener('storage',onFavorites);};
   },[]);
+
+  useEffect(()=>{
+    if(!filterOpen)return;
+    const previousOverflow=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    requestAnimationFrame(()=>filterCloseRef.current?.focus());
+    const onKeyDown=(event:KeyboardEvent)=>{
+      if(event.key==='Escape'){
+        setFilterOpen(false);
+        requestAnimationFrame(()=>filterTriggerRef.current?.focus());
+      }
+    };
+    window.addEventListener('keydown',onKeyDown);
+    return()=>{
+      document.body.style.overflow=previousOverflow;
+      window.removeEventListener('keydown',onKeyDown);
+    };
+  },[filterOpen]);
+
+  function closeFilters(){
+    setFilterOpen(false);
+    requestAnimationFrame(()=>filterTriggerRef.current?.focus());
+  }
 
   function syncUrl(next:Filters,push:boolean){
     const url=new URL(window.location.href);
@@ -107,8 +133,10 @@ export default function TopperInspirationGallery(){
   const active=Boolean(filters.query||filters.categoria||filters.nivel||filters.favoritos||filters.ordem!=='catalog');
 
   return <div className="public-gallery-layout">
-    <aside className="public-gallery-filters" aria-label="Filtros de inspirações">
-      <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtrar inspirações</strong><small>Encontre o estilo ideal</small></div></div>
+    <button ref={filterTriggerRef} type="button" className="public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={17}/> Filtros{active&&<span>ativos</span>}</button>
+    {filterOpen&&<button type="button" className="public-filter-backdrop" aria-label="Fechar filtros" onClick={closeFilters}/>}
+    <aside id="public-gallery-filters" className={filterOpen?'public-gallery-filters is-open':'public-gallery-filters'} aria-label="Filtros de inspirações" role={filterOpen?'dialog':undefined} aria-modal={filterOpen?true:undefined}>
+      <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtrar inspirações</strong><small>Encontre o estilo ideal</small></div><button ref={filterCloseRef} type="button" className="public-filter-close" onClick={closeFilters} aria-label="Fechar filtros"><X size={18}/></button></div>
 
       <label className="public-filter-search"><span>Buscar</span><div><Search size={16}/><input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Tema, código, cor..."/>{filters.query&&<button type="button" onClick={()=>apply({...filters,query:''},true)} aria-label="Limpar busca"><X size={14}/></button>}</div></label>
 
@@ -119,6 +147,7 @@ export default function TopperInspirationGallery(){
       <button type="button" className={filters.favoritos?'public-favorites-filter is-active':'public-favorites-filter'} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={16} fill={filters.favoritos?'currentColor':'none'}/> Favoritos <span>{favoriteCodes.length}</span></button>
 
       {active&&<button type="button" className="public-clear-filters" onClick={clearFilters}>Limpar filtros</button>}
+      <button type="button" className="public-filter-apply" onClick={closeFilters}>Ver {results.length} {results.length===1?'resultado':'resultados'}</button>
     </aside>
 
     <section className="public-gallery-results">
