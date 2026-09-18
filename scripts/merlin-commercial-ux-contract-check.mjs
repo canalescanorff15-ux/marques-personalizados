@@ -14,6 +14,7 @@ const quotePage=read('app/orcamento/page.tsx');
 const builder=read('components/TopperBuilder.tsx');
 const topperInspirationContract='scripts/topper-inspiration-gallery-contract-check.mjs';
 const publicRedesignContract='scripts/public-redesign-contract-check.mjs';
+const topperDraftContract='scripts/topper-draft-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -40,6 +41,12 @@ if(!fs.existsSync(publicRedesignContract))errors.push('contrato da remodelação
 else{
   const publicCheck=spawnSync(process.execPath,[publicRedesignContract],{encoding:'utf8'});
   if(publicCheck.status!==0)errors.push((publicCheck.stderr||publicCheck.stdout||'contrato da remodelação pública falhou').trim());
+}
+
+if(!fs.existsSync(topperDraftContract))errors.push('contrato do rascunho de topo ausente');
+else{
+  const draftCheck=spawnSync(process.execPath,[topperDraftContract],{encoding:'utf8'});
+  if(draftCheck.status!==0)errors.push((draftCheck.stderr||draftCheck.stdout||'contrato do rascunho falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
