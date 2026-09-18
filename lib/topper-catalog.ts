@@ -54,7 +54,7 @@ export const topperLevels:TopperLevel[]=[
   },
   {
     slug:'elite-shaker-acetato',code:'TOP-06',name:'Topo Elite Shaker + Acetato',eyebrow:'NOSSO TOPO MAIS COMPLETO',
-    description:'O topo de maior nível: multicamadas, shaker, acetato e composição cenográfica equilibrada, seguindo o padrão do prompt premium em desenvolvimento.',
+    description:'O topo de maior nível: multicamadas, shaker, acetato e composição cenográfica equilibrada, com acabamento premium e forte impacto visual.',
     idealFor:'Quem quer o máximo de impacto, profundidade e acabamento dentro da linha de topos.',
     complexity:'4 a 6+ camadas + shaker + acetato',
     features:['Shaker integrado','Acetato estrutural','Multicamadas avançadas','Efeito 3D','Elementos independentes','Composição premium para fotos'],
