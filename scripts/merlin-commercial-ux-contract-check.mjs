@@ -11,6 +11,7 @@ const catalogPage=read('app/catalogo/page.tsx');
 const inspirationsPage=read('app/inspiracoes/page.tsx');
 const quotePage=read('app/orcamento/page.tsx');
 const builder=read('components/TopperBuilder.tsx');
+const topperInspirationContract='scripts/topper-inspiration-gallery-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -31,6 +32,12 @@ if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não co
 if(!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home não orienta o cliente sobre adequação ao bolo');
 for(const [name,source] of [['home',home],['catalogo',catalogPage],['inspiracoes',inspirationsPage],['orcamento',quotePage]]){
   for(const forbidden of ['caixas, kits ou lembrancinhas','antigo orçamento de vários produtos','fotos antigas de mesas completas'])if(source.includes(forbidden))errors.push(`${name} ainda exibe linguagem do catálogo antigo: ${forbidden}`);
+}
+
+if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
+else{
+  const gallery=fs.readFileSync(topperInspirationContract,'utf8');
+  if(!gallery.includes('12 inspirações exclusivas'))errors.push('contrato da galeria de inspirações não está ativo');
 }
 
 if(errors.length){console.error(`Merlin Topper Commercial UX: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
