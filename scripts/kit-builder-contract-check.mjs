@@ -6,7 +6,7 @@ const catalog=read('lib/topper-catalog.ts');
 const builder=read('components/TopperBuilder.tsx');
 const page=read('app/monte-seu-topo/page.tsx');
 const legacy=read('app/monte-seu-kit/page.tsx');
-const header=read('components/Header.tsx');
+const header=read('components/PublicTopperHeader.tsx');
 const home=read('app/page.tsx');
 const sitemap=read('app/sitemap.ts');
 

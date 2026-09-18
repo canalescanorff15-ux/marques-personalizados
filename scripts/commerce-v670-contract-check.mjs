@@ -11,7 +11,7 @@ const home=must('app/page.tsx',['href="/catalogo"','href="/guia-de-precos"','hre
 const price=must('app/guia-de-precos/page.tsx',['topperLevels.map','Sob orçamento','shaker','acetato','/monte-seu-topo']);
 const detail=must('app/catalogo/[slug]/page.tsx',['topperLevelBySlug','level.features','level.materials','/monte-seu-topo?nivel=']);
 const builder=must('components/TopperBuilder.tsx',["'/api/inquiries'","cake_size","desired_categories:['Topos de bolo']","product_name:selected.name"]);
-const header=must('components/Header.tsx',['/guia-de-precos','href="/orcamento"','href="/monte-seu-topo"']);
+const header=must('components/PublicTopperHeader.tsx',['/guia-de-precos','/orcamento','/monte-seu-topo']);
 const footer=must('components/Footer.tsx',['/guia-de-precos','/orcamento','/monte-seu-topo']);
 const dock=must('components/MerlinMobileDock.tsx',['href="/orcamento"','href="/monte-seu-topo"']);
 const sitemap=must('app/sitemap.ts',['/guia-de-precos','/monte-seu-topo','topperLevels.map']);

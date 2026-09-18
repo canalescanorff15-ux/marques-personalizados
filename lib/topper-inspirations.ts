@@ -33,3 +33,8 @@ export const topperInspirations:TopperInspiration[]=[
 export function topperInspirationBySlug(slug:string){
   return topperInspirations.find(item=>item.slug===slug)||null;
 }
+
+export function topperInspirationByCode(code:string){
+  const normalized=code.trim().toUpperCase();
+  return topperInspirations.find(item=>item.code.toUpperCase()===normalized)||null;
+}

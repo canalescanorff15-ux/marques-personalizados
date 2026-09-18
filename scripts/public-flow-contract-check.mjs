@@ -5,6 +5,7 @@ const inquiry=fs.readFileSync('app/api/inquiries/route.ts','utf8');
 const db=fs.readFileSync('lib/db.ts','utf8');
 const quote=fs.readFileSync('app/api/quote-list/route.ts','utf8');
 const topperDetail=fs.readFileSync('app/catalogo/[slug]/page.tsx','utf8');
+const inspirationDetail=fs.readFileSync('app/inspiracoes/[code]/page.tsx','utf8');
 const categoryPage=fs.readFileSync('app/categorias/[slug]/page.tsx','utf8');
 const themePage=fs.readFileSync('app/temas/[slug]/page.tsx','utf8');
 const manifest=fs.readFileSync('app/manifest.ts','utf8');
@@ -31,10 +32,11 @@ for(const token of [
   "{ source: '/categorias/:path*', destination: '/catalogo', permanent: true }",
   "{ source: '/temas/:path*', destination: '/inspiracoes', permanent: true }",
   "{ source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true }",
-  "{ source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }",
-  "{ source: '/inspiracoes/:code', destination: '/inspiracoes', permanent: true }"
+  "{ source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }"
 ])if(!nextConfig.includes(token))errors.push(`redirect HTTP permanente ausente: ${token}`);
 
+if(nextConfig.includes("source: '/inspiracoes/:code'"))errors.push('redirect global de inspirações não pode bloquear os 17 detalhes atuais.');
+if(!inspirationDetail.includes('topperInspirationByCode')||!inspirationDetail.includes("if(!inspiration)redirect('/inspiracoes')"))errors.push('detalhes de inspiração precisam servir códigos atuais e redirecionar apenas inválidos.');
 
 for(const file of ['public/pwa-icon-192.png','public/pwa-icon-512.png','public/pwa-maskable-512.png','public/apple-touch-icon.png']){
   if(!fs.existsSync(file)||fs.statSync(file).size<1000)errors.push(`PWA: ${file} ausente ou inválido.`);

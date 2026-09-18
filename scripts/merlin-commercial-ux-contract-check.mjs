@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
 const home=read('app/page.tsx');
-const header=read('components/Header.tsx');
+const header=read('components/PublicTopperHeader.tsx');
 const dock=read('components/MerlinMobileDock.tsx');
 const footer=read('components/Footer.tsx');
 const catalog=read('lib/topper-catalog.ts');
@@ -13,6 +13,7 @@ const inspirationsPage=read('app/inspiracoes/page.tsx');
 const quotePage=read('app/orcamento/page.tsx');
 const builder=read('components/TopperBuilder.tsx');
 const topperInspirationContract='scripts/topper-inspiration-gallery-contract-check.mjs';
+const publicRedesignContract='scripts/public-redesign-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -26,13 +27,19 @@ if(imageRefs.length!==6)errors.push(`linha de topos precisa declarar 6 imagens o
 if(new Set(imageRefs).size!==imageRefs.length)errors.push('cada nível precisa usar uma imagem oficial exclusiva');
 for(const image of imageRefs){const file=`public${image}`;if(!fs.existsSync(file))errors.push(`asset oficial ausente: ${file}`);}
 if(!catalogPage.includes('TopperLevelVisual'))errors.push('catálogo não reutiliza a referência visual oficial do nível');
-if(!inspirationsPage.includes('TopperLevelVisual'))errors.push('inspirações não reutilizam a referência visual oficial do nível');
+if(!inspirationsPage.includes('TopperInspirationGallery'))errors.push('inspirações não usam a galeria pública de topos');
 if(!builder.includes('TopperLevelVisual'))errors.push('Monte seu topo não reutiliza a referência visual oficial do nível');
 for(const source of [home,header,dock,footer])if(source.includes('href="/monte-seu-kit"'))errors.push('fluxo público ainda contém link para Monte seu Kit');
 if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não comunica os dois acabamentos avançados');
 if(!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home não orienta o cliente sobre adequação ao bolo');
 for(const [name,source] of [['home',home],['catalogo',catalogPage],['inspiracoes',inspirationsPage],['orcamento',quotePage]]){
   for(const forbidden of ['caixas, kits ou lembrancinhas','antigo orçamento de vários produtos','fotos antigas de mesas completas'])if(source.includes(forbidden))errors.push(`${name} ainda exibe linguagem do catálogo antigo: ${forbidden}`);
+}
+
+if(!fs.existsSync(publicRedesignContract))errors.push('contrato da remodelação pública ausente');
+else{
+  const publicCheck=spawnSync(process.execPath,[publicRedesignContract],{encoding:'utf8'});
+  if(publicCheck.status!==0)errors.push((publicCheck.stderr||publicCheck.stdout||'contrato da remodelação pública falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');

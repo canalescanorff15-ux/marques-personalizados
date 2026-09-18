@@ -1,23 +1,51 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, Layers3, Sparkles, Tags } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import TopperLevelVisual from '@/components/TopperLevelVisual';
+import TopperInspirationGallery from '@/components/TopperInspirationGallery';
 import { getSiteSettings } from '@/lib/db';
-import { topperLevels, topperThemes } from '@/lib/topper-catalog';
 import { topperInspirations } from '@/lib/topper-inspirations';
 
 export const dynamic='force-dynamic';
-export const metadata:Metadata={title:'Inspirações de topos | Merlin Encantos em Papel',description:'Escolha temas e estilos para criar seu topo de bolo personalizado, do modelo simples ao Elite com shaker e acetato.'};
+export const metadata:Metadata={
+  title:'Inspirações de topos | Merlin Encantos em Papel',
+  description:'Explore inspirações de topos de bolo, filtre por categoria e acabamento e personalize o modelo que mais combina com a sua festa.'
+};
 
 export default async function InspirationsPage(){
- const settings=await getSiteSettings();
- return <main className="premium-site kf-theme inspiration-page"><Header settings={settings}/>
-  <section className="inspiration-page-hero"><div className="container"><div className="eyebrow"><Sparkles size={14}/> Inspirações de topos</div><h1>Escolha o tema.<br/><em>Depois escolha o nível.</em></h1><p>Aqui você escolhe a direção visual do seu topo: tema, estilo e nível de acabamento. Cada ideia pode ser adaptada ao tamanho do bolo, nome, idade e cores da festa.</p><div className="inspiration-hero-stats"><span><strong>{topperThemes.length}</strong> famílias de tema</span><span><strong>{topperLevels.length}</strong> níveis de acabamento</span><span><strong>1</strong> foco: topos de bolo</span></div></div></section>
-  <section className="inspiration-discovery topper-inspiration-showcase"><div className="container"><div className="inspiration-discovery-head"><div><div className="eyebrow"><Sparkles size={14}/> Modelos para se inspirar</div><h2>12 ideias iniciais.<br/><em>Todas podem ser personalizadas.</em></h2></div><p>Escolha uma base visual. Nome, idade, cores e acabamento podem mudar sem perder a ideia principal.</p></div><div className="topper-inspiration-grid">{topperInspirations.map(item=>{const level=topperLevels.find(option=>option.slug===item.levelSlug);return <article className="topper-inspiration-card" key={item.code}><div className="topper-inspiration-media"><img src={item.image} alt={`Inspiração de topo ${item.title}`} loading="lazy" decoding="async"/><span>{item.code}</span></div><div className="topper-inspiration-copy"><small>{item.category}</small><h3>{item.title}</h3><p>{item.description}</p><div className="topper-inspiration-meta"><span><Layers3 size={14}/> Sugestão: {level?.name||'Topo personalizado'}</span><span>{item.palette.join(' • ')}</span></div><Link className="btn btn-primary" href={`/monte-seu-topo?inspiracao=${encodeURIComponent(item.slug)}&nivel=${encodeURIComponent(item.levelSlug)}&tema=${encodeURIComponent(item.title)}`}>Quero esse modelo <ArrowUpRight size={15}/></Link></div></article>})}</div></div></section>
-  <section className="inspiration-discovery theme-discovery"><div className="container"><div className="inspiration-discovery-head"><div><div className="eyebrow"><Tags size={14}/> Temas</div><h2>Escolha uma direção.<br/><em>A arte final será personalizada.</em></h2></div><p>Essas famílias servem como ponto de partida. Você também pode enviar uma foto, print ou ideia totalmente diferente.</p></div><div className="inspiration-theme-grid">{topperThemes.map(item=><Link href={`/monte-seu-topo?tema=${encodeURIComponent(item.label)}`} key={item.slug}><span><Tags size={16}/></span><div><strong>{item.label}</strong><small>{item.description}</small></div><ArrowUpRight size={15}/></Link>)}</div></div></section>
-  <section className="inspiration-discovery investment"><div className="container"><div className="inspiration-discovery-head"><div><div className="eyebrow"><Layers3 size={14}/> Níveis</div><h2>Transforme a ideia<br/><em>no acabamento que cabe no seu pedido.</em></h2></div><p>Do simples ao Elite com shaker + acetato.</p></div><div className="inspiration-investment-grid topper-level-grid">{topperLevels.map(item=><Link href={`/monte-seu-topo?nivel=${item.slug}`} key={item.slug}><TopperLevelVisual level={item} compact/><span>{item.code}</span><div><strong>{item.name}</strong><p>{item.description}</p></div><Layers3 size={18}/></Link>)}</div></div></section>
-  <Footer settings={settings}/>
- </main>;
+  const settings=await getSiteSettings();
+  return <main className="merlin-public public-inspirations-page">
+    <Header settings={settings}/>
+
+    <section className="public-inspiration-banner">
+      <div className="public-shell public-inspiration-banner-inner">
+        <div>
+          <span className="public-kicker"><Sparkles size={15}/> Inspirações de topos</span>
+          <h1>Encontre uma ideia.<br/><em>Depois deixe com a sua cara.</em></h1>
+          <p>Escolha um modelo para começar. Nome, idade, cores e nível de acabamento podem ser adaptados ao seu pedido.</p>
+        </div>
+        <div className="public-banner-summary">
+          <strong>{topperInspirations.length}</strong>
+          <span>inspirações disponíveis</span>
+          <Link href="/monte-seu-topo">Já tenho uma ideia <ArrowUpRight size={15}/></Link>
+        </div>
+      </div>
+    </section>
+
+    <section className="public-gallery-section">
+      <div className="public-shell">
+        <TopperInspirationGallery/>
+      </div>
+    </section>
+
+    <section className="public-inspiration-after">
+      <div className="public-shell public-after-card">
+        <div><span>Não encontrou exatamente o que imaginou?</span><h2>Seu topo não precisa copiar nenhum modelo.</h2><p>As inspirações são pontos de partida. Você pode enviar uma foto, referência ou descrever uma ideia totalmente diferente.</p></div>
+        <Link className="public-primary-button" href="/monte-seu-topo">Montar meu topo <ArrowUpRight size={16}/></Link>
+      </div>
+    </section>
+
+    <Footer settings={settings}/>
+  </main>;
 }

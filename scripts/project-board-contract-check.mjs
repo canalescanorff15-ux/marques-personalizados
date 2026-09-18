@@ -2,7 +2,7 @@ import fs from 'node:fs';
 
 const errors=[];
 const project=fs.readFileSync('app/meu-projeto/page.tsx','utf8');
-const header=fs.readFileSync('components/Header.tsx','utf8');
+const header=fs.readFileSync('components/PublicTopperHeader.tsx','utf8');
 const dock=fs.readFileSync('components/MerlinMobileDock.tsx','utf8');
 const footer=fs.readFileSync('components/Footer.tsx','utf8');
 const builder=fs.readFileSync('app/monte-seu-topo/page.tsx','utf8');

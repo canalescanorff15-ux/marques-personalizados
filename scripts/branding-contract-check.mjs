@@ -4,7 +4,7 @@ import path from 'node:path';
 const root=process.cwd();
 const errors=[];
 const mustContain={
-  'components/Header.tsx':['Merlin Encantos em Papel','topos personalizados • sob encomenda',"'/merlin-logo.webp'"],
+  'components/PublicTopperHeader.tsx':['settings.brand_name','topos de bolo personalizados',"'/merlin-logo.webp'"],
   'components/Footer.tsx':['/merlin-logo.webp','Topos de bolo personalizados'],
   'app/page.tsx':['MERLIN • TOPOS DE BOLO PERSONALIZADOS','Elite com shaker e acetato'],
   'app/catalogo/page.tsx':['Catálogo de topos','TOP-01 ao TOP-06'],
@@ -20,7 +20,7 @@ for(const rel of ['public/merlin-logo.webp','public/merlin-logo-original.png','p
   const file=path.join(root,rel);
   if(!fs.existsSync(file)||fs.statSync(file).size<100)errors.push(`${rel}: asset ausente ou inválido`);
 }
-const userFacing=['app/page.tsx','app/catalogo/page.tsx','app/inspiracoes/page.tsx','app/monte-seu-topo/page.tsx','components/Header.tsx','components/Footer.tsx','components/TopperBuilder.tsx'];
+const userFacing=['app/page.tsx','app/catalogo/page.tsx','app/inspiracoes/page.tsx','app/monte-seu-topo/page.tsx','components/PublicTopperHeader.tsx','components/Footer.tsx','components/TopperBuilder.tsx'];
 const legacyBrand=[/K&F Papelaria Criativa/i,/K&amp;F/i,/Marques Papelaria/i,/Marques Personalizados/i,/\/kf-logo\.webp/i];
 for(const rel of userFacing){
   const text=fs.readFileSync(path.join(root,rel),'utf8');
