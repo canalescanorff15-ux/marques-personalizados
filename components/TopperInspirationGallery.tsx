@@ -53,6 +53,7 @@ export default function TopperInspirationGallery(){
   const [filterOpen,setFilterOpen]=useState(false);
   const filterTriggerRef=useRef<HTMLButtonElement>(null);
   const filterCloseRef=useRef<HTMLButtonElement>(null);
+  const filterPanelRef=useRef<HTMLElement>(null);
 
   const categories=useMemo(()=>[...new Set(topperInspirations.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,'pt-BR')),[ ]);
 
@@ -78,6 +79,17 @@ export default function TopperInspirationGallery(){
       if(event.key==='Escape'){
         setFilterOpen(false);
         requestAnimationFrame(()=>filterTriggerRef.current?.focus());
+        return;
+      }
+      if(event.key==='Tab'){
+        const panel=filterPanelRef.current;
+        if(!panel)return;
+        const focusable=[...panel.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled]), select:not([disabled]), a[href]')].filter(node=>node.offsetParent!==null);
+        if(focusable.length===0)return;
+        const first=focusable[0];
+        const last=focusable[focusable.length-1];
+        if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+        else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
       }
     };
     window.addEventListener('keydown',onKeyDown);
@@ -135,7 +147,7 @@ export default function TopperInspirationGallery(){
   return <div className="public-gallery-layout">
     <button ref={filterTriggerRef} type="button" className="public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={17}/> Filtros{active&&<span>ativos</span>}</button>
     {filterOpen&&<button type="button" className="public-filter-backdrop" aria-label="Fechar filtros" onClick={closeFilters}/>}
-    <aside id="public-gallery-filters" className={filterOpen?'public-gallery-filters is-open':'public-gallery-filters'} aria-label="Filtros de inspirações" role={filterOpen?'dialog':undefined} aria-modal={filterOpen?true:undefined}>
+    <aside ref={filterPanelRef} id="public-gallery-filters" className={filterOpen?'public-gallery-filters is-open':'public-gallery-filters'} aria-label="Filtros de inspirações" role={filterOpen?'dialog':undefined} aria-modal={filterOpen?true:undefined}>
       <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtrar inspirações</strong><small>Encontre o estilo ideal</small></div><button ref={filterCloseRef} type="button" className="public-filter-close" onClick={closeFilters} aria-label="Fechar filtros"><X size={18}/></button></div>
 
       <label className="public-filter-search"><span>Buscar</span><div><Search size={16}/><input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Tema, código, cor..."/>{filters.query&&<button type="button" onClick={()=>apply({...filters,query:''},true)} aria-label="Limpar busca"><X size={14}/></button>}</div></label>
