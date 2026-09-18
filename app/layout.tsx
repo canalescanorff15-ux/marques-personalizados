@@ -15,7 +15,7 @@ import AttributionCapture from '@/components/AttributionCapture';
 import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 
-const topperDescription='Topos de bolo personalizados sob encomenda, do modelo Essencial ao Elite com shaker e acetato.';
+const topperDescription='Topos de bolo personalizados sob encomenda, do modelo Simples ao Elite com shaker e acetato.';
 export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fff7f2'};
 
 export async function generateMetadata():Promise<Metadata>{
