@@ -263,6 +263,18 @@
 }
 .public-v712 .home-preview-head .btn{align-self:end}
 
+.public-v712 .public-inline-guide{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:16px;
+  color:var(--public-pink);
+  font-size:.76rem;
+  font-weight:850;
+  text-decoration:none;
+}
+.public-v712 .public-inline-guide:hover{text-decoration:underline}
+
 /* Níveis: cards com proporção, texto e CTA previsíveis */
 .public-v712 .home-category-grid,
 .public-v712 .topper-level-grid{
