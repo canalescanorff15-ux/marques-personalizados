@@ -30,7 +30,7 @@ export default async function HomePage(){
 
     <section className="category-showcase premium-categories home-categories" id="topos"><div className="container">
       <div className="section-index" data-reveal><span>01</span><i/><small>NÍVEIS DE TOPO</small></div>
-      <div className="catalog-head" data-reveal><div><div className="eyebrow">Escolha pelo acabamento</div><h2 className="section-title">Escolha quanto detalhe<br/><em>você quer no resultado.</em></h2></div><p className="muted">Do visual mais limpo às composições com várias camadas, shaker e acetato. Cada nível mostra até onde podemos levar o acabamento.</p></div>
+      <div className="catalog-head" data-reveal><div><div className="eyebrow">Escolha pelo acabamento</div><h2 className="section-title">Escolha quanto detalhe<br/><em>você quer no resultado.</em></h2><Link className="public-inline-guide" href="/guia-de-precos">Entender níveis & preços <ArrowUpRight size={14}/></Link></div><p className="muted">Do visual mais limpo às composições com várias camadas, shaker e acetato. Cada nível mostra até onde podemos levar o acabamento.</p></div>
       <div className="category-grid editorial-grid home-category-grid">{topperLevels.map((level,i)=><Link className="category-card editorial-category" href={`/catalogo/${level.slug}`} key={level.slug} data-reveal><div className="category-card-art public-level-art"><TopperLevelVisual level={level} compact/><span>{level.code}</span><div className="category-overlay"/></div><div className="category-copy"><small>{String(i+1).padStart(2,'0')}</small><strong>{level.name}</strong><span>{level.complexity}</span><span className="category-link">Ver detalhes <ArrowUpRight size={15}/></span></div></Link>)}</div>
     </div></section>
 
