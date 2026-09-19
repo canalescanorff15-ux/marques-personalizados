@@ -22,13 +22,13 @@ export default async function InspirationsPage(){
       <div className="public-shell public-inspiration-banner-inner">
         <div>
           <span className="public-kicker"><Sparkles size={15}/> Inspirações de topos</span>
-          <h1>Encontre uma ideia.<br/><em>Depois deixe com a sua cara.</em></h1>
-          <p>Escolha um modelo para começar. Nome, idade, cores e nível de acabamento podem ser adaptados ao seu pedido.</p>
+          <h1>Escolha o estilo que mais se aproxima<br/><em>da sua ideia.</em></h1>
+          <p>Use as inspirações como referência visual. Você não precisa copiar um modelo: nome, idade, cores, elementos e nível de acabamento podem ser adaptados ao seu pedido.</p>
         </div>
         <div className="public-banner-summary">
           <strong>{topperInspirations.length}</strong>
-          <span>inspirações disponíveis</span>
-          <Link href="/monte-seu-topo">Já tenho uma ideia <ArrowUpRight size={15}/></Link>
+          <span>referências para comparar com calma</span>
+          <Link href="/monte-seu-topo">Já sei o que quero <ArrowUpRight size={15}/></Link>
         </div>
       </div>
     </section>
@@ -41,8 +41,8 @@ export default async function InspirationsPage(){
 
     <section className="public-inspiration-after">
       <div className="public-shell public-after-card">
-        <div><span>Não encontrou exatamente o que imaginou?</span><h2>Seu topo não precisa copiar nenhum modelo.</h2><p>As inspirações são pontos de partida. Você pode enviar uma foto, referência ou descrever uma ideia totalmente diferente.</p></div>
-        <Link className="public-primary-button" href="/monte-seu-topo">Montar meu topo <ArrowUpRight size={16}/></Link>
+        <div><span>Não encontrou exatamente o que imaginou?</span><h2>A referência pode vir de qualquer lugar.</h2><p>Envie uma foto, uma paleta, um tema ou descreva o que você quer. As inspirações do site existem para facilitar a conversa, não para limitar a criação.</p></div>
+        <Link className="public-primary-button" href="/monte-seu-topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
       </div>
     </section>
 
