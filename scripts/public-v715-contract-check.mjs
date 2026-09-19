@@ -41,9 +41,9 @@ if(fs.existsSync('app/layout.tsx')){
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
   const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="category-showcase'));
-  for(const token of ['Seu tema, do seu jeito.','Ver inspirações','Conhecer os níveis','Orçamento confirmado antes da produção'])if(!hero.includes(token))errors.push('hero V7.15 sem '+token);
+  for(const token of ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'])if(!hero.includes(token))errors.push('hero público sem '+token);
   for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
-  if(!home.includes('Inspire-se.<br/><em>Personalize. Peça orçamento.</em>'))errors.push('home sem sequência comercial V7.15');
+  if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
 }
 
 
