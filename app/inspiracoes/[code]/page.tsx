@@ -38,7 +38,7 @@ export default async function InspirationDetailPage({params}:Props){
         <Link className="public-back-link" href="/inspiracoes"><ArrowLeft size={16}/> Voltar às inspirações</Link>
         <div className="public-detail-grid">
           <div className="public-detail-media">
-            <img src={inspiration.image} alt={'Inspiração de topo '+inspiration.title}/>
+            <img src={inspiration.image} alt={'Inspiração de topo '+inspiration.title} width={1200} height={1200} decoding="async"/>
             <span>{inspiration.code}</span>
           </div>
           <div className="public-detail-copy">
