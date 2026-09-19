@@ -64,9 +64,17 @@ if(fs.existsSync('app/guia-de-precos/page.tsx')){
 
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
   const gallery=read('components/TopperInspirationGallery.tsx');
-  for(const token of ['Tema, código, cor...','Feminino elegante','Topo Elite Shaker + Acetato','Carregar mais']){
+  for(const token of ['Tema, código, cor...','Carregar mais']){
     if(!gallery.includes(token))errors.push('galeria sem conteúdo esperado: '+token);
   }
+}
+if(fs.existsSync('lib/topper-catalog.ts')){
+  const catalog=read('lib/topper-catalog.ts');
+  if(!catalog.includes("name:'Topo Elite Shaker + Acetato'"))errors.push('catálogo sem nome longo do nível Elite para teste de encaixe');
+}
+if(fs.existsSync('lib/topper-inspirations.ts')){
+  const inspirations=read('lib/topper-inspirations.ts');
+  if(!inspirations.includes("category:'Feminino elegante'"))errors.push('inspirações sem categoria longa Feminino elegante para teste de encaixe');
 }
 
 if(errors.length){
