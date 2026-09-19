@@ -34,7 +34,7 @@ if(fs.existsSync('app/public-v718.css')){
     ['navegação refinada','.public-main-nav a::after'],
     ['assinatura da logo na Home','.home-v718-brand-signature{'],
     ['selo afastado','.home-v717-showcase-seal{'],
-    ['selo desktop fora da foto','left:-62px!important'],
+    ['selo desktop mais afastado da foto','left:-96px!important'],
     ['banners internos','.public-inspiration-banner,'],
     ['cards globais','.public-inspiration-card,'],
     ['filtros premium','.public-gallery-filters{'],
