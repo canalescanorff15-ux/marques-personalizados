@@ -74,7 +74,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
         <form className="public-header-search" action="/inspiracoes" method="get" role="search">
           <Search size={18}/>
           <label className="sr-only" htmlFor="public-topper-search">Buscar inspirações de topo</label>
-          <input id="public-topper-search" name="busca" placeholder="Buscar por tema, código, cor ou estilo..." autoComplete="off"/>
+          <input id="public-topper-search" name="busca" placeholder="Tema, código, cor ou estilo..." autoComplete="off"/>
           <button type="submit">Buscar</button>
         </form>
 
