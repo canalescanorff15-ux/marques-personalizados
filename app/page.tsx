@@ -41,7 +41,7 @@ export default async function HomePage(){
       <div className="home-v717-hero-glow" aria-hidden="true"/>
       <div className="container hero-grid">
         <div className="hero-copy-column" data-reveal>
-          <div className="eyebrow"><i/> TOPOS PERSONALIZADOS • FEITOS SOB ENCOMENDA</div>
+          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • FEITOS SOB ENCOMENDA</div>
           <h1>Topos de bolo que parecem feitos <span>só para o seu momento.</span></h1>
           <p className="hero-copy">Escolha uma inspiração, diga o que quer mudar e transforme tema, nome, idade e cores em uma composição pensada para o seu bolo.</p>
           <div className="hero-actions">
