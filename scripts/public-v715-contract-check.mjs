@@ -46,6 +46,27 @@ if(fs.existsSync('app/page.tsx')){
   if(!home.includes('Inspire-se.<br/><em>Personalize. Peça orçamento.</em>'))errors.push('home sem sequência comercial V7.15');
 }
 
+
+if(fs.existsSync('lib/topper-inspirations.ts')){
+  const inspirationSource=read('lib/topper-inspirations.ts');
+  const images=[...inspirationSource.matchAll(/image:'([^']+)'/g)].map(match=>match[1]);
+  for(const image of images.filter(value=>value.startsWith('/topper-inspirations/')&&value.endsWith('.svg'))){
+    const asset='public'+image;
+    if(!fs.existsSync(asset)){errors.push('asset V7.15 ausente: '+asset);continue;}
+    const svg=read(asset);
+    if(!/viewBox=["']0 0 1200 1200["']/.test(svg))errors.push('inspiração vetorial precisa manter prancha 1200x1200: '+asset);
+  }
+}
+
+if(fs.existsSync('components/TopperInspirationGallery.tsx')){
+  const gallery=read('components/TopperInspirationGallery.tsx');
+  if(!gallery.includes('width={1200} height={1200}'))errors.push('galeria não reserva dimensão 1200x1200 das inspirações');
+}
+if(fs.existsSync('app/inspiracoes/[code]/page.tsx')){
+  const detailImage=read('app/inspiracoes/[code]/page.tsx');
+  if(!detailImage.includes('width={1200} height={1200}'))errors.push('detalhe não reserva dimensão 1200x1200 da inspiração');
+}
+
 if(fs.existsSync('app/inspiracoes/page.tsx')){
   const p=read('app/inspiracoes/page.tsx');
   if(!p.includes('Escolha o estilo que mais se aproxima'))errors.push('banner de inspirações não explica a função de referência');
