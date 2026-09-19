@@ -17,6 +17,7 @@ import Footer from '@/components/Footer';
 import TopperLevelVisual from '@/components/TopperLevelVisual';
 import MerlinMobileDock from '@/components/MerlinMobileDock';
 import JsonLd from '@/components/JsonLd';
+import SafeImage from '@/components/SafeImage';
 import { getSiteSettings, getTestimonials } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 import { topperLevels, topperThemes } from '@/lib/topper-catalog';
@@ -41,6 +42,10 @@ export default async function HomePage(){
       <div className="home-v717-hero-glow" aria-hidden="true"/>
       <div className="container hero-grid">
         <div className="hero-copy-column" data-reveal>
+          <div className="home-v718-brand-signature">
+            <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
+            <div><strong>Merlin Encantos em Papel</strong><small>topos personalizados • feitos sob encomenda</small></div>
+          </div>
           <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • FEITOS SOB ENCOMENDA</div>
           <h1>Topos de bolo que parecem feitos <span>só para o seu momento.</span></h1>
           <p className="hero-copy">Escolha uma inspiração, diga o que quer mudar e transforme tema, nome, idade e cores em uma composição pensada para o seu bolo.</p>
