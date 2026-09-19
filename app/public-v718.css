@@ -236,9 +236,11 @@
 }
 
 .home-v717-showcase-seal{
-  left:-62px!important;
-  bottom:52px!important;
-  width:205px!important;
+  /* V7.18.1 — desloca o selo com mais clareza para fora da foto principal,
+     usando o respiro entre texto e imagem sem invadir o conteúdo da esquerda. */
+  left:-96px!important;
+  bottom:60px!important;
+  width:202px!important;
   min-height:108px!important;
   grid-template-columns:28px 1fr!important;
   gap:4px 10px!important;
@@ -247,6 +249,7 @@
   border-radius:22px!important;
   background:rgba(255,253,251,.97)!important;
   box-shadow:0 24px 52px rgba(70,41,54,.17)!important;
+  z-index:6!important;
 }
 .home-v717-showcase-seal::before{
   content:"";
@@ -644,7 +647,7 @@
 /* RESPONSIVO */
 @media(max-width:1180px){
   .home-v717-showcase-seal{
-    left:-26px!important;
+    left:-42px!important;
     width:190px!important;
   }
 }
