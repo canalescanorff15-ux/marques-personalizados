@@ -18,7 +18,7 @@ export default async function TopperBuilderPage(){
     <section className="kit-builder-hero"><div className="container"><div className="kit-builder-hero-copy">
       <div className="eyebrow"><Layers3 size={14}/> Topos de bolo sob encomenda</div>
       <h1>Conte como você imagina<br/><em>o seu topo.</em></h1>
-      <p>Escolha uma referência e passe apenas o essencial: tema, nome, idade, cores e tamanho do bolo. Não precisa ter tudo decidido para pedir o orçamento.</p>
+      <p>Do simples ao Elite, você escolhe o acabamento e passa apenas o essencial: tema, nome, idade, cores e tamanho do bolo. Não precisa ter tudo decidido para pedir o orçamento.</p>
       <div className="kit-builder-hero-actions"><a className="btn btn-primary btn-luxury" href="#montar-topo">Preencher meu briefing <ArrowUpRight size={16}/></a><a className="btn btn-ghost" href="/inspiracoes"><Sparkles size={16}/> Ver inspirações</a></div>
     </div><div className="kit-builder-hero-card" aria-hidden="true"><span>01</span><strong>Escolha o<br/>acabamento.</strong><i/><span>02</span><strong>Personalize<br/>os detalhes.</strong><i/><span>03</span><strong>Envie para<br/>orçamento.</strong></div></div></section>
     <section className="kit-builder-main" id="montar-topo"><div className="container"><TopperBuilder/></div></section>
