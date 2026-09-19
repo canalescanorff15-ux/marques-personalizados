@@ -17,10 +17,10 @@ export default async function TopperBuilderPage(){
     <Header settings={settings}/>
     <section className="kit-builder-hero"><div className="container"><div className="kit-builder-hero-copy">
       <div className="eyebrow"><Layers3 size={14}/> Topos de bolo sob encomenda</div>
-      <h1>Monte seu topo.<br/><em>Do simples ao Elite.</em></h1>
-      <p>Escolha o nível de acabamento e passe o essencial: tema, nome, idade, cores e tamanho do bolo. O projeto final é personalizado para você.</p>
-      <div className="kit-builder-hero-actions"><a className="btn btn-primary btn-luxury" href="#montar-topo">Começar agora <ArrowUpRight size={16}/></a><a className="btn btn-ghost" href="/catalogo"><Sparkles size={16}/> Ver níveis de topo</a></div>
-    </div><div className="kit-builder-hero-card" aria-hidden="true"><span>01</span><strong>Escolha<br/>o nível.</strong><i/><span>02</span><strong>Defina<br/>o tema.</strong><i/><span>03</span><strong>Envie para<br/>orçamento.</strong></div></div></section>
+      <h1>Conte como você imagina<br/><em>o seu topo.</em></h1>
+      <p>Do simples ao Elite, você escolhe o acabamento e passa apenas o essencial: tema, nome, idade, cores e tamanho do bolo. Não precisa ter tudo decidido para pedir o orçamento.</p>
+      <div className="kit-builder-hero-actions"><a className="btn btn-primary btn-luxury" href="#montar-topo">Preencher meu briefing <ArrowUpRight size={16}/></a><a className="btn btn-ghost" href="/inspiracoes"><Sparkles size={16}/> Ver inspirações</a></div>
+    </div><div className="kit-builder-hero-card" aria-hidden="true"><span>01</span><strong>Escolha o<br/>acabamento.</strong><i/><span>02</span><strong>Personalize<br/>os detalhes.</strong><i/><span>03</span><strong>Envie para<br/>orçamento.</strong></div></div></section>
     <section className="kit-builder-main" id="montar-topo"><div className="container"><TopperBuilder/></div></section>
     <Footer settings={settings}/>
   </main>;
