@@ -53,14 +53,20 @@ export default async function InspirationDetailPage({params}:Props){
 
             <div className="public-detail-tags">{inspiration.tags.map(tag=><span key={tag}>#{tag}</span>)}</div>
 
+            <div className="public-detail-customize" aria-label="O que pode ser personalizado">
+              <span><strong>Nome e idade</strong><small>feitos para o seu pedido</small></span>
+              <span><strong>Cores e elementos</strong><small>podem ser ajustados</small></span>
+              <span><strong>Acabamento</strong><small>você escolhe o nível</small></span>
+            </div>
+
             <div className="public-detail-note">
-              <strong>Esta inspiração é adaptável.</strong>
-              <p>Nome, idade, cores e detalhes podem mudar. O nível sugerido é apenas um ponto de partida; você pode escolher outro acabamento no formulário.</p>
+              <strong>Use esta inspiração como ponto de partida.</strong>
+              <p>O resultado final não precisa ser uma cópia. Vamos adaptar composição, cores e detalhes para combinar com o seu bolo e com o nível de acabamento escolhido.</p>
             </div>
 
             <div className="public-detail-actions">
               <Link className="public-primary-button" href={builderHref}>Quero esse modelo <ArrowUpRight size={16}/></Link>
-              <Link className="public-secondary-button" href="/catalogo">Comparar acabamentos</Link>
+              <Link className="public-secondary-button" href="/catalogo">Ver níveis de acabamento</Link>
             </div>
           </div>
         </div>
