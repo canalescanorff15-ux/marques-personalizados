@@ -26,7 +26,7 @@ import { topperInspirations } from '@/lib/topper-inspirations';
 export const dynamic='force-dynamic';
 function digits(v:string){return v.replace(/\D/g,'');}
 
-const homeInspirationCodes=['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17','INSP-TOP-14','INSP-TOP-10','INSP-TOP-05'];
+const homeInspirationCodes=['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17','INSP-TOP-14','INSP-TOP-10','INSP-TOP-15'];
 
 export default async function HomePage(){
   const [settings,testimonials]=await Promise.all([getSiteSettings(),getTestimonials()]);
