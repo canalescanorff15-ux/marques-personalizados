@@ -115,3 +115,15 @@ Enquanto a migração não estiver homologada, `netlify.toml` e `NETLIFY.md` con
 
 O `.nvmrc` usa `22` para selecionar a linha Node 22 no bootstrap do Workers Builds e permitir o reaproveitamento da versão pré-instalada pela imagem do Cloudflare. O alvo reproduzível continua sendo `22.23.2` em `platform-contract.json`, no Docker e na validação do runtime/CI. Isso evita que o Workers Builds tente reinstalar desnecessariamente o Node exato antes de instalar as dependências.
 \n
+
+## V7.15.1 — persistência de variáveis e segredo obrigatório
+
+A V7.15 confirmou que um deploy do Workers Builds pode publicar o código novo sem uma variável de runtime cadastrada apenas no dashboard quando o Wrangler substitui a configuração de variáveis. Para impedir nova promoção incompleta:
+
+- `wrangler.jsonc` usa `keep_vars: true`, preservando variáveis e bindings existentes no dashboard;
+- `DATABASE_URL` é declarada em `secrets.required`;
+- `wrangler deploy` deve falhar antes da promoção se `DATABASE_URL` não estiver configurada como Secret no Worker;
+- o valor do segredo continua fora do repositório e nunca deve ser adicionado ao `wrangler.jsonc`.
+
+Após cadastrar/reaplicar `DATABASE_URL` como **Secret** em **Worker → Settings → Variables & Secrets**, valide `/api/health`: `database.ok=true`, `schema.version=27` e `blockers=[]`.
+
