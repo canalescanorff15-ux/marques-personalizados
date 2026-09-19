@@ -609,7 +609,16 @@
   width:100%!important;height:100%!important;object-fit:contain!important;
   border-radius:15px;
 }
+.public-v712-footer .footer-brand-kicker{
+  display:block;
+  margin-bottom:5px;
+  color:#e5afc3!important;
+  font-size:.53rem!important;
+  font-weight:900;
+  letter-spacing:.11em;
+}
 .public-v712-footer .footer-brand-block strong{
+  display:block;
   color:#fff!important;
   font-family:var(--display,Georgia,serif);
   font-size:1.24rem!important;
