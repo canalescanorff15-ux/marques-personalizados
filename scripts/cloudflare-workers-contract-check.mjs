@@ -16,6 +16,8 @@ assert(/"main"\s*:\s*"vinext\/server\/fetch-handler"/.test(wrangler),'entrypoint
 assert(/"directory"\s*:\s*"dist\/client"/.test(wrangler),'Static Assets devem sair de dist/client');
 assert(/"binding"\s*:\s*"ASSETS"/.test(wrangler),'binding ASSETS ausente');
 assert(/"CF_VERSION_METADATA"/.test(wrangler),'version metadata do Worker ausente');
+assert(/"keep_vars"\s*:\s*true/.test(wrangler),'Workers deve preservar variáveis/bindings cadastrados no dashboard entre deploys');
+assert(/"secrets"\s*:\s*\{[\s\S]*"required"\s*:\s*\[[\s\S]*"DATABASE_URL"/.test(wrangler),'DATABASE_URL deve ser declarada como secret obrigatório para bloquear deploy sem banco');
 assert(!/<your-[^>]+>/.test(wrangler),'wrangler.jsonc ainda contém placeholder obrigatório');
 assert(!/VINEXT_KV_CACHE/.test(wrangler),'KV não deve ser obrigatório enquanto o app não usa data cache persistente');
 assert(!/"images"\s*:/.test(wrangler),'Cloudflare Images não deve ser obrigatório na primeira publicação gratuita');
@@ -47,4 +49,4 @@ if(failures.length){
   for(const f of failures)console.error(`- ${f}`);
   process.exit(1);
 }
-console.log('Cloudflare Workers Contract: OK — vinext + Static Assets + Workers Cache prontos, sem KV/Images obrigatórios; Neon e R2 seguem externos.');
+console.log('Cloudflare Workers Contract: OK — vinext + Static Assets + Workers Cache prontos; bindings de dashboard preservados e DATABASE_URL obrigatória; Neon e R2 seguem externos.');
