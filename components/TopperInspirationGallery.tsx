@@ -9,9 +9,9 @@ import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspiration
 
 const PAGE_SIZE=12;
 const INITIAL_VISIBLE=8;
-type SortOrder='catalog'|'az'|'za';
+type SortOrder='recent'|'catalog'|'az'|'za';
 type Filters={query:string;categoria:string;nivel:string;favoritos:boolean;ordem:SortOrder};
-const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'catalog'};
+const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'recent'};
 
 export function normalize(value:string){
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -26,7 +26,7 @@ function readFiltersFromUrl():Filters{
     categoria:params.get('categoria')||'',
     nivel:params.get('nivel')||'',
     favoritos:params.get('favoritos')==='1',
-    ordem:ordem==='az'||ordem==='za'?ordem:'catalog'
+    ordem:ordem==='catalog'||ordem==='az'||ordem==='za'?ordem:'recent'
   };
 }
 
@@ -96,7 +96,7 @@ export default function TopperInspirationGallery(){
     next.categoria?params.set('categoria',next.categoria):params.delete('categoria');
     next.nivel?params.set('nivel',next.nivel):params.delete('nivel');
     next.favoritos?params.set('favoritos','1'):params.delete('favoritos');
-    next.ordem!=='catalog'?params.set('ordem',next.ordem):params.delete('ordem');
+    next.ordem!=='recent'?params.set('ordem',next.ordem):params.delete('ordem');
     if(push)history.pushState(null,'',url);else history.replaceState(null,'',url);
   }
 
@@ -120,6 +120,7 @@ export default function TopperInspirationGallery(){
       const haystack=normalize([item.title,item.code,item.category,item.description,...item.tags,...item.palette].join(' '));
       return haystack.includes(query);
     });
+    if(filters.ordem==='recent')return [...filtered].reverse();
     if(filters.ordem==='az')return [...filtered].sort((a,b)=>a.title.localeCompare(b.title,'pt-BR'));
     if(filters.ordem==='za')return [...filtered].sort((a,b)=>b.title.localeCompare(a.title,'pt-BR'));
     return filtered;
@@ -127,7 +128,7 @@ export default function TopperInspirationGallery(){
 
   const shown=results.slice(0,visible);
   const hasMore=shown.length<results.length;
-  const active=Boolean(filters.query||filters.categoria||filters.nivel||filters.favoritos||filters.ordem!=='catalog');
+  const active=Boolean(filters.query||filters.categoria||filters.nivel||filters.favoritos||filters.ordem!=='recent');
 
   return <div className="public-gallery-layout public-gallery-layout-v721">
     <div className="public-gallery-premium-controls">
@@ -155,7 +156,7 @@ export default function TopperInspirationGallery(){
 
       <fieldset><legend>Nível de acabamento</legend><button type="button" className={!filters.nivel?'is-active':''} onClick={()=>apply({...filters,nivel:''})}>Todos</button>{topperLevels.map(level=><button type="button" key={level.slug} className={filters.nivel===level.slug?'is-active':''} onClick={()=>apply({...filters,nivel:level.slug})}>{level.name}</button>)}</fieldset>
 
-      <label className="public-filter-sort-v721">Ordenar por<select value={filters.ordem} onChange={e=>apply({...filters,ordem:e.target.value as SortOrder})}><option value="catalog">Ordem do catálogo</option><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option></select></label>
+      <label className="public-filter-sort-v721">Ordenar por<select value={filters.ordem} onChange={e=>apply({...filters,ordem:e.target.value as SortOrder})}><option value="recent">Mais recentes</option><option value="catalog">Ordem do catálogo</option><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option></select></label>
 
       <button type="button" className={filters.favoritos?'public-favorites-filter is-active':'public-favorites-filter'} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={16} fill={filters.favoritos?'currentColor':'none'}/> Favoritos <span>{favoriteCodes.length}</span></button>
       {active&&<button type="button" className="public-clear-filters" onClick={clearFilters}>Limpar filtros</button>}
