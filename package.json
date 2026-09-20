@@ -93,7 +93,8 @@
     "start:vinext": "vinext start",
     "deploy:vinext": "vinext-cloudflare deploy",
     "check:cloudflare": "node scripts/cloudflare-workers-contract-check.mjs",
-    "check:public-redesign": "node scripts/public-redesign-contract-check.mjs"
+    "check:public-redesign": "node scripts/public-redesign-contract-check.mjs",
+    "check:v8-images": "node scripts/v8-product-image-policy-check.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.1127.0",
