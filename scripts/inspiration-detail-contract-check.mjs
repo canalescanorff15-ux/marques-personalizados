@@ -10,7 +10,7 @@ const sitemap=read('app/sitemap.ts');
 if(!oldDetail.includes("redirect('/inspiracoes')"))errors.push('fichas antigas de INSP precisam redirecionar para a nova página de inspirações');
 if(!levelDetail.includes('topperLevelBySlug'))errors.push('detalhe público precisa resolver exclusivamente os níveis de topo');
 if(!levelDetail.includes("redirect('/catalogo')"))errors.push('slug antigo/inválido precisa retornar ao catálogo de topos');
-for(const token of ['level.features','level.materials','level.idealFor','/monte-seu-topo?nivel='])if(!levelDetail.includes(token))errors.push(`detalhe de topo sem requisito: ${token}`);
+for(const token of ['level.features','level.materials','level.idealFor','/monte-seu-pedido?produto=topo&nivel='])if(!levelDetail.includes(token))errors.push(`detalhe de topo sem requisito: ${token}`);
 for(const slug of ['essencial','camadas-3d','premium','shaker','acetato','elite-shaker-acetato'])if(!catalog.includes(`slug:'${slug}'`))errors.push(`nível ausente no catálogo: ${slug}`);
 if(!sitemap.includes('topperLevels.map'))errors.push('sitemap não gera URLs para os níveis de topo');
 if(sitemap.includes('inspirationModels.map'))errors.push('sitemap ainda indexa as 128 fichas de inspiração antigas');
