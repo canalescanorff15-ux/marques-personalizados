@@ -17,6 +17,7 @@ import './v8-design-system.css';
 import './v8-image-policy.css';
 import './v8-home.css';
 import './v8-inspirations.css';
+import './v8-inspiration-detail.css';
 import './v8-order-builder.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
