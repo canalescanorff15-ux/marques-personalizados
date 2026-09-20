@@ -33,16 +33,78 @@ export const topperInspirations:TopperInspiration[]=[
   ...topperInspirationBatch
 ];
 
-const PUBLIC_TOPPER_MIN=18;
-const PUBLIC_TOPPER_MAX=50;
+// V8.01 — curadoria pública explícita.
+// Só entra na vitrine o lote visualmente aprovado com foco em bolo + topo.
+// Novas inspirações devem ser adicionadas manualmente após revisão visual.
+export const curatedPublicTopperCodes=new Set<string>([
+  'INSP-TOP-18',
+  'INSP-TOP-19',
+  'INSP-TOP-20',
+  'INSP-TOP-21',
+  'INSP-TOP-22',
+  'INSP-TOP-23',
+  'INSP-TOP-24',
+  'INSP-TOP-25',
+  'INSP-TOP-26',
+  'INSP-TOP-27',
+  'INSP-TOP-28',
+  'INSP-TOP-29',
+  'INSP-TOP-30',
+  'INSP-TOP-31',
+  'INSP-TOP-32',
+  'INSP-TOP-33',
+  'INSP-TOP-34',
+  'INSP-TOP-35',
+  'INSP-TOP-36',
+  'INSP-TOP-37',
+  'INSP-TOP-38',
+  'INSP-TOP-39',
+  'INSP-TOP-40',
+  'INSP-TOP-41',
+  'INSP-TOP-42',
+  'INSP-TOP-43',
+  'INSP-TOP-44',
+  'INSP-TOP-45',
+  'INSP-TOP-46',
+  'INSP-TOP-47',
+  'INSP-TOP-48',
+  'INSP-TOP-49',
+  'INSP-TOP-50'
+]);
 
-export const publicTopperInspirations=topperInspirations.filter(item=>{
-  const match=item.code.match(/INSP-TOP-(\d+)/);
-  const number=match?Number(match[1]):0;
-  return number>=PUBLIC_TOPPER_MIN&&number<=PUBLIC_TOPPER_MAX;
-});
+// Referências de cenário completo preservadas apenas como acervo interno.
+// Não devem aparecer na galeria pública nem em páginas individuais públicas.
+export const archivedSceneTopperCodes=new Set<string>([
+  'INSP-TOP-51',
+  'INSP-TOP-52',
+  'INSP-TOP-53',
+  'INSP-TOP-54',
+  'INSP-TOP-55',
+  'INSP-TOP-56',
+  'INSP-TOP-57',
+  'INSP-TOP-58',
+  'INSP-TOP-59',
+  'INSP-TOP-60',
+  'INSP-TOP-61',
+  'INSP-TOP-62',
+  'INSP-TOP-63',
+  'INSP-TOP-64',
+  'INSP-TOP-65',
+  'INSP-TOP-66',
+  'INSP-TOP-67',
+  'INSP-TOP-68',
+  'INSP-TOP-69',
+  'INSP-TOP-70',
+  'INSP-TOP-71',
+  'INSP-TOP-72',
+  'INSP-TOP-73'
+]);
 
-export const archivedTopperInspirations=topperInspirations.filter(item=>!publicTopperInspirations.some(publicItem=>publicItem.code===item.code));
+export const publicTopperInspirations=topperInspirations.filter(item=>curatedPublicTopperCodes.has(item.code));
+
+export const archivedTopperInspirations=topperInspirations.filter(item=>!curatedPublicTopperCodes.has(item.code));
+
+export const archivedSceneTopperInspirations=topperInspirations.filter(item=>archivedSceneTopperCodes.has(item.code));
 
 export function isPublicTopperInspiration(code:string){
   const normalized=code.trim().toUpperCase();
