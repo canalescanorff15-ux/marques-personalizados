@@ -22,7 +22,7 @@ export default async function InspirationsPage(){
       <div className="public-shell public-inspiration-banner-inner-v721">
         <div className="public-inspiration-hero-copy">
           <div className="public-inspiration-index"><strong>02</strong><i/><span>INSPIRAÇÕES</span></div>
-          <span className="public-kicker">VEJA ANTES DE IMAGINAR</span>
+          <span className="public-kicker">VEJA ANTES DE IMAGINAR</span><span className="sr-only">Escolha o estilo que mais se aproxima da sua ideia.</span>
           <h1>Referências que ajudam a<br/><em>enxergar o resultado.</em></h1>
           <p>Explore ideias reais com topos de bolo em cenários completos de festa. Veja composições, paletas e estilos; depois adapte tudo para o seu pedido. Cada detalhe é pensado para ficar lindo no seu tema e no seu bolo.</p>
         </div>
