@@ -52,13 +52,18 @@ if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V8.02 deve 
 if(!hero.includes('/inspiracoes')||!hero.includes('/orcamento'))errors.push('hero V8.02 precisa ligar inspirações e orçamento');
 
 for(const route of [
-  '/orcamento?produto=caixinhas',
-  '/orcamento?produto=lembrancinhas',
-  '/orcamento?produto=adesivos-chaveiros',
-  '/orcamento?produto=doces',
-  '/orcamento?produto=kit'
+  '/personalizados#caixinhas',
+  '/personalizados#lembrancinhas',
+  '/personalizados#adesivos-chaveiros',
+  '/personalizados#doces',
+  '/personalizados#kits'
 ]){
-  if(!home.includes(route))errors.push('produto sem rota comercial: '+route);
+  if(!home.includes(route))errors.push('produto sem rota comercial V8.05: '+route);
+}
+if(!fs.existsSync('app/personalizados/page.tsx'))errors.push('rota /personalizados ausente');
+const personalizados=fs.existsSync('app/personalizados/page.tsx')?read('app/personalizados/page.tsx'):'';
+for(const token of ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','O que não está incluso por padrão']){
+  if(!personalizados.includes(token))errors.push('V8.05 Personalizados sem '+token);
 }
 
 if(errors.length){
@@ -66,4 +71,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.02 Home Premium Contract: OK — Home posiciona Topos + Papelaria Personalizada, mantém fotos limpas e conduz para inspirações/orçamento.');
+console.log('V8.05 Home Premium Contract: OK — Home conduz Topos + Papelaria Personalizada para descoberta por categoria e orçamento.');
