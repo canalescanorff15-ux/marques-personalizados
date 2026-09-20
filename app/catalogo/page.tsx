@@ -23,7 +23,7 @@ export default async function CatalogPage(){
       <div className="container">
         <span className="eyebrow"><Layers3 size={14}/> TOPOS DE BOLO</span>
         <h1>Escolha o acabamento.<br/><em>O tema é do seu jeito.</em></h1>
-        <p>Seis níveis de acabamento. Depois você personaliza nome, idade, cores e tema.</p>
+        <p>Escolha o acabamento e personalize o tema.</p>
       </div>
     </section>
 
@@ -33,16 +33,14 @@ export default async function CatalogPage(){
           {topperLevels.map(item=><Link href={`/catalogo/${item.slug}`} className="v8-storefront-card v8-storefront-level-card" key={item.slug}>
             <TopperLevelVisual level={item} compact/>
             <div>
-              <small>{item.code}</small>
               <h2>{item.name}</h2>
-              <p>{item.description}</p>
               <span>Ver acabamento <ArrowUpRight size={14}/></span>
             </div>
           </Link>)}
         </div>
 
         <div className="v8-storefront-bottom-cta">
-          <div><small>JÁ TEM UM TEMA EM MENTE?</small><strong>Comece seu pedido.</strong></div>
+          <strong>Já sabe o que quer?</strong>
           <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Montar meu topo <ArrowUpRight size={16}/></Link>
         </div>
       </div>
