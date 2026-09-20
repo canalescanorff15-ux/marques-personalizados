@@ -35,7 +35,7 @@ export default async function HomePage(){
         <div className="hero-copy-column" data-reveal>
           <div className="home-v718-brand-signature">
             <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
-            <div><strong>Merlin Encantos em Papel</strong><small>topos de bolo • papelaria personalizada</small></div>
+            <div><strong>Merlin Encantos em Papel</strong><small>Topos de bolo • Papelaria personalizada</small></div>
           </div>
           <div className="eyebrow">MERLIN • TOPOS DE BOLO PERSONALIZADOS • PAPELARIA PERSONALIZADA</div>
           <h1>Detalhes personalizados que fazem <span>o seu momento ter identidade.</span></h1>
@@ -57,7 +57,7 @@ export default async function HomePage(){
       <div className="container">
         <span><CheckCircle2 size={15}/><strong>Feito sob encomenda</strong></span>
         <span><CheckCircle2 size={15}/><strong>Personalizável</strong></span>
-        <span><CheckCircle2 size={15}/><strong>Orçamento antes da produção</strong></span>
+        <span><CheckCircle2 size={15}/><strong>Orçamento confirmado antes da produção</strong></span>
       </div>
     </section>
 
