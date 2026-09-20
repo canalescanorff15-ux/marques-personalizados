@@ -114,7 +114,7 @@ export default async function HomePage(){
             </div>
           </div>
 
-          <div className="eyebrow"><i/> FEITO PARA O SEU MOMENTO</div>
+          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • PAPELARIA SOB ENCOMENDA</div>
           <h1>Papelaria personalizada para <em>celebrações que merecem detalhe.</em></h1>
           <p>Topos de bolo, lembranças e personalizados criados a partir do seu tema, cores e referências — com foco no produto que você realmente vai receber.</p>
 
@@ -262,7 +262,7 @@ export default async function HomePage(){
             <div className="eyebrow"><i/> ACABAMENTOS PARA TOPOS</div>
             <h2>O nível entra depois.<br/><em>Primeiro vem a sua ideia.</em></h2>
           </div>
-          <p>Do modelo mais direto ao Elite com Shaker e Acetato, o acabamento define profundidade e efeitos — não limita o tema.</p>
+          <p>Do modelo mais direto ao Elite com shaker e acetato, o acabamento define profundidade e efeitos — não limita o tema.</p>
         </div>
 
         <div className="v8-levels-grid">
