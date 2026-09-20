@@ -12,7 +12,8 @@ export default function sitemap():MetadataRoute.Sitemap{
   ...topperLevels.map(level=>({url:`${siteUrl}/catalogo/${level.slug}`,lastModified:now,changeFrequency:'monthly' as const,priority:.82})),
   {url:`${siteUrl}/inspiracoes`,lastModified:now,changeFrequency:'weekly',priority:.9},
   ...publicTopperInspirations.map(item=>({url:`${siteUrl}/inspiracoes/${encodeURIComponent(item.code)}`,lastModified:now,changeFrequency:'monthly' as const,priority:.76})),
-  {url:`${siteUrl}/monte-seu-topo`,lastModified:now,changeFrequency:'weekly',priority:.92},
+  {url:`${siteUrl}/personalizados`,lastModified:now,changeFrequency:'weekly',priority:.9},
+  {url:`${siteUrl}/monte-seu-pedido`,lastModified:now,changeFrequency:'weekly',priority:.94},
   {url:`${siteUrl}/guia-de-precos`,lastModified:now,changeFrequency:'weekly',priority:.82},
   {url:`${siteUrl}/privacidade`,lastModified:now,changeFrequency:'yearly',priority:.2},
   {url:`${siteUrl}/termos`,lastModified:now,changeFrequency:'yearly',priority:.2}
