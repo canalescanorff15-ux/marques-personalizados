@@ -87,8 +87,14 @@ if(fs.existsSync('app/inspiracoes/[code]/page.tsx')){
 
 if(fs.existsSync('app/inspiracoes/page.tsx')){
   const p=read('app/inspiracoes/page.tsx');
-  if(!p.includes('Escolha o estilo que mais se aproxima'))errors.push('banner de inspirações não explica a função de referência');
-  if(!p.includes('As inspirações do site existem para facilitar a conversa'))errors.push('fechamento de inspirações não reforça liberdade de criação');
+  const isV810=p.includes('v8-storefront-inspirations');
+  if(isV810){
+    if(!p.includes('Escolha uma referência e personalize'))errors.push('V8.10 não explica de forma curta a função da referência');
+    if(!p.includes('Envie sua própria referência'))errors.push('V8.10 não preserva liberdade de criação');
+  }else{
+    if(!p.includes('Escolha o estilo que mais se aproxima'))errors.push('banner de inspirações não explica a função de referência');
+    if(!p.includes('As inspirações do site existem para facilitar a conversa'))errors.push('fechamento de inspirações não reforça liberdade de criação');
+  }
 }
 
 if(fs.existsSync('app/inspiracoes/[code]/page.tsx')){

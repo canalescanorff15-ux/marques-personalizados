@@ -33,6 +33,7 @@ const v8InspirationDetailContract='scripts/v8-inspiration-detail-contract-check.
 const v8OrderBuilderContract='scripts/v8-order-builder-contract-check.mjs';
 const v8CleanPremiumContract='scripts/v8-clean-premium-contract-check.mjs';
 const v8GlobalCleanContract='scripts/v8-global-clean-contract-check.mjs';
+const v8StorefrontEssentialsContract='scripts/v8-storefront-essentials-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -163,6 +164,12 @@ if(!fs.existsSync(v8GlobalCleanContract))errors.push('contrato global clean V8.0
 else{
   const v8GlobalCleanCheck=spawnSync(process.execPath,[v8GlobalCleanContract],{encoding:'utf8'});
   if(v8GlobalCleanCheck.status!==0)errors.push((v8GlobalCleanCheck.stderr||v8GlobalCleanCheck.stdout||'contrato global clean V8.09 falhou').trim());
+}
+
+if(!fs.existsSync(v8StorefrontEssentialsContract))errors.push('contrato storefront V8.10 ausente');
+else{
+  const v8StorefrontCheck=spawnSync(process.execPath,[v8StorefrontEssentialsContract],{encoding:'utf8'});
+  if(v8StorefrontCheck.status!==0)errors.push((v8StorefrontCheck.stderr||v8StorefrontCheck.stdout||'contrato storefront V8.10 falhou').trim());
 }
 
 if(!fs.existsSync(v8CleanPremiumContract))errors.push('contrato clean V8.08 ausente');

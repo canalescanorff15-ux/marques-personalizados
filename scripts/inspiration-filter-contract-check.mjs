@@ -17,7 +17,12 @@ if(!page.includes('TopperInspirationGallery'))errors.push('página de inspiraç�
 for(const token of ['topperInspirations','categoria','nivel','favoritos','busca','normalize','history.replaceState'])if(!gallery.includes(token))errors.push(`galeria sem recurso: ${token}`);
 if(!gallery.includes("item.category!==filters.categoria"))errors.push('categoria precisa usar mapeamento explícito, sem reclassificação parcial');
 for(const old of ['InspirationExplorer','inspirationModels','inspirationGroups','inspirationThemeCollections'])if(page.includes(old)||gallery.includes(old))errors.push(`galeria pública ainda depende do sistema antigo: ${old}`);
-if(!page.includes('Inspirações de topos')&&!page.includes('inspirações de topos'))errors.push('página não comunica claramente o novo escopo de topos');
+const isV810=page.includes('v8-storefront-inspirations');
+if(isV810){
+  if(!page.includes('INSPIRAÇÕES')||!page.includes('Escolha uma referência'))errors.push('página V8.10 não comunica de forma curta o escopo de inspirações');
+}else if(!page.includes('Inspirações de topos')&&!page.includes('inspirações de topos')){
+  errors.push('página não comunica claramente o novo escopo de topos');
+}
 
 if(errors.length){console.error(`Topper Inspiration Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log(`Topper Inspiration Contract: OK — ${new Set(categories).size} categorias reais e ${levels.length} níveis filtráveis.`);
+console.log(`Topper Inspiration Contract: OK — ${new Set(categories).size} categorias reais, ${levels.length} níveis filtráveis e V8.10 clean reconhecida.`);

@@ -38,8 +38,12 @@ if(fs.existsSync('app/v8-inspirations.css')){
 
 if(fs.existsSync('app/inspiracoes/page.tsx')){
   const page=read('app/inspiracoes/page.tsx');
-  for(const token of ['Foco no produto','Personalizável','Referência clara'])if(!page.includes(token))errors.push('V8.04 página sem '+token);
-  if(page.includes('cenários completos de festa'))errors.push('V8.04 não pode prometer cenário completo');
+  const isV810=page.includes('v8-storefront-inspirations');
+  const required=isV810
+    ? ['Encontre uma ideia.','Depois deixe com a sua cara.','TopperInspirationGallery']
+    : ['Foco no produto','Personalizável','Referência clara'];
+  for(const token of required)if(!page.includes(token))errors.push('V8 inspirações sem '+token);
+  if(page.includes('cenários completos de festa'))errors.push('V8 não pode prometer cenário completo');
 }
 
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
@@ -52,4 +56,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.04 Inspiration Premium Contract: OK — galeria clara, fotos sem máscara e responsividade protegidas.');
+console.log('V8.04/V8.10 Inspiration Contract: OK — galeria clara, fotos sem máscara e versão minimalista protegida.');

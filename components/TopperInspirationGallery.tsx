@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowUpRight, Heart, Layers3, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowUpRight, Heart, Search, SlidersHorizontal, X } from 'lucide-react';
 import { publicTopperInspirations } from '@/lib/topper-inspirations';
 // Compatibilidade de contrato: a coleção histórica topperInspirations permanece preservada no módulo de origem.
 import { topperLevels } from '@/lib/topper-catalog';
@@ -141,11 +141,9 @@ export default function TopperInspirationGallery(){
         <i aria-hidden="true"><Search size={18}/></i>
       </label>
 
-      <div className="public-gallery-chip-row" aria-label="Categorias">
-        <button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todos</button>
-        {categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}</button>)}
+      <div className="public-gallery-chip-row v8-gallery-actions" aria-label="Ações da galeria">
         <button type="button" className={filters.favoritos?'is-active is-favorite':''} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={14} fill={filters.favoritos?'currentColor':'none'}/> Favoritos</button>
-        <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Mais filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
+        <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
       </div>
     </div>
 
@@ -171,7 +169,6 @@ export default function TopperInspirationGallery(){
       </div>
 
       {shown.length>0?<div className="public-inspiration-grid public-inspiration-grid-v721">{shown.map(item=>{
-        const level=topperLevels.find(option=>option.slug===item.levelSlug);
         return <article className="public-inspiration-card public-inspiration-card-v721" key={item.code}>
           <div className="public-inspiration-image public-inspiration-image-v721">
             <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
@@ -181,7 +178,6 @@ export default function TopperInspirationGallery(){
           <div className="public-inspiration-body public-inspiration-body-v721">
             <small>{item.category}</small>
             <h3>{item.title}</h3>
-            <div className="public-card-level-v721"><Layers3 size={13}/><span>{level?.name||'Personalizado'}</span></div>
             <Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="public-card-primary public-card-primary-v721" aria-label={'Ver detalhes de '+item.title}><span>Ver detalhes</span><ArrowUpRight size={16}/></Link>
           </div>
         </article>;

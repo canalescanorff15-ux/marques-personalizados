@@ -17,18 +17,21 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/inspiracoes/page.tsx')){
   const page=read('app/inspiracoes/page.tsx');
+  const isV810=page.includes('v8-storefront-inspirations');
   const isV8=page.includes('Foco no produto')&&page.includes('Referência clara');
-  const required=[
-    'public-inspirations-v721',
-    'public-inspiration-banner-v721',
-    '02',
-    'Referências que ajudam a',
-    'enxergar o resultado.',
-    ...(isV8?['Foco no produto','Personalizável','Referência clara']:['Design exclusivo','Para todos os temas','Feito com carinho']),
-    'public-after-points'
-  ];
+  const required=isV810
+    ? ['public-inspirations-v721','public-inspiration-banner-v721','Encontre uma ideia.','Depois deixe com a sua cara.','TopperInspirationGallery']
+    : [
+        'public-inspirations-v721',
+        'public-inspiration-banner-v721',
+        '02',
+        'Referências que ajudam a',
+        'enxergar o resultado.',
+        ...(isV8?['Foco no produto','Personalizável','Referência clara']:['Design exclusivo','Para todos os temas','Feito com carinho']),
+        'public-after-points'
+      ];
   for(const token of required)if(!page.includes(token))errors.push('página '+(isV8?'V8.03':'V7.21')+' sem '+token);
-  if(isV8&&page.includes('cenários completos de festa'))errors.push('página V8.03 reintroduziu linguagem de cenário completo');
+  if((isV8||isV810)&&page.includes('cenários completos de festa'))errors.push('página V8 reintroduziu linguagem de cenário completo');
 }
 
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){

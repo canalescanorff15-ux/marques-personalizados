@@ -3,11 +3,16 @@ import path from 'node:path';
 
 const root=process.cwd();
 const errors=[];
+const catalogText=fs.readFileSync(path.join(root,'app/catalogo/page.tsx'),'utf8');
+const catalogNeedles=catalogText.includes('v8-storefront-catalog')
+  ? ['TOPOS DE BOLO','Escolha o acabamento.','topperLevels.map']
+  : ['Catálogo de topos','TOP-01 ao TOP-06'];
+
 const mustContain={
   'components/PublicTopperHeader.tsx':['settings.brand_name','topos de bolo personalizados',"'/merlin-logo.webp'"],
   'components/Footer.tsx':['/merlin-logo.webp','Topos de bolo personalizados'],
   'app/page.tsx':['MERLIN • TOPOS DE BOLO PERSONALIZADOS','Elite com shaker e acetato'],
-  'app/catalogo/page.tsx':['Catálogo de topos','TOP-01 ao TOP-06'],
+  'app/catalogo/page.tsx':catalogNeedles,
   'app/monte-seu-topo/page.tsx':['Topos de bolo sob encomenda','Do simples ao Elite'],
 };
 for(const [rel,needles] of Object.entries(mustContain)){

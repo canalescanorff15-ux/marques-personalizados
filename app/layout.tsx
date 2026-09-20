@@ -21,6 +21,7 @@ import './v8-inspiration-detail.css';
 import './v8-order-builder.css';
 import './v8-clean-ui.css';
 import './v8-global-clean.css';
+import './v8-storefront-clean.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
