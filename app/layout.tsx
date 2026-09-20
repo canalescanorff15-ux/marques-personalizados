@@ -16,6 +16,7 @@ import './public-v721.css';
 import './v8-design-system.css';
 import './v8-image-policy.css';
 import './v8-home.css';
+import './v8-inspirations.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
