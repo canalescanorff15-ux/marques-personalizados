@@ -202,7 +202,7 @@ export default async function HomePage(){
         <div className="home-v717-process-grid">
           <Link href="/inspiracoes" data-reveal><span><Eye size={20}/></span><small>PASSO 01</small><strong>Encontre sua inspiração</strong><p>Explore estilos, cores e composições que se aproximam do que você imaginou.</p><b>Ver ideias <ArrowUpRight size={15}/></b></Link>
           <Link href="/catalogo" data-reveal><span><Palette size={20}/></span><small>PASSO 02</small><strong>Escolha o acabamento</strong><p>Compare os níveis e decida quanta profundidade e efeito você quer no resultado.</p><b>Comparar níveis <ArrowUpRight size={15}/></b></Link>
-          <Link href="/monte-seu-topo" data-reveal><span><Send size={20}/></span><small>PASSO 03</small><strong>Conte como quer o seu pedido</strong><p>Envie produto, tema, nome, idade, cores, quantidade e as referências que quiser.</p><b>Preencher briefing <ArrowUpRight size={15}/></b></Link>
+          <Link href="/monte-seu-pedido" data-reveal><span><Send size={20}/></span><small>PASSO 03</small><strong>Conte como quer o seu pedido</strong><p>Envie produto, tema, nome, idade, cores, quantidade e as referências que quiser.</p><b>Preencher briefing <ArrowUpRight size={15}/></b></Link>
         </div>
       </div>
     </section>
