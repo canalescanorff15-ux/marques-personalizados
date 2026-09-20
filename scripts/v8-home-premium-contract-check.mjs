@@ -62,8 +62,12 @@ for(const route of [
 }
 if(!fs.existsSync('app/personalizados/page.tsx'))errors.push('rota /personalizados ausente');
 const personalizados=fs.existsSync('app/personalizados/page.tsx')?read('app/personalizados/page.tsx'):'';
-for(const token of ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','O que não está incluso por padrão']){
-  if(!personalizados.includes(token))errors.push('V8.05 Personalizados sem '+token);
+const isV810Personalizados=personalizados.includes('v8-storefront-personalizados');
+const personalizadosTokens=isV810Personalizados
+  ? ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','v8-storefront-note','Bolo, doces e decoração do ambiente não estão inclusos']
+  : ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','O que não está incluso por padrão'];
+for(const token of personalizadosTokens){
+  if(!personalizados.includes(token))errors.push('Personalizados V8 sem '+token);
 }
 
 if(errors.length){
@@ -71,4 +75,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.05 Home Premium Contract: OK — Home conduz Topos + Papelaria Personalizada para descoberta por categoria e orçamento.');
+console.log('V8.05/V8.10 Home Premium Contract: OK — Home e Personalizados preservam descoberta comercial com conteúdo enxuto.');
