@@ -46,7 +46,7 @@ export default async function HomePage(){
             <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
             <div><strong>Merlin Encantos em Papel</strong><small>topos de bolo • papelaria personalizada</small></div>
           </div>
-          <div className="eyebrow"><i/> MERLIN • PAPELARIA PERSONALIZADA • FEITO SOB ENCOMENDA</div>
+          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • PAPELARIA PERSONALIZADA</div>
           <h1>Detalhes personalizados que fazem <span>o seu momento ter identidade.</span></h1>
           <p className="hero-copy">Topos de bolo, caixinhas, lembrancinhas e outros personalizados criados para combinar com o tema, as cores e a personalidade da sua comemoração.</p>
           <div className="hero-actions">
@@ -152,7 +152,7 @@ export default async function HomePage(){
             <h2 className="section-title">Escolha quanto detalhe<br/><em>faz sentido para o seu bolo.</em></h2>
             <Link className="public-inline-guide" href="/guia-de-precos">Comparar níveis e detalhes <ArrowUpRight size={14}/></Link>
           </div>
-          <p className="muted">Os níveis continuam disponíveis para quem escolhe Topo de Bolo. Eles ajudam a comparar quantidade de camadas, profundidade e efeitos especiais.</p>
+          <p className="muted">Os níveis continuam disponíveis para quem escolhe Topo de Bolo. Do simples ao Elite com shaker e acetato, eles ajudam a comparar quantidade de camadas, profundidade e efeitos especiais.</p>
         </div>
         <div className="home-v717-level-progress" aria-hidden="true"><span/><span/><span/><span/><span/><span/></div>
         <div className="home-v717-level-grid">
