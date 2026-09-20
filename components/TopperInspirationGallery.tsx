@@ -174,15 +174,14 @@ export default function TopperInspirationGallery(){
         return <article className="public-inspiration-card public-inspiration-card-v721" key={item.code}>
           <div className="public-inspiration-image public-inspiration-image-v721">
             <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
-            <i className="public-card-shade-v721" aria-hidden="true"/>
             <InspirationFavoriteButton code={item.code}/>
             <span className="public-card-code-v721">{item.code}</span>
-            <div className="public-inspiration-body public-inspiration-body-v721">
-              <small>{item.category}</small>
-              <h3>{item.title}</h3>
-              <div className="public-card-level-v721"><Layers3 size={13}/><span>{level?.name||'Personalizado'}</span></div>
-              <Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="public-card-primary public-card-primary-v721" aria-label={'Ver detalhes de '+item.title}><ArrowUpRight size={17}/></Link>
-            </div>
+          </div>
+          <div className="public-inspiration-body public-inspiration-body-v721">
+            <small>{item.category}</small>
+            <h3>{item.title}</h3>
+            <div className="public-card-level-v721"><Layers3 size={13}/><span>{level?.name||'Personalizado'}</span></div>
+            <Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="public-card-primary public-card-primary-v721" aria-label={'Ver detalhes de '+item.title}><span>Ver detalhes</span><ArrowUpRight size={16}/></Link>
           </div>
         </article>;
       })}</div>:<div className="public-gallery-empty public-gallery-empty-v721"><Search size={28}/><strong>Nenhuma inspiração encontrou essa combinação.</strong><p>Tente limpar um filtro ou buscar por outro tema, cor ou código.</p><button type="button" onClick={clearFilters}>Ver todas as inspirações</button></div>}
