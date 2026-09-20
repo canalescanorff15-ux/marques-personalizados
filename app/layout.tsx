@@ -11,6 +11,7 @@ import './public-v715.css';
 import './public-v716.css';
 import './public-v717.css';
 import './public-v718.css';
+import './public-v719.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
