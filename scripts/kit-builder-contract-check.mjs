@@ -5,6 +5,8 @@ const read=file=>fs.readFileSync(file,'utf8');
 const catalog=read('lib/topper-catalog.ts');
 const builder=read('components/TopperBuilder.tsx');
 const page=read('app/monte-seu-topo/page.tsx');
+const orderPage=read('app/monte-seu-pedido/page.tsx');
+const orderBuilder=read('components/OrderBuilder.tsx');
 const legacy=read('app/monte-seu-kit/page.tsx');
 const header=read('components/PublicTopperHeader.tsx');
 const home=read('app/page.tsx');
@@ -23,10 +25,12 @@ for(const token of ["'/api/inquiries'","getAttribution()","desired_categories:['
 }
 if(!builder.includes("product_name:selected.name")||!builder.includes("category:'Topos de bolo'"))errors.push('TopperBuilder precisa identificar o pedido como topo de bolo.');
 if(!page.includes('<TopperBuilder/>'))errors.push('rota /monte-seu-topo não monta TopperBuilder');
-if(!legacy.includes("redirect('/monte-seu-topo')"))errors.push('rota antiga /monte-seu-kit precisa redirecionar para /monte-seu-topo');
-if(!header.includes('href="/monte-seu-topo"'))errors.push('header não expõe /monte-seu-topo');
-if(!home.includes('href="/monte-seu-topo"'))errors.push('home não oferece caminho direto para /monte-seu-topo');
-if(!sitemap.includes('/monte-seu-topo'))errors.push('sitemap não inclui /monte-seu-topo');
+if(!legacy.includes("redirect('/monte-seu-topo')"))errors.push('rota antiga /monte-seu-kit precisa preservar fallback legado');
+if(!header.includes("href:'/monte-seu-pedido'")&&!header.includes('href="/monte-seu-pedido"'))errors.push('header não expõe /monte-seu-pedido');
+if(!home.includes('href="/monte-seu-pedido"'))errors.push('home não oferece caminho direto para /monte-seu-pedido');
+if(!sitemap.includes('/monte-seu-pedido'))errors.push('sitemap não inclui /monte-seu-pedido');
+if(!orderPage.includes('<OrderBuilder/>'))errors.push('rota /monte-seu-pedido não monta OrderBuilder');
+for(const token of ["'topo'","'caixinhas'","'lembrancinhas'","'chaveiros'","'adesivos'","'doces'","'kit'","'outro'","'/api/inquiries'","desired_categories:[selectedProduct.label]"])if(!orderBuilder.includes(token))errors.push(`OrderBuilder sem contrato V8.06: ${token}`);
 if(header.includes('href="/monte-seu-kit"'))errors.push('header ainda expõe o construtor antigo de kits');
 
 if(errors.length){
@@ -34,4 +38,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Topper Builder Contract: OK — 6 níveis, briefing de topo, CRM/WhatsApp e redirecionamento legado protegidos.');
+console.log('Order Builder Contract: OK — 6 níveis de topo preservados e V8.06 adiciona briefing adaptativo sem quebrar o fluxo legado.');
