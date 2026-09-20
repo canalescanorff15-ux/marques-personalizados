@@ -37,7 +37,7 @@ export default async function HomePage(){
             <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
             <div><strong>Merlin Encantos em Papel</strong><small>topos de bolo • papelaria personalizada</small></div>
           </div>
-          <div className="eyebrow">PAPELARIA PERSONALIZADA • FEITO SOB ENCOMENDA</div>
+          <div className="eyebrow">MERLIN • TOPOS DE BOLO PERSONALIZADOS • PAPELARIA PERSONALIZADA</div>
           <h1>Detalhes personalizados que fazem <span>o seu momento ter identidade.</span></h1>
           <p className="hero-copy">Topos de bolo e personalizados criados para combinar com o seu tema, suas cores e a sua comemoração.</p>
           <div className="hero-actions">
@@ -91,7 +91,7 @@ export default async function HomePage(){
             <div><small>{level.eyebrow}</small><strong>{level.name}</strong></div>
           </Link>)}
         </div>
-        <p className="v8-clean-level-note">Do essencial ao premium. Shaker e Acetato ficam como opções de acabamento. O tamanho do bolo ajuda a definir a proporção final.</p>
+        <p className="v8-clean-level-note">Do essencial ao Elite com shaker e acetato. O tamanho do bolo ajuda a definir a proporção final.</p>
 
         <details className="home-v717-detail-grid v8-clean-extra-details">
           <summary>Quer entender melhor os acabamentos?</summary>
