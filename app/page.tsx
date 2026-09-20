@@ -96,6 +96,7 @@ export default async function HomePage(){
         <details className="home-v717-detail-grid v8-clean-extra-details">
           <summary>Quer entender melhor os acabamentos?</summary>
           <div><span>Camadas 3D</span><span>Shaker</span><span>Acetato</span></div>
+          <Link className="v8-clean-guide-link" href="/guia-de-precos">Ver guia de acabamentos <ArrowUpRight size={13}/></Link>
         </details>
       </div>
     </section>
