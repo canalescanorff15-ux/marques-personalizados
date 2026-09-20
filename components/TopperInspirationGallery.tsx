@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, Heart, Layers3, Search, SlidersHorizontal, X } from 'lucide-react';
-import { topperInspirations, publicTopperInspirations } from '@/lib/topper-inspirations';
+import { publicTopperInspirations } from '@/lib/topper-inspirations';
+// Compatibilidade de contrato: a coleção histórica topperInspirations permanece preservada no módulo de origem.
 import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
