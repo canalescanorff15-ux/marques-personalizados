@@ -6,43 +6,56 @@ Fazer a vitrine pública mostrar somente referências que comuniquem corretament
 
 ## Curadoria aplicada
 
-- coleção pública limitada provisoriamente a INSP-TOP-18..INSP-TOP-50;
-- 33 referências de bolo permanecem públicas;
-- referências históricas, SVGs e cenas completas continuam preservadas internamente;
-- INSP-TOP-51..73 (mesas, celebrações, cenários e composições amplas) deixam a galeria pública;
+- 33 referências de bolo permanecem públicas: INSP-TOP-18 até INSP-TOP-50;
+- a coleção pública agora é uma lista explícita de códigos aprovados, não uma faixa automática;
+- novas inspirações só entram após revisão visual;
+- INSP-TOP-51 até INSP-TOP-73 foram classificadas como referências de cenário e ficam fora da vitrine pública;
+- referências históricas e cenas completas continuam preservadas internamente;
 - páginas individuais arquivadas redirecionam para /inspiracoes;
-- sitemap passa a listar somente inspirações públicas;
-- Home passa a destacar apenas códigos dentro do lote focado em bolo.
+- sitemap usa apenas a coleção pública curada;
+- Home busca destaques somente dentro da coleção pública aprovada.
 
 ## Política visual
 
-Novo arquivo `app/v8-image-policy.css` carregado por último:
+Uma única camada, `app/v8-image-policy.css`, é carregada por último e funciona como autoridade visual:
 
-- remove shade preto da Home e da galeria;
-- garante opacity 1 e filter none nas fotografias públicas;
-- transforma informações sobre fotos da Home em pequenas etiquetas claras;
-- impede overlays antigos de virarem placas escuras;
-- mantém código como etiqueta clara discreta;
-- página de detalhe usa fundo neutro e fotografia sem efeito escuro.
+- remove qualquer shade preto das fotos;
+- garante opacity 1, filter none e mix-blend-mode normal;
+- move título, categoria e informações para fora da fotografia na Home;
+- deixa a imagem limpa como elemento principal;
+- remove overlays e bordas internas que poderiam parecer manchas;
+- mantém o código apenas como etiqueta clara e discreta;
+- página de detalhe usa fotografia limpa sobre fundo neutro;
+- adiciona aviso comercial explícito sobre o que está e não está incluído no produto.
+
+## Transparência comercial
+
+A página de detalhe informa que a referência representa o topo/papelaria personalizada. Bolo, doces, painel, balões, mesa e demais itens de cenário não fazem parte do produto salvo contratação separada.
 
 ## Proteção automática
 
-Foi criado `scripts/v8-product-image-policy-check.mjs` e o CI agora valida:
+O CI valida:
 
-- faixa pública curada;
-- galeria usando publicTopperInspirations;
+- coleção pública explícita;
+- arquivo de cenários arquivados;
+- galeria usando `publicTopperInspirations`;
 - páginas arquivadas bloqueadas;
-- sitemap sem referências arquivadas;
-- Home sem códigos fora da faixa pública;
+- sitemap sem cenas arquivadas;
+- Home sem códigos fora do acervo aprovado;
 - política de imagem carregada depois do Design System;
-- ausência de máscaras escuras e filtros nas imagens públicas.
+- ausência de máscaras escuras e filtros nas imagens;
+- informações da Home fora da fotografia.
+
+## Limpeza técnica
+
+Durante a V8.01 havia duas camadas de CSS concorrentes para imagens. Elas foram consolidadas em uma única política para evitar conflitos futuros.
 
 ## Próxima etapa
 
 V8.02 — reconstrução da Home com foco em:
-- produtos reais;
 - categorias comerciais;
 - Topos de Bolo;
 - Papelaria & Personalizados;
+- Produtos Criativos;
 - inspirações recentes;
 - CTA e fluxo de orçamento mais claros.

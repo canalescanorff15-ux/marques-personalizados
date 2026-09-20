@@ -41,6 +41,7 @@ export default async function InspirationDetailPage({params}:Props){
           <div className="public-detail-media">
             <img src={inspiration.image} alt={'Inspiração de topo '+inspiration.title} width={1200} height={1200} decoding="async"/>
             <span>{inspiration.code}</span>
+            <p className="public-detail-image-scope"><strong>Referência do produto.</strong> O foco do pedido é o topo/papelaria personalizada. Bolo, doces, painel, balões, mesa e demais itens de cenário não fazem parte do produto, salvo quando forem contratados separadamente.</p>
           </div>
           <div className="public-detail-copy">
             <span className="public-kicker"><Sparkles size={14}/> {inspiration.category}</span>

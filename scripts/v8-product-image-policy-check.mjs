@@ -12,12 +12,23 @@ const layout=read('app/layout.tsx');
 const css=read('app/v8-image-policy.css');
 
 for(const token of [
-  'PUBLIC_TOPPER_MIN=18',
-  'PUBLIC_TOPPER_MAX=50',
+  'curatedPublicTopperCodes',
+  'archivedSceneTopperCodes',
   'publicTopperInspirations',
   'archivedTopperInspirations',
+  'archivedSceneTopperInspirations',
   'isPublicTopperInspiration'
 ])if(!inspirations.includes(token))errors.push('curadoria sem '+token);
+
+const curatedCodes=[...inspirations.matchAll(/'INSP-TOP-(\d{2})'/g)]
+  .map(match=>Number(match[1]))
+  .filter((value,index,array)=>array.indexOf(value)===index);
+for(let code=18;code<=50;code++){
+  if(!curatedCodes.includes(code))errors.push('coleção pública explícita sem INSP-TOP-'+String(code).padStart(2,'0'));
+}
+for(let code=51;code<=73;code++){
+  if(!inspirations.includes("'INSP-TOP-"+String(code).padStart(2,'0')+"'"))errors.push('arquivo de cenário sem INSP-TOP-'+String(code).padStart(2,'0'));
+}
 
 if(!gallery.includes('publicTopperInspirations'))errors.push('galeria ainda não usa coleção pública curada');
 if(!detail.includes('isPublicTopperInspiration'))errors.push('detalhe não bloqueia referências arquivadas');
@@ -36,9 +47,13 @@ if(designIndex<0||imageIndex<designIndex)errors.push('política de imagem precis
 for(const token of [
   '.home-v717-photo-shade',
   '.public-card-shade-v721',
+  '.home-v717-showcase-main>div',
+  '.home-v717-gallery-info',
+  'position:static!important',
   'display:none!important',
   'filter:none!important',
-  'opacity:1!important'
+  'opacity:1!important',
+  '.public-detail-image-scope'
 ])if(!css.includes(token))errors.push('política de imagem sem '+token);
 
 if(errors.length){

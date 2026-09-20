@@ -17,26 +17,60 @@
   mix-blend-mode:normal!important;
 }
 
-/* Vitrine principal: informações passam a ser etiquetas claras pequenas,
-   em vez de depender de uma faixa preta sobre a fotografia. */
+/* HERO / VITRINE DA HOME — imagem limpa, informações fora da fotografia. */
+.home-v717-showcase{
+  min-height:0!important;
+  align-items:start!important;
+  grid-template-columns:minmax(0,1.15fr) minmax(220px,.85fr)!important;
+  gap:16px!important;
+}
+.home-v717-showcase-main,
+.home-v717-showcase-side>a{
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  border:1px solid var(--v8-line)!important;
+  border-radius:var(--v8-radius-lg)!important;
+  background:#fff!important;
+  box-shadow:var(--v8-shadow-sm)!important;
+}
+.home-v717-showcase-main{border-radius:30px!important}
+.home-v717-showcase-side{
+  display:grid!important;
+  grid-template-rows:auto auto!important;
+  gap:16px!important;
+}
+.home-v717-showcase img{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  background:var(--v8-paper-2)!important;
+}
+.home-v717-showcase-main>img{aspect-ratio:4/5!important}
+.home-v717-showcase-side>a>img{aspect-ratio:4/3!important}
 .home-v717-showcase-main>div,
 .home-v717-showcase-side>a>div{
-  left:14px!important;
-  right:auto!important;
-  bottom:14px!important;
-  max-width:calc(100% - 28px)!important;
-  width:max-content!important;
-  padding:10px 12px!important;
-  border:1px solid rgba(74,48,61,.10)!important;
-  border-radius:14px!important;
-  background:rgba(255,250,248,.95)!important;
+  position:static!important;
+  inset:auto!important;
+  display:grid!important;
+  gap:5px!important;
+  max-width:none!important;
+  width:auto!important;
+  padding:15px 17px 17px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
   color:var(--v8-ink)!important;
-  box-shadow:0 9px 28px rgba(60,35,48,.12)!important;
-  backdrop-filter:blur(10px)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
 }
 .home-v717-showcase-main small,
 .home-v717-showcase-side small{
-  color:#9f5574!important;
+  color:var(--v8-rose)!important;
   opacity:1!important;
 }
 .home-v717-showcase-main strong,
@@ -44,64 +78,101 @@
   color:var(--v8-ink)!important;
 }
 .home-v717-showcase-main>div>span{
-  color:#75686f!important;
+  color:var(--v8-muted)!important;
   opacity:1!important;
 }
+.home-v717-showcase-seal{display:none!important}
 
-/* Galeria editorial da Home: sem película preta; ficha compacta clara no rodapé. */
+/* GALERIA EDITORIAL DA HOME — foto limpa + ficha abaixo. */
+.home-v717-gallery-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  grid-auto-rows:auto!important;
+  gap:18px!important;
+  align-items:start!important;
+}
+.home-v717-gallery-card,
+.home-v717-gallery-card-1,
+.home-v717-gallery-card-4{
+  grid-row:auto!important;
+  grid-column:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  border:1px solid var(--v8-line)!important;
+  border-radius:var(--v8-radius-md)!important;
+  background:#fff!important;
+  color:var(--v8-ink)!important;
+  box-shadow:var(--v8-shadow-xs)!important;
+}
+.home-v717-gallery-card::after{display:none!important}
+.home-v717-gallery-card>img{
+  position:static!important;
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:4/3!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:1!important;
+  filter:none!important;
+  background:var(--v8-paper-2)!important;
+}
 .home-v717-gallery-info{
-  left:13px!important;
-  right:auto!important;
-  bottom:13px!important;
-  max-width:calc(100% - 26px)!important;
-  width:max-content!important;
-  padding:10px 12px!important;
-  border:1px solid rgba(74,48,61,.10)!important;
-  border-radius:14px!important;
-  background:rgba(255,250,248,.95)!important;
+  position:static!important;
+  inset:auto!important;
+  display:grid!important;
+  gap:5px!important;
+  max-width:none!important;
+  width:auto!important;
+  padding:14px 15px 16px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
   color:var(--v8-ink)!important;
-  box-shadow:0 9px 28px rgba(60,35,48,.12)!important;
-  backdrop-filter:blur(10px)!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
 }
-.home-v717-gallery-info small{
-  color:#9f5574!important;
-}
+.home-v717-gallery-info small{color:var(--v8-rose)!important}
 .home-v717-gallery-info strong{
+  max-width:none!important;
   color:var(--v8-ink)!important;
 }
-.home-v717-gallery-info span{
-  color:#75686f!important;
-}
+.home-v717-gallery-info span{color:var(--v8-muted)!important}
 
 /* Bordas internas podem existir, mas nunca com preenchimento escuro. */
-.home-v719 .home-v717-gallery-card::after{
-  background:transparent!important;
-}
+.home-v719 .home-v717-gallery-card::after{background:transparent!important}
 
 /* Demais overlays fotográficos antigos deixam de escurecer o produto. */
 .premium-site .category-overlay{
   background:linear-gradient(to top,rgba(255,250,248,.92) 0%,rgba(255,250,248,.22) 25%,transparent 46%)!important;
 }
-.premium-site .category-copy{
-  color:var(--v8-ink)!important;
-}
-.premium-site .category-copy strong{
-  color:var(--v8-ink)!important;
-}
-.premium-site .category-copy p{
-  color:#6f6369!important;
-}
-.premium-site .category-copy>small{
-  color:#9b5572!important;
-}
+.premium-site .category-copy{color:var(--v8-ink)!important}
+.premium-site .category-copy strong{color:var(--v8-ink)!important}
+.premium-site .category-copy p{color:#6f6369!important}
+.premium-site .category-copy>small{color:#9b5572!important}
 
 /* Página de detalhe: fotografia sem efeitos e com fundo neutro. */
-.public-detail-media{
-  background:var(--v8-paper-2)!important;
-}
+.public-detail-media{background:var(--v8-paper-2)!important}
 .public-detail-media>img{
   background:var(--v8-paper-2)!important;
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
 }
+.public-detail-media::before{background:transparent!important}
+
+.public-detail-image-scope{
+  margin:12px 0 0;
+  padding:11px 13px;
+  border:1px solid var(--v8-line);
+  border-radius:var(--v8-radius-sm);
+  background:var(--v8-paper-2);
+  color:var(--v8-muted);
+  font-size:.72rem;
+  line-height:1.5;
+}
+.public-detail-image-scope strong{color:var(--v8-ink)}
 
 /* Código continua útil, mas não vira bloco escuro dominante. */
 .public-card-code-v721,
@@ -113,14 +184,22 @@
   backdrop-filter:blur(8px)!important;
 }
 
-@media(max-width:640px){
-  .home-v717-showcase-main>div,
-  .home-v717-showcase-side>a>div,
-  .home-v717-gallery-info{
-    left:10px!important;
-    bottom:10px!important;
-    max-width:calc(100% - 20px)!important;
-    padding:8px 10px!important;
-    border-radius:12px!important;
+@media(max-width:900px){
+  .home-v717-showcase{grid-template-columns:1fr!important}
+  .home-v717-showcase-main>img{aspect-ratio:4/3!important}
+  .home-v717-showcase-side{
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:auto!important;
   }
+  .home-v717-gallery-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+
+@media(max-width:640px){
+  .home-v717-showcase-side{grid-template-columns:1fr!important}
+  .home-v717-showcase-main>img,
+  .home-v717-showcase-side>a>img{aspect-ratio:4/3!important}
+  .home-v717-gallery-grid{grid-template-columns:1fr!important}
+  .home-v717-gallery-card>img{aspect-ratio:4/3!important}
 }

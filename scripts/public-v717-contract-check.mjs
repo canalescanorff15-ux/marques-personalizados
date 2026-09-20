@@ -27,7 +27,7 @@ if(fs.existsSync('app/page.tsx')){
     ['grade nova de níveis','home-v717-level-grid'],
     ['visuais oficiais dos níveis','TopperLevelVisual'],
     ['galeria de inspirações','home-v717-gallery-grid'],
-    ['fonte real de inspirações','topperInspirations'],
+    ['fonte real de inspirações','publicTopperInspirations'],
     ['processo em três passos','home-v717-process-grid'],
     ['acabamento visual','home-v717-detail-grid'],
     ['história da marca','home-v717-about-grid'],
