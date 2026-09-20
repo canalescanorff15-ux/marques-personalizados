@@ -14,6 +14,7 @@ import './public-v718.css';
 import './public-v719.css';
 import './public-v721.css';
 import './v8-design-system.css';
+import './v8-image-curation.css';
 import './v8-image-policy.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
