@@ -52,8 +52,10 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('components/PublicTopperHeader.tsx')){
   const header=read('components/PublicTopperHeader.tsx');
+  const isV8=header.includes("label:'Personalizados'");
   if(!header.includes('className="sr-only"'))errors.push('label acessível da busca foi removido');
-  if(!header.includes('placeholder="Tema, código, cor ou estilo..."'))errors.push('placeholder curto da busca global ausente');
+  const expectedPlaceholder=isV8?'placeholder="Tema, produto, cor ou estilo..."':'placeholder="Tema, código, cor ou estilo..."';
+  if(!header.includes(expectedPlaceholder))errors.push('placeholder curto da busca global ausente');
   if((header.match(/<input/g)||[]).length!==1)errors.push('header público deve manter uma única entrada de busca');
 }
 

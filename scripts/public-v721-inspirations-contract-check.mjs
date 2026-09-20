@@ -17,17 +17,18 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/inspiracoes/page.tsx')){
   const page=read('app/inspiracoes/page.tsx');
-  for(const token of [
+  const isV8=page.includes('Foco no produto')&&page.includes('Referência clara');
+  const required=[
     'public-inspirations-v721',
     'public-inspiration-banner-v721',
     '02',
     'Referências que ajudam a',
     'enxergar o resultado.',
-    'Design exclusivo',
-    'Para todos os temas',
-    'Feito com carinho',
+    ...(isV8?['Foco no produto','Personalizável','Referência clara']:['Design exclusivo','Para todos os temas','Feito com carinho']),
     'public-after-points'
-  ])if(!page.includes(token))errors.push('página V7.21 sem '+token);
+  ];
+  for(const token of required)if(!page.includes(token))errors.push('página '+(isV8?'V8.03':'V7.21')+' sem '+token);
+  if(isV8&&page.includes('cenários completos de festa'))errors.push('página V8.03 reintroduziu linguagem de cenário completo');
 }
 
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
