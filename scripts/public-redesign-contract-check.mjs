@@ -14,12 +14,16 @@ for(const file of [
 
 if(exists('components/PublicTopperHeader.tsx')){
   const h=read('components/PublicTopperHeader.tsx');
-  const isV8=h.includes("label:'Personalizados'")&&h.includes("label:'Como funciona'");
-  const required=isV8
-    ? ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','/catalogo','Topos de bolo','Personalizados','Inspirações','Como funciona','/orcamento','Orçamento']
-    : ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'];
-  for(const token of required)if(!h.includes(token))errors.push(`header público ${isV8?'V8.03':'legado'} sem ${token}`);
-  if(!h.includes('public-header-search'))errors.push('header público sem busca dedicada');
+  const isV809=h.includes('v8-simple-header');
+  const isV8=h.includes("label:'Personalizados'");
+  const required=isV809
+    ? ['/monte-seu-pedido','/catalogo','Topos de bolo','Personalizados','Inspirações','v8-simple-nav','v8-simple-order-cta']
+    : isV8
+      ? ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','/catalogo','Topos de bolo','Personalizados','Inspirações','Como funciona','/orcamento','Orçamento']
+      : ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'];
+  for(const token of required)if(!h.includes(token))errors.push(`header público ${isV809?'V8.09':isV8?'V8.03':'legado'} sem ${token}`);
+  if(!isV809&&!h.includes('public-header-search'))errors.push('header público sem busca dedicada');
+  if(isV809&&h.includes('public-header-search'))errors.push('header V8.09 não deve reintroduzir busca global');
 }
 
 if(exists('components/TopperInspirationGallery.tsx')){
