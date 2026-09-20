@@ -23,7 +23,8 @@ export const dynamic='force-dynamic';
 export default async function InspirationDetailPage({params}:Props){
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
-  if(!inspiration||!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
+  if(!inspiration)redirect('/inspiracoes');
+  if(!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
 
   const settings=await getSiteSettings();
   const builderHref='/monte-seu-pedido?produto=topo&inspiracao='+encodeURIComponent(inspiration.slug)+'&nivel='+encodeURIComponent(inspiration.levelSlug)+'&tema='+encodeURIComponent(inspiration.title);
