@@ -174,7 +174,7 @@ export default function TopperInspirationGallery(){
         return <article className="public-inspiration-card public-inspiration-card-v721" key={item.code}>
           <div className="public-inspiration-image public-inspiration-image-v721">
             <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
-            <span className="public-card-shade-v721" aria-hidden="true"/>
+            <i className="public-card-shade-v721" aria-hidden="true"/>
             <InspirationFavoriteButton code={item.code}/>
             <span className="public-card-code-v721">{item.code}</span>
             <div className="public-inspiration-body public-inspiration-body-v721">
