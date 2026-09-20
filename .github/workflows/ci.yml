@@ -132,6 +132,8 @@ jobs:
         run: npm run check:inspiration-filters
       - name: Inspiration detail contract
         run: npm run check:inspiration-detail
+      - name: V8 product image policy contract
+        run: npm run check:v8-images
       - name: Inspiration quote contract
         run: npm run check:inspiration-quote
       - name: Inspiration compare contract
