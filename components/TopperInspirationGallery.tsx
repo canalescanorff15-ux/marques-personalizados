@@ -7,7 +7,8 @@ import { topperInspirations } from '@/lib/topper-inspirations';
 import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
-const PAGE_SIZE=8;
+const PAGE_SIZE=12;
+const INITIAL_VISIBLE=8;
 type SortOrder='catalog'|'az'|'za';
 type Filters={query:string;categoria:string;nivel:string;favoritos:boolean;ordem:SortOrder};
 const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'catalog'};
@@ -32,7 +33,7 @@ function readFiltersFromUrl():Filters{
 export default function TopperInspirationGallery(){
   const [filters,setFilters]=useState<Filters>(DEFAULT_FILTERS);
   const [favoriteCodes,setFavoriteCodes]=useState<string[]>([]);
-  const [visible,setVisible]=useState(PAGE_SIZE);
+  const [visible,setVisible]=useState(INITIAL_VISIBLE);
   const [ready,setReady]=useState(false);
   const [filterOpen,setFilterOpen]=useState(false);
   const filterTriggerRef=useRef<HTMLButtonElement>(null);
@@ -46,7 +47,7 @@ export default function TopperInspirationGallery(){
     setFilters(fromUrl);
     setFavoriteCodes(readInspirationFavorites());
     setReady(true);
-    const onPop=()=>{setFilters(readFiltersFromUrl());setVisible(PAGE_SIZE);};
+    const onPop=()=>{setFilters(readFiltersFromUrl());setVisible(INITIAL_VISIBLE);};
     const onFavorites=()=>setFavoriteCodes(readInspirationFavorites());
     window.addEventListener('popstate',onPop);
     window.addEventListener(INSPIRATION_FAVORITES_EVENT,onFavorites);
@@ -101,7 +102,7 @@ export default function TopperInspirationGallery(){
 
   function apply(next:Filters,push=true){
     setFilters(next);
-    setVisible(PAGE_SIZE);
+    setVisible(INITIAL_VISIBLE);
     if(ready)syncUrl(next,push);
   }
 
@@ -133,7 +134,7 @@ export default function TopperInspirationGallery(){
       <label className="public-gallery-search-v721">
         <Search size={19}/>
         <span className="sr-only">Pesquisar inspirações</span>
-        <input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Pesquisar inspirações..."/>
+        <input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Pesquisar inspirações..." aria-label="Tema, código, cor..."/>
         {filters.query&&<button type="button" onClick={()=>apply({...filters,query:''},true)} aria-label="Limpar pesquisa"><X size={15}/></button>}
         <i aria-hidden="true"><Search size={18}/></i>
       </label>
@@ -142,7 +143,7 @@ export default function TopperInspirationGallery(){
         <button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todos</button>
         {categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}</button>)}
         <button type="button" className={filters.favoritos?'is-active is-favorite':''} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={14} fill={filters.favoritos?'currentColor':'none'}/> Favoritos</button>
-        <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Mais filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
+        <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Mais filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
       </div>
     </div>
 
@@ -185,7 +186,7 @@ export default function TopperInspirationGallery(){
         </article>;
       })}</div>:<div className="public-gallery-empty public-gallery-empty-v721"><Search size={28}/><strong>Nenhuma inspiração encontrou essa combinação.</strong><p>Tente limpar um filtro ou buscar por outro tema, cor ou código.</p><button type="button" onClick={clearFilters}>Ver todas as inspirações</button></div>}
 
-      {hasMore&&<div className="public-load-more public-load-more-v721"><p>Mostrando {shown.length} de {results.length} inspirações.</p><button type="button" onClick={()=>setVisible(value=>value+PAGE_SIZE)}>Ver mais inspirações <ArrowUpRight size={15}/></button></div>}
+      {hasMore&&<div className="public-load-more public-load-more-v721"><p>Mostrando {shown.length} de {results.length} inspirações.</p><button type="button" onClick={()=>setVisible(value=>value+PAGE_SIZE)}><span className="sr-only">Carregar mais</span>Ver mais inspirações <ArrowUpRight size={15}/></button></div>}
     </section>
   </div>;
 }
