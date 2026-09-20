@@ -12,12 +12,11 @@ import SafeImage from './SafeImage';
 
 const navItems=[
   {href:'/',label:'Início'},
-  {href:'/#sobre',label:'Sobre Nós'},
-  {href:'/catalogo',label:'Nossos Topos'},
+  {href:'/catalogo',label:'Topos de bolo'},
+  {href:'/#personalizados',label:'Personalizados'},
   {href:'/inspiracoes',label:'Inspirações'},
-  {href:'/monte-seu-topo',label:'Monte seu Topo'},
-  {href:'/#duvidas',label:'Dúvidas'},
-  {href:'/#contato',label:'Contato'}
+  {href:'/#como-pedir',label:'Como funciona'},
+  {href:'/orcamento',label:'Orçamento'}
 ];
 
 export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
@@ -27,7 +26,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const [menuOpen,setMenuOpen]=useState(false);
   const menuButtonRef=useRef<HTMLButtonElement>(null);
   const mobileMenuRef=useRef<HTMLElement>(null);
-  const wa=whatsappUrl(settings.whatsapp_number,'Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.');
+  const wa=whatsappUrl(settings.whatsapp_number,'Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento de papelaria personalizada.');
   const logo=settings.logo_url||'/merlin-logo.webp';
 
   useEffect(()=>{
@@ -73,8 +72,8 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
 
         <form className="public-header-search" action="/inspiracoes" method="get" role="search">
           <Search size={18}/>
-          <label className="sr-only" htmlFor="public-topper-search">Buscar inspirações de topo</label>
-          <input id="public-topper-search" name="busca" placeholder="Tema, código, cor ou estilo..." autoComplete="off"/>
+          <label className="sr-only" htmlFor="public-topper-search">Buscar inspirações</label>
+          <input id="public-topper-search" name="busca" placeholder="Tema, produto, cor ou estilo..." autoComplete="off"/>
           <button type="submit">Buscar</button>
         </form>
 
