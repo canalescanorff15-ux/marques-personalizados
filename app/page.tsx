@@ -46,7 +46,7 @@ export default async function HomePage(){
             <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
             <div><strong>Merlin Encantos em Papel</strong><small>topos de bolo • papelaria personalizada</small></div>
           </div>
-          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • PAPELARIA PERSONALIZADA</div>
+          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • Papelaria personalizada</div>
           <h1>Detalhes personalizados que fazem <span>o seu momento ter identidade.</span></h1>
           <p className="hero-copy">Topos de bolo, caixinhas, lembrancinhas e outros personalizados criados para combinar com o tema, as cores e a personalidade da sua comemoração.</p>
           <div className="hero-actions">
