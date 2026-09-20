@@ -59,9 +59,9 @@ try{
   r=await request('/catalogo');assert(r.ok,'Catálogo de topos responde',`HTTP ${r.status}`);
   r=await request('/catalogo/essencial');assert(r.ok,'Detalhe TOP-01 responde',`HTTP ${r.status}`);
   const topperHtml=await r.text();assert(/Topo Essencial|TOP-01/i.test(topperHtml),'Detalhe TOP-01 contém identificação do nível');
-  r=await request('/monte-seu-topo');assert(r.ok,'Monte seu topo responde',`HTTP ${r.status}`);
+  r=await request('/monte-seu-pedido');assert(r.ok,'Monte seu Pedido responde',`HTTP ${r.status}`);r=await request('/monte-seu-topo');assert(r.ok,'Monte seu topo legado continua acessível',`HTTP ${r.status}`);
   const builderHtml=await r.text();assert(/Monte seu topo|Do simples ao Elite/i.test(builderHtml),'Configurador de topo retorna a nova jornada');
-  r=await request('/monte-seu-kit');assert([301,302,303,307,308].includes(r.status),'Monte seu kit legado redireciona',`HTTP ${r.status}`);assert((r.headers.get('location')||'').includes('/monte-seu-topo'),'Redirecionamento legado aponta para Monte seu topo');
+  r=await request('/monte-seu-kit');assert([301,302,303,307,308].includes(r.status),'Monte seu kit legado redireciona',`HTTP ${r.status}`);assert((r.headers.get('location')||'').includes('/monte-seu-pedido'),'Redirecionamento legado aponta para Monte seu Pedido');
   r=await request('/categorias/legado');assert([301,302,303,307,308].includes(r.status),'Categoria legada não expõe catálogo antigo',`HTTP ${r.status}`);
   r=await request('/api/catalog?page=1&limit=3');const catalog=await bodyJson(r);assert(r.ok&&Array.isArray(catalog.items),'API de catálogo preservada para compatibilidade interna');assert(Number.isInteger(catalog.page)&&Number.isInteger(catalog.page_size),'API de catálogo mantém paginação consistente');
   const first=Array.isArray(catalog.items)?catalog.items[0]:null;
