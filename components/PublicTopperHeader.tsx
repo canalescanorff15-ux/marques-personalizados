@@ -68,7 +68,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
       <div className="public-shell public-header-top-inner">
         <Link className="public-brand" href="/" aria-label={settings.brand_name+' — início'}>
           <span className="public-brand-logo"><SafeImage src={logo} fallback="/merlin-logo.webp" alt="" width={64} height={60} sizes="64px" priority/></span>
-          <span><strong>{settings.brand_name}</strong><small>topos de bolo personalizados</small></span>
+          <span><strong>{settings.brand_name}</strong><small>topos de bolo personalizados • papelaria sob encomenda</small></span>
         </Link>
 
         <form className="public-header-search" action="/inspiracoes" method="get" role="search">

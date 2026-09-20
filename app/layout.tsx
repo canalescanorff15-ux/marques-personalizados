@@ -13,6 +13,7 @@ import './public-v717.css';
 import './public-v718.css';
 import './public-v719.css';
 import './public-v721.css';
+import './v8-design-system.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
@@ -23,12 +24,12 @@ import AttributionCapture from '@/components/AttributionCapture';
 import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 
-const topperDescription='Topos de bolo personalizados sob encomenda, do modelo Simples ao Elite com shaker e acetato.';
-export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fffafb'};
+const topperDescription='Topos de bolo e papelaria personalizada feitos sob encomenda, com criação adaptada ao tema, cores e detalhes de cada comemoração.';
+export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fffaf8'};
 
 export async function generateMetadata():Promise<Metadata>{
  const s=await getSiteSettings();
- const title=`${s.brand_name} | Topos de bolo personalizados`;
+ const title=`${s.brand_name} | Papelaria personalizada e topos de bolo`;
  return{
   metadataBase:siteUrl?new URL(siteUrl):undefined,
   title:{default:title,template:`%s | ${s.brand_name}`},
