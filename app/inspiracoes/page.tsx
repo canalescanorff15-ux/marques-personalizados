@@ -1,36 +1,29 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, Gem, Gift, Heart, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TopperInspirationGallery from '@/components/TopperInspirationGallery';
 import { getSiteSettings } from '@/lib/db';
 
 export const dynamic='force-dynamic';
+
 export const metadata:Metadata={
   title:'Inspirações | Merlin Encantos em Papel',
-  description:'Explore inspirações de topos de bolo com foco no produto, filtre por estilo e personalize a referência que mais combina com o seu momento.'
+  description:'Veja referências de topos de bolo e escolha uma ideia para personalizar.'
 };
 
 export default async function InspirationsPage(){
   const settings=await getSiteSettings();
-  return <main className="merlin-public public-inspirations-page public-v712 public-inspirations-v721">
+
+  return <main className="merlin-public public-inspirations-page public-v712 public-inspirations-v721 v8-storefront-inspirations">
     <Header settings={settings}/>
 
-    <section className="public-inspiration-banner public-inspiration-banner-v721">
-      <div className="public-shell public-inspiration-banner-inner-v721">
-        <div className="public-inspiration-hero-copy">
-          <div className="public-inspiration-index"><strong>02</strong><i/><span>INSPIRAÇÕES</span></div>
-          <span className="public-kicker">VEJA ANTES DE IMAGINAR</span><span className="sr-only">Escolha o estilo que mais se aproxima da sua ideia.</span>
-          <h1>Referências que ajudam a<br/><em>enxergar o resultado.</em></h1>
-          <p>Explore referências com foco no bolo e no topo, sem confundir o produto com a decoração completa da festa. Veja cores, composição e estilo; depois adapte nome, idade, tema e acabamento ao seu pedido.</p>
-        </div>
-
-        <div className="public-inspiration-benefits" aria-label="Diferenciais">
-          <article><span><Gem size={20}/></span><div><strong>Foco no produto</strong><small>Bolo e topo em evidência</small></div></article>
-          <article><span><Gift size={20}/></span><div><strong>Personalizável</strong><small>Nome, idade, cores e tema podem mudar</small></div></article>
-          <article><span><Heart size={20}/></span><div><strong>Referência clara</strong><small>Você vê o estilo antes de pedir</small></div></article>
-        </div>
+    <section className="public-inspiration-banner public-inspiration-banner-v721 v8-storefront-hero">
+      <div className="public-shell">
+        <span className="eyebrow"><Sparkles size={14}/> INSPIRAÇÕES</span>
+        <h1>Encontre uma ideia.<br/><em>Depois deixe com a sua cara.</em></h1>
+        <p>Escolha uma referência e personalize nome, idade, cores e acabamento.</p>
       </div>
     </section>
 
@@ -40,25 +33,10 @@ export default async function InspirationsPage(){
       </div>
     </section>
 
-    <section className="public-inspiration-after public-inspiration-after-v721">
-      <div className="public-shell public-after-card public-after-card-v721">
-        <div className="public-after-points">
-          <span><Sparkles size={16}/> Topos de bolo personalizados</span>
-          <span><Heart size={16}/> Feito para combinar com o seu tema e o seu bolo</span>
-          <span><Gem size={16}/> Qualidade em cada detalhe</span>
-        </div>
-        <Link className="public-after-cta-v721" href="/inspiracoes?favoritos=1">Ver meus favoritos <ArrowUpRight size={16}/></Link>
-      </div>
-    </section>
-
-    <section className="public-inspiration-custom-cta">
+    <section className="v8-storefront-simple-cta">
       <div className="public-shell">
-        <div>
-          <span>Não encontrou exatamente o que imaginou?</span>
-          <h2>A referência pode vir de qualquer lugar.</h2>
-          <p>Envie uma foto, uma paleta, um tema ou descreva o que você quer. As inspirações do site existem para facilitar a conversa, não para limitar a criação.</p>
-        </div>
-        <Link className="public-primary-button" href="/monte-seu-pedido?produto=topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
+        <div><small>NÃO ACHOU O QUE QUER?</small><strong>Envie sua própria referência.</strong></div>
+        <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
       </div>
     </section>
 
