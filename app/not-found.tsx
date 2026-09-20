@@ -11,7 +11,7 @@ export default function NotFound(){
       <div className="public-state-actions">
         <Link className="public-primary-button" href="/"><ArrowLeft size={16}/> Voltar ao início</Link>
         <Link className="public-secondary-button" href="/inspiracoes">Ver inspirações</Link>
-        <Link className="public-secondary-button" href="/monte-seu-topo">Montar meu topo</Link>
+        <Link className="public-secondary-button" href="/monte-seu-pedido">Montar meu topo</Link>
       </div>
     </section>
   </main>;
