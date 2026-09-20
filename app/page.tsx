@@ -31,9 +31,9 @@ const homeInspirationCodes=['INSP-TOP-48','INSP-TOP-49','INSP-TOP-32','INSP-TOP-
 export default async function HomePage(){
   const [settings,testimonials]=await Promise.all([getSiteSettings(),getTestimonials()]);
   const phone=digits(settings.whatsapp_number);
-  const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.')}`:'';
+  const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento de papelaria personalizada.')}`:'';
   const featuredInspirations=homeInspirationCodes.map(code=>publicTopperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof publicTopperInspirations;
-  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do simples ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
+  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo e papelaria personalizada feitos sob encomenda para festas e momentos especiais.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
 
   return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719">
     <Header settings={settings}/><JsonLd data={organizationJsonLd}/>
@@ -44,19 +44,19 @@ export default async function HomePage(){
         <div className="hero-copy-column" data-reveal>
           <div className="home-v718-brand-signature">
             <span><SafeImage src={settings.logo_url||'/merlin-logo.webp'} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
-            <div><strong>Merlin Encantos em Papel</strong><small>topos personalizados • feitos sob encomenda</small></div>
+            <div><strong>Merlin Encantos em Papel</strong><small>topos de bolo • papelaria personalizada</small></div>
           </div>
-          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • FEITOS SOB ENCOMENDA</div>
-          <h1>Topos de bolo que parecem feitos <span>só para o seu momento.</span></h1>
-          <p className="hero-copy">Escolha uma inspiração, diga o que quer mudar e transforme tema, nome, idade e cores em uma composição pensada para o seu bolo.</p>
+          <div className="eyebrow"><i/> MERLIN • TOPOS DE BOLO PERSONALIZADOS • Papelaria personalizada</div>
+          <h1>Detalhes personalizados que fazem <span>o seu momento ter identidade.</span></h1>
+          <p className="hero-copy">Topos de bolo, caixinhas, lembrancinhas e outros personalizados criados para combinar com o tema, as cores e a personalidade da sua comemoração.</p>
           <div className="hero-actions">
             <Link className="btn btn-primary btn-luxury" href="/inspiracoes">Ver inspirações <Sparkles size={17}/></Link>
-            <Link className="btn btn-ghost" href="/monte-seu-topo">Montar meu topo <ArrowUpRight size={16}/></Link>
+            <Link className="btn btn-ghost" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
           </div>
           <div className="home-v717-hero-meta">
-            <span><BadgeCheck size={16}/> 6 níveis de acabamento</span>
-            <span><Palette size={16}/> Cores, nome e idade adaptáveis</span>
-            <span><CheckCircle2 size={16}/> Orçamento antes da produção</span>
+            <span><BadgeCheck size={16}/> Feito sob encomenda</span>
+            <span><Palette size={16}/> Tema, cores e detalhes adaptáveis</span>
+            <span><CheckCircle2 size={16}/> Orçamento confirmado antes da produção</span>
           </div>
           {wa&&<a className="home-v717-whatsapp-link" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={16}/> Prefere conversar? Fale direto no WhatsApp <ArrowUpRight size={14}/></a>}
         </div>
@@ -72,31 +72,87 @@ export default async function HomePage(){
                 <div><small>{item.category}</small><strong>{item.title}</strong></div>
             </Link>)}
           </div>
-          <div className="home-v717-showcase-seal"><Sparkles size={17}/><strong>feito para combinar</strong><span>com o seu tema e o seu bolo</span></div>
         </div>
       </div>
     </section>
 
     <section className="home-v717-intro-strip" aria-label="Como funciona">
       <div className="container">
-        <span><b>01</b><strong>Escolha uma referência</strong><small>Veja estilos que combinam com você.</small></span>
+        <span><b>01</b><strong>Escolha o que deseja</strong><small>Topo, caixinha, lembrancinha ou outro personalizado.</small></span>
         <i/>
-        <span><b>02</b><strong>Personalize os detalhes</strong><small>Nome, idade, cores e composição.</small></span>
+        <span><b>02</b><strong>Encontre uma inspiração</strong><small>Tema, cores e estilo ajudam a começar.</small></span>
         <i/>
-        <span><b>03</b><strong>Defina o acabamento</strong><small>Do simples ao Elite com efeitos especiais.</small></span>
+        <span><b>03</b><strong>Personalize seu pedido</strong><small>Conte os detalhes e receba o orçamento.</small></span>
+      </div>
+    </section>
+
+    <section className="v8-home-products" id="personalizados">
+      <div className="container">
+        <div className="section-index" data-reveal><span>01</span><i/><small>O QUE CRIAMOS</small></div>
+        <div className="v8-home-products-head" data-reveal>
+          <div>
+            <div className="eyebrow"><i/> Papelaria para celebrar do seu jeito</div>
+            <h2>Escolha o produto.<br/><em>A identidade vem depois.</em></h2>
+          </div>
+          <p>Você pode começar pelo produto ou pelo tema. Cada pedido é adaptado às cores, nome, idade e estilo da comemoração — sem precisar chegar com tudo decidido.</p>
+        </div>
+        <div className="v8-home-products-grid">
+          <Link href="/inspiracoes" className="v8-home-product-card is-featured" data-reveal>
+            <span className="v8-home-product-icon"><Layers3 size={23}/></span>
+            <small>PRODUTO PRINCIPAL</small>
+            <h3>Topos de Bolo</h3>
+            <p>Do modelo mais direto ao acabamento premium com camadas, shaker e acetato.</p>
+            <b>Ver inspirações <ArrowUpRight size={15}/></b>
+          </Link>
+          <Link href="/orcamento?produto=caixinhas" className="v8-home-product-card" data-reveal>
+            <span className="v8-home-product-icon"><BadgeCheck size={23}/></span>
+            <small>FESTA PERSONALIZADA</small>
+            <h3>Caixinhas</h3>
+            <p>Modelos personalizados para doces, lembranças e composição da mesa.</p>
+            <b>Pedir orçamento <ArrowUpRight size={15}/></b>
+          </Link>
+          <Link href="/orcamento?produto=lembrancinhas" className="v8-home-product-card" data-reveal>
+            <span className="v8-home-product-icon"><Sparkles size={23}/></span>
+            <small>PARA PRESENTEAR</small>
+            <h3>Lembrancinhas</h3>
+            <p>Peças criativas para marcar o momento e entregar aos convidados.</p>
+            <b>Pedir orçamento <ArrowUpRight size={15}/></b>
+          </Link>
+          <Link href="/orcamento?produto=adesivos-chaveiros" className="v8-home-product-card" data-reveal>
+            <span className="v8-home-product-icon"><Palette size={23}/></span>
+            <small>PERSONALIZAÇÃO</small>
+            <h3>Adesivos & Chaveiros</h3>
+            <p>Aplicações personalizadas para lembranças, presentes e pequenos detalhes.</p>
+            <b>Pedir orçamento <ArrowUpRight size={15}/></b>
+          </Link>
+          <Link href="/orcamento?produto=doces" className="v8-home-product-card" data-reveal>
+            <span className="v8-home-product-icon"><Star size={23}/></span>
+            <small>DETALHES DA MESA</small>
+            <h3>Doces & Complementos</h3>
+            <p>Toppers, tags, wrappers e peças que ajudam a levar o tema para os doces.</p>
+            <b>Pedir orçamento <ArrowUpRight size={15}/></b>
+          </Link>
+          <Link href="/orcamento?produto=kit" className="v8-home-product-card" data-reveal>
+            <span className="v8-home-product-icon"><CheckCircle2 size={23}/></span>
+            <small>CONJUNTO PERSONALIZADO</small>
+            <h3>Kits</h3>
+            <p>Combine diferentes peças com a mesma identidade visual em um único pedido.</p>
+            <b>Montar ideia <ArrowUpRight size={15}/></b>
+          </Link>
+        </div>
       </div>
     </section>
 
     <section className="category-showcase premium-categories home-categories home-v717-levels" id="topos">
       <div className="container">
-        <div className="section-index" data-reveal><span>01</span><i/><small>NÍVEIS DE TOPO</small></div>
+        <div className="section-index" data-reveal><span>02</span><i/><small>ACABAMENTO DOS TOPOS</small></div>
         <div className="catalog-head" data-reveal>
           <div>
-            <div className="eyebrow">Uma evolução de acabamento</div>
-            <h2 className="section-title">Do essencial ao efeito<br/><em>mais marcante.</em></h2>
+            <div className="eyebrow">Para quem quer um topo de bolo</div>
+            <h2 className="section-title">Escolha quanto detalhe<br/><em>faz sentido para o seu bolo.</em></h2>
             <Link className="public-inline-guide" href="/guia-de-precos">Comparar níveis e detalhes <ArrowUpRight size={14}/></Link>
           </div>
-          <p className="muted">Cada nível aumenta presença, profundidade e possibilidades de acabamento. Você escolhe quanto detalhe faz sentido para o seu bolo.</p>
+          <p className="muted">Os níveis continuam disponíveis para quem escolhe Topo de Bolo. Do simples ao Elite com shaker e acetato, eles ajudam a comparar quantidade de camadas, profundidade e efeitos especiais.</p>
         </div>
         <div className="home-v717-level-progress" aria-hidden="true"><span/><span/><span/><span/><span/><span/></div>
         <div className="home-v717-level-grid">
@@ -119,7 +175,7 @@ export default async function HomePage(){
 
     <section className="home-v717-inspiration-story">
       <div className="container">
-        <div className="section-index" data-reveal><span>02</span><i/><small>INSPIRAÇÕES</small></div>
+        <div className="section-index" data-reveal><span>03</span><i/><small>INSPIRAÇÕES</small></div>
         <div className="home-v717-story-head" data-reveal>
           <div><div className="eyebrow">Veja antes de imaginar</div><h2>Referências que ajudam a<br/><em>enxergar o resultado.</em></h2></div>
           <div><p>Você não precisa começar com a ideia pronta. Veja composições, paletas e estilos; depois adapte tudo para o seu pedido.</p><Link href="/inspiracoes">Abrir galeria completa <ArrowUpRight size={15}/></Link></div>
@@ -141,19 +197,19 @@ export default async function HomePage(){
 
     <section className="event-pathways kf-order-pathways home-start home-v717-process">
       <div className="container">
-        <div className="section-index" data-reveal><span>03</span><i/><small>COMO PEDIR</small></div>
-        <div className="home-v717-process-head" data-reveal><div><div className="eyebrow">Sem complicação</div><h2>Três passos para tirar<br/><em>a ideia do papel.</em></h2></div><p>Comece pelo que você já sabe. Uma referência, uma cor ou apenas o tema já são suficientes para iniciar o briefing.</p></div>
+        <div className="section-index" data-reveal><span>04</span><i/><small>COMO PEDIR</small></div>
+        <div className="home-v717-process-head" data-reveal><div><div className="eyebrow">Sem complicação</div><h2>Três passos para transformar<br/><em>a ideia em pedido.</em></h2></div><p>Comece pelo que você já sabe. Produto, tema, cor ou uma simples referência já são suficientes para iniciar o pedido.</p></div>
         <div className="home-v717-process-grid">
           <Link href="/inspiracoes" data-reveal><span><Eye size={20}/></span><small>PASSO 01</small><strong>Encontre sua inspiração</strong><p>Explore estilos, cores e composições que se aproximam do que você imaginou.</p><b>Ver ideias <ArrowUpRight size={15}/></b></Link>
           <Link href="/catalogo" data-reveal><span><Palette size={20}/></span><small>PASSO 02</small><strong>Escolha o acabamento</strong><p>Compare os níveis e decida quanta profundidade e efeito você quer no resultado.</p><b>Comparar níveis <ArrowUpRight size={15}/></b></Link>
-          <Link href="/monte-seu-topo" data-reveal><span><Send size={20}/></span><small>PASSO 03</small><strong>Conte como quer o seu topo</strong><p>Envie tema, nome, idade, cores, tamanho do bolo e as referências que quiser.</p><b>Preencher briefing <ArrowUpRight size={15}/></b></Link>
+          <Link href="/monte-seu-topo" data-reveal><span><Send size={20}/></span><small>PASSO 03</small><strong>Conte como quer o seu pedido</strong><p>Envie produto, tema, nome, idade, cores, quantidade e as referências que quiser.</p><b>Preencher briefing <ArrowUpRight size={15}/></b></Link>
         </div>
       </div>
     </section>
 
     <section className="craft-section home-craft home-v717-craft">
       <div className="container">
-        <div className="section-index" data-reveal><span>04</span><i/><small>ACABAMENTO</small></div>
+        <div className="section-index" data-reveal><span>05</span><i/><small>ACABAMENTO</small></div>
         <div className="craft-head" data-reveal><div><div className="eyebrow">Detalhes que aparecem no resultado</div><h2>Bonito de perto.<br/><em>Equilibrado no bolo.</em></h2></div><p>O acabamento não entra só para enfeitar. Cada camada, recorte e efeito precisa contribuir para leitura, profundidade e presença.</p></div>
         <div className="home-v717-detail-grid">
           <article data-reveal><div className="home-v717-detail-visual detail-cut"><span/><i/><b/></div><Scissors size={19}/><small>01</small><h3>Recorte preciso</h3><p>Contornos limpos e peças pensadas para produção real.</p></article>
@@ -167,7 +223,7 @@ export default async function HomePage(){
     <section className="public-home-about home-v717-about" id="sobre">
       <div className="container">
         <div className="home-v717-about-grid">
-          <div className="home-v717-about-title" data-reveal><div className="eyebrow">Sobre a Merlin</div><h2>Não é só colocar um nome em cima do bolo.</h2><p>É organizar tema, cores, proporção e acabamento para o topo conversar com o bolo — e não competir com ele.</p></div>
+          <div className="home-v717-about-title" data-reveal><div className="eyebrow">Sobre a Merlin</div><h2>Personalizar é fazer cada detalhe conversar com o seu momento.</h2><p>É organizar tema, cores, proporção, acabamento e produto para criar uma identidade coerente — do topo às pequenas lembranças.</p></div>
           <div className="home-v717-about-card" data-reveal>
             <Sparkles size={22}/>
             <blockquote>“A inspiração é o começo. O resultado precisa ter a cara do seu pedido.”</blockquote>
@@ -184,6 +240,8 @@ export default async function HomePage(){
         <div className="home-v717-faq-head" data-reveal><div><div className="eyebrow">Dúvidas frequentes</div><h2>Antes de pedir,<br/><em>vale saber.</em></h2></div><p>As respostas abaixo ajudam a entender até onde a personalização pode ir antes de você preencher o briefing.</p></div>
         <div className="public-home-faq-grid">
           <details><summary>Posso mudar as cores de uma inspiração?</summary><p>Sim. Nome, idade, cores e detalhes podem ser adaptados ao seu pedido.</p></details>
+          <details><summary>O bolo e a decoração da foto estão inclusos?</summary><p>Não. As imagens servem para apresentar o topo ou a papelaria personalizada. Bolo, doces, mesa, painel, balões e cenário só fazem parte do pedido quando isso for informado e contratado separadamente.</p></details>
+          <details><summary>Vocês fazem outros personalizados além de topo de bolo?</summary><p>Sim. A linha está sendo ampliada com caixinhas, lembrancinhas, adesivos, chaveiros, itens para doces e kits personalizados.</p></details>
           <details><summary>Posso enviar uma foto ou referência minha?</summary><p>Sim. A referência ajuda a explicar tema, paleta, composição e detalhes que você gostaria de aproveitar.</p></details>
           <details><summary>Preciso escolher o nível sugerido da inspiração?</summary><p>Não. O nível sugerido é apenas um ponto de partida; você pode escolher outro acabamento no briefing.</p></details>
           <details><summary>O topo fica idêntico à inspiração?</summary><p>As inspirações são pontos de partida. O resultado é adaptado ao nome, idade, cores, elementos e acabamento do seu pedido.</p></details>
@@ -196,10 +254,10 @@ export default async function HomePage(){
     <section className="public-home-contact home-v717-contact" id="contato">
       <div className="container">
         <div className="home-v717-contact-shell" data-reveal>
-          <div className="home-v717-contact-copy"><div className="eyebrow">Agora é com a sua ideia</div><h2>Encontrou uma referência<br/><em>que tem a sua cara?</em></h2><p>Envie o briefing e conte o que você quer manter, mudar ou acrescentar. Antes da produção, os detalhes e o orçamento são confirmados.</p></div>
+          <div className="home-v717-contact-copy"><div className="eyebrow">Agora é com a sua ideia</div><h2>Quer um topo ou outro<br/><em>personalizado para a sua festa?</em></h2><p>Conte o que você deseja, envie suas referências e nós organizamos os detalhes do pedido. Antes da produção, tudo é confirmado com você.</p></div>
           <div className="home-v717-contact-actions">
-            <Link className="btn btn-primary btn-luxury" href="/monte-seu-topo">Montar meu topo <ArrowUpRight size={16}/></Link>
-            <Link className="btn btn-ghost" href="/orcamento">Ver meu pedido</Link>
+            <Link className="btn btn-primary btn-luxury" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
+            <Link className="btn btn-ghost" href="/inspiracoes">Ver inspirações</Link>
             {wa&&<a className="home-v717-contact-wa" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={17}/><span><small>ATENDIMENTO DIRETO</small><strong>Falar no WhatsApp</strong></span><ArrowUpRight size={15}/></a>}
           </div>
         </div>
