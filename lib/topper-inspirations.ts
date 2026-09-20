@@ -33,6 +33,22 @@ export const topperInspirations:TopperInspiration[]=[
   ...topperInspirationBatch
 ];
 
+const PUBLIC_TOPPER_MIN=18;
+const PUBLIC_TOPPER_MAX=50;
+
+export const publicTopperInspirations=topperInspirations.filter(item=>{
+  const match=item.code.match(/INSP-TOP-(\d+)/);
+  const number=match?Number(match[1]):0;
+  return number>=PUBLIC_TOPPER_MIN&&number<=PUBLIC_TOPPER_MAX;
+});
+
+export const archivedTopperInspirations=topperInspirations.filter(item=>!publicTopperInspirations.some(publicItem=>publicItem.code===item.code));
+
+export function isPublicTopperInspiration(code:string){
+  const normalized=code.trim().toUpperCase();
+  return publicTopperInspirations.some(item=>item.code.toUpperCase()===normalized);
+}
+
 export function topperInspirationBySlug(slug:string){
   return topperInspirations.find(item=>item.slug===slug)||null;
 }

@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getSiteSettings } from '@/lib/db';
-import { topperInspirationByCode } from '@/lib/topper-inspirations';
+import { isPublicTopperInspiration, topperInspirationByCode } from '@/lib/topper-inspirations';
 import { topperLevelBySlug } from '@/lib/topper-catalog';
 
 type Props={params:Promise<{code:string}>};
@@ -13,7 +13,7 @@ type Props={params:Promise<{code:string}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
-  if(!inspiration)return{title:'Inspirações de topos | Merlin Encantos em Papel'};
+  if(!inspiration||!isPublicTopperInspiration(inspiration.code))return{title:'Inspirações de topos | Merlin Encantos em Papel'};
   return{
     title:inspiration.title+' | Inspirações Merlin',
     description:inspiration.description
@@ -26,6 +26,7 @@ export default async function InspirationDetailPage({params}:Props){
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
   if(!inspiration)redirect('/inspiracoes');
+  if(!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
 
   const [settings]=await Promise.all([getSiteSettings()]);
   const level=topperLevelBySlug(inspiration.levelSlug);

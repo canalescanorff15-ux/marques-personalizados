@@ -41,7 +41,11 @@ if(fs.existsSync('app/page.tsx')){
   const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="home-v717-intro-strip'));
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
   if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
-  if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
+  const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
+  if(v8Curated){
+    const codes=[...home.matchAll(/INSP-TOP-(\\d{2})/g)].map(match=>Number(match[1]));
+    if(codes.some(code=>code<18||code>50))errors.push('hero V8 usa inspiração fora da faixa curada de bolos');
+  }else if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
 }
 
 if(fs.existsSync('app/public-v717.css')){

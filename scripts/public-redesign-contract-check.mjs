@@ -40,7 +40,8 @@ if(exists('app/inspiracoes/page.tsx')){
 
 if(exists('app/inspiracoes/[code]/page.tsx')){
   const d=read('app/inspiracoes/[code]/page.tsx');
-  if(d.includes('function LegacyInspirationDetail')||!d.includes("if(!inspiration)redirect('/inspiracoes')"))errors.push('detalhe deve renderizar códigos atuais e redirecionar apenas códigos desconhecidos');
+  if(d.includes('function LegacyInspirationDetail')||!d.includes("if(!inspiration)redirect('/inspiracoes')"))errors.push('detalhe deve redirecionar códigos desconhecidos');
+  if(d.includes('isPublicTopperInspiration')&&!d.includes("redirect('/inspiracoes')"))errors.push('curadoria V8 precisa redirecionar referências arquivadas');
   for(const token of ['topperInspirationByCode','Quero esse modelo','paleta','nível sugerido'])if(!d.toLowerCase().includes(token.toLowerCase()))errors.push(`detalhe de inspiração sem ${token}`);
 }
 

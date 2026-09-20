@@ -1,0 +1,126 @@
+/* V8.01 — Política de imagem focada no produto
+   Nenhuma máscara escura deve esconder fotos públicas. */
+
+.premium-site .home-v717-photo-shade,
+.premium-site .public-card-shade-v721,
+.merlin-public .public-card-shade-v721{
+  display:none!important;
+}
+
+/* As fotos aparecem em cor real. */
+.premium-site .home-v717-showcase img,
+.premium-site .home-v717-gallery-card img,
+.premium-site .public-inspiration-image-v721>img,
+.merlin-public .public-detail-media>img{
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+
+/* Vitrine principal: informações passam a ser etiquetas claras pequenas,
+   em vez de depender de uma faixa preta sobre a fotografia. */
+.home-v717-showcase-main>div,
+.home-v717-showcase-side>a>div{
+  left:14px!important;
+  right:auto!important;
+  bottom:14px!important;
+  max-width:calc(100% - 28px)!important;
+  width:max-content!important;
+  padding:10px 12px!important;
+  border:1px solid rgba(74,48,61,.10)!important;
+  border-radius:14px!important;
+  background:rgba(255,250,248,.95)!important;
+  color:var(--v8-ink)!important;
+  box-shadow:0 9px 28px rgba(60,35,48,.12)!important;
+  backdrop-filter:blur(10px)!important;
+}
+.home-v717-showcase-main small,
+.home-v717-showcase-side small{
+  color:#9f5574!important;
+  opacity:1!important;
+}
+.home-v717-showcase-main strong,
+.home-v717-showcase-side strong{
+  color:var(--v8-ink)!important;
+}
+.home-v717-showcase-main>div>span{
+  color:#75686f!important;
+  opacity:1!important;
+}
+
+/* Galeria editorial da Home: sem película preta; ficha compacta clara no rodapé. */
+.home-v717-gallery-info{
+  left:13px!important;
+  right:auto!important;
+  bottom:13px!important;
+  max-width:calc(100% - 26px)!important;
+  width:max-content!important;
+  padding:10px 12px!important;
+  border:1px solid rgba(74,48,61,.10)!important;
+  border-radius:14px!important;
+  background:rgba(255,250,248,.95)!important;
+  color:var(--v8-ink)!important;
+  box-shadow:0 9px 28px rgba(60,35,48,.12)!important;
+  backdrop-filter:blur(10px)!important;
+}
+.home-v717-gallery-info small{
+  color:#9f5574!important;
+}
+.home-v717-gallery-info strong{
+  color:var(--v8-ink)!important;
+}
+.home-v717-gallery-info span{
+  color:#75686f!important;
+}
+
+/* Bordas internas podem existir, mas nunca com preenchimento escuro. */
+.home-v719 .home-v717-gallery-card::after{
+  background:transparent!important;
+}
+
+/* Demais overlays fotográficos antigos deixam de escurecer o produto. */
+.premium-site .category-overlay{
+  background:linear-gradient(to top,rgba(255,250,248,.92) 0%,rgba(255,250,248,.22) 25%,transparent 46%)!important;
+}
+.premium-site .category-copy{
+  color:var(--v8-ink)!important;
+}
+.premium-site .category-copy strong{
+  color:var(--v8-ink)!important;
+}
+.premium-site .category-copy p{
+  color:#6f6369!important;
+}
+.premium-site .category-copy>small{
+  color:#9b5572!important;
+}
+
+/* Página de detalhe: fotografia sem efeitos e com fundo neutro. */
+.public-detail-media{
+  background:var(--v8-paper-2)!important;
+}
+.public-detail-media>img{
+  background:var(--v8-paper-2)!important;
+}
+
+/* Código continua útil, mas não vira bloco escuro dominante. */
+.public-card-code-v721,
+.public-detail-media>span{
+  border:1px solid rgba(74,48,61,.10)!important;
+  background:rgba(255,250,248,.94)!important;
+  color:var(--v8-ink)!important;
+  box-shadow:0 7px 20px rgba(60,35,48,.10)!important;
+  backdrop-filter:blur(8px)!important;
+}
+
+@media(max-width:640px){
+  .home-v717-showcase-main>div,
+  .home-v717-showcase-side>a>div,
+  .home-v717-gallery-info{
+    left:10px!important;
+    bottom:10px!important;
+    max-width:calc(100% - 20px)!important;
+    padding:8px 10px!important;
+    border-radius:12px!important;
+  }
+}
