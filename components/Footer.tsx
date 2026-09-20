@@ -15,6 +15,6 @@ export default function Footer({settings}:{settings:SiteSettings}){
         {settings.contact_email&&<div><small>E-MAIL</small><a href={`mailto:${settings.contact_email}`}><Mail size={14}/>{settings.contact_email}</a></div>}
       </div>
     </div>
-    <div className="container footer-grid"><div><span>© {new Date().getFullYear()} {settings.brand_name}. Todos os direitos reservados.</span></div><div className="footer-links"><Link href="/catalogo">Topos</Link><Link href="/personalizados">Personalizados</Link><Link href="/inspiracoes">Inspirações</Link><Link href="/#como-pedir">Como funciona</Link><Link href="/monte-seu-topo">Monte seu pedido</Link><Link href="/guia-de-precos">Acabamentos</Link><Link href="/orcamento">Orçamento</Link><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos</Link><Link href="/#inicio">Voltar ao topo ↑</Link></div></div>
+    <div className="container footer-grid"><div><span>© {new Date().getFullYear()} {settings.brand_name}. Todos os direitos reservados.</span></div><div className="footer-links"><Link href="/catalogo">Topos</Link><Link href="/personalizados">Personalizados</Link><Link href="/inspiracoes">Inspirações</Link><Link href="/#como-pedir">Como funciona</Link><Link href="/monte-seu-pedido">Monte seu pedido</Link><Link href="/guia-de-precos">Acabamentos</Link><Link href="/orcamento">Orçamento</Link><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos</Link><Link href="/#inicio">Voltar ao topo ↑</Link></div></div>
   </footer>;
 }
