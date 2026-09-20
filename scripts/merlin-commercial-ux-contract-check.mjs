@@ -39,7 +39,15 @@ for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento']
   if(!header.includes(route))errors.push(`header sem caminho comercial: ${route}`);
 }
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento'])if(!dock.includes(route))errors.push(`dock móvel sem caminho: ${route}`);
-for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/guia-de-precos','/orcamento'])if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
+const isV809=header.includes('v8-simple-header');
+const footerRoutes=isV809
+  ? ['/catalogo','/inspiracoes','/monte-seu-pedido']
+  : ['/catalogo','/inspiracoes','/monte-seu-pedido','/guia-de-precos','/orcamento'];
+for(const route of footerRoutes)if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
+if(isV809){
+  if(!home.includes('/guia-de-precos'))errors.push('V8.09 sem acesso ao guia de acabamentos fora do footer');
+  if(!header.includes('/orcamento')&&!home.includes('/orcamento'))errors.push('V8.09 sem caminho público para orçamento');
+}
 for(const token of ['Topo Simples','Topo Básico 3D','Topo Premium','Topo Shaker','Topo com Acetato','Topo Elite Shaker + Acetato'])if(!catalog.includes(token))errors.push(`nível comercial ausente: ${token}`);
 const imageRefs=[...catalog.matchAll(/image:'([^']+)'/g)].map(match=>match[1]);
 if(imageRefs.length!==6)errors.push(`linha de topos precisa declarar 6 imagens oficiais; encontrou ${imageRefs.length}`);
