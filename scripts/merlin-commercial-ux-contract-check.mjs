@@ -27,6 +27,7 @@ const publicV720PartyScenesContract='scripts/public-v720-party-scenes-contract-c
 const publicV721InspirationsContract='scripts/public-v721-inspirations-contract-check.mjs';
 const publicV722InspirationBatchContract='scripts/public-v722-inspiration-batch-contract-check.mjs';
 const v8HomePremiumContract='scripts/v8-home-premium-contract-check.mjs';
+const v8InspirationsPremiumContract='scripts/v8-inspirations-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -131,6 +132,12 @@ if(!fs.existsSync(v8HomePremiumContract))errors.push('contrato da Home V8.02 aus
 else{
   const v8HomeCheck=spawnSync(process.execPath,[v8HomePremiumContract],{encoding:'utf8'});
   if(v8HomeCheck.status!==0)errors.push((v8HomeCheck.stderr||v8HomeCheck.stdout||'contrato da Home V8.02 falhou').trim());
+}
+
+if(!fs.existsSync(v8InspirationsPremiumContract))errors.push('contrato das Inspirações V8.04 ausente');
+else{
+  const v8InspirationsCheck=spawnSync(process.execPath,[v8InspirationsPremiumContract],{encoding:'utf8'});
+  if(v8InspirationsCheck.status!==0)errors.push((v8InspirationsCheck.stderr||v8InspirationsCheck.stdout||'contrato das Inspirações V8.04 falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
