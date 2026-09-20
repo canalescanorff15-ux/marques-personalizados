@@ -262,7 +262,7 @@ export default async function HomePage(){
             <div className="eyebrow"><i/> ACABAMENTOS PARA TOPOS</div>
             <h2>O nível entra depois.<br/><em>Primeiro vem a sua ideia.</em></h2>
           </div>
-          <p>Do modelo mais direto ao Elite com shaker e acetato, o acabamento define profundidade e efeitos — não limita o tema.</p>
+          <p>Do modelo mais direto ao Elite com shaker e acetato, o acabamento define profundidade e efeitos — não limita o tema. Shaker e Acetato seguem disponíveis quando combinam com a composição.</p>
         </div>
 
         <div className="v8-levels-grid">
