@@ -17,8 +17,15 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  for(const token of ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal']){
-    if(!home.includes(token))errors.push('Home V7.18 sem '+token);
+  const v8Home=home.includes('className="premium-site kf-theme public-v712 v8-home"');
+  if(v8Home){
+    for(const token of ['v8-brand-signature','topos de bolo personalizados','papelaria sob encomenda','settings.brand_name']){
+      if(!home.includes(token))errors.push('Home V8 sem assinatura de marca: '+token);
+    }
+  }else{
+    for(const token of ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal']){
+      if(!home.includes(token))errors.push('Home V7.18 sem '+token);
+    }
   }
   if(!home.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('Home não usa a logo configurável da marca');
 }
