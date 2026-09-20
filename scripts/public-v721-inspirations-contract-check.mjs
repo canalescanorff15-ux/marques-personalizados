@@ -33,7 +33,8 @@ if(fs.existsSync('app/inspiracoes/page.tsx')){
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
   const gallery=read('components/TopperInspirationGallery.tsx');
   for(const token of [
-    'PAGE_SIZE=8',
+    'PAGE_SIZE=12',
+    'INITIAL_VISIBLE=8',
     'public-gallery-search-v721',
     'public-gallery-chip-row',
     'public-gallery-more-filters',
