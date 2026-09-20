@@ -12,7 +12,15 @@ const price=must('app/guia-de-precos/page.tsx',['topperLevels.map','Sob orçamen
 const detail=must('app/catalogo/[slug]/page.tsx',['topperLevelBySlug','level.features','level.materials','/monte-seu-pedido?produto=topo&nivel=']);
 const builder=must('components/TopperBuilder.tsx',["'/api/inquiries'","cake_size","desired_categories:['Topos de bolo']","product_name:selected.name"]);
 const header=must('components/PublicTopperHeader.tsx',['/guia-de-precos','/orcamento','/monte-seu-pedido']);
-const footer=must('components/Footer.tsx',['/guia-de-precos','/orcamento','/monte-seu-pedido']);
+const footerText=read('components/Footer.tsx');
+const isV809Footer=footerText.includes('v8-simple-footer');
+const footer=isV809Footer
+  ? must('components/Footer.tsx',['/monte-seu-pedido','/catalogo','/inspiracoes','/personalizados'])
+  : must('components/Footer.tsx',['/guia-de-precos','/orcamento','/monte-seu-pedido']);
+if(isV809Footer){
+  if(!home.includes('href="/guia-de-precos"'))errors.push('Home V8.09 sem acesso ao guia de acabamentos');
+  if(!home.includes('href="/orcamento"'))errors.push('Home V8.09 sem acesso a orçamento');
+}
 const dock=must('components/MerlinMobileDock.tsx',['href="/orcamento"','href="/monte-seu-pedido"']);
 const sitemap=must('app/sitemap.ts',['/guia-de-precos','/monte-seu-pedido','topperLevels.map']);
 
@@ -29,4 +37,4 @@ const workflow=read('.github/workflows/ci.yml');
 if(!workflow.includes('check:commerce-v670'))errors.push('CI não executa o contrato comercial');
 
 if(errors.length){console.error(`TOPPER_COMMERCE_CONTRACT_FAIL (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('TOPPER_COMMERCE_CONTRACT_OK — catálogo de topos, preços sob orçamento e navegação V8.06 protegidos.');
+console.log('TOPPER_COMMERCE_CONTRACT_OK — catálogo de topos, preços sob orçamento e navegação clean V8.09 protegidos.');
