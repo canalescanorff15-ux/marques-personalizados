@@ -79,9 +79,9 @@ export default async function InspirationDetailPage({params}:Props){
               <small>PODE SER PERSONALIZADO</small>
               <div>
                 <span><CheckCircle2 size={15}/> Nome e idade</span>
-                <span><CheckCircle2 size={15}/> Cores</span>
-                <span><CheckCircle2 size={15}/> Elementos</span>
-                <span><CheckCircle2 size={15}/> Nível de acabamento</span>
+                <span><CheckCircle2 size={15}/> Cores e elementos</span>
+                <span><CheckCircle2 size={15}/> Acabamento</span>
+                <span><CheckCircle2 size={15}/> Tema e composição</span>
               </div>
             </div>
 
