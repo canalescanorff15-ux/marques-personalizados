@@ -47,7 +47,7 @@ export default async function InspirationDetailPage({params}:Props){
         <div className="v8-detail-grid">
           <div className="v8-detail-media-column">
             <figure className="v8-detail-media">
-              <img src={inspiration.image} alt={'Inspiração de topo '+inspiration.title} width={1400} height={1050} decoding="async"/>
+              <img src={inspiration.image} alt={'Inspiração de topo '+inspiration.title} width={1200} height={1200} decoding="async"/>
               <figcaption>
                 <span>{inspiration.code}</span>
                 <strong>Referência visual do produto</strong>
@@ -71,11 +71,11 @@ export default async function InspirationDetailPage({params}:Props){
             <p className="v8-detail-description">{inspiration.description}</p>
 
             <div className="v8-detail-facts">
-              <article><Layers3 size={18}/><div><small>Acabamento sugerido</small><strong>{level?.name||'Topo personalizado'}</strong></div></article>
+              <article><Layers3 size={18}/><div><small>nível sugerido</small><strong>{level?.name||'Topo personalizado'}</strong></div></article>
               <article><Palette size={18}/><div><small>Paleta da referência</small><strong>{inspiration.palette.join(' • ')}</strong></div></article>
             </div>
 
-            <div className="v8-detail-personalize">
+            <div className="v8-detail-personalize public-detail-customize">
               <small>PODE SER PERSONALIZADO</small>
               <div>
                 <span><CheckCircle2 size={15}/> Nome e idade</span>
@@ -93,7 +93,7 @@ export default async function InspirationDetailPage({params}:Props){
             </div>
 
             <div className="v8-detail-actions">
-              <Link className="btn btn-primary btn-luxury" href={builderHref}>Quero algo inspirado neste modelo <ArrowUpRight size={16}/></Link>
+              <Link className="btn btn-primary btn-luxury" href={builderHref}>Quero esse modelo <ArrowUpRight size={16}/></Link>
               <Link className="btn btn-ghost" href="/catalogo">Comparar acabamentos</Link>
             </div>
           </div>
