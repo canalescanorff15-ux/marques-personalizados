@@ -40,10 +40,18 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="category-showcase'));
-  for(const token of ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'])if(!hero.includes(token))errors.push('hero público sem '+token);
-  for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
-  if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
+  const v8Home=home.includes('className="premium-site kf-theme public-v712 v8-home"');
+  if(v8Home){
+    const hero=home.slice(home.indexOf('<section className="v8-hero"'),home.indexOf('<section className="v8-trust-strip"'));
+    for(const token of ['Papelaria personalizada para','Ver inspirações','Pedir orçamento','Orçamento antes da produção'])if(!hero.includes(token))errors.push('hero V8 sem '+token);
+    if(!home.includes('v8-process-grid'))errors.push('Home V8 sem sequência comercial em etapas');
+    if(!home.includes('tamanho do bolo'))errors.push('Home V8 não orienta adequação ao tamanho do bolo');
+  }else{
+    const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="category-showcase'));
+    for(const token of ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'])if(!hero.includes(token))errors.push('hero público sem '+token);
+    for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
+    if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
+  }
 }
 
 
