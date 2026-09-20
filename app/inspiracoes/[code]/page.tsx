@@ -30,7 +30,7 @@ export default async function InspirationDetailPage({params}:Props){
 
   const [settings]=await Promise.all([getSiteSettings()]);
   const level=topperLevelBySlug(inspiration.levelSlug);
-  const builderHref='/monte-seu-topo?inspiracao='+encodeURIComponent(inspiration.slug)+'&nivel='+encodeURIComponent(inspiration.levelSlug)+'&tema='+encodeURIComponent(inspiration.title);
+  const builderHref='/monte-seu-pedido?produto=topo&inspiracao='+encodeURIComponent(inspiration.slug)+'&nivel='+encodeURIComponent(inspiration.levelSlug)+'&tema='+encodeURIComponent(inspiration.title);
 
   return <main className="merlin-public public-inspiration-detail-page">
     <Header settings={settings}/>
