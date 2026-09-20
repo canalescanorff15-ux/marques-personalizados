@@ -14,8 +14,12 @@ for(const file of [
 
 if(exists('components/PublicTopperHeader.tsx')){
   const h=read('components/PublicTopperHeader.tsx');
-  for(const token of ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-topo','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'])if(!h.includes(token))errors.push(`header público sem ${token}`);
-  if(!h.includes('busca'))errors.push('header V7.10 sem busca dedicada a topos');
+  const isV8=h.includes("label:'Personalizados'")&&h.includes("label:'Como funciona'");
+  const required=isV8
+    ? ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-topo','/catalogo','Topos de bolo','Personalizados','Inspirações','Como funciona','/orcamento','Orçamento']
+    : ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-topo','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'];
+  for(const token of required)if(!h.includes(token))errors.push(`header público ${isV8?'V8.03':'legado'} sem ${token}`);
+  if(!h.includes('public-header-search'))errors.push('header público sem busca dedicada');
 }
 
 if(exists('components/TopperInspirationGallery.tsx')){
