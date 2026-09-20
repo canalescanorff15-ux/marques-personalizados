@@ -21,7 +21,7 @@ import SafeImage from '@/components/SafeImage';
 import { getSiteSettings, getTestimonials } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 import { topperLevels, topperThemes } from '@/lib/topper-catalog';
-import { topperInspirations } from '@/lib/topper-inspirations';
+import { publicTopperInspirations } from '@/lib/topper-inspirations';
 
 export const dynamic='force-dynamic';
 function digits(v:string){return v.replace(/\D/g,'');}
@@ -32,7 +32,7 @@ export default async function HomePage(){
   const [settings,testimonials]=await Promise.all([getSiteSettings(),getTestimonials()]);
   const phone=digits(settings.whatsapp_number);
   const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento para um topo de bolo personalizado.')}`:'';
-  const featuredInspirations=homeInspirationCodes.map(code=>topperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof topperInspirations;
+  const featuredInspirations=homeInspirationCodes.map(code=>publicTopperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof publicTopperInspirations;
   const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do simples ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
 
   return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719">
@@ -64,14 +64,12 @@ export default async function HomePage(){
         <div className="home-v717-showcase" data-reveal aria-label="Seleção de inspirações Merlin">
           {featuredInspirations[0]&&<Link className="home-v717-showcase-main" href={'/inspiracoes/'+featuredInspirations[0].code}>
             <img src={featuredInspirations[0].image} alt={'Inspiração '+featuredInspirations[0].title}/>
-            <span className="home-v717-photo-shade"/>
             <div><small>DESTAQUE DO ATELIÊ</small><strong>{featuredInspirations[0].title}</strong><span>{featuredInspirations[0].category}</span></div>
           </Link>}
           <div className="home-v717-showcase-side">
             {featuredInspirations.slice(1,3).map(item=><Link href={'/inspiracoes/'+item.code} key={item.code}>
               <img src={item.image} alt={'Inspiração '+item.title}/>
-              <span className="home-v717-photo-shade"/>
-              <div><small>{item.category}</small><strong>{item.title}</strong></div>
+                <div><small>{item.category}</small><strong>{item.title}</strong></div>
             </Link>)}
           </div>
           <div className="home-v717-showcase-seal"><Sparkles size={17}/><strong>feito para combinar</strong><span>com o seu tema e o seu bolo</span></div>
@@ -131,8 +129,7 @@ export default async function HomePage(){
             const level=topperLevels.find(level=>level.slug===item.levelSlug);
             return <Link className={'home-v717-gallery-card home-v717-gallery-card-'+(i+1)} href={'/inspiracoes/'+item.code} key={item.code} data-reveal>
               <img src={item.image} alt={'Inspiração de topo '+item.title}/>
-              <span className="home-v717-photo-shade"/>
-              <div className="home-v717-gallery-info"><small>{item.category}</small><strong>{item.title}</strong><span>{level?.name||'Personalizado'} <ArrowUpRight size={13}/></span></div>
+                <div className="home-v717-gallery-info"><small>{item.category}</small><strong>{item.title}</strong><span>{level?.name||'Personalizado'} <ArrowUpRight size={13}/></span></div>
             </Link>;
           })}
         </div>
