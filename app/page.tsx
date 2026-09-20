@@ -35,7 +35,7 @@ export default async function HomePage(){
   const featuredInspirations=homeInspirationCodes.map(code=>topperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof topperInspirations;
   const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo personalizados sob encomenda, do simples ao Elite com shaker e acetato.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
 
-  return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717">
+  return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719">
     <Header settings={settings}/><JsonLd data={organizationJsonLd}/>
 
     <section className="hero premium-hero home-v717-hero" id="inicio">

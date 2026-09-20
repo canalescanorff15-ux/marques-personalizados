@@ -22,6 +22,7 @@ const publicV716Contract='scripts/public-v716-contract-check.mjs';
 const publicV717Contract='scripts/public-v717-contract-check.mjs';
 const publicV718Contract='scripts/public-v718-contract-check.mjs';
 const publicV7182AssetContract='scripts/public-v7182-asset-integrity-check.mjs';
+const publicV719Contract='scripts/public-v719-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -96,6 +97,12 @@ if(!fs.existsSync(publicV7182AssetContract))errors.push('contrato de integridade
 else{
   const v7182Check=spawnSync(process.execPath,[publicV7182AssetContract],{encoding:'utf8'});
   if(v7182Check.status!==0)errors.push((v7182Check.stderr||v7182Check.stdout||'contrato de integridade de assets V7.18.2 falhou').trim());
+}
+
+if(!fs.existsSync(publicV719Contract))errors.push('contrato premium final V7.19 ausente');
+else{
+  const v719Check=spawnSync(process.execPath,[publicV719Contract],{encoding:'utf8'});
+  if(v719Check.status!==0)errors.push((v719Check.stderr||v719Check.stdout||'contrato premium final V7.19 falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
