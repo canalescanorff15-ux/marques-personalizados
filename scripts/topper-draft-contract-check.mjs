@@ -13,9 +13,14 @@ else{
 }
 if(fs.existsSync(header)){
   const source=fs.readFileSync(header,'utf8');
-  if(!source.includes('readTopperDraft'))errors.push('cabeçalho não lê rascunho do topo');
-  if(!source.includes('TOPPER_DRAFT_EVENT'))errors.push('cabeçalho não sincroniza contador do pedido');
-  if(!source.includes('0/1')&&!source.includes('orderCount'))errors.push('cabeçalho não expõe contador 0/1 do pedido');
+  const isV809=source.includes('v8-simple-header');
+  if(!isV809){
+    if(!source.includes('readTopperDraft'))errors.push('cabeçalho não lê rascunho do topo');
+    if(!source.includes('TOPPER_DRAFT_EVENT'))errors.push('cabeçalho não sincroniza contador do pedido');
+    if(!source.includes('0/1')&&!source.includes('orderCount'))errors.push('cabeçalho não expõe contador 0/1 do pedido');
+  }else if(!source.includes('/monte-seu-pedido')){
+    errors.push('cabeçalho V8.09 precisa manter acesso ao Monte seu Pedido');
+  }
 }
 if(fs.existsSync(builder)){
   const source=fs.readFileSync(builder,'utf8');
@@ -32,4 +37,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Topper Draft Contract: OK — rascunho de sessão, contador 0/1 e contingência protegidos.');
+console.log('Topper Draft Contract: OK — rascunho de sessão e contingência protegidos; V8.09 pode omitir contador global no header.');
