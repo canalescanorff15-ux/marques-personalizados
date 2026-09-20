@@ -31,6 +31,7 @@ const v8HomePremiumContract='scripts/v8-home-premium-contract-check.mjs';
 const v8InspirationsPremiumContract='scripts/v8-inspirations-contract-check.mjs';
 const v8InspirationDetailContract='scripts/v8-inspiration-detail-contract-check.mjs';
 const v8OrderBuilderContract='scripts/v8-order-builder-contract-check.mjs';
+const v8CleanPremiumContract='scripts/v8-clean-premium-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -147,6 +148,12 @@ if(!fs.existsSync(v8OrderBuilderContract))errors.push('contrato do Monte seu Ped
 else{
   const v8OrderCheck=spawnSync(process.execPath,[v8OrderBuilderContract],{encoding:'utf8'});
   if(v8OrderCheck.status!==0)errors.push((v8OrderCheck.stderr||v8OrderCheck.stdout||'contrato do Monte seu Pedido V8.06 falhou').trim());
+}
+
+if(!fs.existsSync(v8CleanPremiumContract))errors.push('contrato clean V8.08 ausente');
+else{
+  const v8CleanCheck=spawnSync(process.execPath,[v8CleanPremiumContract],{encoding:'utf8'});
+  if(v8CleanCheck.status!==0)errors.push((v8CleanCheck.stderr||v8CleanCheck.stdout||'contrato clean V8.08 falhou').trim());
 }
 
 if(!fs.existsSync(v8InspirationDetailContract))errors.push('contrato do detalhe V8.07 ausente');
