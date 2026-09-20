@@ -444,11 +444,17 @@
   transform:scale(1.035);
   filter:saturate(1.03) contrast(1.02);
 }
-.public-card-shade-v721{
+.public-inspiration-image-v721>.public-card-shade-v721{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(to top,rgba(18,14,18,.92) 0%,rgba(18,14,18,.34) 38%,rgba(18,14,18,.04) 68%,transparent 78%);
+  display:block;
+  margin:0;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:linear-gradient(to top,rgba(18,14,18,.78) 0%,rgba(18,14,18,.22) 34%,rgba(18,14,18,.025) 62%,transparent 72%);
+  color:transparent;
   pointer-events:none;
 }
 .public-inspiration-image-v721::after{
