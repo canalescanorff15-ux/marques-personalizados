@@ -25,7 +25,8 @@ export const dynamic='force-dynamic';
 export default async function InspirationDetailPage({params}:Props){
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
-  if(!inspiration||!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
+  if(!inspiration)redirect('/inspiracoes');
+  if(!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
 
   const [settings]=await Promise.all([getSiteSettings()]);
   const level=topperLevelBySlug(inspiration.levelSlug);
