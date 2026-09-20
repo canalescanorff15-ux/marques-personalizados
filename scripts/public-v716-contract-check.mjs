@@ -52,11 +52,19 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('components/PublicTopperHeader.tsx')){
   const header=read('components/PublicTopperHeader.tsx');
+  const isV809=header.includes('v8-simple-header');
   const isV8=header.includes("label:'Personalizados'");
-  if(!header.includes('className="sr-only"'))errors.push('label acessível da busca foi removido');
-  const expectedPlaceholder=isV8?'placeholder="Tema, produto, cor ou estilo..."':'placeholder="Tema, código, cor ou estilo..."';
-  if(!header.includes(expectedPlaceholder))errors.push('placeholder curto da busca global ausente');
-  if((header.match(/<input/g)||[]).length!==1)errors.push('header público deve manter uma única entrada de busca');
+  if(!isV809){
+    if(!header.includes('className="sr-only"'))errors.push('label acessível da busca foi removido');
+    const expectedPlaceholder=isV8?'placeholder="Tema, produto, cor ou estilo..."':'placeholder="Tema, código, cor ou estilo..."';
+    if(!header.includes(expectedPlaceholder))errors.push('placeholder curto da busca global ausente');
+    if((header.match(/<input/g)||[]).length!==1)errors.push('header público deve manter uma única entrada de busca');
+  }else{
+    if(header.includes('public-header-search'))errors.push('header V8.09 não deve reintroduzir busca global');
+    const gallery=read('components/TopperInspirationGallery.tsx');
+    if(!gallery.includes('public-gallery-search-v721'))errors.push('V8.09 precisa manter busca contextual na galeria');
+    if(!gallery.includes('Tema, código, cor...'))errors.push('busca contextual da galeria sem placeholder curto');
+  }
 }
 
 if(fs.existsSync('app/guia-de-precos/page.tsx')){
@@ -84,4 +92,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.16 Global Visual Audit Contract: OK — header, preço, filtros, texto e breakpoints protegidos.');
+console.log('V7.16/V8.09 Global Visual Audit Contract: OK — busca contextual, preço, filtros, texto e breakpoints protegidos.');
