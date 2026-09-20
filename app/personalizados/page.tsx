@@ -21,7 +21,7 @@ const lines=[
     copy:'Caixinhas para doces, lembranças e pequenos presentes, personalizadas com tema, nome, idade e paleta do evento.',
     items:['Milk','Bala','Pirâmide','Sushi','Modelos especiais'],
     cta:'Quero orçamento de caixinhas',
-    href:'/orcamento?produto=caixinhas'
+    href:'/monte-seu-pedido?produto=caixinhas'
   },
   {
     id:'lembrancinhas',
@@ -31,7 +31,7 @@ const lines=[
     copy:'Peças personalizadas para entregar aos convidados e marcar a comemoração com identidade visual própria.',
     items:['Mimos personalizados','Embalagens','Tags','Kits lembrança'],
     cta:'Quero orçamento de lembrancinhas',
-    href:'/orcamento?produto=lembrancinhas'
+    href:'/monte-seu-pedido?produto=lembrancinhas'
   },
   {
     id:'adesivos-chaveiros',
@@ -41,7 +41,7 @@ const lines=[
     copy:'Personalização para lembranças, presentes e pequenos itens, com aplicação de nome, foto, tema ou identidade visual.',
     items:['Adesivos','Chaveiros','Frente e verso','Formatos especiais'],
     cta:'Quero orçamento de adesivos ou chaveiros',
-    href:'/orcamento?produto=adesivos-chaveiros'
+    href:'/monte-seu-pedido?produto=chaveiros'
   },
   {
     id:'doces',
@@ -51,7 +51,7 @@ const lines=[
     copy:'Peças que levam o tema para brigadeiros, cupcakes e outros doces sem confundir com serviço de confeitaria ou decoração completa.',
     items:['Toppers','Wrappers','Tags','Plaquinhas'],
     cta:'Quero orçamento para doces',
-    href:'/orcamento?produto=doces'
+    href:'/monte-seu-pedido?produto=doces'
   },
   {
     id:'kits',
@@ -61,7 +61,7 @@ const lines=[
     copy:'Combinações de diferentes peças seguindo a mesma identidade visual para deixar o pedido mais completo e coerente.',
     items:['Topo + caixinhas','Lembrancinhas','Tags','Complementos'],
     cta:'Quero montar um kit',
-    href:'/orcamento?produto=kit'
+    href:'/monte-seu-pedido?produto=kit'
   },
   {
     id:'outros',
@@ -71,7 +71,7 @@ const lines=[
     copy:'Se você tem uma referência ou ideia que não aparece nas categorias, pode enviar e pedir avaliação para produção personalizada.',
     items:['Projetos sob consulta','Referências próprias','Adaptações de tema'],
     cta:'Contar minha ideia',
-    href:'/orcamento?produto=outro'
+    href:'/monte-seu-pedido?produto=outro'
   }
 ];
 
@@ -88,7 +88,7 @@ export default async function PersonalizadosPage(){
           <h1>Mais do que topos.<br/><em>Detalhes para completar o seu momento.</em></h1>
           <p>Escolha o tipo de produto e depois personalize tema, nome, idade, cores e quantidade. Cada peça é feita sob encomenda e o orçamento é confirmado antes da produção.</p>
           <div className="hero-actions">
-            <Link className="btn btn-primary btn-luxury" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
+            <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido">Montar meu pedido <ArrowUpRight size={16}/></Link>
             <Link className="btn btn-ghost" href="/inspiracoes">Ver inspirações <Sparkles size={16}/></Link>
           </div>
         </div>
@@ -174,7 +174,7 @@ export default async function PersonalizadosPage(){
         </div>
         <div className="v8-personalizados-final-cta">
           <div><small>PRONTO PARA COMEÇAR?</small><strong>Conte o que você quer personalizar.</strong></div>
-          <Link className="btn btn-primary btn-luxury" href="/orcamento">Solicitar orçamento <ArrowUpRight size={16}/></Link>
+          <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido">Montar meu pedido <ArrowUpRight size={16}/></Link>
         </div>
       </div>
     </section>
