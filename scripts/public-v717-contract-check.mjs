@@ -17,35 +17,58 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  const required=[
-    ['escopo da home','home-v717'],
-    ['hero editorial','home-v717-showcase'],
-    ['headline nova','Topos de bolo que parecem feitos'],
-    ['CTA inspirações','Ver inspirações'],
-    ['CTA briefing','Montar meu topo'],
-    ['faixa de processo','home-v717-intro-strip'],
-    ['grade nova de níveis','home-v717-level-grid'],
-    ['visuais oficiais dos níveis','TopperLevelVisual'],
-    ['galeria de inspirações','home-v717-gallery-grid'],
-    ['fonte real de inspirações','topperInspirations'],
-    ['processo em três passos','home-v717-process-grid'],
-    ['acabamento visual','home-v717-detail-grid'],
-    ['história da marca','home-v717-about-grid'],
-    ['FAQ ampliado','Posso enviar uma foto ou referência minha?'],
-    ['contato final','home-v717-contact-shell'],
-    ['âncora sobre','id="sobre"'],
-    ['âncora dúvidas','id="duvidas"'],
-    ['âncora contato','id="contato"']
-  ];
-  for(const [label,token] of required)if(!home.includes(token))errors.push(label);
-  const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="home-v717-intro-strip'));
-  if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
-  if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
-  const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
-  if(v8Curated){
+  const v8Home=home.includes('className="premium-site kf-theme public-v712 v8-home"');
+  if(v8Home){
+    const required=[
+      ['escopo da home V8','v8-home'],
+      ['hero produto-first','v8-hero'],
+      ['assinatura da marca','v8-brand-signature'],
+      ['categorias comerciais','v8-product-categories'],
+      ['inspirações de produto','v8-home-inspirations'],
+      ['clareza do que está incluso','v8-included-grid'],
+      ['acabamentos','v8-levels-grid'],
+      ['visuais oficiais dos níveis','TopperLevelVisual'],
+      ['processo em quatro passos','v8-process-grid'],
+      ['história da marca','v8-home-about'],
+      ['FAQ','v8-faq-grid'],
+      ['contato final','v8-home-contact-shell'],
+      ['fonte pública curada','publicTopperInspirations'],
+      ['âncora sobre','id="sobre"'],
+      ['âncora dúvidas','id="duvidas"'],
+      ['âncora contato','id="contato"']
+    ];
+    for(const [label,token] of required)if(!home.includes(token))errors.push(label);
+    const hero=home.slice(home.indexOf('<section className="v8-hero"'),home.indexOf('<section className="v8-trust-strip"'));
+    if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V8 deve manter exatamente 2 CTAs principais');
     const codes=[...home.matchAll(/INSP-TOP-(\\d{2})/g)].map(match=>Number(match[1]));
-    if(codes.some(code=>code<18||code>50))errors.push('hero V8 usa inspiração fora da faixa curada de bolos');
-  }else if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
+    if(codes.some(code=>code<18||code>50))errors.push('Home V8 usa inspiração fora da faixa curada de bolos');
+  }else{
+    const required=[
+      ['escopo da home','home-v717'],
+      ['hero editorial','home-v717-showcase'],
+      ['headline nova','Topos de bolo que parecem feitos'],
+      ['CTA inspirações','Ver inspirações'],
+      ['CTA briefing','Montar meu topo'],
+      ['faixa de processo','home-v717-intro-strip'],
+      ['grade nova de níveis','home-v717-level-grid'],
+      ['visuais oficiais dos níveis','TopperLevelVisual'],
+      ['galeria de inspirações','home-v717-gallery-grid'],
+      ['fonte real de inspirações','topperInspirations'],
+      ['processo em três passos','home-v717-process-grid'],
+      ['acabamento visual','home-v717-detail-grid'],
+      ['história da marca','home-v717-about-grid'],
+      ['FAQ ampliado','Posso enviar uma foto ou referência minha?'],
+      ['contato final','home-v717-contact-shell'],
+      ['âncora sobre','id="sobre"'],
+      ['âncora dúvidas','id="duvidas"'],
+      ['âncora contato','id="contato"']
+    ];
+    for(const [label,token] of required)if(!home.includes(token))errors.push(label);
+    const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="home-v717-intro-strip'));
+    if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
+    if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
+    if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
+  }
 }
 
 if(fs.existsSync('app/public-v717.css')){
