@@ -5,12 +5,11 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import TopperInspirationGallery from '@/components/TopperInspirationGallery';
 import { getSiteSettings } from '@/lib/db';
-import { topperInspirations } from '@/lib/topper-inspirations';
 
 export const dynamic='force-dynamic';
 export const metadata:Metadata={
-  title:'Inspirações de topos | Merlin Encantos em Papel',
-  description:'Explore inspirações premium de topos de bolo em cenários de festa, filtre por categoria e personalize o modelo que mais combina com o seu momento.'
+  title:'Inspirações | Merlin Encantos em Papel',
+  description:'Explore inspirações de topos de bolo com foco no produto, filtre por estilo e personalize a referência que mais combina com o seu momento.'
 };
 
 export default async function InspirationsPage(){
@@ -24,13 +23,13 @@ export default async function InspirationsPage(){
           <div className="public-inspiration-index"><strong>02</strong><i/><span>INSPIRAÇÕES</span></div>
           <span className="public-kicker">VEJA ANTES DE IMAGINAR</span><span className="sr-only">Escolha o estilo que mais se aproxima da sua ideia.</span>
           <h1>Referências que ajudam a<br/><em>enxergar o resultado.</em></h1>
-          <p>Explore ideias reais com topos de bolo em cenários completos de festa. Veja composições, paletas e estilos; depois adapte tudo para o seu pedido. Cada detalhe é pensado para ficar lindo no seu tema e no seu bolo.</p>
+          <p>Explore referências com foco no bolo e no topo, sem confundir o produto com a decoração completa da festa. Veja cores, composição e estilo; depois adapte nome, idade, tema e acabamento ao seu pedido.</p>
         </div>
 
         <div className="public-inspiration-benefits" aria-label="Diferenciais">
-          <article><span><Gem size={20}/></span><div><strong>Design exclusivo</strong><small>Artes únicas e personalizadas</small></div></article>
-          <article><span><Gift size={20}/></span><div><strong>Para todos os temas</strong><small>Infantil, adulto, casamento e mais</small></div></article>
-          <article><span><Heart size={20}/></span><div><strong>Feito com carinho</strong><small>Do seu jeito, para o seu momento</small></div></article>
+          <article><span><Gem size={20}/></span><div><strong>Foco no produto</strong><small>Bolo e topo em evidência</small></div></article>
+          <article><span><Gift size={20}/></span><div><strong>Personalizável</strong><small>Nome, idade, cores e tema podem mudar</small></div></article>
+          <article><span><Heart size={20}/></span><div><strong>Referência clara</strong><small>Você vê o estilo antes de pedir</small></div></article>
         </div>
       </div>
     </section>
