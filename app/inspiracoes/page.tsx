@@ -23,7 +23,7 @@ export default async function InspirationsPage(){
       <div className="public-shell">
         <span className="eyebrow"><Sparkles size={14}/> INSPIRAÇÕES</span>
         <h1>Encontre uma ideia.<br/><em>Depois deixe com a sua cara.</em></h1>
-        <p>Escolha uma referência e personalize nome, idade, cores e acabamento.</p>
+        <p>Escolha uma referência e personalize.</p>
       </div>
     </section>
 
@@ -35,8 +35,8 @@ export default async function InspirationsPage(){
 
     <section className="v8-storefront-simple-cta">
       <div className="public-shell">
-        <div><small>NÃO ACHOU O QUE QUER?</small><strong>Envie sua própria referência.</strong></div>
-        <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
+        <strong>Tem outra ideia?</strong>
+        <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Enviar referência <ArrowUpRight size={16}/></Link>
       </div>
     </section>
 
