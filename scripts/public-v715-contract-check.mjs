@@ -43,15 +43,23 @@ if(fs.existsSync('app/page.tsx')){
   const heroEnd=home.indexOf('<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd>0?heroEnd:home.indexOf('<section className="category-showcase'));
   const isV8=home.includes('v8-home-products');
-  const heroTokens=isV8
-    ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento','Orçamento confirmado antes da produção']
-    : ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'];
+  const isV808=home.includes('v8-clean-home');
+  const heroTokens=isV808
+    ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento']
+    : isV8
+      ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento','Orçamento confirmado antes da produção']
+      : ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'];
   for(const token of heroTokens)if(!hero.includes(token))errors.push('hero público sem '+token);
   if(!isV8){
     for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
     if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
   }else{
-    if(!home.includes('Três passos para transformar<br/><em>a ideia em pedido.</em>'))errors.push('Home V8 sem nova sequência comercial');
+    if(isV808){
+      if(!home.includes('Três passos.<br/><em>Só o necessário.</em>'))errors.push('Home V8.08 sem sequência comercial clean');
+      if(!home.includes('Orçamento confirmado antes da produção'))errors.push('Home V8.08 sem confirmação prévia de orçamento');
+    }else if(!home.includes('Três passos para transformar<br/><em>a ideia em pedido.</em>')){
+      errors.push('Home V8 sem nova sequência comercial');
+    }
     if(!home.includes('Caixinhas')||!home.includes('Lembrancinhas'))errors.push('Home V8 sem expansão de produtos');
   }
 }

@@ -18,8 +18,12 @@ if(fs.existsSync('app/layout.tsx')){
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
   if(!home.includes('home-v719'))errors.push('Home não habilita classe home-v719');
-  for(const token of ['home-v717-inspiration-story','Referências que ajudam a','enxergar o resultado.']){
-    if(!home.includes(token))errors.push('Home sem estrutura esperada da seção 02: '+token);
+  const isV808=home.includes('v8-clean-home');
+  const tokens=isV808
+    ? ['home-v717-inspiration-story','Veja o produto.','Escolha a sua direção.']
+    : ['home-v717-inspiration-story','Referências que ajudam a','enxergar o resultado.'];
+  for(const token of tokens){
+    if(!home.includes(token))errors.push('Home sem estrutura esperada da seção de inspirações: '+token);
   }
 }
 
@@ -51,4 +55,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.19 Premium Final Polish: OK — contraste da seção 02 e acabamento final protegidos.');
+console.log('V7.19/V8.08 Premium Contract: OK — seção de inspirações preservada e Home clean reconhecida.');
