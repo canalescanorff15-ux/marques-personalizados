@@ -12,6 +12,7 @@ const catalogPage=read('app/catalogo/page.tsx');
 const inspirationsPage=read('app/inspiracoes/page.tsx');
 const quotePage=read('app/orcamento/page.tsx');
 const builder=read('components/TopperBuilder.tsx');
+const orderBuilder=read('components/OrderBuilder.tsx');
 const topperInspirationContract='scripts/topper-inspiration-gallery-contract-check.mjs';
 const publicRedesignContract='scripts/public-redesign-contract-check.mjs';
 const topperDraftContract='scripts/topper-draft-contract-check.mjs';
@@ -28,13 +29,14 @@ const publicV721InspirationsContract='scripts/public-v721-inspirations-contract-
 const publicV722InspirationBatchContract='scripts/public-v722-inspiration-batch-contract-check.mjs';
 const v8HomePremiumContract='scripts/v8-home-premium-contract-check.mjs';
 const v8InspirationsPremiumContract='scripts/v8-inspirations-contract-check.mjs';
+const v8OrderBuilderContract='scripts/v8-order-builder-contract-check.mjs';
 
-for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
   if(!header.includes(route))errors.push(`header sem caminho comercial: ${route}`);
 }
-for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento'])if(!dock.includes(route))errors.push(`dock móvel sem caminho: ${route}`);
-for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/guia-de-precos','/orcamento'])if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/orcamento'])if(!dock.includes(route))errors.push(`dock móvel sem caminho: ${route}`);
+for(const route of ['/catalogo','/inspiracoes','/monte-seu-pedido','/guia-de-precos','/orcamento'])if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
 for(const token of ['Topo Simples','Topo Básico 3D','Topo Premium','Topo Shaker','Topo com Acetato','Topo Elite Shaker + Acetato'])if(!catalog.includes(token))errors.push(`nível comercial ausente: ${token}`);
 const imageRefs=[...catalog.matchAll(/image:'([^']+)'/g)].map(match=>match[1]);
 if(imageRefs.length!==6)errors.push(`linha de topos precisa declarar 6 imagens oficiais; encontrou ${imageRefs.length}`);
@@ -42,7 +44,7 @@ if(new Set(imageRefs).size!==imageRefs.length)errors.push('cada nível precisa u
 for(const image of imageRefs){const file=`public${image}`;if(!fs.existsSync(file))errors.push(`asset oficial ausente: ${file}`);}
 if(!catalogPage.includes('TopperLevelVisual'))errors.push('catálogo não reutiliza a referência visual oficial do nível');
 if(!inspirationsPage.includes('TopperInspirationGallery'))errors.push('inspirações não usam a galeria pública de topos');
-if(!builder.includes('TopperLevelVisual'))errors.push('Monte seu topo não reutiliza a referência visual oficial do nível');
+if(!orderBuilder.includes('TopperLevelVisual'))errors.push('Monte seu Pedido não reutiliza a referência visual oficial do topo');
 for(const source of [home,header,dock,footer])if(source.includes('href="/monte-seu-kit"'))errors.push('fluxo público ainda contém link para Monte seu Kit');
 if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não comunica os dois acabamentos avançados');
 if(!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home não orienta o cliente sobre adequação ao bolo');
@@ -140,6 +142,12 @@ else{
   if(v8InspirationsCheck.status!==0)errors.push((v8InspirationsCheck.stderr||v8InspirationsCheck.stdout||'contrato das Inspirações V8.04 falhou').trim());
 }
 
+if(!fs.existsSync(v8OrderBuilderContract))errors.push('contrato do Monte seu Pedido V8.06 ausente');
+else{
+  const v8OrderCheck=spawnSync(process.execPath,[v8OrderBuilderContract],{encoding:'utf8'});
+  if(v8OrderCheck.status!==0)errors.push((v8OrderCheck.stderr||v8OrderCheck.stdout||'contrato do Monte seu Pedido V8.06 falhou').trim());
+}
+
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
 else{
   const galleryCheck=spawnSync(process.execPath,[topperInspirationContract],{encoding:'utf8'});
@@ -147,4 +155,4 @@ else{
 }
 
 if(errors.length){console.error(`Merlin Topper Commercial UX: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Merlin Topper Commercial UX: OK — jornada pública focada em escolher nível, inspiração, briefing e orçamento.');
+console.log('Merlin Commercial UX: OK — jornada pública V8 cobre produto, inspiração, briefing adaptativo e orçamento.');
