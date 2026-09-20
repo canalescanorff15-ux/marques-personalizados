@@ -1,0 +1,347 @@
+/* V8.00 — Merlin Encantos em Papel: Design System Foundation
+   Camada final de autoridade visual. Carregada após os estilos legados. */
+
+:root{
+  --v8-ink:#211b20;
+  --v8-ink-soft:#40353b;
+  --v8-charcoal:#171317;
+  --v8-charcoal-2:#221b21;
+  --v8-paper:#fffaf8;
+  --v8-paper-2:#f8f1ee;
+  --v8-paper-3:#f2e8e5;
+  --v8-white:#ffffff;
+  --v8-blush:#f3d8e1;
+  --v8-blush-2:#eab8c9;
+  --v8-rose:#c93c72;
+  --v8-rose-dark:#9d2856;
+  --v8-champagne:#c4a36b;
+  --v8-champagne-soft:#e2cfaa;
+  --v8-muted:#756a70;
+  --v8-line:rgba(65,43,54,.12);
+  --v8-line-strong:rgba(65,43,54,.20);
+  --v8-shadow-xs:0 4px 18px rgba(59,36,47,.06);
+  --v8-shadow-sm:0 10px 30px rgba(59,36,47,.08);
+  --v8-shadow-md:0 22px 58px rgba(59,36,47,.12);
+  --v8-radius-sm:12px;
+  --v8-radius-md:18px;
+  --v8-radius-lg:26px;
+  --v8-radius-pill:999px;
+  --v8-shell:1240px;
+  --v8-focus:0 0 0 3px rgba(201,60,114,.20);
+}
+
+/* Base pública */
+.premium-site,
+.public-v712{
+  --public-pink:var(--v8-rose);
+  --public-text:var(--v8-ink);
+  --public-muted:var(--v8-muted);
+  --public-line:var(--v8-line);
+}
+
+.premium-site img,
+.public-v712 img{
+  image-rendering:auto;
+}
+
+.premium-site :focus-visible,
+.public-v712 :focus-visible,
+.public-topper-header :focus-visible,
+.footer :focus-visible{
+  outline:2px solid var(--v8-rose)!important;
+  outline-offset:3px!important;
+  box-shadow:var(--v8-focus);
+}
+
+/* Shell / respiro */
+.public-shell{
+  width:min(var(--v8-shell),calc(100% - 40px))!important;
+  margin-inline:auto!important;
+}
+.container{
+  width:min(var(--v8-shell),calc(100% - 40px));
+}
+
+/* Botões */
+.btn{
+  border-radius:var(--v8-radius-pill);
+  font-weight:850;
+  letter-spacing:.01em;
+}
+.btn-primary,
+.btn-luxury{
+  border-color:var(--v8-rose)!important;
+  background:linear-gradient(135deg,var(--v8-rose),#dd668f)!important;
+  color:#fff!important;
+  box-shadow:0 10px 26px rgba(201,60,114,.18)!important;
+}
+.btn-primary:hover,
+.btn-luxury:hover{
+  background:linear-gradient(135deg,var(--v8-rose-dark),var(--v8-rose))!important;
+  transform:translateY(-1px);
+}
+.btn-ghost{
+  border-color:var(--v8-line-strong)!important;
+}
+.text-link,
+.public-inline-guide{
+  color:var(--v8-rose)!important;
+}
+
+/* Header único V8 */
+.public-topper-header{
+  position:sticky!important;
+  top:0!important;
+  z-index:80!important;
+  border-bottom:1px solid var(--v8-line)!important;
+  background:rgba(255,250,248,.94)!important;
+  color:var(--v8-ink)!important;
+  box-shadow:0 8px 32px rgba(52,31,41,.055)!important;
+  backdrop-filter:blur(18px) saturate(140%)!important;
+}
+.public-topper-header .public-header-top{
+  background:transparent!important;
+}
+.public-topper-header .public-header-top::after{
+  background:linear-gradient(90deg,transparent,rgba(201,60,114,.16),rgba(196,163,107,.16),transparent)!important;
+}
+.public-topper-header .public-header-top-inner{
+  min-height:76px;
+}
+.public-topper-header .public-brand{
+  color:var(--v8-ink)!important;
+}
+.public-topper-header .public-brand-logo{
+  border:1px solid var(--v8-line)!important;
+  background:#fff!important;
+  box-shadow:var(--v8-shadow-xs)!important;
+}
+.public-topper-header .public-brand strong{
+  color:var(--v8-ink)!important;
+  letter-spacing:-.02em;
+}
+.public-topper-header .public-brand small{
+  color:#9a687c!important;
+  letter-spacing:.055em;
+}
+.public-topper-header .public-header-search{
+  border:1px solid var(--v8-line)!important;
+  border-radius:var(--v8-radius-pill)!important;
+  background:rgba(255,255,255,.86)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.72)!important;
+}
+.public-topper-header .public-header-search input{
+  color:var(--v8-ink)!important;
+}
+.public-topper-header .public-header-search input::placeholder{
+  color:#9b9095!important;
+}
+.public-topper-header .public-header-search>svg{
+  color:#9a687c!important;
+}
+.public-topper-header .public-header-search button{
+  border-radius:var(--v8-radius-pill)!important;
+  background:var(--v8-ink)!important;
+  color:#fff!important;
+}
+.public-topper-header .public-header-action{
+  color:var(--v8-ink-soft)!important;
+}
+.public-topper-header .public-header-action:hover{
+  background:rgba(201,60,114,.055)!important;
+}
+.public-topper-header .public-header-action>svg{
+  color:var(--v8-rose)!important;
+}
+.public-topper-header .public-header-action small{
+  color:#998d93!important;
+}
+.public-topper-header .public-header-whatsapp{
+  border:1px solid rgba(28,96,56,.18)!important;
+  border-radius:var(--v8-radius-pill)!important;
+  background:#1f7a4e!important;
+  color:#fff!important;
+  box-shadow:0 8px 22px rgba(31,122,78,.14)!important;
+}
+.public-topper-header .public-header-nav-row{
+  border-top:1px solid rgba(65,43,54,.06)!important;
+  background:rgba(255,250,248,.90)!important;
+}
+.public-topper-header .public-main-nav a{
+  color:#6f6269!important;
+  font-weight:800!important;
+}
+.public-topper-header .public-main-nav a:hover,
+.public-topper-header .public-main-nav a.is-active{
+  color:var(--v8-ink)!important;
+}
+.public-topper-header .public-main-nav a::after{
+  background:var(--v8-rose)!important;
+}
+.public-topper-header .public-menu-toggle{
+  border:1px solid var(--v8-line)!important;
+  background:#fff!important;
+  color:var(--v8-ink)!important;
+}
+.public-topper-header .public-mobile-menu{
+  border-color:var(--v8-line)!important;
+  background:rgba(255,250,248,.98)!important;
+  color:var(--v8-ink)!important;
+  box-shadow:var(--v8-shadow-md)!important;
+}
+.public-topper-header .public-mobile-menu a{
+  color:var(--v8-ink)!important;
+}
+
+/* Formulários públicos */
+.premium-site input,
+.premium-site textarea,
+.premium-site select,
+.public-v712 input,
+.public-v712 textarea,
+.public-v712 select{
+  border-color:var(--v8-line)!important;
+}
+.premium-site input:focus,
+.premium-site textarea:focus,
+.premium-site select:focus,
+.public-v712 input:focus,
+.public-v712 textarea:focus,
+.public-v712 select:focus{
+  border-color:rgba(201,60,114,.42)!important;
+}
+
+/* Contrato de fotografia V8:
+   produto real e inspiração devem permanecer visíveis, sem máscara preta. */
+.public-inspiration-image-v721>.public-card-shade-v721{
+  display:none!important;
+}
+.public-inspiration-image-v721>img,
+.home-v717-gallery-card>img,
+.home-v717-showcase img,
+.featured-piece img,
+.editorial-category .category-card-art img{
+  opacity:1!important;
+  filter:none!important;
+}
+.public-inspiration-image-v721::before{
+  display:none!important;
+}
+.public-inspiration-image-v721::after{
+  background:transparent!important;
+}
+
+/* Cards de inspiração — superfície premium, foto limpa */
+.public-inspiration-card-v721{
+  border:1px solid rgba(255,255,255,.09)!important;
+  border-radius:20px!important;
+  background:var(--v8-charcoal-2)!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.18)!important;
+}
+.public-inspiration-card-v721:hover{
+  border-color:rgba(234,184,201,.30)!important;
+  box-shadow:0 24px 64px rgba(0,0,0,.25)!important;
+}
+.public-inspiration-body-v721{
+  background:var(--v8-charcoal-2)!important;
+}
+.public-card-primary-v721{
+  border-radius:var(--v8-radius-pill)!important;
+  background:linear-gradient(135deg,var(--v8-blush),var(--v8-blush-2))!important;
+  color:var(--v8-ink)!important;
+}
+
+/* Regra preventiva: antigos overlays de cards não podem virar placas opacas. */
+.home-v717-photo-shade{
+  pointer-events:none!important;
+  background:linear-gradient(to top,rgba(22,17,21,.42) 0%,rgba(22,17,21,.10) 34%,transparent 58%)!important;
+}
+.category-overlay{
+  pointer-events:none!important;
+  background:linear-gradient(to top,rgba(20,16,19,.50) 0%,rgba(20,16,19,.08) 40%,transparent 64%)!important;
+}
+
+/* Hierarquia editorial */
+.section-title,
+.premium-site h1,
+.premium-site h2{
+  text-wrap:balance;
+}
+.eyebrow{
+  color:var(--v8-rose)!important;
+}
+.section-index{
+  color:#968b91!important;
+}
+.section-index span{
+  color:var(--v8-champagne)!important;
+}
+
+/* Rodapé V8 */
+.footer.premium-footer.public-v712-footer{
+  border-top:1px solid rgba(255,255,255,.08)!important;
+  background:
+    radial-gradient(circle at 12% 0,rgba(201,60,114,.09),transparent 27%),
+    radial-gradient(circle at 92% 100%,rgba(196,163,107,.08),transparent 28%),
+    var(--v8-charcoal)!important;
+  color:#f7eff3!important;
+}
+.footer.premium-footer .footer-brand-kicker{
+  color:var(--v8-blush-2)!important;
+}
+.footer.premium-footer .footer-brand-block strong{
+  color:#fff!important;
+}
+.footer.premium-footer .footer-brand-block p{
+  color:#c9bec4!important;
+}
+.footer.premium-footer .footer-contact-grid>div{
+  border-color:rgba(255,255,255,.09)!important;
+}
+.footer.premium-footer .footer-contact-grid small{
+  color:#b99a76!important;
+}
+.footer.premium-footer a{
+  color:#e8dde2!important;
+}
+.footer.premium-footer a:hover{
+  color:#fff!important;
+}
+.footer.premium-footer .footer-grid{
+  border-top-color:rgba(255,255,255,.08)!important;
+  color:#998e94!important;
+}
+
+/* Seleção e scrollbar discretos */
+::selection{
+  background:var(--v8-blush-2);
+  color:var(--v8-ink);
+}
+
+@media(max-width:1024px){
+  .public-topper-header .public-header-top-inner{
+    min-height:70px;
+  }
+}
+
+@media(max-width:640px){
+  .public-shell,
+  .container{
+    width:min(100% - 28px,var(--v8-shell))!important;
+  }
+  .public-topper-header{
+    box-shadow:0 6px 20px rgba(52,31,41,.06)!important;
+  }
+  .public-inspiration-card-v721{
+    border-radius:18px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .btn,
+  .public-inspiration-card-v721,
+  .home-v717-gallery-card img,
+  .home-v717-showcase img{
+    transition:none!important;
+  }
+}
