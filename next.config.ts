@@ -39,10 +39,10 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      { source: '/monte-seu-kit', destination: '/monte-seu-topo', permanent: true },
+      { source: '/monte-seu-kit', destination: '/monte-seu-pedido', permanent: true },
       { source: '/categorias/:path*', destination: '/catalogo', permanent: true },
       { source: '/temas/:path*', destination: '/inspiracoes', permanent: true },
-      { source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true },
+      { source: '/meu-projeto', destination: '/monte-seu-pedido', permanent: true },
       { source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }
     ];
   },

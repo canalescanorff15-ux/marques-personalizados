@@ -16,8 +16,8 @@ if(exists('components/PublicTopperHeader.tsx')){
   const h=read('components/PublicTopperHeader.tsx');
   const isV8=h.includes("label:'Personalizados'")&&h.includes("label:'Como funciona'");
   const required=isV8
-    ? ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-topo','/catalogo','Topos de bolo','Personalizados','Inspirações','Como funciona','/orcamento','Orçamento']
-    : ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-topo','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'];
+    ? ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','/catalogo','Topos de bolo','Personalizados','Inspirações','Como funciona','/orcamento','Orçamento']
+    : ['Meus Favoritos','Meu Pedido','/inspiracoes?favoritos=1','/monte-seu-pedido','Sobre Nós','Nossos Topos','Inspirações','Monte seu Topo','Dúvidas','Contato'];
   for(const token of required)if(!h.includes(token))errors.push(`header público ${isV8?'V8.03':'legado'} sem ${token}`);
   if(!h.includes('public-header-search'))errors.push('header público sem busca dedicada');
 }
@@ -61,7 +61,7 @@ if(exists('app/public-v712.css')){
   const css=read('app/public-v712.css');
   if(!css.includes('V7.12 — sistema visual público unificado'))errors.push('marcador da camada visual V7.12 ausente');
 }
-for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.tsx','app/catalogo/[slug]/page.tsx','app/monte-seu-topo/page.tsx','app/orcamento/page.tsx','app/guia-de-precos/page.tsx','app/privacidade/page.tsx','app/termos/page.tsx']){
+for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.tsx','app/catalogo/[slug]/page.tsx','app/monte-seu-topo/page.tsx','app/monte-seu-pedido/page.tsx','app/orcamento/page.tsx','app/guia-de-precos/page.tsx','app/privacidade/page.tsx','app/termos/page.tsx']){
   if(!read(page).includes('public-v712'))errors.push(`${page} ainda não usa a identidade V7.12`);
 }
 if(!read('components/Footer.tsx').includes('public-v712-footer'))errors.push('rodapé ainda não usa a identidade V7.12');

@@ -28,10 +28,10 @@ if(!topperDetail.includes("redirect('/catalogo')"))errors.push('slug de produto 
 if(!categoryPage.includes("redirect('/catalogo')"))errors.push('categorias antigas precisam redirecionar para /catalogo.');
 if(!themePage.includes("redirect('/inspiracoes')"))errors.push('temas antigos precisam redirecionar para /inspiracoes.');
 for(const token of [
-  "{ source: '/monte-seu-kit', destination: '/monte-seu-topo', permanent: true }",
+  "{ source: '/monte-seu-kit', destination: '/monte-seu-pedido', permanent: true }",
   "{ source: '/categorias/:path*', destination: '/catalogo', permanent: true }",
   "{ source: '/temas/:path*', destination: '/inspiracoes', permanent: true }",
-  "{ source: '/meu-projeto', destination: '/monte-seu-topo', permanent: true }",
+  "{ source: '/meu-projeto', destination: '/monte-seu-pedido', permanent: true }",
   "{ source: '/comparar-inspiracoes', destination: '/inspiracoes', permanent: true }"
 ])if(!nextConfig.includes(token))errors.push(`redirect HTTP permanente ausente: ${token}`);
 
@@ -55,4 +55,4 @@ if(!nextConfig.includes("source: '/sw.js'")||!nextConfig.includes('Service-Worke
 if(!publicCsp.includes("worker-src 'self' blob:"))errors.push('PWA: CSP pública precisa permitir worker do próprio domínio.');
 
 if(errors.length){console.error(`Public Flow Contract Check: ${errors.length} problema(s)`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Public Flow Contract Check: OK — orçamento/API continuam protegidos e o storefront público está restrito aos topos.');
+console.log('Public Flow Contract Check: OK — orçamento/API protegidos e fluxo público V8 suporta topos e papelaria personalizada.');

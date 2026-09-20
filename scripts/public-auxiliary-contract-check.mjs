@@ -18,7 +18,7 @@ if(links.includes('bio-page'))errors.push('links ainda usa o layout legado bio-p
 for(const [name,source] of [['404',notFound],['loading',loading],['erro',errorPage]]){
   if(!source.includes('public-state-page'))errors.push(name+' não usa o estado visual público');
 }
-for(const route of ['/','/inspiracoes','/monte-seu-topo']){
+for(const route of ['/','/inspiracoes','/monte-seu-pedido']){
   if(!notFound.includes(route))errors.push('404 sem rota de recuperação: '+route);
 }
 if(!errorPage.includes('Tentar novamente'))errors.push('erro sem ação de nova tentativa');

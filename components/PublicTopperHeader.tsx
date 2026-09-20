@@ -8,6 +8,7 @@ import type { SiteSettings } from '@/lib/db';
 import { whatsappUrl } from '@/lib/links';
 import { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 import { TOPPER_DRAFT_EVENT, hasTopperDraft, readTopperDraft } from '@/lib/topper-draft';
+import { ORDER_DRAFT_EVENT, hasOrderDraft, readOrderDraft } from '@/lib/order-draft';
 import SafeImage from './SafeImage';
 
 const navItems=[
@@ -16,6 +17,7 @@ const navItems=[
   {href:'/personalizados',label:'Personalizados'},
   {href:'/inspiracoes',label:'Inspirações'},
   {href:'/#como-pedir',label:'Como funciona'},
+  {href:'/monte-seu-pedido',label:'Monte seu Pedido'},
   {href:'/orcamento',label:'Orçamento'}
 ];
 
@@ -31,12 +33,13 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
 
   useEffect(()=>{
     const syncFavorites=()=>setFavoriteCount(readInspirationFavorites().length);
-    const syncDraft=()=>setOrderCount(hasTopperDraft(readTopperDraft())?1:0);
+    const syncDraft=()=>setOrderCount(hasOrderDraft(readOrderDraft())||hasTopperDraft(readTopperDraft())?1:0);
     syncFavorites();syncDraft();
     window.addEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);
     window.addEventListener(TOPPER_DRAFT_EVENT,syncDraft);
+    window.addEventListener(ORDER_DRAFT_EVENT,syncDraft);
     window.addEventListener('storage',syncFavorites);
-    return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);window.removeEventListener(TOPPER_DRAFT_EVENT,syncDraft);window.removeEventListener('storage',syncFavorites);};
+    return()=>{window.removeEventListener(INSPIRATION_FAVORITES_EVENT,syncFavorites);window.removeEventListener(TOPPER_DRAFT_EVENT,syncDraft);window.removeEventListener(ORDER_DRAFT_EVENT,syncDraft);window.removeEventListener('storage',syncFavorites);};
   },[]);
 
   useEffect(()=>{
@@ -57,7 +60,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
     if(pathname.startsWith('/inspiracoes'))return '/inspiracoes';
     if(pathname.startsWith('/catalogo'))return '/catalogo';
     if(pathname.startsWith('/guia-de-precos'))return '/guia-de-precos';
-    if(pathname.startsWith('/monte-seu-topo'))return '/monte-seu-topo';
+    if(pathname.startsWith('/monte-seu-pedido')||pathname.startsWith('/monte-seu-topo'))return '/monte-seu-pedido';
     if(pathname.startsWith('/personalizados'))return '/personalizados';
     if(pathname.startsWith('/orcamento'))return '/orcamento';
     return '/';
@@ -80,7 +83,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
 
         <div className="public-header-actions">
           <Link href="/inspiracoes?favoritos=1" className="public-header-action"><Heart size={19}/><span>Meus Favoritos<small>{favoriteCount} salvo{favoriteCount===1?'':'s'}</small></span></Link>
-          <Link href="/monte-seu-topo" className="public-header-action"><ShoppingBag size={19}/><span>Meu Pedido<small>{orderCount}/1 topo em rascunho</small></span></Link>
+          <Link href="/monte-seu-pedido" className="public-header-action"><ShoppingBag size={19}/><span>Meu Pedido<small>{orderCount?'rascunho salvo':'começar pedido'}</small></span></Link>
           {wa&&<a href={wa} target="_blank" rel="noreferrer" className="public-header-whatsapp"><MessageCircle size={18}/> WhatsApp</a>}
           <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
         </div>

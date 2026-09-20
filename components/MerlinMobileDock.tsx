@@ -5,7 +5,7 @@ export default function MerlinMobileDock({whatsapp}:{whatsapp:string}){
   return <nav className="merlin-mobile-dock" aria-label="Ações rápidas">
     <Link href="/catalogo"><Layers3 size={18}/><span>Topos</span></Link>
     <Link href="/inspiracoes"><Sparkles size={18}/><span>Ideias</span></Link>
-    <Link href="/monte-seu-topo"><Layers3 size={18}/><span>Montar topo</span></Link>
+    <Link href="/monte-seu-pedido"><Layers3 size={18}/><span>Meu pedido</span></Link>
     <Link className="is-primary" href="/orcamento"><MessageCircle size={18}/><span>Orçamento</span></Link>
   </nav>;
 }

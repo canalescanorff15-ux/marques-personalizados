@@ -58,7 +58,7 @@ export default async function InspirationsPage(){
           <h2>A referência pode vir de qualquer lugar.</h2>
           <p>Envie uma foto, uma paleta, um tema ou descreva o que você quer. As inspirações do site existem para facilitar a conversa, não para limitar a criação.</p>
         </div>
-        <Link className="public-primary-button" href="/monte-seu-topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
+        <Link className="public-primary-button" href="/monte-seu-pedido?produto=topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
       </div>
     </section>
 
