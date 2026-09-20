@@ -16,7 +16,12 @@ for(const name of files){
 
 const home=fs.readFileSync('app/page.tsx','utf8');
 if(home.includes("'INSP-TOP-05'"))errors.push('Home ainda destaca Floral Rosé simplificado na vitrine principal');
-if(!home.includes("'INSP-TOP-15'"))errors.push('Home não usa a inspiração fotográfica Ursinho Aviador no destaque');
+const v8Curated=fs.existsSync('app/v8-image-policy.css');
+if(!v8Curated&&!home.includes("'INSP-TOP-15'"))errors.push('Home não usa a inspiração fotográfica Ursinho Aviador no destaque');
+if(v8Curated){
+  const codes=[...home.matchAll(/INSP-TOP-(\\d{2})/g)].map(match=>Number(match[1]));
+  if(codes.some(code=>code<18||code>50))errors.push('Home V8 voltou a destacar referência fora da faixa pública de bolos');
+}
 
 if(errors.length){
   console.error(`V7.18.2 SVG Asset Integrity: FALHOU (${errors.length})`);
