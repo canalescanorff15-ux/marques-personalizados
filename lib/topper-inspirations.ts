@@ -1,3 +1,5 @@
+import { topperInspirationBatch } from './topper-inspirations-batch';
+
 export type TopperInspiration={
   code:string;
   slug:string;
@@ -27,7 +29,8 @@ export const topperInspirations:TopperInspiration[]=[
   {code:'INSP-TOP-14',slug:'dino-aventura',title:'Dino Aventura',category:'Infantil menino / unissex',levelSlug:'premium',description:'Dinossauros simpáticos, vulcão e folhagens tropicais em uma composição infantil de bastante presença.',image:'https://merlin-topper-assets.floot.app/_cdn/static/7d95a4ff-9e66-4d78-aebb-4afd297949ba-insp-top-14-dino-aventura-festa-premium.png',palette:['Verde floresta','Laranja','Azul'],tags:['dinossauro','aventura','infantil']},
   {code:'INSP-TOP-15',slug:'ursinho-aviador',title:'Ursinho Aviador',category:'Infantil delicado',levelSlug:'shaker',description:'Ursinho aviador, avião, nuvens e estrelas com módulos shaker para um topo leve e cheio de movimento.',image:'https://merlin-topper-assets.floot.app/_cdn/static/d2c3ea33-c577-4d55-a780-7fd1df1d107d-insp-top-15-ursinho-aviador.png',palette:['Azul bebê','Creme','Dourado'],tags:['ursinho','aviador','shaker']},
   {code:'INSP-TOP-16',slug:'casamento-floral-dourado',title:'Casamento Floral Dourado',category:'Casamento & bodas',levelSlug:'acetato',description:'Arco dourado, flores brancas, folhagens e monograma em acetato para uma composição elegante e romântica.',image:'https://merlin-topper-assets.floot.app/_cdn/static/a0ca3d63-04b8-4372-b2d9-330fe736a35f-insp-top-16-casamento-floral-dourado-festa-premium.png',palette:['Branco','Verde oliva','Dourado'],tags:['casamento','floral','acetato']},
-  {code:'INSP-TOP-17',slug:'bailarina-15-anos',title:'Bailarina 15 Anos',category:'Feminino elegante',levelSlug:'elite-shaker-acetato',description:'Bailarina delicada, laços, flores e composição de alto impacto para uma celebração feminina especial.',image:'https://merlin-topper-assets.floot.app/_cdn/static/dd5496e6-b7b3-4ef5-9a67-784fa7738319-insp-top-17-bailarina-15-anos-festa-premium.png',palette:['Rosa','Champagne','Dourado'],tags:['bailarina','15 anos','elite']}
+  {code:'INSP-TOP-17',slug:'bailarina-15-anos',title:'Bailarina 15 Anos',category:'Feminino elegante',levelSlug:'elite-shaker-acetato',description:'Bailarina delicada, laços, flores e composição de alto impacto para uma celebração feminina especial.',image:'https://merlin-topper-assets.floot.app/_cdn/static/dd5496e6-b7b3-4ef5-9a67-784fa7738319-insp-top-17-bailarina-15-anos-festa-premium.png',palette:['Rosa','Champagne','Dourado'],tags:['bailarina','15 anos','elite']},
+  ...topperInspirationBatch
 ];
 
 export function topperInspirationBySlug(slug:string){
