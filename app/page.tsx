@@ -368,6 +368,6 @@ export default async function HomePage(){
     </section>
 
     <Footer settings={settings}/>
-    <MerlinMobileDock/>
+    <MerlinMobileDock whatsapp={wa}/>
   </main>;
 }
