@@ -21,8 +21,14 @@ if(catalog.includes('getPublicCatalogPage')||catalog.includes('starterCatalogPro
 if(!detail.includes('topperLevelBySlug')||!detail.includes("redirect('/catalogo')"))errors.push('detalhe não está limitado aos seis níveis de topo');
 if(!prices.includes('topperLevels.map')||!prices.includes('Sob orçamento'))errors.push('guia de preços não reflete os níveis com orçamento real');
 if(!prices.includes('shaker')||!prices.includes('acetato'))errors.push('guia de preços não explica acabamentos avançados');
-if(!home.includes('href="/catalogo"')||!home.includes('href="/guia-de-precos"')&&!home.includes('/guia-de-precos'))errors.push('home não oferece acesso ao catálogo/guia');
-if(!home.includes('topperLevels.map'))errors.push('home não apresenta a escada de produtos');
+const isV808=home.includes('v8-clean-home');
+if(isV808){
+  if(!home.includes('href="/catalogo"'))errors.push('Home V8.08 não oferece acesso ao catálogo completo');
+  if(!home.includes("const featuredLevels=['essencial','premium','elite-shaker-acetato']"))errors.push('Home V8.08 sem seleção enxuta de níveis representativos');
+}else{
+  if(!home.includes('href="/catalogo"')||!home.includes('href="/guia-de-precos"')&&!home.includes('/guia-de-precos'))errors.push('home não oferece acesso ao catálogo/guia');
+  if(!home.includes('topperLevels.map'))errors.push('home não apresenta a escada de produtos');
+}
 
 if(errors.length){console.error(`Topper Catalog Commercial Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Topper Catalog Commercial Contract: OK — 6 níveis únicos, sem catálogo misto e preços sem invenção.');
+console.log('Topper Catalog Commercial Contract: OK — catálogo completo preservado e Home V8.08 pode usar seleção enxuta.');
