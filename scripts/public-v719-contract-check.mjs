@@ -17,9 +17,16 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  if(!home.includes('home-v719'))errors.push('Home não habilita classe home-v719');
-  for(const token of ['home-v717-inspiration-story','Referências que ajudam a','enxergar o resultado.']){
-    if(!home.includes(token))errors.push('Home sem estrutura esperada da seção 02: '+token);
+  const v8Home=home.includes('className="premium-site kf-theme public-v712 v8-home"');
+  if(v8Home){
+    for(const token of ['v8-home-inspirations','INSPIRAÇÕES REAIS DE PRODUTO','Sem cenário escondendo o que importa.','v8-inspiration-grid']){
+      if(!home.includes(token))errors.push('Home V8 sem estrutura premium de inspirações: '+token);
+    }
+  }else{
+    if(!home.includes('home-v719'))errors.push('Home não habilita classe home-v719');
+    for(const token of ['home-v717-inspiration-story','Referências que ajudam a','enxergar o resultado.']){
+      if(!home.includes(token))errors.push('Home sem estrutura esperada da seção 02: '+token);
+    }
   }
 }
 
