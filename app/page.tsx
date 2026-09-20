@@ -195,7 +195,7 @@ export default async function HomePage(){
       </div>
     </section>
 
-    <section className="event-pathways kf-order-pathways home-start home-v717-process">
+    <section className="event-pathways kf-order-pathways home-start home-v717-process" id="como-pedir">
       <div className="container">
         <div className="section-index" data-reveal><span>04</span><i/><small>COMO PEDIR</small></div>
         <div className="home-v717-process-head" data-reveal><div><div className="eyebrow">Sem complicação</div><h2>Três passos para transformar<br/><em>a ideia em pedido.</em></h2></div><p>Comece pelo que você já sabe. Produto, tema, cor ou uma simples referência já são suficientes para iniciar o pedido.</p></div>
