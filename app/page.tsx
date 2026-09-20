@@ -72,7 +72,6 @@ export default async function HomePage(){
                 <div><small>{item.category}</small><strong>{item.title}</strong></div>
             </Link>)}
           </div>
-          <div className="home-v717-showcase-seal"><Sparkles size={17}/><strong>feito para combinar</strong><span>com o seu tema e o seu bolo</span></div>
         </div>
       </div>
     </section>
