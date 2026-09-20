@@ -79,7 +79,7 @@
     "check:kit-builder": "node scripts/kit-builder-contract-check.mjs",
     "check:inspiration-filters": "node scripts/inspiration-filter-contract-check.mjs",
     "check:branding": "node scripts/branding-contract-check.mjs",
-    "check:merlin-commercial": "node scripts/merlin-commercial-ux-contract-check.mjs && node scripts/public-redesign-contract-check.mjs",
+    "check:merlin-commercial": "node scripts/merlin-commercial-ux-contract-check.mjs && node scripts/public-redesign-contract-check.mjs && npm run check:v8-home",
     "check:topper-inspirations": "node scripts/topper-inspiration-gallery-contract-check.mjs",
     "check:inspiration-detail": "node scripts/inspiration-detail-contract-check.mjs",
     "check:inspiration-quote": "node scripts/inspiration-quote-contract-check.mjs",
