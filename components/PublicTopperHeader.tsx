@@ -13,7 +13,7 @@ import SafeImage from './SafeImage';
 const navItems=[
   {href:'/',label:'Início'},
   {href:'/catalogo',label:'Topos de bolo'},
-  {href:'/#personalizados',label:'Personalizados'},
+  {href:'/personalizados',label:'Personalizados'},
   {href:'/inspiracoes',label:'Inspirações'},
   {href:'/#como-pedir',label:'Como funciona'},
   {href:'/orcamento',label:'Orçamento'}
@@ -58,6 +58,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
     if(pathname.startsWith('/catalogo'))return '/catalogo';
     if(pathname.startsWith('/guia-de-precos'))return '/guia-de-precos';
     if(pathname.startsWith('/monte-seu-topo'))return '/monte-seu-topo';
+    if(pathname.startsWith('/personalizados'))return '/personalizados';
     if(pathname.startsWith('/orcamento'))return '/orcamento';
     return '/';
   },[pathname]);
