@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Heart, Layers3, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowUpRight, Heart, Layers3, Search, SlidersHorizontal, X } from 'lucide-react';
 import { topperInspirations } from '@/lib/topper-inspirations';
 import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
 const PAGE_SIZE=12;
+const INITIAL_VISIBLE=8;
 type SortOrder='catalog'|'az'|'za';
 type Filters={query:string;categoria:string;nivel:string;favoritos:boolean;ordem:SortOrder};
 const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'catalog'};
@@ -29,40 +30,24 @@ function readFiltersFromUrl():Filters{
   };
 }
 
-function paletteColor(name:string){
-  const key=normalize(name);
-  if(key.includes('rosa')||key.includes('rose'))return '#e9a8b9';
-  if(key.includes('vermelho')||key.includes('marsala'))return '#94495f';
-  if(key.includes('azul'))return '#8db8df';
-  if(key.includes('verde'))return '#88a27f';
-  if(key.includes('dourado')||key.includes('champagne'))return '#c8a45f';
-  if(key.includes('preto'))return '#252525';
-  if(key.includes('branco')||key.includes('marfim')||key.includes('creme'))return '#f5efe3';
-  if(key.includes('lilas')||key.includes('roxo'))return '#a697cb';
-  if(key.includes('laranja')||key.includes('terracota'))return '#d98555';
-  if(key.includes('nude')||key.includes('bege')||key.includes('areia'))return '#d8bda8';
-  if(key.includes('prata'))return '#b9bec8';
-  return '#d8c3ca';
-}
-
 export default function TopperInspirationGallery(){
   const [filters,setFilters]=useState<Filters>(DEFAULT_FILTERS);
   const [favoriteCodes,setFavoriteCodes]=useState<string[]>([]);
-  const [visible,setVisible]=useState(PAGE_SIZE);
+  const [visible,setVisible]=useState(INITIAL_VISIBLE);
   const [ready,setReady]=useState(false);
   const [filterOpen,setFilterOpen]=useState(false);
   const filterTriggerRef=useRef<HTMLButtonElement>(null);
   const filterCloseRef=useRef<HTMLButtonElement>(null);
   const filterPanelRef=useRef<HTMLElement>(null);
 
-  const categories=useMemo(()=>[...new Set(topperInspirations.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,'pt-BR')),[ ]);
+  const categories=useMemo(()=>[...new Set(topperInspirations.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,'pt-BR')),[]);
 
   useEffect(()=>{
     const fromUrl=readFiltersFromUrl();
     setFilters(fromUrl);
     setFavoriteCodes(readInspirationFavorites());
     setReady(true);
-    const onPop=()=>{setFilters(readFiltersFromUrl());setVisible(PAGE_SIZE);};
+    const onPop=()=>{setFilters(readFiltersFromUrl());setVisible(INITIAL_VISIBLE);};
     const onFavorites=()=>setFavoriteCodes(readInspirationFavorites());
     window.addEventListener('popstate',onPop);
     window.addEventListener(INSPIRATION_FAVORITES_EVENT,onFavorites);
@@ -117,7 +102,7 @@ export default function TopperInspirationGallery(){
 
   function apply(next:Filters,push=true){
     setFilters(next);
-    setVisible(PAGE_SIZE);
+    setVisible(INITIAL_VISIBLE);
     if(ready)syncUrl(next,push);
   }
 
@@ -144,39 +129,64 @@ export default function TopperInspirationGallery(){
   const hasMore=shown.length<results.length;
   const active=Boolean(filters.query||filters.categoria||filters.nivel||filters.favoritos||filters.ordem!=='catalog');
 
-  return <div className="public-gallery-layout">
-    <button ref={filterTriggerRef} type="button" className="public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={17}/> Filtros{active&&<span>ativos</span>}</button>
-    {filterOpen&&<button type="button" className="public-filter-backdrop" aria-label="Fechar filtros" onClick={closeFilters}/>}
-    <aside ref={filterPanelRef} id="public-gallery-filters" className={filterOpen?'public-gallery-filters is-open':'public-gallery-filters'} aria-label="Filtros de inspirações" role={filterOpen?'dialog':undefined} aria-modal={filterOpen?true:undefined}>
-      <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtrar inspirações</strong><small>Encontre o estilo ideal</small></div><button ref={filterCloseRef} type="button" className="public-filter-close" onClick={closeFilters} aria-label="Fechar filtros"><X size={18}/></button></div>
+  return <div className="public-gallery-layout public-gallery-layout-v721">
+    <div className="public-gallery-premium-controls">
+      <label className="public-gallery-search-v721">
+        <Search size={19}/>
+        <span className="sr-only">Pesquisar inspirações</span>
+        <input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Pesquisar inspirações..." aria-label="Tema, código, cor..."/>
+        {filters.query&&<button type="button" onClick={()=>apply({...filters,query:''},true)} aria-label="Limpar pesquisa"><X size={15}/></button>}
+        <i aria-hidden="true"><Search size={18}/></i>
+      </label>
 
-      <label className="public-filter-search"><span>Buscar</span><div><Search size={16}/><input value={filters.query} onChange={e=>apply({...filters,query:e.target.value},false)} placeholder="Tema, código, cor..."/>{filters.query&&<button type="button" onClick={()=>apply({...filters,query:''},true)} aria-label="Limpar busca"><X size={14}/></button>}</div></label>
+      <div className="public-gallery-chip-row" aria-label="Categorias">
+        <button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todos</button>
+        {categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}</button>)}
+        <button type="button" className={filters.favoritos?'is-active is-favorite':''} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={14} fill={filters.favoritos?'currentColor':'none'}/> Favoritos</button>
+        <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Mais filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
+      </div>
+    </div>
+
+    {filterOpen&&<button type="button" className="public-filter-backdrop" aria-label="Fechar filtros" onClick={closeFilters}/>}
+    <aside ref={filterPanelRef} id="public-gallery-filters" className={filterOpen?'public-gallery-filters public-gallery-filters-v721 is-open':'public-gallery-filters public-gallery-filters-v721'} aria-label="Filtros avançados de inspirações" role="dialog" aria-modal="true">
+      <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtros avançados</strong><small>Refine por categoria e acabamento</small></div><button ref={filterCloseRef} type="button" className="public-filter-close" onClick={closeFilters} aria-label="Fechar filtros"><X size={18}/></button></div>
 
       <fieldset><legend>Categoria</legend><button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todas <span>{topperInspirations.length}</span></button>{categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}<span>{topperInspirations.filter(item=>item.category===categoria).length}</span></button>)}</fieldset>
 
-      <fieldset><legend>Nível</legend><button type="button" className={!filters.nivel?'is-active':''} onClick={()=>apply({...filters,nivel:''})}>Todos</button>{topperLevels.map(level=><button type="button" key={level.slug} className={filters.nivel===level.slug?'is-active':''} onClick={()=>apply({...filters,nivel:level.slug})}>{level.name}</button>)}</fieldset>
+      <fieldset><legend>Nível de acabamento</legend><button type="button" className={!filters.nivel?'is-active':''} onClick={()=>apply({...filters,nivel:''})}>Todos</button>{topperLevels.map(level=><button type="button" key={level.slug} className={filters.nivel===level.slug?'is-active':''} onClick={()=>apply({...filters,nivel:level.slug})}>{level.name}</button>)}</fieldset>
+
+      <label className="public-filter-sort-v721">Ordenar por<select value={filters.ordem} onChange={e=>apply({...filters,ordem:e.target.value as SortOrder})}><option value="catalog">Ordem do catálogo</option><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option></select></label>
 
       <button type="button" className={filters.favoritos?'public-favorites-filter is-active':'public-favorites-filter'} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={16} fill={filters.favoritos?'currentColor':'none'}/> Favoritos <span>{favoriteCodes.length}</span></button>
-
       {active&&<button type="button" className="public-clear-filters" onClick={clearFilters}>Limpar filtros</button>}
       <button type="button" className="public-filter-apply" onClick={closeFilters}>Ver {results.length} {results.length===1?'resultado':'resultados'}</button>
     </aside>
 
-    <section className="public-gallery-results">
-      <div className="public-gallery-toolbar">
+    <section className="public-gallery-results public-gallery-results-v721">
+      <div className="public-gallery-toolbar public-gallery-toolbar-v721">
         <div><strong>{results.length}</strong><span>{results.length===1?' inspiração encontrada':' inspirações encontradas'}</span></div>
-        <label>Ordenar por<select value={filters.ordem} onChange={e=>apply({...filters,ordem:e.target.value as SortOrder})}><option value="catalog">Ordem do catálogo</option><option value="az">Nome A–Z</option><option value="za">Nome Z–A</option></select></label>
+        {active&&<button type="button" onClick={clearFilters}>Limpar filtros</button>}
       </div>
 
-      {shown.length>0?<div className="public-inspiration-grid">{shown.map(item=>{
+      {shown.length>0?<div className="public-inspiration-grid public-inspiration-grid-v721">{shown.map(item=>{
         const level=topperLevels.find(option=>option.slug===item.levelSlug);
-        return <article className="public-inspiration-card" key={item.code}>
-          <div className="public-inspiration-image"><img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/><InspirationFavoriteButton code={item.code}/><span>{item.code}</span></div>
-          <div className="public-inspiration-body"><small>{item.category}</small><h3>{item.title}</h3><div className="public-inspiration-level"><Layers3 size={14}/><span>Nível sugerido: <strong>{level?.name||'Personalizado'}</strong></span></div><div className="public-palette" aria-label={'Paleta: '+item.palette.join(', ')}>{item.palette.map(color=><span key={color} title={color}><i style={{background:paletteColor(color)}} aria-hidden="true"/><em>{color}</em></span>)}</div><Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="public-card-primary">Ver detalhes</Link></div>
+        return <article className="public-inspiration-card public-inspiration-card-v721" key={item.code}>
+          <div className="public-inspiration-image public-inspiration-image-v721">
+            <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
+            <span className="public-card-shade-v721" aria-hidden="true"/>
+            <InspirationFavoriteButton code={item.code}/>
+            <span className="public-card-code-v721">{item.code}</span>
+            <div className="public-inspiration-body public-inspiration-body-v721">
+              <small>{item.category}</small>
+              <h3>{item.title}</h3>
+              <div className="public-card-level-v721"><Layers3 size={13}/><span>{level?.name||'Personalizado'}</span></div>
+              <Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="public-card-primary public-card-primary-v721" aria-label={'Ver detalhes de '+item.title}><ArrowUpRight size={17}/></Link>
+            </div>
+          </div>
         </article>;
-      })}</div>:<div className="public-gallery-empty"><Search size={28}/><strong>Nenhuma inspiração encontrou essa combinação.</strong><p>Tente limpar um filtro ou buscar por outro tema, cor ou código.</p><button type="button" onClick={clearFilters}>Ver todas as inspirações</button></div>}
+      })}</div>:<div className="public-gallery-empty public-gallery-empty-v721"><Search size={28}/><strong>Nenhuma inspiração encontrou essa combinação.</strong><p>Tente limpar um filtro ou buscar por outro tema, cor ou código.</p><button type="button" onClick={clearFilters}>Ver todas as inspirações</button></div>}
 
-      {hasMore&&<div className="public-load-more"><p>Mostrando {shown.length} de {results.length} inspirações.</p><button type="button" onClick={()=>setVisible(value=>value+PAGE_SIZE)}>Carregar mais</button></div>}
+      {hasMore&&<div className="public-load-more public-load-more-v721"><p>Mostrando {shown.length} de {results.length} inspirações.</p><button type="button" onClick={()=>setVisible(value=>value+PAGE_SIZE)}><span className="sr-only">Carregar mais</span>Ver mais inspirações <ArrowUpRight size={15}/></button></div>}
     </section>
   </div>;
 }
