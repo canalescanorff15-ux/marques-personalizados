@@ -25,6 +25,7 @@ const publicV7182AssetContract='scripts/public-v7182-asset-integrity-check.mjs';
 const publicV719Contract='scripts/public-v719-contract-check.mjs';
 const publicV720PartyScenesContract='scripts/public-v720-party-scenes-contract-check.mjs';
 const publicV721InspirationsContract='scripts/public-v721-inspirations-contract-check.mjs';
+const publicV722InspirationBatchContract='scripts/public-v722-inspiration-batch-contract-check.mjs';
 
 for(const route of ['/catalogo','/inspiracoes','/monte-seu-topo','/orcamento']){
   if(!home.includes(route))errors.push(`home sem caminho comercial: ${route}`);
@@ -117,6 +118,12 @@ if(!fs.existsSync(publicV721InspirationsContract))errors.push('contrato premium 
 else{
   const v721Check=spawnSync(process.execPath,[publicV721InspirationsContract],{encoding:'utf8'});
   if(v721Check.status!==0)errors.push((v721Check.stderr||v721Check.stdout||'contrato premium de inspirações V7.21 falhou').trim());
+}
+
+if(!fs.existsSync(publicV722InspirationBatchContract))errors.push('contrato do lote de inspirações V7.22 ausente');
+else{
+  const v722Check=spawnSync(process.execPath,[publicV722InspirationBatchContract],{encoding:'utf8'});
+  if(v722Check.status!==0)errors.push((v722Check.stderr||v722Check.stdout||'contrato do lote de inspirações V7.22 falhou').trim());
 }
 
 if(!fs.existsSync(topperInspirationContract))errors.push('contrato da galeria de inspirações ausente');
