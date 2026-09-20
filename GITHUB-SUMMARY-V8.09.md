@@ -65,3 +65,7 @@ Sem alterações em:
 - favoritos;
 - Monte seu Pedido;
 - orçamento.
+
+## Validação adicional
+
+A V8.09 preserva busca e favoritos dentro da área de inspirações, mas remove esses controles do cabeçalho global para reduzir ruído visual.
