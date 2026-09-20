@@ -81,3 +81,7 @@ Sem alterações em:
 - Monte seu Pedido;
 - dados das inspirações;
 - níveis do catálogo.
+
+## Compatibilidade
+
+O contrato de branding foi atualizado para reconhecer o catálogo V8.10 sem exigir frases longas das versões anteriores. A identidade Merlin e os seis níveis do catálogo continuam preservados.
