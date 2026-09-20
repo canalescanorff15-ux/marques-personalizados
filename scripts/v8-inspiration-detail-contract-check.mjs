@@ -9,7 +9,7 @@ for(const token of [
   'InspirationFavoriteButton',
   'InspirationShareButton',
   'publicTopperInspirations',
-  'Quero algo inspirado neste modelo',
+  'Quero esse modelo',
   'O que a imagem representa',
   'Bolo, doces, painel, balões, mesa, flores de cenário',
   'Outras referências que',
