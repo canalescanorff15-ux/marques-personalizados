@@ -5,17 +5,12 @@ const page=fs.readFileSync('app/inspiracoes/[code]/page.tsx','utf8');
 const css=fs.readFileSync('app/v8-inspiration-detail.css','utf8');
 const layout=fs.readFileSync('app/layout.tsx','utf8');
 
-for(const token of [
-  'InspirationFavoriteButton',
-  'InspirationShareButton',
-  'publicTopperInspirations',
-  'Quero esse modelo',
-  'O que a imagem representa',
-  'Bolo, doces, painel, balões, mesa, flores de cenário',
-  'Outras referências que',
-  'related.length>0'
-]){
-  if(!page.includes(token))errors.push('Detalhe V8.07 sem '+token);
+const isV810=page.includes('v8-storefront-detail');
+const pageTokens=isV810
+  ? ['InspirationFavoriteButton','InspirationShareButton','publicTopperInspirations','Quero esse modelo','Imagem de referência. Bolo e decoração do ambiente','related.length>0']
+  : ['InspirationFavoriteButton','InspirationShareButton','publicTopperInspirations','Quero esse modelo','O que a imagem representa','Bolo, doces, painel, balões, mesa, flores de cenário','Outras referências que','related.length>0'];
+for(const token of pageTokens){
+  if(!page.includes(token))errors.push('Detalhe V8 sem '+token);
 }
 
 for(const token of [
@@ -24,12 +19,11 @@ for(const token of [
   '.v8-detail-copy',
   '.v8-detail-personalize',
   '.v8-detail-related-grid',
-  '.v8-detail-final-cta',
   'opacity:1!important',
   'filter:none!important',
   '@media(max-width:680px)'
 ]){
-  if(!css.includes(token))errors.push('CSS V8.07 sem '+token);
+  if(!css.includes(token))errors.push('CSS V8 detalhe sem '+token);
 }
 
 const detailIndex=layout.indexOf("import './v8-inspiration-detail.css';");
@@ -45,4 +39,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.07 Inspiration Detail Contract: OK — foto limpa, escopo comercial claro, ações úteis e referências relacionadas protegidas.');
+console.log('V8.07/V8.10 Inspiration Detail Contract: OK — foto limpa, ação principal e versão minimalista protegidas.');
