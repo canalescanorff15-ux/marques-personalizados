@@ -104,40 +104,40 @@ export default async function HomePage(){
             <p>Do modelo mais direto ao acabamento premium com camadas, shaker e acetato.</p>
             <b>Ver inspirações <ArrowUpRight size={15}/></b>
           </Link>
-          <Link href="/orcamento?produto=caixinhas" className="v8-home-product-card" data-reveal>
+          <Link href="/personalizados#caixinhas" className="v8-home-product-card" data-reveal>
             <span className="v8-home-product-icon"><BadgeCheck size={23}/></span>
             <small>FESTA PERSONALIZADA</small>
             <h3>Caixinhas</h3>
             <p>Modelos personalizados para doces, lembranças e composição da mesa.</p>
-            <b>Pedir orçamento <ArrowUpRight size={15}/></b>
+            <b>Conhecer esta linha <ArrowUpRight size={15}/></b>
           </Link>
-          <Link href="/orcamento?produto=lembrancinhas" className="v8-home-product-card" data-reveal>
+          <Link href="/personalizados#lembrancinhas" className="v8-home-product-card" data-reveal>
             <span className="v8-home-product-icon"><Sparkles size={23}/></span>
             <small>PARA PRESENTEAR</small>
             <h3>Lembrancinhas</h3>
             <p>Peças criativas para marcar o momento e entregar aos convidados.</p>
             <b>Pedir orçamento <ArrowUpRight size={15}/></b>
           </Link>
-          <Link href="/orcamento?produto=adesivos-chaveiros" className="v8-home-product-card" data-reveal>
+          <Link href="/personalizados#adesivos-chaveiros" className="v8-home-product-card" data-reveal>
             <span className="v8-home-product-icon"><Palette size={23}/></span>
             <small>PERSONALIZAÇÃO</small>
             <h3>Adesivos & Chaveiros</h3>
             <p>Aplicações personalizadas para lembranças, presentes e pequenos detalhes.</p>
             <b>Pedir orçamento <ArrowUpRight size={15}/></b>
           </Link>
-          <Link href="/orcamento?produto=doces" className="v8-home-product-card" data-reveal>
+          <Link href="/personalizados#doces" className="v8-home-product-card" data-reveal>
             <span className="v8-home-product-icon"><Star size={23}/></span>
             <small>DETALHES DA MESA</small>
             <h3>Doces & Complementos</h3>
             <p>Toppers, tags, wrappers e peças que ajudam a levar o tema para os doces.</p>
             <b>Pedir orçamento <ArrowUpRight size={15}/></b>
           </Link>
-          <Link href="/orcamento?produto=kit" className="v8-home-product-card" data-reveal>
+          <Link href="/personalizados#kits" className="v8-home-product-card" data-reveal>
             <span className="v8-home-product-icon"><CheckCircle2 size={23}/></span>
             <small>CONJUNTO PERSONALIZADO</small>
             <h3>Kits</h3>
             <p>Combine diferentes peças com a mesma identidade visual em um único pedido.</p>
-            <b>Montar ideia <ArrowUpRight size={15}/></b>
+            <b>Conhecer esta linha <ArrowUpRight size={15}/></b>
           </Link>
         </div>
       </div>
