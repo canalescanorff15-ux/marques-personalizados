@@ -20,7 +20,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'1 camada principal',
     features:['Nome e idade','2 a 4 elementos temáticos','Composição limpa','Recorte preciso'],
     materials:['Papel fotográfico ou matte','Hastes para aplicação'],
-    image:'/topper-levels/top-01-simples.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/e2c98970-b9a1-457b-a3af-03c9bbe4f6c6-topo-simples-borboletas-lia-5.png'
   },
   {
     slug:'camadas-3d',code:'TOP-02',name:'Topo Básico 3D',eyebrow:'VOLUME SEM EXAGERO',
@@ -29,7 +29,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'2 a 3 camadas',
     features:['Efeito 3D','Nome em destaque','Elementos sobrepostos','Mais profundidade'],
     materials:['Papel fotográfico/matte','Color Plus','Fita banana'],
-    image:'/topper-levels/top-02-basico-3d.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/25dcd304-a60f-4c1a-81da-52736c4714bd-topo-basico-3d-safari-lia-5.png'
   },
   {
     slug:'premium',code:'TOP-03',name:'Topo Premium',eyebrow:'MAIS DETALHES',
@@ -38,7 +38,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'3 a 5 camadas',
     features:['Multicamadas','Elementos maiores e menores','Detalhes metalizados quando combinarem','Composição mais trabalhada'],
     materials:['Papéis fotográficos e Color Plus','Papel especial opcional','Fita banana'],
-    image:'/topper-levels/top-03-premium.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/5411f2b0-3246-4c05-aea9-f0749a4fba8f-topo-premium-bailarina-lia-5.png'
   },
   {
     slug:'shaker',code:'TOP-04',name:'Topo Shaker',eyebrow:'EFEITO INTERATIVO',
@@ -47,7 +47,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'Premium + módulo shaker',
     features:['Janela shaker','Confetes ou elementos internos','Camadas 3D','Acabamento fechado e limpo'],
     materials:['Papel fotográfico/Color Plus','Acetato na janela','Espuma ou fita de volume','Elementos shaker'],
-    image:'/topper-levels/top-04-shaker.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/05708d0c-10dd-472d-a8af-5bee9721bd47-topo-shaker-espaco-lia-5.png'
   },
   {
     slug:'acetato',code:'TOP-05',name:'Topo com Acetato',eyebrow:'EFEITO FLUTUANTE',
@@ -56,7 +56,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'Premium + estrutura em acetato',
     features:['Elementos flutuantes','Profundidade sem poluição visual','Nome ou detalhe suspenso','Visual moderno'],
     materials:['Acetato transparente','Papel fotográfico/Color Plus','Fita banana quando necessário'],
-    image:'/topper-levels/top-05-acetato.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/7ed8f014-823d-4afe-a6b2-89442bc58319-topo-acetato-unicornio-lia-5.png'
   },
   {
     slug:'elite-shaker-acetato',code:'TOP-06',name:'Topo Elite Shaker + Acetato',eyebrow:'NOSSO TOPO MAIS COMPLETO',
@@ -65,7 +65,7 @@ export const topperLevels:TopperLevel[]=[
     complexity:'4 a 6+ camadas + shaker + acetato',
     features:['Shaker integrado','Acetato estrutural','Multicamadas avançadas','Efeito 3D','Elementos independentes','Composição premium para fotos'],
     materials:['Acetato','Papéis especiais conforme o projeto','Fita banana/espuma 3D','Elementos shaker','Hastes e reforços estruturais'],
-    image:'/topper-levels/top-06-elite-shaker-acetato.svg'
+    image:'https://merlin-topper-assets.floot.app/_cdn/static/8dd8da23-99a9-463a-9263-1dac5bc39252-topo-elite-shaker-acetato-borboletas-lia-5.png'
   }
 ];
 
