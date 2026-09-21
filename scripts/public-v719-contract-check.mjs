@@ -19,8 +19,11 @@ if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
   if(!home.includes('home-v719'))errors.push('Home não habilita classe home-v719');
   const isV808=home.includes('v8-clean-home');
-  const tokens=isV808
-    ? ['home-v717-inspiration-story','Veja o produto.','Escolha a sua direção.']
+  const isEssentialHome=home.includes('v8-essential-home-v814');
+  const tokens=isEssentialHome
+    ? ['home-v717-inspiration-story','Inspirações para','começar sua ideia.']
+    : isV808
+      ? ['home-v717-inspiration-story','Veja o produto.','Escolha a sua direção.']
     : ['home-v717-inspiration-story','Referências que ajudam a','enxergar o resultado.'];
   for(const token of tokens){
     if(!home.includes(token))errors.push('Home sem estrutura esperada da seção de inspirações: '+token);
@@ -55,4 +58,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.19/V8.08 Premium Contract: OK — seção de inspirações preservada e Home clean reconhecida.');
+console.log('V8.14 Premium Contract: OK — seção de inspirações essencial preservada e Home clean reconhecida.');

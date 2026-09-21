@@ -40,10 +40,11 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  const heroEnd=home.indexOf('<section className="home-v717-intro-strip');
-  const hero=home.slice(home.indexOf('<section className="hero'),heroEnd>0?heroEnd:home.indexOf('<section className="category-showcase'));
   const isV8=home.includes('v8-home-products');
   const isV808=home.includes('v8-clean-home');
+  const isEssentialHome=home.includes('v8-essential-home-v814');
+  const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
+  const hero=home.slice(home.indexOf('<section className="hero'),heroEnd>0?heroEnd:home.indexOf('<section className="category-showcase'));
   const heroTokens=isV808
     ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento']
     : isV8
@@ -54,10 +55,10 @@ if(fs.existsSync('app/page.tsx')){
     for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
     if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
   }else{
-    if(isV808){
+    if(isV808&&!isEssentialHome){
       if(!home.includes('Três passos.<br/><em>Só o necessário.</em>'))errors.push('Home V8.08 sem sequência comercial clean');
       if(!home.includes('Orçamento confirmado antes da produção'))errors.push('Home V8.08 sem confirmação prévia de orçamento');
-    }else if(!home.includes('Três passos para transformar<br/><em>a ideia em pedido.</em>')){
+    }else if(!isEssentialHome&&!home.includes('Três passos para transformar<br/><em>a ideia em pedido.</em>')){
       errors.push('Home V8 sem nova sequência comercial');
     }
     if(!home.includes('Caixinhas')||!home.includes('Lembrancinhas'))errors.push('Home V8 sem expansão de produtos');
@@ -112,4 +113,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.15 Visual Structure Contract: OK — hierarquia, legibilidade, cards, inspirações, briefing e breakpoints protegidos.');
+console.log('V8.14 Visual Structure Contract: OK — hierarquia essencial, legibilidade, produtos, inspirações e breakpoints protegidos.');

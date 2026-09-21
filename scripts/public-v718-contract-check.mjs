@@ -18,14 +18,17 @@ if(fs.existsSync('app/layout.tsx')){
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
   const isV8=home.includes('v8-home-products');
-  const required=isV8
-    ? ['home-v718-brand-signature','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada']
+  const isEssentialHome=home.includes('v8-essential-home-v814');
+  const required=isEssentialHome
+    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada','publicTopperInspirations']
+    : isV8
+      ? ['home-v718-brand-signature','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada']
     : ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal'];
   for(const token of required){
     if(!home.includes(token))errors.push('Home '+(isV8?'V8.02':'V7.18')+' sem '+token);
   }
   if(isV8&&home.includes('home-v717-showcase-seal'))errors.push('Home V8.02 não deve reintroduzir selo editorial legado');
-  if(!home.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('Home não usa a logo configurável da marca');
+  if(!isEssentialHome&&!home.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('Home legada não usa a logo configurável da marca');
 }
 
 if(fs.existsSync('app/public-v718.css')){
@@ -69,4 +72,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.18 Premium Global Brand Contract: OK — marca, logo, header, Home, cards, formulários e footer protegidos.');
+console.log('V8.14 Premium Global Brand Contract: OK — marca, header, Home essencial, cards, formulários e footer protegidos.');
