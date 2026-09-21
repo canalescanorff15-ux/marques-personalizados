@@ -51,13 +51,13 @@ export default async function InspirationDetailPage({params}:Props){
           <div className="v8-detail-copy">
             <span className="v8-detail-kicker"><Sparkles size={14}/> INSPIRAÇÃO</span>
             <h1>{inspiration.title}</h1>
-            <p className="v8-detail-description">Use esta referência como ponto de partida e personalize nome, idade, cores e acabamento.</p>
+            <p className="v8-detail-description">Use esta referência como ponto de partida e personalize nome, idade, cores e acabamento.</p>\n            <div className="public-detail-customize v8-detail-contract-copy" aria-hidden="true"><span>Nome e idade</span><span>Cores e elementos</span><span>Acabamento</span></div>
 
             <div className="v8-detail-actions">
               <Link className="btn btn-primary btn-luxury" href={builderHref}>Quero esse modelo <ArrowUpRight size={16}/></Link>
             </div>
 
-            <p className="v8-storefront-disclaimer">Imagem de referência. Bolo e decoração não estão inclusos.</p>
+            <p className="v8-storefront-disclaimer">Imagem de referência. Bolo e decoração do ambiente não estão inclusos.</p>
           </div>
         </div>
       </div>
