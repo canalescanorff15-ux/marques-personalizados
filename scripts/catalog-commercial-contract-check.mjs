@@ -22,7 +22,11 @@ if(!detail.includes('topperLevelBySlug')||!detail.includes("redirect('/catalogo'
 if(!prices.includes('topperLevels.map')||!prices.includes('Sob orçamento'))errors.push('guia de preços não reflete os níveis com orçamento real');
 if(!prices.includes('shaker')||!prices.includes('acetato'))errors.push('guia de preços não explica acabamentos avançados');
 const isV808=home.includes('v8-clean-home');
-if(isV808){
+const isEssentialHome=home.includes('v8-essential-home-v814');
+if(isEssentialHome){
+  if(!home.includes('href="/catalogo"'))errors.push('Home V8.14 não oferece acesso direto ao catálogo completo');
+  if(home.includes('featuredLevels'))errors.push('Home V8.14 voltou a incorporar níveis de acabamento que pertencem ao catálogo');
+}else if(isV808){
   if(!home.includes('href="/catalogo"'))errors.push('Home V8.08 não oferece acesso ao catálogo completo');
   if(!home.includes("const featuredLevels=['essencial','premium','elite-shaker-acetato']"))errors.push('Home V8.08 sem seleção enxuta de níveis representativos');
 }else{
@@ -31,4 +35,4 @@ if(isV808){
 }
 
 if(errors.length){console.error(`Topper Catalog Commercial Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Topper Catalog Commercial Contract: OK — catálogo completo preservado e Home V8.08 pode usar seleção enxuta.');
+console.log('Topper Catalog Commercial Contract: OK — seis níveis preservados no catálogo; Home essencial mantém acesso direto sem duplicar a escada de acabamentos.');
