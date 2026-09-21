@@ -9,7 +9,7 @@ import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
 const PAGE_SIZE=12;
-const INITIAL_VISIBLE=9;
+const INITIAL_VISIBLE=8;
 type SortOrder='recent'|'catalog'|'az'|'za';
 type Filters={query:string;categoria:string;nivel:string;favoritos:boolean;ordem:SortOrder};
 const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'recent'};
