@@ -49,7 +49,7 @@ export default async function PersonalizadosPage(){
         </div>
 
         <div className="v8-storefront-note">
-          <span>Referências mostram o produto. Cenário e decoração não estão inclusos por padrão.</span>
+          <span>Bolo, doces e decoração do ambiente não estão inclusos por padrão.</span>
         </div>
       </div>
     </section>
