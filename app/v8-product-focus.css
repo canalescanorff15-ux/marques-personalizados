@@ -1,0 +1,100 @@
+/* V8.13 — Produto em foco
+   Fotos públicas de inspiração devem preservar bolo + topo inteiros.
+   Evita crop agressivo de imagens verticais e mantém o cenário como contexto secundário. */
+
+/* Galeria principal: os assets públicos são majoritariamente verticais (~10:11). */
+.v8-storefront-inspirations .public-inspiration-image-v721{
+  aspect-ratio:10/11!important;
+  background:#fff!important;
+}
+.v8-storefront-inspirations .public-inspiration-image-v721>img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  transform:none!important;
+  filter:none!important;
+}
+.v8-storefront-inspirations .public-inspiration-card-v721:hover .public-inspiration-image-v721>img{
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Home: a foto de destaque não corta o topo do bolo. */
+.v8-clean-home .v8-clean-hero-media{
+  background:#fff!important;
+}
+.v8-clean-home .v8-clean-hero-media>img{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:1/1!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Cards de inspiração da Home seguem a proporção real do lote público. */
+.v8-clean-home .v8-clean-gallery .home-v717-gallery-card{
+  background:#fff!important;
+}
+.v8-clean-home .v8-clean-gallery .home-v717-gallery-card>img{
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:10/11!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Detalhe: usar a proporção natural da imagem para não esconder nenhuma parte do produto. */
+.v8-storefront-detail .v8-detail-media{
+  background:#fff!important;
+}
+.v8-storefront-detail .v8-detail-media>img{
+  display:block!important;
+  width:100%!important;
+  height:auto!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Relacionados também ficam sem crop. */
+.v8-storefront-related .v8-detail-related-card>div{
+  aspect-ratio:10/11!important;
+  background:#fff!important;
+}
+.v8-storefront-related .v8-detail-related-card>div>img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  background:#fff!important;
+  transform:none!important;
+  filter:none!important;
+}
+
+/* Molduras permanecem claras; nenhuma camada estética pode escurecer a fotografia. */
+.v8-storefront-inspirations .public-inspiration-image-v721::after{
+  border-color:rgba(65,43,54,.07)!important;
+  background:transparent!important;
+}
+
+@media(max-width:680px){
+  .v8-clean-home .v8-clean-hero-media>img{
+    aspect-ratio:10/11!important;
+  }
+  .v8-storefront-inspirations .public-inspiration-image-v721,
+  .v8-clean-home .v8-clean-gallery .home-v717-gallery-card>img,
+  .v8-storefront-related .v8-detail-related-card>div{
+    aspect-ratio:10/11!important;
+  }
+}

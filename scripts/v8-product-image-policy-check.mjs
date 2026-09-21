@@ -10,6 +10,8 @@ const sitemap=read('app/sitemap.ts');
 const home=read('app/page.tsx');
 const layout=read('app/layout.tsx');
 const css=read('app/v8-image-policy.css');
+const focusCssPath='app/v8-product-focus.css';
+const focusCss=fs.existsSync(focusCssPath)?read(focusCssPath):'';
 
 for(const token of [
   'curatedPublicTopperCodes',
@@ -44,6 +46,24 @@ const imageIndex=layout.indexOf("import './v8-image-policy.css';");
 if(imageIndex<0)errors.push('layout não importa v8-image-policy.css');
 if(designIndex<0||imageIndex<designIndex)errors.push('política de imagem precisa carregar depois do design system');
 
+const homeMinimalIndex=layout.indexOf("import './v8-home-minimal.css';");
+const productFocusIndex=layout.indexOf("import './v8-product-focus.css';");
+if(!fs.existsSync(focusCssPath))errors.push('camada V8.13 de foco no produto ausente');
+if(productFocusIndex<0)errors.push('layout não importa v8-product-focus.css');
+if(homeMinimalIndex<0||productFocusIndex<homeMinimalIndex)errors.push('v8-product-focus.css precisa carregar depois da Home minimalista');
+
+for(const token of [
+  '.public-inspiration-image-v721',
+  'aspect-ratio:10/11!important',
+  'object-fit:contain!important',
+  '.v8-clean-hero-media>img',
+  '.v8-detail-media>img',
+  '.v8-detail-related-card>div',
+  'transform:none!important'
+]){
+  if(!focusCss.includes(token))errors.push('foco de produto V8.13 sem '+token);
+}
+
 for(const token of [
   '.home-v717-photo-shade',
   '.public-card-shade-v721',
@@ -61,4 +81,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.01 Product Image Policy: OK — 33 inspirações de bolo publicadas; cenários permanecem arquivados e fora do sitemap.');
+console.log('V8.13 Product Image Policy: OK — 33 inspirações de bolo publicadas, sem cortes agressivos; cenários permanecem arquivados.');
