@@ -31,7 +31,7 @@ export default async function PersonalizadosPage(){
       <div className="container">
         <span className="eyebrow"><Sparkles size={14}/> PERSONALIZADOS</span>
         <h1>Escolha o produto.<br/><em>A gente personaliza.</em></h1>
-        <p>Tema, nome, idade, cores e quantidade são definidos no pedido.</p>
+        <p>Escolha a categoria e monte seu pedido.</p>
       </div>
     </section>
 
@@ -43,15 +43,13 @@ export default async function PersonalizadosPage(){
             return <Link href={product.href} id={product.id} className="v8-storefront-card v8-storefront-product-card" key={product.id}>
               <span className="v8-storefront-icon"><Icon size={22}/></span>
               <h2>{product.title}</h2>
-              <p>{product.copy}</p>
               <b>Montar pedido <ArrowUpRight size={14}/></b>
             </Link>;
           })}
         </div>
 
         <div className="v8-storefront-note">
-          <span>As imagens servem como referência do produto.</span>
-          <small>Bolo, doces e decoração do ambiente não estão inclusos, salvo quando descritos no orçamento.</small>
+          <span>Bolo, doces e decoração do ambiente não estão inclusos por padrão.</span>
         </div>
       </div>
     </section>

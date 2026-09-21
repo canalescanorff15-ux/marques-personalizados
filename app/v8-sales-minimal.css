@@ -1,0 +1,146 @@
+/* V8.11 — Venda Essencial
+   Regra: produto primeiro, informação mínima, uma ação clara. */
+
+.v8-storefront-page .v8-storefront-hero,
+.v8-storefront-inspirations .v8-storefront-hero,
+.v8-order-page .v8-order-hero{
+  padding-top:56px!important;
+  padding-bottom:40px!important;
+}
+
+.v8-storefront-page .v8-storefront-hero h1,
+.v8-storefront-inspirations .v8-storefront-hero h1,
+.v8-order-page .v8-order-hero h1{
+  margin-bottom:10px!important;
+}
+
+.v8-storefront-page .v8-storefront-hero p,
+.v8-storefront-inspirations .v8-storefront-hero p,
+.v8-order-page .v8-order-hero p{
+  max-width:520px!important;
+  font-size:.84rem!important;
+  line-height:1.55!important;
+}
+
+.v8-storefront-grid-section{
+  padding-top:48px!important;
+}
+
+/* Catálogo: visual + nome + ação */
+.v8-storefront-level-card{
+  grid-template-columns:150px minmax(0,1fr)!important;
+  gap:18px!important;
+  padding:14px!important;
+}
+.v8-storefront-level-card small,
+.v8-storefront-level-card p{
+  display:none!important;
+}
+.v8-storefront-level-card h2{
+  margin:0 0 12px!important;
+  font-size:1.55rem!important;
+}
+.v8-storefront-level-card span{
+  margin-top:0!important;
+}
+
+/* Personalizados: cards menores e sem textos intermediários */
+.v8-storefront-product-card{
+  min-height:168px!important;
+  justify-content:flex-start!important;
+}
+.v8-storefront-product-card h2{
+  margin-bottom:0!important;
+}
+.v8-storefront-product-card p{
+  display:none!important;
+}
+.v8-storefront-product-card b{
+  margin-top:auto!important;
+}
+
+/* Notas e CTA em uma única linha visual */
+.v8-storefront-note{
+  justify-content:flex-start!important;
+  padding:13px 0!important;
+  border-top:1px solid var(--v8-line)!important;
+  border-bottom:0!important;
+}
+.v8-storefront-note small{
+  display:none!important;
+}
+.v8-storefront-bottom-cta,
+.v8-storefront-simple-cta>.public-shell{
+  padding:20px 22px!important;
+}
+.v8-storefront-bottom-cta>div,
+.v8-storefront-simple-cta>.public-shell>div{
+  display:contents!important;
+}
+.v8-storefront-bottom-cta small,
+.v8-storefront-simple-cta small{
+  display:none!important;
+}
+.v8-storefront-bottom-cta strong,
+.v8-storefront-simple-cta strong{
+  font-size:1.2rem!important;
+}
+
+/* Orçamento: sem painel explicativo no hero */
+.v8-order-page .v8-order-hero>.container{
+  display:block!important;
+  max-width:920px!important;
+}
+.v8-order-page .v8-order-hero-card{
+  display:none!important;
+}
+.v8-order-page .v8-order-main{
+  padding-top:36px!important;
+}
+
+/* Galeria: menos ruído antes das fotos */
+.v8-storefront-inspirations .public-gallery-toolbar-v721{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+.v8-storefront-inspirations .public-gallery-toolbar-v721 button{
+  font-size:.65rem!important;
+}
+.v8-storefront-inspirations .public-load-more-v721 p{
+  display:none!important;
+}
+
+/* Footer ainda mais discreto */
+.v8-simple-footer{
+  margin-top:0!important;
+}
+.v8-simple-footer-main{
+  padding-top:42px!important;
+  padding-bottom:30px!important;
+}
+.v8-simple-footer-brand p{
+  display:none!important;
+}
+
+@media(max-width:640px){
+  .v8-storefront-page .v8-storefront-hero,
+  .v8-storefront-inspirations .v8-storefront-hero,
+  .v8-order-page .v8-order-hero{
+    padding-top:42px!important;
+    padding-bottom:34px!important;
+  }
+
+  .v8-storefront-product-card{
+    min-height:130px!important;
+  }
+
+  .v8-storefront-level-card{
+    grid-template-columns:94px minmax(0,1fr)!important;
+  }
+
+  .v8-storefront-bottom-cta,
+  .v8-storefront-simple-cta>.public-shell{
+    align-items:stretch!important;
+  }
+}

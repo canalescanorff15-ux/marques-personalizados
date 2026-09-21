@@ -13,11 +13,14 @@ for(const [name,source] of [['header',header],['dock',dock],['home',home],['cata
 }
 if(!catalog.includes('topperLevels.map'))errors.push('comparação comercial agora precisa acontecer entre os níveis do catálogo');
 const isV810=catalog.includes('v8-storefront-catalog');
-if(isV810){
+const isV811=fs.existsSync('app/v8-sales-minimal.css')&&catalog.includes('v8-storefront-catalog');
+if(isV811){
+  if(!catalog.includes('Ver acabamento'))errors.push('catálogo V8.11 precisa manter acesso aos seis níveis');
+}else if(isV810){
   if(!catalog.includes('item.code')||!catalog.includes('Ver acabamento'))errors.push('catálogo V8.10 precisa manter identificação e acesso aos seis níveis');
 }else if(!catalog.includes('TOP-01 ao TOP-06')){
   errors.push('catálogo precisa comunicar claramente a escala dos seis níveis');
 }
 
 if(errors.length){console.error(`Legacy Compare Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Legacy Compare Contract: OK — comparador antigo aposentado e seis níveis preservados no catálogo clean.');
+console.log('Legacy Compare Contract: OK — comparador antigo aposentado e seis níveis preservados sem exigir código técnico na V8.11.');
