@@ -35,8 +35,8 @@ export default async function InspirationsPage(){
 
     <section className="v8-storefront-simple-cta">
       <div className="public-shell">
-        <strong>Tem outra ideia?</strong>
-        <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Enviar referência <ArrowUpRight size={16}/></Link>
+        <strong>Envie sua própria referência.</strong>
+        <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido?produto=topo">Contar minha ideia <ArrowUpRight size={16}/></Link>
       </div>
     </section>
 
