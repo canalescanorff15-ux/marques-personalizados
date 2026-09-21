@@ -12,7 +12,7 @@ import { publicTopperInspirations } from '@/lib/topper-inspirations';
 export const dynamic='force-dynamic';
 function digits(v:string){return v.replace(/\D/g,'');}
 
-const homeInspirationCodes=['INSP-TOP-48','INSP-TOP-49','INSP-TOP-50'];
+const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'];
 
 export default async function HomePage(){
   const settings=await getSiteSettings();

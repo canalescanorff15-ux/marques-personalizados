@@ -1,4 +1,5 @@
 import { topperInspirationBatch } from './topper-inspirations-batch';
+import { topperInspirationsV820 } from './topper-inspirations-v820';
 
 export type TopperInspiration={
   code:string;
@@ -30,46 +31,49 @@ export const topperInspirations:TopperInspiration[]=[
   {code:'INSP-TOP-15',slug:'ursinho-aviador',title:'Ursinho Aviador',category:'Infantil delicado',levelSlug:'shaker',description:'Ursinho aviador, avião, nuvens e estrelas com módulos shaker para um topo leve e cheio de movimento.',image:'https://merlin-topper-assets.floot.app/_cdn/static/d2c3ea33-c577-4d55-a780-7fd1df1d107d-insp-top-15-ursinho-aviador.png',palette:['Azul bebê','Creme','Dourado'],tags:['ursinho','aviador','shaker']},
   {code:'INSP-TOP-16',slug:'casamento-floral-dourado',title:'Casamento Floral Dourado',category:'Casamento & bodas',levelSlug:'acetato',description:'Arco dourado, flores brancas, folhagens e monograma em acetato para uma composição elegante e romântica.',image:'https://merlin-topper-assets.floot.app/_cdn/static/a0ca3d63-04b8-4372-b2d9-330fe736a35f-insp-top-16-casamento-floral-dourado-festa-premium.png',palette:['Branco','Verde oliva','Dourado'],tags:['casamento','floral','acetato']},
   {code:'INSP-TOP-17',slug:'bailarina-15-anos',title:'Bailarina 15 Anos',category:'Feminino elegante',levelSlug:'elite-shaker-acetato',description:'Bailarina delicada, laços, flores e composição de alto impacto para uma celebração feminina especial.',image:'https://merlin-topper-assets.floot.app/_cdn/static/dd5496e6-b7b3-4ef5-9a67-784fa7738319-insp-top-17-bailarina-15-anos-festa-premium.png',palette:['Rosa','Champagne','Dourado'],tags:['bailarina','15 anos','elite']},
-  ...topperInspirationBatch
+  ...topperInspirationBatch,
+  ...topperInspirationsV820
 ];
 
-// V8.01 — curadoria pública explícita.
-// Só entra na vitrine o lote visualmente aprovado com foco em bolo + topo.
-// Novas inspirações devem ser adicionadas manualmente após revisão visual.
+// V8.20 — curadoria pública final: 36 inspirações novas, 6 por cada uma das 6 categorias comerciais de topo.
+// O acervo anterior continua preservado no módulo, mas não aparece na vitrine pública.
 export const curatedPublicTopperCodes=new Set<string>([
-  'INSP-TOP-18',
-  'INSP-TOP-19',
-  'INSP-TOP-20',
-  'INSP-TOP-21',
-  'INSP-TOP-22',
-  'INSP-TOP-23',
-  'INSP-TOP-24',
-  'INSP-TOP-25',
-  'INSP-TOP-26',
-  'INSP-TOP-27',
-  'INSP-TOP-28',
-  'INSP-TOP-29',
-  'INSP-TOP-30',
-  'INSP-TOP-31',
-  'INSP-TOP-32',
-  'INSP-TOP-33',
-  'INSP-TOP-34',
-  'INSP-TOP-35',
-  'INSP-TOP-36',
-  'INSP-TOP-37',
-  'INSP-TOP-38',
-  'INSP-TOP-39',
-  'INSP-TOP-40',
-  'INSP-TOP-41',
-  'INSP-TOP-42',
-  'INSP-TOP-43',
-  'INSP-TOP-44',
-  'INSP-TOP-45',
-  'INSP-TOP-46',
-  'INSP-TOP-47',
-  'INSP-TOP-48',
-  'INSP-TOP-49',
-  'INSP-TOP-50'
+  'INSP-TOP-74',
+  'INSP-TOP-75',
+  'INSP-TOP-76',
+  'INSP-TOP-77',
+  'INSP-TOP-78',
+  'INSP-TOP-79',
+  'INSP-TOP-80',
+  'INSP-TOP-81',
+  'INSP-TOP-82',
+  'INSP-TOP-83',
+  'INSP-TOP-84',
+  'INSP-TOP-85',
+  'INSP-TOP-86',
+  'INSP-TOP-87',
+  'INSP-TOP-88',
+  'INSP-TOP-89',
+  'INSP-TOP-90',
+  'INSP-TOP-91',
+  'INSP-TOP-92',
+  'INSP-TOP-93',
+  'INSP-TOP-94',
+  'INSP-TOP-95',
+  'INSP-TOP-96',
+  'INSP-TOP-97',
+  'INSP-TOP-98',
+  'INSP-TOP-99',
+  'INSP-TOP-100',
+  'INSP-TOP-101',
+  'INSP-TOP-102',
+  'INSP-TOP-103',
+  'INSP-TOP-104',
+  'INSP-TOP-105',
+  'INSP-TOP-106',
+  'INSP-TOP-107',
+  'INSP-TOP-108',
+  'INSP-TOP-109'
 ]);
 
 // Referências de cenário completo preservadas apenas como acervo interno.
