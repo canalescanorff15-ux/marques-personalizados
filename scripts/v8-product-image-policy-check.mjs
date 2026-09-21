@@ -22,7 +22,7 @@ for(const token of [
   'isPublicTopperInspiration'
 ])if(!inspirations.includes(token))errors.push('curadoria sem '+token);
 
-const curatedCodes=[...inspirations.matchAll(/'INSP-TOP-(\d{2})'/g)]
+const curatedCodes=[...inspirations.matchAll(/'INSP-TOP-(\d{2,3})'/g)]
   .map(match=>Number(match[1]))
   .filter((value,index,array)=>array.indexOf(value)===index);
 for(let code=74;code<=109;code++){
@@ -36,9 +36,10 @@ if(!gallery.includes('publicTopperInspirations'))errors.push('galeria ainda não
 if(!detail.includes('isPublicTopperInspiration'))errors.push('detalhe não bloqueia referências arquivadas');
 if(!sitemap.includes('publicTopperInspirations'))errors.push('sitemap ainda expõe referências arquivadas');
 
-const homeCodes=[...home.matchAll(/INSP-TOP-(\d{2})/g)].map(match=>Number(match[1]));
+const homeList=(home.match(/const homeInspirationCodes=\[([^\]]*)\]/)||[])[1]||'';
+const homeCodes=[...homeList.matchAll(/INSP-TOP-(\d{2,3})/g)].map(match=>Number(match[1]));
 for(const code of homeCodes){
-  if(code<18||code>50)errors.push('Home usa inspiração fora da faixa curada: INSP-TOP-'+String(code).padStart(2,'0'));
+  if(code<74||code>109)errors.push('Home usa inspiração fora da faixa curada V8.20: INSP-TOP-'+String(code).padStart(2,'0'));
 }
 
 const designIndex=layout.indexOf("import './v8-design-system.css';");
