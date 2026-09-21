@@ -30,7 +30,7 @@ export default async function InspirationDetailPage({params}:Props){
   const builderHref='/monte-seu-pedido?produto=topo&inspiracao='+encodeURIComponent(inspiration.slug)+'&nivel='+encodeURIComponent(inspiration.levelSlug)+'&tema='+encodeURIComponent(inspiration.title);
   const related=publicTopperInspirations.filter(item=>item.code!==inspiration.code).slice(0,2);
 
-  return <main className="merlin-public public-inspiration-detail-page v8-inspiration-detail v8-storefront-detail">
+  return <main className="merlin-public public-inspiration-detail-page v8-inspiration-detail v8-storefront-detail v8-detail-minimal-v817">
     <Header settings={settings}/>
 
     <section className="v8-detail-hero">
@@ -49,21 +49,15 @@ export default async function InspirationDetailPage({params}:Props){
           </div>
 
           <div className="v8-detail-copy">
-            <span className="v8-detail-kicker"><Sparkles size={14}/> {inspiration.category}</span>
+            <span className="v8-detail-kicker"><Sparkles size={14}/> INSPIRAÇÃO</span>
             <h1>{inspiration.title}</h1>
-            <p className="v8-detail-description">{inspiration.description}</p>
-
-            <div className="v8-detail-personalize public-detail-customize">
-              <span><CheckCircle2 size={15}/> Nome e idade</span>
-              <span><CheckCircle2 size={15}/> Cores e elementos</span>
-              <span><CheckCircle2 size={15}/> Acabamento</span>
-            </div>
+            <p className="v8-detail-description">Use esta referência como ponto de partida e personalize nome, idade, cores e acabamento.</p>
 
             <div className="v8-detail-actions">
               <Link className="btn btn-primary btn-luxury" href={builderHref}>Quero esse modelo <ArrowUpRight size={16}/></Link>
             </div>
 
-            <p className="v8-storefront-disclaimer">Imagem de referência. Bolo e decoração do ambiente não estão inclusos por padrão.</p>
+            <p className="v8-storefront-disclaimer">Imagem de referência. Bolo e decoração não estão inclusos.</p>
           </div>
         </div>
       </div>
@@ -71,7 +65,7 @@ export default async function InspirationDetailPage({params}:Props){
 
     {related.length>0&&<section className="v8-detail-related v8-storefront-related">
       <div className="public-shell">
-        <div className="v8-storefront-related-head"><small>OUTRAS IDEIAS</small><Link href="/inspiracoes">Ver todas <ArrowUpRight size={14}/></Link></div>
+        <div className="v8-storefront-related-head"><small>OUTRAS INSPIRAÇÕES</small><Link href="/inspiracoes">Ver todas <ArrowUpRight size={14}/></Link></div>
         <div className="v8-detail-related-grid">
           {related.map(item=><Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="v8-detail-related-card" key={item.code}>
             <div><img src={item.image} alt={'Inspiração '+item.title} loading="lazy"/></div>

@@ -26,6 +26,7 @@ import './v8-sales-minimal.css';
 import './v8-home-minimal.css';
 import './v8-product-focus.css';
 import './v8-gallery-minimal.css';
+import './v8-final-polish.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
