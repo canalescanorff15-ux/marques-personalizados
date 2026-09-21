@@ -20,7 +20,7 @@ if(fs.existsSync('app/page.tsx')){
   const isV8=home.includes('v8-home-products');
   const isEssentialHome=home.includes('v8-essential-home-v814');
   const required=isEssentialHome
-    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada','publicTopperInspirations']
+    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','publicTopperInspirations']
     : isV8
       ? ['home-v718-brand-signature','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada']
     : ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal'];

@@ -50,7 +50,7 @@ export default async function HomePage(){
         </div>
 
         <div className="v8-home-products-grid v8-clean-products-grid">
-          <Link href="/inspiracoes" className="v8-home-product-card is-featured"><span><Layers3 size={20}/></span><h3>Topos de Bolo</h3></Link>
+          <Link href="/catalogo" className="v8-home-product-card is-featured"><span><Layers3 size={20}/></span><h3>Topos de Bolo</h3></Link>
           <Link href="/personalizados#caixinhas" className="v8-home-product-card"><h3>Caixinhas</h3></Link>
           <Link href="/personalizados#lembrancinhas" className="v8-home-product-card"><h3>Lembrancinhas</h3></Link>
           <Link href="/personalizados#adesivos-chaveiros" className="v8-home-product-card"><h3>Adesivos & Chaveiros</h3></Link>
