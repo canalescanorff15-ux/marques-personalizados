@@ -55,7 +55,20 @@ for(const token of ['Topo Simples','Topo Básico 3D','Topo Premium','Topo Shaker
 const imageRefs=[...catalog.matchAll(/image:'([^']+)'/g)].map(match=>match[1]);
 if(imageRefs.length!==6)errors.push(`linha de topos precisa declarar 6 imagens oficiais; encontrou ${imageRefs.length}`);
 if(new Set(imageRefs).size!==imageRefs.length)errors.push('cada nível precisa usar uma imagem oficial exclusiva');
-for(const image of imageRefs){const file=`public${image}`;if(!fs.existsSync(file))errors.push(`asset oficial ausente: ${file}`);}
+for(const image of imageRefs){
+  if(/^https:\/\//.test(image)){
+    try{
+      const url=new URL(image);
+      if(url.hostname!=='merlin-topper-assets.floot.app')errors.push(`host externo de asset não aprovado: ${url.hostname}`);
+      if(!url.pathname.startsWith('/_cdn/static/'))errors.push(`asset externo fora do CDN oficial: ${image}`);
+    }catch{
+      errors.push(`URL de asset oficial inválida: ${image}`);
+    }
+  }else{
+    const file=`public${image}`;
+    if(!fs.existsSync(file))errors.push(`asset oficial ausente: ${file}`);
+  }
+}
 if(!catalogPage.includes('TopperLevelVisual'))errors.push('catálogo não reutiliza a referência visual oficial do nível');
 if(!inspirationsPage.includes('TopperInspirationGallery'))errors.push('inspirações não usam a galeria pública de topos');
 if(!orderBuilder.includes('TopperLevelVisual'))errors.push('Monte seu Pedido não reutiliza a referência visual oficial do topo');
