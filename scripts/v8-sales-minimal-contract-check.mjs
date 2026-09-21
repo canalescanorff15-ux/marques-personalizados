@@ -22,7 +22,8 @@ for(const token of ['v8-storefront-personalizados','Caixinhas','Lembrancinhas','
 if(personalizados.includes('<p>{product.copy}</p>'))errors.push('Personalizados V8.11 voltou a exibir copy longa nos cards');
 
 if(!inspirations.includes('Escolha uma referência e personalize.'))errors.push('Inspirações V8.11 sem microcopy curta');
-if(!inspirations.includes('Enviar referência'))errors.push('Inspirações V8.11 sem CTA essencial');
+if(!inspirations.includes('Envie sua própria referência.'))errors.push('Inspirações V8.11 sem liberdade de referência');
+if(!inspirations.includes('Contar minha ideia'))errors.push('Inspirações V8.11 sem CTA essencial');
 
 if(!quote.includes('Escolha o produto e informe apenas os detalhes necessários.'))errors.push('Orçamento V8.11 sem orientação curta');
 if(quote.includes('v8-order-hero-card'))errors.push('Orçamento V8.11 voltou a exibir painel explicativo no hero');
