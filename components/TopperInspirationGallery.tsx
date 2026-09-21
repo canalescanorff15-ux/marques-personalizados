@@ -9,7 +9,7 @@ import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
 const PAGE_SIZE=12;
-const INITIAL_VISIBLE=8;
+const INITIAL_VISIBLE=9;
 type SortOrder='recent'|'catalog'|'az'|'za';
 type Filters={query:string;categoria:string;nivel:string;favoritos:boolean;ordem:SortOrder};
 const DEFAULT_FILTERS:Filters={query:'',categoria:'',nivel:'',favoritos:false,ordem:'recent'};
@@ -142,7 +142,6 @@ export default function TopperInspirationGallery(){
       </label>
 
       <div className="public-gallery-chip-row v8-gallery-actions" aria-label="Ações da galeria">
-        <button type="button" className={filters.favoritos?'is-active is-favorite':''} onClick={()=>apply({...filters,favoritos:!filters.favoritos})}><Heart size={14} fill={filters.favoritos?'currentColor':'none'}/> Favoritos</button>
         <button ref={filterTriggerRef} type="button" className="public-gallery-more-filters public-mobile-filter-trigger" aria-expanded={filterOpen} aria-controls="public-gallery-filters" onClick={()=>setFilterOpen(true)}><SlidersHorizontal size={15}/> Filtros{active&&<span aria-label="Há filtros ativos"/>}</button>
       </div>
     </div>
@@ -171,7 +170,9 @@ export default function TopperInspirationGallery(){
       {shown.length>0?<div className="public-inspiration-grid public-inspiration-grid-v721">{shown.map(item=>{
         return <article className="public-inspiration-card public-inspiration-card-v721" key={item.code}>
           <div className="public-inspiration-image public-inspiration-image-v721">
-            <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
+            <Link href={'/inspiracoes/'+encodeURIComponent(item.code)} className="v8-gallery-image-link" aria-label={'Abrir inspiração '+item.title}>
+              <img src={item.image} alt={'Inspiração de topo '+item.title} width={1200} height={1200} loading="lazy" decoding="async" onError={event=>{event.currentTarget.onerror=null;event.currentTarget.src='/placeholder-topo.svg';}}/>
+            </Link>
             <InspirationFavoriteButton code={item.code}/>
             <span className="public-card-code-v721">{item.code}</span>
           </div>
