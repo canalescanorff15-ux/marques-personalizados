@@ -16,6 +16,19 @@ const css=read('app/v8-order-builder.css');
 const layout=read('app/layout.tsx');
 
 if(!page.includes('<OrderBuilder/>'))errors.push('/monte-seu-pedido não usa OrderBuilder');
+const isMinimalV815=page.includes('v8-order-minimal-v815');
+if(isMinimalV815){
+  if(page.includes('v8-order-hero-card'))errors.push('V8.15 voltou a renderizar painel explicativo no hero');
+  if(!page.includes('Escolha o produto e conte os detalhes do seu pedido.'))errors.push('V8.15 sem microcopy curta no hero');
+  for(const forbidden of [
+    'O formulário muda conforme sua escolha',
+    'O tema pode ser o mesmo em qualquer nível',
+    'Não precisa ter tudo decidido'
+  ])if(builder.includes(forbidden))errors.push('V8.15 voltou a exibir explicação repetitiva: '+forbidden);
+  if(builder.includes('{item.description}</p>'))errors.push('V8.15 voltou a exibir descrição longa em cards de produto/nível');
+  if(!builder.includes('<summary>Revisar pedido</summary>'))errors.push('V8.15 sem resumo recolhível');
+  if(!builder.includes('aria-pressed={productType===item.key}'))errors.push('V8.15 sem estado acessível nos produtos');
+}
 if(!quote.includes('<OrderBuilder/>'))errors.push('/orcamento não usa OrderBuilder');
 
 for(const token of [
@@ -64,4 +77,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.06 Order Builder Contract: OK — seleção de produto, campos adaptativos, rascunho, CRM e navegação protegidos.');
+console.log('V8.15 Order Builder Contract: OK — pedido essencial, seleção acessível, campos adaptativos, rascunho e CRM protegidos.');

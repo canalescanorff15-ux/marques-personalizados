@@ -33,14 +33,14 @@ type InquiryResponse={ok:boolean;persisted?:boolean;whatsapp_url?:string};
 type Contingency={message:string;whatsappUrl:string}|null;
 
 const productTypes=[
-  {key:'topo' as const,label:'Topo de bolo',short:'Topo',icon:Layers3,description:'Topo personalizado com nível de acabamento, tema, nome, idade e tamanho do bolo.'},
-  {key:'caixinhas' as const,label:'Caixinhas personalizadas',short:'Caixinhas',icon:Box,description:'Milk, bala, pirâmide, sushi e outros modelos para doces e lembranças.'},
-  {key:'lembrancinhas' as const,label:'Lembrancinhas',short:'Lembrancinhas',icon:Gift,description:'Mimos e peças personalizadas para entregar aos convidados.'},
-  {key:'chaveiros' as const,label:'Chaveiros personalizados',short:'Chaveiros',icon:KeyRound,description:'Chaveiros com foto, tema, nome, frente e verso ou formatos especiais.'},
-  {key:'adesivos' as const,label:'Adesivos personalizados',short:'Adesivos',icon:Sticker,description:'Adesivos em formatos e tamanhos definidos para lembranças e produtos.'},
-  {key:'doces' as const,label:'Doces & complementos',short:'Doces',icon:Tags,description:'Toppers, wrappers, tags, plaquinhas e outros detalhes de papelaria para doces.'},
-  {key:'kit' as const,label:'Kit personalizado',short:'Kit',icon:PackageOpen,description:'Conjunto de peças diferentes seguindo a mesma identidade visual.'},
-  {key:'outro' as const,label:'Outro personalizado',short:'Outro',icon:Sparkles,description:'Uma ideia diferente que você quer avaliar para produção.'}
+  {key:'topo' as const,label:'Topo de bolo',short:'Topo',icon:Layers3},
+  {key:'caixinhas' as const,label:'Caixinhas personalizadas',short:'Caixinhas',icon:Box},
+  {key:'lembrancinhas' as const,label:'Lembrancinhas',short:'Lembrancinhas',icon:Gift},
+  {key:'chaveiros' as const,label:'Chaveiros personalizados',short:'Chaveiros',icon:KeyRound},
+  {key:'adesivos' as const,label:'Adesivos personalizados',short:'Adesivos',icon:Sticker},
+  {key:'doces' as const,label:'Doces & complementos',short:'Doces',icon:Tags},
+  {key:'kit' as const,label:'Kit personalizado',short:'Kit',icon:PackageOpen},
+  {key:'outro' as const,label:'Outro personalizado',short:'Outro',icon:Sparkles}
 ];
 
 const productQueryMap:Record<string,OrderProductType>={
@@ -306,14 +306,13 @@ export default function OrderBuilder(){
     {draftWarning&&<div className="error" role="status">{draftWarning}</div>}
 
     <section className="v8-order-step">
-      <div className="kit-step-heading"><span>01</span><div><small>ESCOLHA O PRODUTO</small><h2>O que você quer personalizar?</h2><p>O formulário muda conforme sua escolha para perguntar apenas o que faz sentido para esse produto.</p></div></div>
+      <div className="kit-step-heading"><span>01</span><div><small>ESCOLHA O PRODUTO</small><h2>O que você quer personalizar?</h2></div></div>
       <div className="v8-order-product-grid">
         {productTypes.map(item=>{
           const Icon=item.icon;
-          return <button type="button" className={productType===item.key?'is-active':''} onClick={()=>chooseProduct(item.key)} key={item.key}>
+          return <button type="button" aria-pressed={productType===item.key} className={productType===item.key?'is-active':''} onClick={()=>chooseProduct(item.key)} key={item.key}>
             <span><Icon size={22}/></span>
             <strong>{item.short}</strong>
-            <p>{item.description}</p>
             {productType===item.key&&<i><CheckCircle2 size={14}/> selecionado</i>}
           </button>;
         })}
@@ -321,14 +320,14 @@ export default function OrderBuilder(){
     </section>
 
     {productType==='topo'&&<section className="v8-order-step">
-      <div className="kit-step-heading"><span>02</span><div><small>ACABAMENTO DO TOPO</small><h2>Escolha quanto detalhe você quer.</h2><p>O tema pode ser o mesmo em qualquer nível. O que muda é a quantidade de camadas, profundidade e efeitos.</p></div></div>
-      <div className="kit-preset-grid">{topperLevels.map(item=><button type="button" className={level===item.slug?'active':''} onClick={()=>setLevel(item.slug)} key={item.slug}><small>{item.code} • {item.eyebrow}</small><strong>{item.name}</strong><p>{item.description}</p><span>{item.complexity}</span>{level===item.slug&&<i><CheckCircle2 size={14}/> selecionado</i>}</button>)}</div>
+      <div className="kit-step-heading"><span>02</span><div><small>ACABAMENTO DO TOPO</small><h2>Escolha o acabamento.</h2></div></div>
+      <div className="kit-preset-grid">{topperLevels.map(item=><button type="button" aria-pressed={level===item.slug} className={level===item.slug?'active':''} onClick={()=>setLevel(item.slug)} key={item.slug}><small>{item.eyebrow}</small><strong>{item.name}</strong><span>{item.complexity}</span>{level===item.slug&&<i><CheckCircle2 size={14}/> selecionado</i>}</button>)}</div>
     </section>}
 
     <section className="v8-order-step">
-      <div className="kit-step-heading"><span>{productType==='topo'?'03':'02'}</span><div><small>PERSONALIZAÇÃO</small><h2>Conte os detalhes do seu pedido.</h2><p>Não precisa ter tudo decidido. Preencha o que você já sabe e deixe observações para o restante.</p></div></div>
+      <div className="kit-step-heading"><span>{productType==='topo'?'03':'02'}</span><div><small>PERSONALIZAÇÃO</small><h2>Conte os detalhes do seu pedido.</h2></div></div>
 
-      {selectedInspiration&&<div className="topper-builder-inspiration"><img src={selectedInspiration.image} alt={`Inspiração escolhida: ${selectedInspiration.title}`}/><div><small>INSPIRAÇÃO ESCOLHIDA • {selectedInspiration.code}</small><strong>{selectedInspiration.title}</strong><p>Vamos adaptar nome, idade, cores e detalhes para o seu pedido.</p></div></div>}
+      {selectedInspiration&&<div className="topper-builder-inspiration"><img src={selectedInspiration.image} alt={`Inspiração escolhida: ${selectedInspiration.title}`}/><div><small>INSPIRAÇÃO ESCOLHIDA</small><strong>{selectedInspiration.title}</strong></div></div>}
 
       {productType==='topo'&&<TopperLevelVisual level={selectedLevel} className="topper-builder-selected-visual"/>}
 
@@ -378,23 +377,22 @@ export default function OrderBuilder(){
         <label>Já tem referência?<select value={form.reference} onChange={e=>set('reference',e.target.value)}><option value="">Selecione</option><option>Sim, vou enviar uma foto</option><option>Não, quero uma criação do zero</option><option>Quero adaptar uma inspiração do site</option></select></label>
       </div>
 
-      {productType==='topo'&&<div className="product-premium-notes">{selectedLevel.features.slice(0,4).map(feature=><span key={feature}><Layers3 size={15}/>{feature}</span>)}</div>}
     </section>
 
     <section className="v8-order-final">
       <form className="kit-contact-panel" onSubmit={submit}>
-        <div><small>{productType==='topo'?'04':'03'} • ORÇAMENTO</small><h3>Envie seu briefing.</h3><p>Quantidade, complexidade, materiais, acabamento e prazo são confirmados antes da produção.</p></div>
+        <div><small>{productType==='topo'?'04':'03'} • ORÇAMENTO</small><h3>Envie seu pedido.</h3></div>
         <label>Seu nome<input minLength={2} maxLength={120} required autoComplete="name" value={form.name} onChange={e=>set('name',e.target.value)}/></label>
         <label>WhatsApp<input minLength={8} maxLength={30} required inputMode="tel" autoComplete="tel" placeholder="(98) 99999-9999" value={form.whatsapp} onChange={e=>set('whatsapp',e.target.value)}/></label>
         <div className="kit-contact-two"><label>E-mail (opcional)<input type="email" maxLength={180} value={form.email} onChange={e=>set('email',e.target.value)}/></label><label>Data do evento<input type="date" min={todayLocal()} value={form.event_date} onChange={e=>set('event_date',e.target.value)}/></label></div>
         <label>Observações<textarea maxLength={1200} placeholder="Prazo, estilo, acabamento, referência ou qualquer informação importante..." value={form.notes} onChange={e=>set('notes',e.target.value)}/></label>
 
-        <div className="v8-order-summary">
-          <small>SEU PEDIDO</small>
+        <details className="v8-order-summary">
+          <summary>Revisar pedido</summary>
           <strong>{selectedProduct.label}</strong>
           <pre>{summary}</pre>
           <button type="button" className="public-secondary-button" onClick={resetDraft}><Trash2 size={15}/> Limpar rascunho</button>
-        </div>
+        </details>
 
         {error&&<div className="error" role="alert">{error}</div>}
 

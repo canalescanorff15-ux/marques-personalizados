@@ -202,3 +202,124 @@
 @media(prefers-reduced-motion:reduce){
   .v8-order-product-grid button{transition:none}
 }
+
+
+/* V8.15 — Pedido Essencial
+   Menos leitura, cards compactos e uma ação por etapa. */
+.v8-order-minimal-v815 .v8-order-hero{
+  padding:56px 0 42px;
+}
+.v8-order-minimal-v815 .v8-order-hero .container{
+  display:block;
+  max-width:920px;
+}
+.v8-order-minimal-v815 .v8-order-hero h1{
+  margin-bottom:12px;
+}
+.v8-order-minimal-v815 .v8-order-hero p{
+  max-width:500px;
+  font-size:.86rem;
+  line-height:1.55;
+}
+.v8-order-minimal-v815 .v8-order-main{
+  padding-top:38px;
+}
+.v8-order-minimal-v815 .v8-order-step,
+.v8-order-minimal-v815 .v8-order-final{
+  padding:28px;
+  border-radius:22px;
+  box-shadow:none;
+}
+.v8-order-minimal-v815 .v8-order-product-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-top:20px;
+}
+.v8-order-minimal-v815 .v8-order-product-grid button{
+  min-height:116px;
+  justify-content:flex-start;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:none;
+}
+.v8-order-minimal-v815 .v8-order-product-grid button:hover{
+  transform:none;
+  box-shadow:none;
+}
+.v8-order-minimal-v815 .v8-order-product-grid button>span{
+  width:36px;
+  height:36px;
+  margin-bottom:12px;
+  border-radius:11px;
+}
+.v8-order-minimal-v815 .v8-order-product-grid button p{
+  display:none;
+}
+.v8-order-minimal-v815 .v8-order-product-grid button i{
+  padding-top:8px;
+}
+.v8-order-minimal-v815 .kit-step-heading p{
+  display:none;
+}
+.v8-order-minimal-v815 .kit-preset-grid button p{
+  display:none;
+}
+.v8-order-minimal-v815 .kit-preset-grid button small{
+  font-size:.58rem;
+}
+.v8-order-minimal-v815 .kit-preset-grid button{
+  min-height:0;
+}
+.v8-order-minimal-v815 .product-premium-notes{
+  display:none;
+}
+.v8-order-minimal-v815 .v8-order-summary{
+  padding:0;
+  overflow:hidden;
+  background:var(--v8-paper-2);
+}
+.v8-order-minimal-v815 .v8-order-summary>summary{
+  cursor:pointer;
+  padding:16px 18px;
+  color:var(--v8-ink);
+  font-size:.78rem;
+  font-weight:900;
+  list-style-position:inside;
+}
+.v8-order-minimal-v815 .v8-order-summary>strong,
+.v8-order-minimal-v815 .v8-order-summary>pre,
+.v8-order-minimal-v815 .v8-order-summary>.public-secondary-button{
+  margin-left:18px;
+  margin-right:18px;
+}
+.v8-order-minimal-v815 .v8-order-summary>.public-secondary-button{
+  margin-bottom:18px;
+}
+.v8-order-minimal-v815 .topper-builder-inspiration p{
+  display:none;
+}
+
+@media(max-width:900px){
+  .v8-order-minimal-v815 .v8-order-product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+@media(max-width:640px){
+  .v8-order-minimal-v815 .v8-order-hero{
+    padding:40px 0 34px;
+  }
+  .v8-order-minimal-v815 .v8-order-main{
+    padding-top:28px;
+  }
+  .v8-order-minimal-v815 .v8-order-step,
+  .v8-order-minimal-v815 .v8-order-final{
+    padding:20px;
+    border-radius:18px;
+  }
+  .v8-order-minimal-v815 .v8-order-product-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .v8-order-minimal-v815 .v8-order-product-grid button{
+    min-height:104px;
+  }
+}
