@@ -8,10 +8,14 @@ const catalogNeedles=catalogText.includes('v8-storefront-catalog')
   ? ['TOPOS DE BOLO','Escolha o acabamento.','topperLevels.map']
   : ['Catálogo de topos','TOP-01 ao TOP-06'];
 
+const homeText=fs.readFileSync(path.join(root,'app/page.tsx'),'utf8');
+const essentialHome=homeText.includes('v8-essential-home-v814');
 const mustContain={
   'components/PublicTopperHeader.tsx':['settings.brand_name','topos de bolo personalizados',"'/merlin-logo.webp'"],
   'components/Footer.tsx':['/merlin-logo.webp','Topos de bolo personalizados'],
-  'app/page.tsx':['MERLIN • TOPOS DE BOLO PERSONALIZADOS','Elite com shaker e acetato'],
+  'app/page.tsx':essentialHome
+    ? ['v8-essential-home-v814','Detalhes personalizados que fazem','Topos de Bolo','publicTopperInspirations']
+    : ['MERLIN • TOPOS DE BOLO PERSONALIZADOS','Elite com shaker e acetato'],
   'app/catalogo/page.tsx':catalogNeedles,
   'app/monte-seu-topo/page.tsx':['Topos de bolo sob encomenda','Do simples ao Elite'],
 };
