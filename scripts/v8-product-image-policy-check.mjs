@@ -25,7 +25,7 @@ for(const token of [
 const curatedCodes=[...inspirations.matchAll(/'INSP-TOP-(\d{2})'/g)]
   .map(match=>Number(match[1]))
   .filter((value,index,array)=>array.indexOf(value)===index);
-for(let code=18;code<=50;code++){
+for(let code=74;code<=109;code++){
   if(!curatedCodes.includes(code))errors.push('coleção pública explícita sem INSP-TOP-'+String(code).padStart(2,'0'));
 }
 for(let code=51;code<=73;code++){
@@ -81,4 +81,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.13 Product Image Policy: OK — 33 inspirações de bolo publicadas, sem cortes agressivos; cenários permanecem arquivados.');
+console.log('V8.20 Product Image Policy: OK — 36 inspirações públicas (6 por categoria), sem cortes agressivos; acervo anterior e cenários permanecem arquivados.');
