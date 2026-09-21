@@ -37,7 +37,9 @@ if(exists('components/TopperInspirationGallery.tsx')){
 
 if(exists('app/page.tsx')){
   const home=read('app/page.tsx');
-  for(const id of ['id="sobre"','id="duvidas"','id="contato"'])if(!home.includes(id))errors.push(`home sem âncora pública ${id}`);
+  const isEssentialHome=home.includes('v8-essential-home-v814');
+  const anchors=isEssentialHome?['id="contato"']:['id="sobre"','id="duvidas"','id="contato"'];
+  for(const id of anchors)if(!home.includes(id))errors.push(`home sem âncora pública ${id}`);
 }
 
 if(exists('app/inspiracoes/page.tsx')){
@@ -74,7 +76,7 @@ for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.
   if(!read(page).includes('public-v712'))errors.push(`${page} ainda não usa a identidade V7.12`);
 }
 if(!read('components/Footer.tsx').includes('public-v712-footer'))errors.push('rodapé ainda não usa a identidade V7.12');
-if(!read('app/page.tsx').includes('TopperLevelVisual'))errors.push('home não usa visuais reais dos níveis');
+if(!read('app/page.tsx').includes('v8-essential-home-v814')&&!read('app/page.tsx').includes('TopperLevelVisual'))errors.push('home legada não usa visuais reais dos níveis');
 if(!read('app/catalogo/[slug]/page.tsx').includes('TopperLevelVisual'))errors.push('detalhe do nível não usa visual oficial');
 if(read('app/privacidade/page.tsx').includes('Minha Lista'))errors.push('privacidade ainda descreve recurso legado');
 if(read('app/termos/page.tsx').includes('“a partir de”'))errors.push('termos ainda descrevem preço legado');

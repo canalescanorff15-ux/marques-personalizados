@@ -165,3 +165,13 @@
     padding:22px!important;
   }
 }
+
+
+/* V8.14 — aviso comercial curto, sem virar uma nova seção. */
+.v8-home-scope-note{
+  max-width:720px;
+  margin:18px 0 0;
+  color:#8a7d83;
+  font-size:.68rem;
+  line-height:1.5;
+}

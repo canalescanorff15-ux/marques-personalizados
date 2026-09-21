@@ -17,7 +17,26 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  const required=[
+  const isEssentialHome=home.includes('v8-essential-home-v814');
+  const required=isEssentialHome?[
+    ['escopo da home','home-v717'],
+    ['Home essencial V8.14','v8-essential-home-v814'],
+    ['hero editorial','home-v717-showcase'],
+    ['headline V8','Detalhes personalizados que fazem'],
+    ['CTA inspirações','Ver inspirações'],
+    ['CTA orçamento','Pedir orçamento'],
+    ['vitrine de produtos V8','v8-home-products'],
+    ['produto caixinhas','Caixinhas'],
+    ['produto lembrancinhas','Lembrancinhas'],
+    ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
+    ['produto doces','Doces & Complementos'],
+    ['produto kits','Kits'],
+    ['galeria de inspirações','home-v717-gallery-grid'],
+    ['fonte real de inspirações','publicTopperInspirations'],
+    ['escopo comercial curto','v8-home-scope-note'],
+    ['contato final','home-v717-contact-shell'],
+    ['âncora contato','id="contato"']
+  ]:[
     ['escopo da home','home-v717'],
     ['hero editorial','home-v717-showcase'],
     ['headline V8','Detalhes personalizados que fazem'],
@@ -44,7 +63,8 @@ if(fs.existsSync('app/page.tsx')){
     ['âncora contato','id="contato"']
   ];
   for(const [label,token] of required)if(!home.includes(token))errors.push(label);
-  const hero=home.slice(home.indexOf('<section className="hero'),home.indexOf('<section className="home-v717-intro-strip'));
+  const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
+  const hero=home.slice(home.indexOf('<section className="hero'),heroEnd);
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
   if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
   const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
@@ -92,4 +112,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.17 Home Editorial Contract: OK — hero, níveis, inspirações, processo, acabamento, sobre, FAQ e contato protegidos.');
+console.log('V8.14 Home Editorial Contract: OK — hero, produtos, inspirações e contato protegidos; blocos secundários podem permanecer aposentados.');

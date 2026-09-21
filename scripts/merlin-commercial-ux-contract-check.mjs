@@ -13,6 +13,7 @@ const inspirationsPage=read('app/inspiracoes/page.tsx');
 const quotePage=read('app/orcamento/page.tsx');
 const builder=read('components/TopperBuilder.tsx');
 const orderBuilder=read('components/OrderBuilder.tsx');
+const isEssentialHome=home.includes('v8-essential-home-v814');
 const topperInspirationContract='scripts/topper-inspiration-gallery-contract-check.mjs';
 const publicRedesignContract='scripts/public-redesign-contract-check.mjs';
 const topperDraftContract='scripts/topper-draft-contract-check.mjs';
@@ -47,7 +48,7 @@ const footerRoutes=isV809
   : ['/catalogo','/inspiracoes','/monte-seu-pedido','/guia-de-precos','/orcamento'];
 for(const route of footerRoutes)if(!footer.includes(route))errors.push(`footer sem caminho: ${route}`);
 if(isV809){
-  if(!home.includes('/guia-de-precos'))errors.push('V8.09 sem acesso ao guia de acabamentos fora do footer');
+  if(!isEssentialHome&&!home.includes('/guia-de-precos'))errors.push('V8.09 sem acesso ao guia de acabamentos fora do footer');
   if(!header.includes('/orcamento')&&!home.includes('/orcamento'))errors.push('V8.09 sem caminho público para orçamento');
 }
 for(const token of ['Topo Simples','Topo Básico 3D','Topo Premium','Topo Shaker','Topo com Acetato','Topo Elite Shaker + Acetato'])if(!catalog.includes(token))errors.push(`nível comercial ausente: ${token}`);
@@ -59,8 +60,9 @@ if(!catalogPage.includes('TopperLevelVisual'))errors.push('catálogo não reutil
 if(!inspirationsPage.includes('TopperInspirationGallery'))errors.push('inspirações não usam a galeria pública de topos');
 if(!orderBuilder.includes('TopperLevelVisual'))errors.push('Monte seu Pedido não reutiliza a referência visual oficial do topo');
 for(const source of [home,header,dock,footer])if(source.includes('href="/monte-seu-kit"'))errors.push('fluxo público ainda contém link para Monte seu Kit');
-if(!home.includes('Shaker')||!home.includes('Acetato'))errors.push('home não comunica os dois acabamentos avançados');
-if(!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home não orienta o cliente sobre adequação ao bolo');
+if(!isEssentialHome&&(!home.includes('Shaker')||!home.includes('Acetato')))errors.push('home legada não comunica os dois acabamentos avançados');
+if(!isEssentialHome&&!home.includes('tamanho do bolo')&&!home.includes('tamanho'))errors.push('home legada não orienta o cliente sobre adequação ao bolo');
+if(isEssentialHome&&!home.includes('v8-home-scope-note'))errors.push('Home V8.14 sem aviso curto de escopo comercial');
 for(const [name,source] of [['home',home],['catalogo',catalogPage],['inspiracoes',inspirationsPage],['orcamento',quotePage]]){
   for(const forbidden of ['caixas, kits ou lembrancinhas','antigo orçamento de vários produtos','fotos antigas de mesas completas'])if(source.includes(forbidden))errors.push(`${name} ainda exibe linguagem do catálogo antigo: ${forbidden}`);
 }

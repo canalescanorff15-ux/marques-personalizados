@@ -7,6 +7,8 @@ const home=read('app/page.tsx');
 const css=read('app/v8-home.css');
 const layout=read('app/layout.tsx');
 
+const isEssentialHome=home.includes('v8-essential-home-v814');
+
 for(const token of [
   'v8-home-products',
   'Topos de Bolo',
@@ -18,8 +20,7 @@ for(const token of [
   'Detalhes personalizados que fazem',
   'Pedir orçamento',
   'publicTopperInspirations',
-  'O bolo e a decoração da foto estão inclusos?',
-  'Vocês fazem outros personalizados além de topo de bolo?'
+  ...(isEssentialHome?['v8-home-scope-note','Bolo e cenário não estão inclusos.']:['O bolo e a decoração da foto estão inclusos?','Vocês fazem outros personalizados além de topo de bolo?'])
 ]){
   if(!home.includes(token))errors.push('Home V8.02 sem '+token);
 }
@@ -43,10 +44,15 @@ if(homeIndex<0)errors.push('layout não importa v8-home.css');
 if(designIndex<0||imageIndex<0||homeIndex<imageIndex)errors.push('v8-home.css precisa carregar depois da política de imagens');
 
 if(home.includes('home-v717-showcase-seal'))errors.push('Home ainda contém selo editorial legado');
+if(isEssentialHome){
+  for(const forbidden of ['v8-clean-trust','v8-clean-levels','v8-clean-process','v8-clean-about','v8-clean-faq']){
+    if(home.includes(forbidden))errors.push('Home V8.14 voltou a renderizar bloco removido: '+forbidden);
+  }
+}
 if(home.includes('<span className="home-v717-photo-shade"'))errors.push('Home voltou a renderizar shade sobre fotografia');
 
 const heroStart=home.indexOf('<section className="hero');
-const heroEnd=home.indexOf('<section className="home-v717-intro-strip');
+const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
 const hero=heroStart>=0&&heroEnd>heroStart?home.slice(heroStart,heroEnd):'';
 if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V8.02 deve manter exatamente dois CTAs principais');
 if(!hero.includes('/inspiracoes')||!hero.includes('/orcamento'))errors.push('hero V8.02 precisa ligar inspirações e orçamento');
@@ -75,4 +81,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.05/V8.10 Home Premium Contract: OK — Home e Personalizados preservam descoberta comercial com conteúdo enxuto.');
+console.log('V8.14 Home Premium Contract: OK — Home essencial preserva produtos, inspirações e conversão sem blocos secundários.');
