@@ -36,9 +36,7 @@ if(fs.existsSync('app/public-v716.css')){
     ['paleta sem ellipsis','text-overflow:clip'],
     ['price guide 1 coluna estreita','@media(max-width:650px)']
   ];
-  for(const [label,token] of required){
-    if(!css.includes(token))errors.push(label);
-  }
+  for(const [label,token] of required){if(!css.includes(token))errors.push(label);}
   if(css.includes('content:"Preço inicial"'))errors.push('V7.16 não deve rotular complexidade como preço inicial');
 }
 
@@ -71,25 +69,18 @@ if(fs.existsSync('app/guia-de-precos/page.tsx')){
   const guide=read('app/guia-de-precos/page.tsx');
   for(const token of ['Complexidade','Valor','Ideal para'])if(!guide.includes(token))errors.push('guia sem coluna '+token);
 }
-
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
   const gallery=read('components/TopperInspirationGallery.tsx');
-  for(const token of ['Tema, código, cor...','Carregar mais']){
-    if(!gallery.includes(token))errors.push('galeria sem conteúdo esperado: '+token);
-  }
+  for(const token of ['Tema, código, cor...','Carregar mais'])if(!gallery.includes(token))errors.push('galeria sem conteúdo esperado: '+token);
 }
 if(fs.existsSync('lib/topper-catalog.ts')){
   const catalog=read('lib/topper-catalog.ts');
-  if(!catalog.includes("name:'Topo Elite Shaker + Acetato'"))errors.push('catálogo sem nome longo do nível Elite para teste de encaixe');
+  if(!catalog.includes("name:'Topo Luxo — Movimento + Acetato'"))errors.push('catálogo sem nome longo atual do nível mais completo para teste de encaixe');
 }
 if(fs.existsSync('lib/topper-inspirations.ts')){
   const inspirations=read('lib/topper-inspirations.ts');
   if(!inspirations.includes("category:'Feminino elegante'"))errors.push('inspirações sem categoria longa Feminino elegante para teste de encaixe');
 }
 
-if(errors.length){
-  console.error('V7.16 Global Visual Audit Contract: FALHOU ('+errors.length+')');
-  for(const error of errors)console.error('- '+error);
-  process.exit(1);
-}
-console.log('V7.16/V8.09 Global Visual Audit Contract: OK — busca contextual, preço, filtros, texto e breakpoints protegidos.');
+if(errors.length){console.error('V7.16 Global Visual Audit Contract: FALHOU ('+errors.length+')');for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('V7.16/V8.21 Global Visual Audit Contract: OK — busca contextual, textos longos atuais, filtros e breakpoints protegidos.');
