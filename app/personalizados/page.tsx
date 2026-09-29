@@ -43,7 +43,7 @@ export default async function PersonalizadosPage(){
               <span className="v8-storefront-icon"><Icon size={22}/></span>
               {product.badge&&<small className="v821-product-badge">{product.badge}</small>}
               <h2>{product.title}</h2>
-              <p>{product.copy}</p>
+              <small className="v821-product-copy">{product.copy}</small>
               <b>Montar pedido <ArrowUpRight size={14}/></b>
             </Link>;
           })}
