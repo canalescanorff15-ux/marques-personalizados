@@ -1,0 +1,108 @@
+/* V8.21 — estabilização comercial e UX */
+
+/* Marca: a logo já carrega a identidade completa; o texto lateral fica curto. */
+.v821-brand-copy{display:grid;gap:2px;min-width:0}
+.v821-brand-copy strong{font-size:1rem!important;line-height:1!important}
+.v821-brand-copy small{display:block!important;font-size:.52rem!important;letter-spacing:.16em!important;white-space:nowrap}
+.v8-simple-header .public-brand-logo{width:56px!important;height:56px!important;flex:0 0 56px!important;border-radius:50%!important;overflow:hidden!important}
+.v8-simple-header .public-brand-logo img{object-fit:contain!important}
+
+/* Barra de navegação inferior: sempre disponível nas páginas públicas em telas compactas. */
+.merlin-mobile-dock{display:none}
+@media(max-width:1040px){
+  .merlin-mobile-dock{
+    position:fixed;
+    z-index:120;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    min-height:62px;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    align-items:center;
+    padding:6px;
+    border:1px solid rgba(99,67,78,.12);
+    border-radius:20px;
+    background:rgba(255,250,248,.97);
+    box-shadow:0 15px 42px rgba(55,34,44,.16);
+    backdrop-filter:blur(18px) saturate(135%);
+  }
+  .merlin-mobile-dock a{
+    min-width:0;
+    min-height:48px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+    border-radius:14px;
+    color:#76666e;
+    font-size:.55rem;
+    font-weight:850;
+    line-height:1.05;
+    text-align:center;
+  }
+  .merlin-mobile-dock a svg{width:17px;height:17px}
+  .merlin-mobile-dock a.is-active{background:#fff;color:var(--v8-ink);box-shadow:0 5px 15px rgba(55,34,44,.07)}
+  .merlin-mobile-dock a.is-primary{color:var(--v8-rose)}
+  .merlin-mobile-dock a.is-primary.is-active{background:var(--v8-ink);color:#fff}
+  .v8-simple-footer{padding-bottom:82px!important}
+}
+@media(max-width:430px){
+  .merlin-mobile-dock{left:6px;right:6px;bottom:6px;min-height:58px;border-radius:18px}
+  .merlin-mobile-dock a{min-height:45px;font-size:.5rem}
+  .v821-brand-copy small{font-size:.46rem!important;letter-spacing:.11em!important}
+}
+
+/* Home mais curta e clara. */
+.v821-home .v8-clean-hero{padding-top:42px!important;padding-bottom:44px!important}
+.v821-home .v8-clean-products{padding-top:48px!important;padding-bottom:52px!important}
+.v821-product-grid .v8-home-product-card h3 small{display:block;margin-top:3px;color:#9c858e;font-size:.58rem;font-weight:750}
+.v821-product-grid .v8-home-product-card>span{display:grid;place-items:center;color:var(--v8-rose)}
+
+.v821-real-work{padding:58px 0;border-top:1px solid var(--v8-line);background:#fff}
+.v821-real-work .v8-clean-section-head{margin-bottom:22px}
+.v821-real-work .v8-clean-section-head p{margin:7px 0 0;color:var(--v8-muted);font-size:.78rem}
+.v821-real-work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.v821-real-work-card{overflow:hidden;border:1px solid var(--v8-line);border-radius:20px;background:var(--v8-paper);box-shadow:none}
+.v821-real-work-card>img{width:100%;aspect-ratio:4/5;display:block;object-fit:cover}
+.v821-real-work-card>div{display:grid;gap:4px;padding:13px 14px 15px}
+.v821-real-work-card small{color:var(--v8-rose);font-size:.55rem;font-weight:950;letter-spacing:.12em}
+.v821-real-work-card strong{color:var(--v8-ink);font-size:.95rem}
+
+/* Personalizados: texto curto explica exatamente o que é cada produto. */
+.v821-personalizados .v8-storefront-hero{padding-top:44px!important;padding-bottom:36px!important}
+.v821-personalizados .v8-storefront-grid-section{padding-top:34px!important}
+.v821-personalizados .v8-storefront-product-card p{margin:8px 0 14px;color:var(--v8-muted);font-size:.72rem;line-height:1.5}
+
+/* Pedido e orçamento sem hero gigante/tela vazia. */
+.v821-order-compact .v8-order-hero{min-height:0!important;padding:30px 0 24px!important}
+.v821-order-compact .v8-order-hero .container{display:block!important;max-width:980px!important}
+.v821-order-compact .v8-order-hero h1{max-width:720px!important;margin:9px 0 10px!important;font-size:clamp(2rem,4vw,3.45rem)!important;line-height:.98!important}
+.v821-order-compact .v8-order-hero p{margin:0!important;max-width:610px!important;line-height:1.5!important}
+.v821-order-compact .v8-order-hero .hero-actions{margin-top:16px!important}
+.v821-order-compact .v8-order-main{padding:26px 0 78px!important}
+.v821-order-builder{gap:14px!important}
+.v821-order-builder .v8-order-step,.v821-order-builder+.v8-order-final{box-shadow:none!important}
+.v821-order-builder .v8-order-step,.v821-order-builder .v8-order-final{padding:22px!important;border-radius:18px!important}
+.v821-order-builder .v8-order-product-grid{margin-top:16px!important;gap:8px!important}
+.v821-order-builder .v8-order-product-grid button{min-height:94px!important;padding:13px!important}
+.v821-order-builder .v8-order-product-grid button>span{width:32px!important;height:32px!important;margin-bottom:8px!important}
+.v821-order-builder .kit-preset-grid,.v821-order-builder .kit-brief-grid,.v821-order-builder .topper-builder-inspiration{margin-top:16px!important}
+.v821-reference-note{grid-column:1/-1;margin:-5px 0 0;color:var(--v8-muted);font-size:.7rem;line-height:1.45}
+
+@media(max-width:780px){
+  .v821-real-work{padding:44px 0}
+  .v821-real-work-grid{grid-template-columns:1fr 1fr}
+  .v821-real-work-card:first-child{grid-column:1/-1}
+  .v821-real-work-card:first-child>img{aspect-ratio:16/11}
+  .v821-order-compact .v8-order-hero{padding:24px 0 20px!important}
+  .v821-order-compact .v8-order-main{padding-top:18px!important}
+}
+@media(max-width:520px){
+  .v821-real-work-grid{grid-template-columns:1fr}
+  .v821-real-work-card:first-child{grid-column:auto}
+  .v821-real-work-card:first-child>img,.v821-real-work-card>img{aspect-ratio:4/5}
+  .v821-home .v8-clean-hero{padding:28px 0 34px!important}
+  .v821-order-builder .v8-order-step,.v821-order-builder .v8-order-final{padding:17px!important}
+}
