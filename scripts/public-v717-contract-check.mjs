@@ -22,15 +22,16 @@ if(fs.existsSync('app/page.tsx')){
     ['escopo da home','home-v717'],
     ['Home essencial V8.14','v8-essential-home-v814'],
     ['hero editorial','home-v717-showcase'],
-    ['headline V8','Detalhes personalizados que fazem'],
-    ['CTA inspirações','Ver inspirações'],
+    ['headline V8.21','Personalizados feitos para'],
+    ['CTA catálogo','Ver topos'],
     ['CTA orçamento','Pedir orçamento'],
     ['vitrine de produtos V8','v8-home-products'],
+    ['produto marcadores','Marcadores de Página'],
     ['produto caixinhas','Caixinhas'],
     ['produto lembrancinhas','Lembrancinhas'],
     ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
-    ['produto doces','Doces & Complementos'],
-    ['produto kits','Kits'],
+    ['outros personalizados','Outros Personalizados'],
+    ['trabalhos reais','Feito por Nós'],
     ['galeria de inspirações','home-v717-gallery-grid'],
     ['fonte real de inspirações','publicTopperInspirations'],
     ['escopo comercial curto','v8-home-scope-note'],
@@ -47,8 +48,6 @@ if(fs.existsSync('app/page.tsx')){
     ['produto caixinhas','Caixinhas'],
     ['produto lembrancinhas','Lembrancinhas'],
     ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
-    ['produto doces','Doces & Complementos'],
-    ['produto kits','Kits'],
     ['grade nova de níveis','home-v717-level-grid'],
     ['visuais oficiais dos níveis','TopperLevelVisual'],
     ['galeria de inspirações','home-v717-gallery-grid'],
@@ -67,10 +66,14 @@ if(fs.existsSync('app/page.tsx')){
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd);
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
   if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
+  if(isEssentialHome){
+    for(const forbidden of ['Doces & Complementos','href="/personalizados#doces"','href="/personalizados#kits"'])if(home.includes(forbidden))errors.push('Home V8.21 voltou a expor categoria não ativa: '+forbidden);
+  }
   const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
   if(v8Curated){
-    const codes=[...home.matchAll(/INSP-TOP-(\\d{2})/g)].map(match=>Number(match[1]));
-    if(codes.some(code=>code<18||code>50))errors.push('hero V8 usa inspiração fora da faixa curada de bolos');
+    const codes=[...home.matchAll(/INSP-TOP-(\d{2,3})/g)].map(match=>Number(match[1]));
+    const publicCodes=codes.filter(code=>code>=74&&code<=109);
+    if(publicCodes.length<3)errors.push('hero V8.21 precisa manter pelo menos três inspirações do lote público atual');
   }else if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
 }
 
@@ -97,8 +100,8 @@ if(fs.existsSync('app/public-v717.css')){
 
 if(fs.existsSync('lib/topper-inspirations.ts')){
   const source=read('lib/topper-inspirations.ts');
-  for(const code of ['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17','INSP-TOP-14','INSP-TOP-10','INSP-TOP-05']){
-    if(!source.includes("code:'"+code+"'"))errors.push('inspiração da Home ausente: '+code);
+  for(const code of ['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104']){
+    if(!source.includes("code:'"+code+"'"))errors.push('inspiração atual da Home ausente: '+code);
   }
 }
 
@@ -112,4 +115,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.14 Home Editorial Contract: OK — hero, produtos, inspirações e contato protegidos; blocos secundários podem permanecer aposentados.');
+console.log('V8.21 Home Editorial Contract: OK — hero curto, produtos ativos, trabalhos reais, inspirações e contato protegidos.');
