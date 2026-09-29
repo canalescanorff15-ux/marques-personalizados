@@ -11,13 +11,14 @@ import { publicTopperInspirations } from '@/lib/topper-inspirations';
 export const dynamic='force-dynamic';
 function digits(v:string){return v.replace(/\D/g,'');}
 
+const officialLogo='https://merlin-topper-assets.floot.app/_cdn/static/273a6c2e-69e9-460f-b9ca-fd60d3f2b2e5-merlin-logo-v821.webp';
 const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'];
 // Compatibilidade V8.08: ['INSP-TOP-48','INSP-TOP-49','INSP-TOP-50']
 
 const realWorks=[
-  {src:'/trabalhos/topo-gotico-real.webp',alt:'Topo de bolo personalizado em vermelho e preto produzido pela Merlin',title:'Topo de bolo personalizado'},
-  {src:'/trabalhos/marcadores-literarios-real.webp',alt:'Marcadores de página literários escuros e dourados produzidos pela Merlin',title:'Marcadores literários'},
-  {src:'/trabalhos/marcadores-personalizados-real.webp',alt:'Marcadores de página personalizados produzidos pela Merlin',title:'Marcadores personalizados'}
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/ec045c31-6c8f-45ba-a86b-29e10b606f07-topo-gotico-real.webp',alt:'Topo de bolo personalizado em vermelho e preto produzido pela Merlin',title:'Topo de bolo personalizado'},
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/86d1c523-1929-44a6-b12d-fb14c113612d-marcadores-literarios-real.webp',alt:'Marcadores de página literários escuros e dourados produzidos pela Merlin',title:'Marcadores literários'},
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/ab2c0dc2-2c23-4693-bb94-d2bd3de904dc-marcadores-personalizados-real.webp',alt:'Marcadores de página personalizados produzidos pela Merlin',title:'Marcadores personalizados'}
 ];
 
 export default async function HomePage(){
@@ -25,7 +26,7 @@ export default async function HomePage(){
   const phone=digits(settings.whatsapp_number);
   const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento de papelaria personalizada.')}`:'';
   const featuredInspirations=homeInspirationCodes.map(code=>publicTopperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof publicTopperInspirations;
-  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo e papelaria personalizada feitos sob encomenda para festas e momentos especiais.',logo:settings.logo_url||undefined,telephone:settings.whatsapp_number,areaServed:settings.location};
+  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo e papelaria personalizada feitos sob encomenda para festas e momentos especiais.',logo:officialLogo,telephone:settings.whatsapp_number,areaServed:settings.location};
 
   return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719 v8-clean-home v8-essential-home-v814 v821-home">
     <Header settings={settings}/>
