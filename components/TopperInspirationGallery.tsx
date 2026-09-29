@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowUpRight, Heart, Search, SlidersHorizontal, X } from 'lucide-react';
-import { publicTopperInspirations } from '@/lib/topper-inspirations';
-// Compatibilidade de contrato: a coleção histórica topperInspirations permanece preservada no módulo de origem.
+import { activePublicTopperInspirations } from '@/lib/active-topper-inspirations';
 import { topperLevels } from '@/lib/topper-catalog';
 import InspirationFavoriteButton, { INSPIRATION_FAVORITES_EVENT, readInspirationFavorites } from './InspirationFavoriteButton';
 
@@ -41,7 +40,7 @@ export default function TopperInspirationGallery(){
   const filterCloseRef=useRef<HTMLButtonElement>(null);
   const filterPanelRef=useRef<HTMLElement>(null);
 
-  const categories=useMemo(()=>[...new Set(publicTopperInspirations.map(item=>item.category))].sort((a,b)=>a.localeCompare(b,'pt-BR')),[]);
+  const categories=useMemo(()=>topperLevels.map(level=>level.name),[]);
 
   useEffect(()=>{
     const fromUrl=readFiltersFromUrl();
@@ -113,7 +112,7 @@ export default function TopperInspirationGallery(){
 
   const results=useMemo(()=>{
     const query=normalize(filters.query);
-    const filtered=publicTopperInspirations.filter(item=>{
+    const filtered=activePublicTopperInspirations.filter(item=>{
       if(filters.categoria&&item.category!==filters.categoria)return false;
       if(filters.nivel&&item.levelSlug!==filters.nivel)return false;
       if(filters.favoritos&&!favoriteCodes.includes(item.code))return false;
@@ -150,7 +149,7 @@ export default function TopperInspirationGallery(){
     <aside ref={filterPanelRef} id="public-gallery-filters" className={filterOpen?'public-gallery-filters public-gallery-filters-v721 is-open':'public-gallery-filters public-gallery-filters-v721'} aria-label="Filtros avançados de inspirações" role="dialog" aria-modal="true">
       <div className="public-filter-heading"><SlidersHorizontal size={17}/><div><strong>Filtros avançados</strong><small>Refine por categoria e acabamento</small></div><button ref={filterCloseRef} type="button" className="public-filter-close" onClick={closeFilters} aria-label="Fechar filtros"><X size={18}/></button></div>
 
-      <fieldset><legend>Categoria</legend><button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todas <span>{publicTopperInspirations.length}</span></button>{categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}<span>{publicTopperInspirations.filter(item=>item.category===categoria).length}</span></button>)}</fieldset>
+      <fieldset><legend>Categoria</legend><button type="button" className={!filters.categoria?'is-active':''} onClick={()=>apply({...filters,categoria:''})}>Todas <span>{activePublicTopperInspirations.length}</span></button>{categories.map(categoria=><button type="button" key={categoria} className={filters.categoria===categoria?'is-active':''} onClick={()=>apply({...filters,categoria})}>{categoria}<span>{activePublicTopperInspirations.filter(item=>item.category===categoria).length}</span></button>)}</fieldset>
 
       <fieldset><legend>Nível de acabamento</legend><button type="button" className={!filters.nivel?'is-active':''} onClick={()=>apply({...filters,nivel:''})}>Todos</button>{topperLevels.map(level=><button type="button" key={level.slug} className={filters.nivel===level.slug?'is-active':''} onClick={()=>apply({...filters,nivel:level.slug})}>{level.name}</button>)}</fieldset>
 
