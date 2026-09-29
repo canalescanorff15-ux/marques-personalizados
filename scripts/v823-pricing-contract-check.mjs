@@ -15,8 +15,16 @@ if(exists(pricingFile)){
     'classic:35','layers:45','premium:55','transparent:60',
     'classic:40','layers:50','premium:60','transparent:65',
     'classic:45','layers:55','premium:65','transparent:70',
-    'classic:45','layers:55','premium:70','transparent:75'
+    'classic:45','layers:55','premium:70','transparent:75',
+    'completedSalesFrom:1,completedSalesTo:20',
+    'completedSalesFrom:21,completedSalesTo:40',
+    'completedSalesFrom:41,completedSalesTo:60',
+    'completedSalesFrom:61,completedSalesTo:null',
+    'reviewEveryMonths:3',
+    'majorInputIncreaseThresholdPercent:10',
+    "annualReference:'IPCA/IBGE acumulado em 12 meses'"
   ])assert(pricing.replace(/\s/g,'').includes(token.replace(/\s/g,'')),`pricing config sem ${token}`);
+  for(const driver of ['papel','tinta','fita/cola','acetato','embalagem','energia','manutenção','mão de obra'])assert(pricing.includes(`'${driver}'`),`politica interna sem custo: ${driver}`);
   assert(pricing.includes('Valor base. O orçamento final pode variar conforme tamanho, quantidade de camadas, complexidade, personalização e materiais especiais.'),'aviso de valor base ausente');
   assert(pricing.includes('Valores de lançamento, sujeitos a atualização conforme custos de produção e evolução da marca.'),'aviso geral de lancamento ausente');
 }
@@ -68,4 +76,4 @@ if(failures.length){
   process.exit(1);
 }
 
-console.log('V8.23 Pricing Contract: OK — quatro topos publicos, precos centralizados, etapas futuras ocultas e linhas retiradas fora da vitrine.');
+console.log('V8.23 Pricing Contract: OK — quatro topos publicos, precos centralizados, etapas/politica interna preservadas e linhas retiradas fora da vitrine.');
