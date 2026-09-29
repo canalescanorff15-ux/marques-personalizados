@@ -29,6 +29,7 @@ import './v8-gallery-minimal.css';
 import './v8-final-polish.css';
 import './v8-typography-balance.css';
 import './v8-catalog-real-photos.css';
+import './v821-stabilization.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
