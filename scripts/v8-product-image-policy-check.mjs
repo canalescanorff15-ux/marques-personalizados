@@ -4,6 +4,7 @@ const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
 
 const inspirations=read('lib/topper-inspirations.ts');
+const activeInspirations=read('lib/active-topper-inspirations.ts');
 const gallery=read('components/TopperInspirationGallery.tsx');
 const detail=read('app/inspiracoes/[code]/page.tsx');
 const sitemap=read('app/sitemap.ts');
@@ -20,26 +21,28 @@ for(const token of [
   'archivedTopperInspirations',
   'archivedSceneTopperInspirations',
   'isPublicTopperInspiration'
-])if(!inspirations.includes(token))errors.push('curadoria sem '+token);
+])if(!inspirations.includes(token))errors.push('curadoria histórica sem '+token);
 
 const curatedCodes=[...inspirations.matchAll(/'INSP-TOP-(\d{2,3})'/g)]
   .map(match=>Number(match[1]))
   .filter((value,index,array)=>array.indexOf(value)===index);
 for(let code=74;code<=109;code++){
-  if(!curatedCodes.includes(code))errors.push('coleção pública explícita sem INSP-TOP-'+String(code).padStart(2,'0'));
+  if(!curatedCodes.includes(code))errors.push('coleção curada preservada sem INSP-TOP-'+String(code).padStart(2,'0'));
 }
 for(let code=51;code<=73;code++){
   if(!inspirations.includes("'INSP-TOP-"+String(code).padStart(2,'0')+"'"))errors.push('arquivo de cenário sem INSP-TOP-'+String(code).padStart(2,'0'));
 }
 
-if(!gallery.includes('publicTopperInspirations'))errors.push('galeria ainda não usa coleção pública curada');
-if(!detail.includes('isPublicTopperInspiration'))errors.push('detalhe não bloqueia referências arquivadas');
-if(!sitemap.includes('publicTopperInspirations'))errors.push('sitemap ainda expõe referências arquivadas');
+for(const token of ['activePublicTopperInspirations','topperLevelBySlug'])if(!activeInspirations.includes(token))errors.push('coleção pública V8.23 sem '+token);
+if(!gallery.includes('activePublicTopperInspirations'))errors.push('galeria não usa coleção limitada às linhas atuais');
+if(!detail.includes('isActivePublicTopperInspiration'))errors.push('detalhe não bloqueia referências de linhas retiradas');
+if(!sitemap.includes('activePublicTopperInspirations'))errors.push('sitemap ainda pode expor referências de linhas retiradas');
 
 const homeList=(home.match(/const homeInspirationCodes=\[([^\]]*)\]/)||[])[1]||'';
 const homeCodes=[...homeList.matchAll(/INSP-TOP-(\d{2,3})/g)].map(match=>Number(match[1]));
 for(const code of homeCodes){
   if(code<74||code>109)errors.push('Home usa inspiração fora da faixa curada V8.20: INSP-TOP-'+String(code).padStart(2,'0'));
+  if((code>=92&&code<=97)||(code>=104&&code<=109))errors.push('Home usa inspiração de linha retirada: INSP-TOP-'+String(code).padStart(2,'0'));
 }
 
 const designIndex=layout.indexOf("import './v8-design-system.css';");
@@ -78,8 +81,8 @@ for(const token of [
 ])if(!css.includes(token))errors.push('política de imagem sem '+token);
 
 if(errors.length){
-  console.error('V8.01 Product Image Policy: FALHOU ('+errors.length+')');
+  console.error('V8.23 Product Image Policy: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.20 Product Image Policy: OK — 36 inspirações públicas (6 por categoria), sem cortes agressivos; acervo anterior e cenários permanecem arquivados.');
+console.log('V8.23 Product Image Policy: OK — acervo curado preservado, linhas retiradas arquivadas e somente referências dos quatro topos atuais expostas.');
