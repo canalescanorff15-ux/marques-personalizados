@@ -28,7 +28,7 @@ for(const [slug,name] of expectedLevels){
 
 if(!header.includes('MerlinMobileDock'))errors.push('dock móvel não está montado no header público compartilhado');
 if(home.includes('<MerlinMobileDock'))errors.push('Home ainda monta dock móvel duplicado');
-for(const route of ['href:"/"','href:"/catalogo"','href:"/inspiracoes"','href:"/monte-seu-pedido"','href:"/orcamento"']){
+for(const route of ["href:'/'","href:'/catalogo'","href:'/inspiracoes'","href:'/monte-seu-pedido'","href:'/orcamento'"]){
   if(!dock.includes(route))errors.push(`dock sem rota ${route}`);
 }
 if(!dock.includes('usePathname'))errors.push('dock sem estado ativo por rota');
