@@ -6,6 +6,9 @@ import { Menu, ShoppingBag } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import type { SiteSettings } from '@/lib/db';
 import SafeImage from './SafeImage';
+import MerlinMobileDock from './MerlinMobileDock';
+
+const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/273a6c2e-69e9-460f-b9ca-fd60d3f2b2e5-merlin-logo-v821.webp';
 
 const navItems=[
   {href:'/',label:'Início'},
@@ -19,7 +22,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const [menuOpen,setMenuOpen]=useState(false);
   const menuButtonRef=useRef<HTMLButtonElement>(null);
   const mobileMenuRef=useRef<HTMLElement>(null);
-  const logo=settings.logo_url||'/merlin-logo.webp';
+  const logo=OFFICIAL_LOGO;
 
   useEffect(()=>{
     if(!menuOpen)return;
@@ -42,31 +45,34 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
     return pathname==='/'?'/':'';
   },[pathname]);
 
-  return <header className="public-topper-header v8-simple-header">
-    <div className="public-header-top">
-      <div className="public-shell public-header-top-inner">
-        <Link className="public-brand" href="/" aria-label={settings.brand_name+' — início'}>
-          <span className="public-brand-logo"><SafeImage src={logo} fallback="/merlin-logo.webp" alt="" width={58} height={54} sizes="58px" priority/></span>
-          <span><strong>{settings.brand_name}</strong><small>topos de bolo personalizados • papelaria sob encomenda</small></span>
-        </Link>
+  return <>
+    <header className="public-topper-header v8-simple-header">
+      <div className="public-header-top">
+        <div className="public-shell public-header-top-inner">
+          <Link className="public-brand" href="/" aria-label={settings.brand_name+' — início'}>
+            <span className="public-brand-logo"><SafeImage src={logo} fallback="/merlin-logo.webp" alt="Logo Merlin Encantos em Papel" width={64} height={64} sizes="64px" priority/></span>
+            <span className="v821-brand-copy"><strong>Merlin</strong><small>ENCANTOS EM PAPEL</small></span>
+          </Link>
 
-        <nav className="v8-simple-nav" aria-label="Navegação principal">
-          {navItems.map(item=><Link key={item.href} href={item.href} className={activeHref===item.href?'is-active':''} aria-current={activeHref===item.href?'page':undefined}>{item.label}</Link>)}
-        </nav>
+          <nav className="v8-simple-nav" aria-label="Navegação principal">
+            {navItems.map(item=><Link key={item.href} href={item.href} className={activeHref===item.href?'is-active':''} aria-current={activeHref===item.href?'page':undefined}>{item.label}</Link>)}
+          </nav>
 
-        <div className="v8-simple-header-actions">
-          <Link className="v8-simple-order-cta" href="/monte-seu-pedido"><ShoppingBag size={17}/> Monte seu Pedido</Link>
-          <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
+          <div className="v8-simple-header-actions">
+            <Link className="v8-simple-order-cta" href="/monte-seu-pedido"><ShoppingBag size={17}/> Monte seu Pedido</Link>
+            <button ref={menuButtonRef} type="button" className="public-menu-toggle" aria-expanded={menuOpen} aria-controls="public-mobile-menu" onClick={()=>setMenuOpen(value=>!value)}><Menu size={22}/><span>Menu</span></button>
+          </div>
         </div>
       </div>
-    </div>
 
-    {menuOpen&&<nav ref={mobileMenuRef} id="public-mobile-menu" className="public-mobile-menu v8-simple-mobile-menu" aria-label="Navegação móvel">
-      <div className="public-shell">
-        {navItems.map(item=><Link key={item.href} href={item.href} onClick={()=>setMenuOpen(false)}>{item.label}</Link>)}
-        <Link className="is-primary" href="/monte-seu-pedido" onClick={()=>setMenuOpen(false)}>Monte seu Pedido</Link>
-        <Link href="/orcamento" onClick={()=>setMenuOpen(false)}>Orçamento</Link>
-      </div>
-    </nav>}
-  </header>;
+      {menuOpen&&<nav ref={mobileMenuRef} id="public-mobile-menu" className="public-mobile-menu v8-simple-mobile-menu" aria-label="Navegação móvel">
+        <div className="public-shell">
+          {navItems.map(item=><Link key={item.href} href={item.href} onClick={()=>setMenuOpen(false)}>{item.label}</Link>)}
+          <Link className="is-primary" href="/monte-seu-pedido" onClick={()=>setMenuOpen(false)}>Monte seu Pedido</Link>
+          <Link href="/orcamento" onClick={()=>setMenuOpen(false)}>Orçamento</Link>
+        </div>
+      </nav>}
+    </header>
+    <MerlinMobileDock/>
+  </>;
 }
