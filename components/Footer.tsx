@@ -4,14 +4,16 @@ import type { SiteSettings } from '@/lib/db';
 import SocialLinks from './SocialLinks';
 import SafeImage from './SafeImage';
 
+const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/fc9617e0-d9e3-4afa-b08f-4a93729b0aed-merlin-logo-oficial.webp';
+
 export default function Footer({settings}:{settings:SiteSettings}){
   return <footer className="footer premium-footer kf-footer public-v712-footer v8-simple-footer">
     <div className="container v8-simple-footer-main">
       <div className="v8-simple-footer-brand">
-        <span className="kf-footer-logo"><SafeImage src={settings.logo_url||'/merlin-logo.webp'} alt=""/></span>
+        <span className="kf-footer-logo"><SafeImage src={OFFICIAL_LOGO} fallback="/merlin-logo.webp" alt="Logo Merlin Encantos em Papel"/></span>
         <div>
-          <small>PAPELARIA PERSONALIZADA</small>
-          <strong>{settings.brand_name}</strong>
+          <small>ENCANTOS EM PAPEL</small>
+          <strong>Merlin</strong>
           <p>Topos de bolo personalizados e papelaria sob encomenda.</p>
         </div>
       </div>

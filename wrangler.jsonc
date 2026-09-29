@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "merlin-encantos-em-papel",
+  // Compatibilidade de contrato histórico: "name": "merlin-encantos-em-papel"
+  "name": "merlin",
   "compatibility_date": "2026-09-15",
   "compatibility_flags": [
     "nodejs_compat"
@@ -13,6 +14,9 @@
   },
   "cache": {
     "enabled": true
+  },
+  "vars": {
+    "NEXT_PUBLIC_SITE_URL": "https://merlin.encantos.workers.dev"
   },
   "keep_vars": true,
   "secrets": {

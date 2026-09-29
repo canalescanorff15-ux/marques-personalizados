@@ -3,6 +3,8 @@ function localHostname(hostname:string){
   return host==='localhost'||host==='127.0.0.1'||host==='::1';
 }
 
+const CURRENT_PUBLIC_ORIGIN='https://merlin.encantos.workers.dev';
+
 function configuredProductionOrigin(){
   const raw=String(process.env.NEXT_PUBLIC_SITE_URL||'').trim();
   if(!raw)return'';
@@ -14,20 +16,37 @@ function configuredProductionOrigin(){
   }catch{return'';}
 }
 
+export function trustedRequestOrigins(){
+  const origins=new Set<string>();
+  const configured=configuredProductionOrigin();
+  if(configured)origins.add(configured);
+  origins.add(CURRENT_PUBLIC_ORIGIN);
+  return origins;
+}
+
 export function trustedRequestOrigin(request:Request){
-  if(process.env.NODE_ENV==='production')return configuredProductionOrigin();
+  if(process.env.NODE_ENV==='production')return configuredProductionOrigin()||CURRENT_PUBLIC_ORIGIN;
   try{return new URL(request.url).origin;}catch{return'';}
 }
 
 export function sameOriginBoundary(request:Request){
   const fetchSite=request.headers.get('sec-fetch-site')?.trim().toLowerCase();
   if(fetchSite&&!['same-origin','none'].includes(fetchSite))return false;
-  const expected=trustedRequestOrigin(request);if(!expected)return false;
+
+  if(process.env.NODE_ENV==='production'){
+    const trusted=trustedRequestOrigins();
+    const origin=request.headers.get('origin');
+    if(origin){try{return trusted.has(new URL(origin).origin);}catch{return false;}}
+    const referer=request.headers.get('referer');
+    if(referer){try{return trusted.has(new URL(referer).origin);}catch{return false;}}
+    return !fetchSite;
+  }
+
+  const expected=trustedRequestOrigin(request);
+  if(!expected)return false;
   const origin=request.headers.get('origin');
   if(origin){try{return new URL(origin).origin===expected;}catch{return false;}}
   const referer=request.headers.get('referer');
   if(referer){try{return new URL(referer).origin===expected;}catch{return false;}}
-  // Requisições não-browser (CLI/health tooling) não carregam os Fetch Metadata headers.
-  // Browsers modernos enviam Origin/Referer e Sec-Fetch-Site em mutações cross-origin.
   return !fetchSite;
 }
