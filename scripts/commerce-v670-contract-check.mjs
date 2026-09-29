@@ -7,7 +7,7 @@ const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 const must=(file,tokens)=>{const text=read(file);for(const token of tokens)if(!text.includes(token))errors.push(`${file} sem ${token}`);return text;};
 
 const catalog=must('lib/topper-catalog.ts',['TOP-01','TOP-02','TOP-03','TOP-05','Topo Clássico','Topo em Camadas','Topo Premium','Topo Transparente']);
-const pricing=must('lib/topper-pricing.ts',["pricingStage='launch'",'classic:35','layers:45','premium:55','transparent:60','stage2','stage3','consolidated']);
+const pricing=must('lib/topper-pricing.ts',["pricingStage='launch'",'classic:35','layers:45','premium:55','transparent:60','stage2','stage3','consolidated','Valores de lançamento, sujeitos a atualização conforme custos de produção e evolução da marca.']);
 const homeSource=read('app/page.tsx');
 const isEssentialHome=homeSource.includes('v8-essential-home-v814');
 const home=must('app/page.tsx',isEssentialHome
@@ -32,7 +32,7 @@ const sitemap=must('app/sitemap.ts',['/guia-de-precos','/monte-seu-pedido','topp
 
 for(const retired of ["slug:'shaker'","slug:'elite-shaker-acetato'"])if(catalog.includes(retired))errors.push(`catálogo voltou a publicar linha retirada: ${retired}`);
 if(price.includes('Sob orçamento'))errors.push('guia de preços voltou a esconder os valores de lançamento');
-if(!price.includes('Valores de lançamento'))errors.push('guia não comunica a etapa de lançamento');
+if(!price.includes('topperLaunchPriceNote'))errors.push('guia não usa o aviso central da etapa de lançamento');
 if(!detail.includes('A partir de R$'))errors.push('detalhe não comunica valor inicial');
 for(const source of [home,header,footer,dock]){
   if(source.includes('href="/monte-seu-kit"')||source.includes("href:'/monte-seu-kit'"))errors.push('jornada pública ainda oferece Monte seu Kit');
