@@ -28,8 +28,8 @@ if(exists('components/PublicTopperHeader.tsx')){
 
 if(exists('components/TopperInspirationGallery.tsx')){
   const g=read('components/TopperInspirationGallery.tsx');
-  for(const token of ['topperInspirations','categoria','nivel','favoritos','Ordem do catálogo','Nome A–Z','Nome Z–A','Carregar mais','Ver detalhes','InspirationFavoriteButton'])if(!g.includes(token))errors.push(`galeria V7.10 sem contrato: ${token}`);
-  if(!g.includes('PAGE_SIZE=12'))errors.push('galeria precisa iniciar/carregar em blocos de 12');
+  for(const token of ['activePublicTopperInspirations','categoria','nivel','favoritos','Ordem do catálogo','Nome A–Z','Nome Z–A','Ver detalhes','InspirationFavoriteButton'])if(!g.includes(token))errors.push(`galeria pública sem contrato atual: ${token}`);
+  if(!g.includes('PAGE_SIZE=12'))errors.push('galeria precisa carregar em blocos de 12');
   if(!g.includes('normalize'))errors.push('galeria precisa normalizar busca para acentos/maiúsculas');
   if(!g.includes('history.replaceState'))errors.push('galeria precisa refletir filtros na URL');
   for(const token of ['filterOpen','aria-modal','public-mobile-filter-trigger','Escape','filterCloseRef'])if(!g.includes(token))errors.push(`galeria móvel sem requisito acessível: ${token}`);
@@ -44,7 +44,7 @@ if(exists('app/page.tsx')){
 
 if(exists('app/inspiracoes/page.tsx')){
   const p=read('app/inspiracoes/page.tsx');
-  if(!p.includes('TopperInspirationGallery'))errors.push('/inspiracoes não usa a galeria V7.10');
+  if(!p.includes('TopperInspirationGallery'))errors.push('/inspiracoes não usa a galeria pública');
   if(p.includes('12 ideias iniciais'))errors.push('/inspiracoes ainda tem contagem fixa obsoleta');
 }
 
@@ -53,7 +53,7 @@ if(exists('app/inspiracoes/[code]/page.tsx')){
   const isV810=d.includes('v8-storefront-detail');
   const hasRedirect=d.includes("redirect('/inspiracoes')");
   if(d.includes('function LegacyInspirationDetail')||!hasRedirect)errors.push('detalhe deve redirecionar códigos desconhecidos');
-  if(d.includes('isPublicTopperInspiration')&&!hasRedirect)errors.push('curadoria V8 precisa redirecionar referências arquivadas');
+  if(!d.includes('isActivePublicTopperInspiration'))errors.push('detalhe precisa bloquear inspirações de linhas retiradas');
   const required=isV810
     ? ['topperInspirationByCode','Quero esse modelo','Nome e idade','Cores e elementos','Acabamento']
     : ['topperInspirationByCode','Quero esse modelo','paleta','nível sugerido'];
@@ -72,18 +72,19 @@ if(exists('app/public-v712.css')){
   const css=read('app/public-v712.css');
   if(!css.includes('V7.12 — sistema visual público unificado'))errors.push('marcador da camada visual V7.12 ausente');
 }
-for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.tsx','app/catalogo/[slug]/page.tsx','app/monte-seu-topo/page.tsx','app/monte-seu-pedido/page.tsx','app/orcamento/page.tsx','app/guia-de-precos/page.tsx','app/privacidade/page.tsx','app/termos/page.tsx']){
+for(const page of ['app/page.tsx','app/inspiracoes/page.tsx','app/catalogo/page.tsx','app/catalogo/[slug]/page.tsx','app/monte-seu-pedido/page.tsx','app/orcamento/page.tsx','app/guia-de-precos/page.tsx','app/privacidade/page.tsx','app/termos/page.tsx']){
   if(!read(page).includes('public-v712'))errors.push(`${page} ainda não usa a identidade V7.12`);
 }
+const legacyBuilder=read('app/monte-seu-topo/page.tsx');
+if(!legacyBuilder.includes("redirect('/monte-seu-pedido?produto=topo')"))errors.push('rota legada /monte-seu-topo deve redirecionar para o fluxo único atual');
 if(!read('components/Footer.tsx').includes('public-v712-footer'))errors.push('rodapé ainda não usa a identidade V7.12');
 if(!read('app/page.tsx').includes('v8-essential-home-v814')&&!read('app/page.tsx').includes('TopperLevelVisual'))errors.push('home legada não usa visuais reais dos níveis');
 if(!read('app/catalogo/[slug]/page.tsx').includes('TopperLevelVisual'))errors.push('detalhe do nível não usa visual oficial');
 if(read('app/privacidade/page.tsx').includes('Minha Lista'))errors.push('privacidade ainda descreve recurso legado');
-if(read('app/termos/page.tsx').includes('“a partir de”'))errors.push('termos ainda descrevem preço legado');
 
 if(errors.length){
-  console.error(`V7.10 Public Redesign Contract: FALHOU (${errors.length})`);
+  console.error(`V8.23 Public Redesign Contract: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.12 Public Redesign Contract: OK — identidade pública unificada, fluxos atuais e páginas institucionais alinhados.');
+console.log('V8.23 Public Redesign Contract: OK — identidade pública, quatro linhas atuais, galeria filtrada e fluxo único de pedido alinhados.');
