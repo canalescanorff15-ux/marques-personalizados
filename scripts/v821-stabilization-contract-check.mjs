@@ -2,10 +2,10 @@ import fs from 'node:fs';
 
 const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
-const exists=file=>fs.existsSync(file);
 
 const catalog=read('lib/topper-catalog.ts');
 const header=read('components/PublicTopperHeader.tsx');
+const footer=read('components/Footer.tsx');
 const dock=read('components/MerlinMobileDock.tsx');
 const home=read('app/page.tsx');
 const personalizados=read('app/personalizados/page.tsx');
@@ -28,7 +28,7 @@ for(const [slug,name] of expectedLevels){
 
 if(!header.includes('MerlinMobileDock'))errors.push('dock móvel não está montado no header público compartilhado');
 if(home.includes('<MerlinMobileDock'))errors.push('Home ainda monta dock móvel duplicado');
-for(const route of ['href="/"','href="/catalogo"','href="/inspiracoes"','href="/monte-seu-pedido"','href="/orcamento"']){
+for(const route of ['href:"/"','href:"/catalogo"','href:"/inspiracoes"','href:"/monte-seu-pedido"','href:"/orcamento"']){
   if(!dock.includes(route))errors.push(`dock sem rota ${route}`);
 }
 if(!dock.includes('usePathname'))errors.push('dock sem estado ativo por rota');
@@ -39,10 +39,15 @@ for(const token of ['Feito por Nós','Marcadores de Página','Caixinhas — sob 
 for(const forbidden of ['Doces & Complementos','>Kits<','/personalizados#kits','/personalizados#doces']){
   if(home.includes(forbidden))errors.push(`Home ainda expõe categoria oculta: ${forbidden}`);
 }
-for(const asset of ['/trabalhos/topo-gotico-real.webp','/trabalhos/marcadores-literarios-real.webp','/trabalhos/marcadores-personalizados-real.webp']){
-  if(!home.includes(asset))errors.push(`Home sem trabalho real: ${asset}`);
-  if(!exists(`public${asset}`))errors.push(`asset real ausente: public${asset}`);
-}
+const realAssets=[
+  '4a19b88c-1f47-4413-9d77-390a25cef683-trabalho-topo-gotico-real.webp',
+  'a6f584d3-5ac8-45d7-b179-b9ec7c3da8fb-trabalho-marcadores-literarios-real.webp',
+  'ee9a825f-1ab3-479d-83d0-806944f52709-trabalho-marcadores-personalizados-real.webp'
+];
+for(const asset of realAssets)if(!home.includes(`https://merlin-topper-assets.floot.app/_cdn/static/${asset}`))errors.push(`Home sem trabalho real oficial: ${asset}`);
+const officialLogo='https://merlin-topper-assets.floot.app/_cdn/static/fc9617e0-d9e3-4afa-b08f-4a93729b0aed-merlin-logo-oficial.webp';
+if(!header.includes(officialLogo))errors.push('header sem logo oficial');
+if(!footer.includes(officialLogo))errors.push('footer sem logo oficial');
 
 for(const token of ['Marcadores de Página','Caixinhas — sob consulta','Adesivos & Chaveiros','Lembrancinhas','Outros Personalizados']){
   if(!personalizados.includes(token))errors.push(`Personalizados sem ${token}`);
@@ -62,7 +67,6 @@ for(const token of ['🎂 NOVO PEDIDO — MERLIN','👤 Cliente:','📱 WhatsApp
 
 if(!wrangler.includes('"name": "merlin"'))errors.push('wrangler ainda não aponta para o Worker merlin');
 if(!wrangler.includes('https://merlin.encantos.workers.dev'))errors.push('wrangler sem URL pública atual');
-if(!exists('public/merlin-logo.webp'))errors.push('logo oficial WebP ausente');
 
 if(errors.length){
   console.error(`V8.21 Stabilization Contract: FALHOU (${errors.length})`);
