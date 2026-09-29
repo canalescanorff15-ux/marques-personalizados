@@ -12,18 +12,21 @@ const isEssentialHome=home.includes('v8-essential-home-v814');
 for(const token of [
   'v8-home-products',
   'Topos de Bolo',
+  'Marcadores de Página',
   'Caixinhas',
   'Lembrancinhas',
   'Adesivos & Chaveiros',
-  'Doces & Complementos',
-  'Kits',
+  'Outros Personalizados',
+  'Feito por Nós',
   'Detalhes personalizados que fazem',
   'Pedir orçamento',
   'publicTopperInspirations',
   ...(isEssentialHome?['v8-home-scope-note','Bolo e cenário não estão inclusos.']:['O bolo e a decoração da foto estão inclusos?','Vocês fazem outros personalizados além de topo de bolo?'])
 ]){
-  if(!home.includes(token))errors.push('Home V8.02 sem '+token);
+  if(!home.includes(token))errors.push('Home V8 sem '+token);
 }
+
+for(const forbidden of ['Doces & Complementos','Kits Personalizados'])if(home.includes(forbidden))errors.push('Home voltou a divulgar categoria oculta: '+forbidden);
 
 for(const token of [
   '.v8-home-products',
@@ -58,27 +61,24 @@ if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V8.02 deve 
 if(!hero.includes('/inspiracoes')||!hero.includes('/orcamento'))errors.push('hero V8.02 precisa ligar inspirações e orçamento');
 
 for(const route of [
+  '/personalizados#marcadores',
   '/personalizados#caixinhas',
   '/personalizados#lembrancinhas',
   '/personalizados#adesivos-chaveiros',
-  '/personalizados#doces',
-  '/personalizados#kits'
+  '/personalizados#outros'
 ]){
-  if(!home.includes(route))errors.push('produto sem rota comercial V8.05: '+route);
+  if(!home.includes(route))errors.push('produto sem rota comercial V8.21: '+route);
 }
 if(!fs.existsSync('app/personalizados/page.tsx'))errors.push('rota /personalizados ausente');
 const personalizados=fs.existsSync('app/personalizados/page.tsx')?read('app/personalizados/page.tsx'):'';
-const isV810Personalizados=personalizados.includes('v8-storefront-personalizados');
-const personalizadosTokens=isV810Personalizados
-  ? ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','v8-storefront-note','Bolo, doces e decoração do ambiente não estão inclusos']
-  : ['Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Doces & Complementos','Kits Personalizados','O que não está incluso por padrão'];
-for(const token of personalizadosTokens){
-  if(!personalizados.includes(token))errors.push('Personalizados V8 sem '+token);
+for(const token of ['Marcadores de Página','Caixinhas — sob consulta','Lembrancinhas','Adesivos & Chaveiros','Outros Personalizados','v8-storefront-note','Bolo, doces e decoração do ambiente não fazem parte do serviço.']){
+  if(!personalizados.includes(token))errors.push('Personalizados V8.21 sem '+token);
 }
+for(const forbidden of ['Doces & Complementos','Kits Personalizados'])if(personalizados.includes(forbidden))errors.push('Personalizados voltou a expor categoria oculta: '+forbidden);
 
 if(errors.length){
-  console.error('V8.02 Home Premium Contract: FALHOU ('+errors.length+')');
+  console.error('V8 Home Premium Contract: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.14 Home Premium Contract: OK — Home essencial preserva produtos, inspirações e conversão sem blocos secundários.');
+console.log('V8.21 Home Premium Contract: OK — Home essencial preserva conversão, produtos ativos, trabalhos reais e inspirações.');
