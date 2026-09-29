@@ -29,6 +29,7 @@ import './v8-gallery-minimal.css';
 import './v8-final-polish.css';
 import './v8-typography-balance.css';
 import './v8-catalog-real-photos.css';
+import './v821-stabilization.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
@@ -39,21 +40,22 @@ import AttributionCapture from '@/components/AttributionCapture';
 import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 
-const topperDescription='Topos de bolo e papelaria personalizada feitos sob encomenda, com criação adaptada ao tema, cores e detalhes de cada comemoração.';
+const officialLogo='https://merlin-topper-assets.floot.app/_cdn/static/7a6e5cde-d985-43f2-8086-bab7676c0660-merlin-logo-oficial.webp';
+const topperDescription='Topos de bolo, marcadores e papelaria personalizada feitos sob encomenda, com criação adaptada ao tema, cores e detalhes de cada pedido.';
 export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fffaf8'};
 
 export async function generateMetadata():Promise<Metadata>{
  const s=await getSiteSettings();
- const title=`${s.brand_name} | Papelaria personalizada e topos de bolo`;
+ const title='Merlin Encantos em Papel | Personalizados sob encomenda';
  return{
   metadataBase:siteUrl?new URL(siteUrl):undefined,
-  title:{default:title,template:`%s | ${s.brand_name}`},
+  title:{default:title,template:'%s | Merlin Encantos em Papel'},
   description:topperDescription,
-  applicationName:s.brand_name,
+  applicationName:'Merlin Encantos em Papel',
   robots:{index:true,follow:true},
-  openGraph:{type:'website',locale:'pt_BR',siteName:s.brand_name,title,description:topperDescription,url:siteUrl||undefined,images:s.logo_url?[s.logo_url]:undefined},
-  twitter:{card:'summary_large_image',title,description:topperDescription},
-  appleWebApp:{capable:true,statusBarStyle:'default',title:s.brand_name},
+  openGraph:{type:'website',locale:'pt_BR',siteName:'Merlin Encantos em Papel',title,description:topperDescription,url:siteUrl||undefined,images:[officialLogo]},
+  twitter:{card:'summary_large_image',title,description:topperDescription,images:[officialLogo]},
+  appleWebApp:{capable:true,statusBarStyle:'default',title:'Merlin Encantos em Papel'},
   icons:{icon:'/favicon.svg',apple:'/apple-touch-icon.png'}
  };
 }
