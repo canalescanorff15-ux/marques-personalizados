@@ -1,0 +1,227 @@
+/* V8.24 — Trabalhos reais integrados ao hero principal. */
+.v824-real-work-carousel{
+  position:relative;
+  min-width:0;
+}
+
+.v824-carousel-stage{
+  position:relative;
+  width:100%;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  border:1px solid rgba(75,48,59,.08);
+  border-radius:30px;
+  background:#f2e8e5;
+  box-shadow:0 30px 76px rgba(73,45,57,.15);
+  isolation:isolate;
+}
+
+.v824-carousel-image{
+  object-fit:cover;
+  animation:v824-carousel-in .55s ease both;
+}
+
+.v824-carousel-shade{
+  position:absolute;
+  inset:42% 0 0;
+  z-index:1;
+  background:linear-gradient(180deg,transparent 0%,rgba(24,14,18,.14) 28%,rgba(24,14,18,.78) 100%);
+  pointer-events:none;
+}
+
+.v824-carousel-badge{
+  position:absolute;
+  z-index:3;
+  top:16px;
+  left:16px;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:8px 11px;
+  border:1px solid rgba(255,255,255,.68);
+  border-radius:999px;
+  background:rgba(255,250,248,.92);
+  color:#3d2b32;
+  box-shadow:0 8px 24px rgba(51,31,40,.08);
+  backdrop-filter:blur(12px);
+  font-size:.61rem;
+  font-weight:900;
+  letter-spacing:.02em;
+}
+
+.v824-carousel-caption{
+  position:absolute;
+  z-index:3;
+  right:112px;
+  bottom:22px;
+  left:22px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:22px;
+  color:#fff;
+}
+
+.v824-carousel-caption>div{
+  display:grid;
+  gap:5px;
+  min-width:0;
+}
+
+.v824-carousel-caption strong{
+  font-size:clamp(.94rem,1.4vw,1.18rem);
+  line-height:1.18;
+  letter-spacing:-.02em;
+}
+
+.v824-carousel-caption span{
+  max-width:440px;
+  color:rgba(255,255,255,.78);
+  font-size:.64rem;
+  line-height:1.45;
+}
+
+.v824-carousel-caption>a{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  flex:0 0 auto;
+  color:#fff;
+  font-size:.62rem;
+  font-weight:850;
+  white-space:nowrap;
+}
+
+.v824-carousel-controls{
+  position:absolute;
+  z-index:4;
+  right:16px;
+  bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:6px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;
+  background:rgba(34,21,27,.5);
+  box-shadow:0 9px 24px rgba(20,10,15,.16);
+  backdrop-filter:blur(12px);
+}
+
+.v824-carousel-controls button{
+  display:grid;
+  width:31px;
+  height:31px;
+  place-items:center;
+  border:0;
+  border-radius:50%;
+  background:rgba(255,255,255,.13);
+  color:#fff;
+  cursor:pointer;
+  transition:background .2s ease,transform .2s ease;
+}
+
+.v824-carousel-controls button:hover,
+.v824-carousel-controls button:focus-visible{
+  background:rgba(255,255,255,.25);
+  transform:translateY(-1px);
+  outline:none;
+}
+
+.v824-carousel-controls span{
+  min-width:45px;
+  color:rgba(255,255,255,.76);
+  font-size:.54rem;
+  font-weight:850;
+  letter-spacing:.08em;
+  text-align:center;
+}
+
+.v824-carousel-dots{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  padding-top:12px;
+}
+
+.v824-carousel-dots button{
+  width:7px;
+  height:7px;
+  padding:0;
+  border:0;
+  border-radius:999px;
+  background:rgba(142,82,107,.2);
+  cursor:pointer;
+  transition:width .22s ease,background .22s ease;
+}
+
+.v824-carousel-dots button.is-active{
+  width:24px;
+  background:#8e526b;
+}
+
+.v824-real-work-carousel:focus-within .v824-carousel-stage{
+  box-shadow:0 30px 76px rgba(73,45,57,.18),0 0 0 3px rgba(142,82,107,.09);
+}
+
+@keyframes v824-carousel-in{
+  from{opacity:.35;transform:scale(1.018)}
+  to{opacity:1;transform:scale(1)}
+}
+
+@media(max-width:980px){
+  .v824-carousel-caption{
+    right:105px;
+    bottom:18px;
+    left:18px;
+  }
+  .v824-carousel-caption>a{display:none}
+}
+
+@media(max-width:680px){
+  .v824-carousel-stage{
+    aspect-ratio:4/3;
+    border-radius:22px;
+    box-shadow:0 20px 48px rgba(73,45,57,.13);
+  }
+  .v824-carousel-badge{
+    top:11px;
+    left:11px;
+    padding:7px 9px;
+  }
+  .v824-carousel-caption{
+    right:88px;
+    bottom:14px;
+    left:14px;
+  }
+  .v824-carousel-caption span{font-size:.59rem}
+  .v824-carousel-controls{
+    right:10px;
+    bottom:10px;
+    gap:4px;
+    padding:5px;
+  }
+  .v824-carousel-controls button{
+    width:29px;
+    height:29px;
+  }
+  .v824-carousel-controls span{display:none}
+  .v824-carousel-dots{padding-top:10px}
+}
+
+@media(max-width:420px){
+  .v824-carousel-caption{
+    right:82px;
+  }
+  .v824-carousel-caption strong{font-size:.86rem}
+  .v824-carousel-caption span{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v824-carousel-image,
+  .v824-carousel-controls button,
+  .v824-carousel-dots button{
+    animation:none!important;
+    transition:none!important;
+  }
+}
