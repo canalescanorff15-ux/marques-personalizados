@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowUpRight, Box, Gift, KeyRound, PackageOpen, Sparkles, Sticker } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Box, Gift, KeyRound, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getSiteSettings } from '@/lib/db';
@@ -9,29 +9,28 @@ export const dynamic='force-dynamic';
 
 export const metadata:Metadata={
   title:'Papelaria & Personalizados | Merlin Encantos em Papel',
-  description:'Caixinhas, lembrancinhas, adesivos, chaveiros, itens para doces e kits personalizados sob encomenda.'
+  description:'Marcadores de página, lembrancinhas, adesivos, chaveiros, caixinhas sob consulta e outros personalizados feitos sob encomenda.'
 };
 
 const products=[
-  {id:'caixinhas',icon:Box,title:'Caixinhas',copy:'Milk, bala, pirâmide, sushi e outros modelos.',href:'/monte-seu-pedido?produto=caixinhas'},
-  {id:'lembrancinhas',icon:Gift,title:'Lembrancinhas',copy:'Mimos, embalagens e peças personalizadas.',href:'/monte-seu-pedido?produto=lembrancinhas'},
-  {id:'adesivos-chaveiros',icon:KeyRound,title:'Adesivos & Chaveiros',copy:'Personalização com nome, foto ou tema.',href:'/monte-seu-pedido?produto=chaveiros'},
-  {id:'doces',icon:Sticker,title:'Doces & Complementos',copy:'Toppers, wrappers, tags e plaquinhas.',href:'/monte-seu-pedido?produto=doces'},
-  {id:'kits',icon:PackageOpen,title:'Kits Personalizados',copy:'Peças combinadas com a mesma identidade visual.',href:'/monte-seu-pedido?produto=kit'},
-  {id:'outros',icon:Sparkles,title:'Outros Personalizados',copy:'Envie sua referência e conte a sua ideia.',href:'/monte-seu-pedido?produto=outro'}
+  {id:'marcadores',icon:BookOpen,title:'Marcadores de Página',copy:'Literários, temáticos ou totalmente personalizados.',href:'/monte-seu-pedido?produto=marcadores',badge:'FEITO POR NÓS'},
+  {id:'lembrancinhas',icon:Gift,title:'Lembrancinhas',copy:'Mimos, embalagens e peças personalizadas para presentear.',href:'/monte-seu-pedido?produto=lembrancinhas'},
+  {id:'adesivos-chaveiros',icon:KeyRound,title:'Adesivos & Chaveiros',copy:'Personalização com nome, foto, arte ou tema.',href:'/monte-seu-pedido?produto=chaveiros'},
+  {id:'caixinhas',icon:Box,title:'Caixinhas — sob consulta',copy:'Modelos como milk, bala, pirâmide e sushi preparados conforme o pedido.',href:'/monte-seu-pedido?produto=caixinhas',badge:'SOB CONSULTA'},
+  {id:'outros',icon:Sparkles,title:'Outros Personalizados',copy:'Envie uma referência ou conte a sua ideia para avaliarmos.',href:'/monte-seu-pedido?produto=outro'}
 ];
 
 export default async function PersonalizadosPage(){
   const settings=await getSiteSettings();
 
-  return <main className="premium-site public-v712 v8-storefront-page v8-storefront-personalizados">
+  return <main className="premium-site public-v712 v8-storefront-page v8-storefront-personalizados v821-personalizados">
     <Header settings={settings}/>
 
     <section className="v8-storefront-hero">
       <div className="container">
         <span className="eyebrow"><Sparkles size={14}/> PERSONALIZADOS</span>
-        <h1>Escolha o produto.<br/><em>A gente personaliza.</em></h1>
-        <p>Escolha a categoria e monte seu pedido.</p>
+        <h1>Escolha o que precisa.<br/><em>A gente personaliza.</em></h1>
+        <p>Trabalhamos com papelaria personalizada sob encomenda. Se ainda estiver em dúvida, envie sua ideia pelo orçamento.</p>
       </div>
     </section>
 
@@ -42,14 +41,17 @@ export default async function PersonalizadosPage(){
             const Icon=product.icon;
             return <Link href={product.href} id={product.id} className="v8-storefront-card v8-storefront-product-card" key={product.id}>
               <span className="v8-storefront-icon"><Icon size={22}/></span>
+              {product.badge&&<small className="v821-product-badge">{product.badge}</small>}
               <h2>{product.title}</h2>
+              <p>{product.copy}</p>
               <b>Montar pedido <ArrowUpRight size={14}/></b>
             </Link>;
           })}
         </div>
 
         <div className="v8-storefront-note">
-          <span>Bolo, doces e decoração do ambiente não estão inclusos por padrão.</span>
+          <span>Produzimos papelaria personalizada. Não vendemos bolo, doces ou decoração completa.</span>
+          <small>Caixinhas são avaliadas sob consulta conforme modelo, quantidade e prazo.</small>
         </div>
       </div>
     </section>
