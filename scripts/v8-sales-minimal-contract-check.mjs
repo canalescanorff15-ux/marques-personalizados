@@ -16,16 +16,17 @@ for(const token of ['v8-storefront-catalog','topperLevels.map','Montar meu topo'
 if(catalog.includes('<p>{item.description}</p>'))errors.push('Catálogo V8.11 voltou a exibir descrição longa nos cards');
 if(catalog.includes('<small>{item.code}</small>'))errors.push('Catálogo V8.11 voltou a exibir código técnico nos cards');
 
-for(const token of ['v8-storefront-personalizados','Caixinhas','Lembrancinhas','Montar pedido']){
-  if(!personalizados.includes(token))errors.push('Personalizados V8.11 sem '+token);
+for(const token of ['v8-storefront-personalizados','Marcadores de Página','Caixinhas','Lembrancinhas','Montar pedido']){
+  if(!personalizados.includes(token))errors.push('Personalizados V8.21 sem '+token);
 }
-if(personalizados.includes('<p>{product.copy}</p>'))errors.push('Personalizados V8.11 voltou a exibir copy longa nos cards');
+if(personalizados.includes('Kits Personalizados')||personalizados.includes('Doces & Complementos'))errors.push('Personalizados V8.21 não deve exibir produtos ainda não oferecidos');
+if(!personalizados.includes('<p>{product.copy}</p>'))errors.push('Personalizados V8.21 precisa manter uma explicação curta e compreensível em cada categoria');
 
 if(!inspirations.includes('Escolha uma referência e personalize.'))errors.push('Inspirações V8.11 sem microcopy curta');
 if(!inspirations.includes('Envie sua própria referência.'))errors.push('Inspirações V8.11 sem liberdade de referência');
 if(!inspirations.includes('Contar minha ideia'))errors.push('Inspirações V8.11 sem CTA essencial');
 
-if(!quote.includes('Escolha o produto e informe apenas os detalhes necessários.'))errors.push('Orçamento V8.11 sem orientação curta');
+if(!quote.includes('Preencha apenas o necessário. No final, o resumo abre pronto no WhatsApp.'))errors.push('Orçamento V8.21 sem orientação curta do fluxo pelo WhatsApp');
 if(quote.includes('v8-order-hero-card'))errors.push('Orçamento V8.11 voltou a exibir painel explicativo no hero');
 
 for(const token of [
@@ -44,8 +45,8 @@ if(minimalIndex<0)errors.push('layout não importa v8-sales-minimal.css');
 if(storefrontIndex<0||minimalIndex<storefrontIndex)errors.push('v8-sales-minimal.css precisa carregar depois de v8-storefront-clean.css');
 
 if(errors.length){
-  console.error('V8.11 Venda Essencial Contract: FALHOU ('+errors.length+')');
+  console.error('V8.21 Venda Essencial Contract: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.11 Venda Essencial Contract: OK — produto, imagem e CTA com informação mínima.');
+console.log('V8.21 Venda Essencial Contract: OK — informação curta, categorias claras e orçamento direto pelo WhatsApp.');
