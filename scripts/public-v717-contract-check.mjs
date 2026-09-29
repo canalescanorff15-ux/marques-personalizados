@@ -38,37 +38,14 @@ if(fs.existsSync('app/page.tsx')){
     ['contato final','home-v717-contact-shell'],
     ['âncora contato','id="contato"']
   ]:[
-    ['escopo da home','home-v717'],
-    ['hero editorial','home-v717-showcase'],
-    ['headline V8','Detalhes personalizados que fazem'],
-    ['CTA inspirações','Ver inspirações'],
-    ['CTA orçamento','Pedir orçamento'],
-    ['faixa de processo','home-v717-intro-strip'],
-    ['vitrine de produtos V8','v8-home-products'],
-    ['produto caixinhas','Caixinhas'],
-    ['produto lembrancinhas','Lembrancinhas'],
-    ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
-    ['grade nova de níveis','home-v717-level-grid'],
-    ['visuais oficiais dos níveis','TopperLevelVisual'],
-    ['galeria de inspirações','home-v717-gallery-grid'],
-    ['fonte real de inspirações','publicTopperInspirations'],
-    ['processo em três passos','home-v717-process-grid'],
-    ['acabamento visual','home-v717-detail-grid'],
-    ['história da marca','home-v717-about-grid'],
-    ['FAQ ampliado','Posso enviar uma foto ou referência minha?'],
-    ['contato final','home-v717-contact-shell'],
-    ['âncora sobre','id="sobre"'],
-    ['âncora dúvidas','id="duvidas"'],
-    ['âncora contato','id="contato"']
+    ['escopo da home','home-v717'],['hero editorial','home-v717-showcase'],['headline V8','Detalhes personalizados que fazem'],['CTA inspirações','Ver inspirações'],['CTA orçamento','Pedir orçamento'],['faixa de processo','home-v717-intro-strip'],['vitrine de produtos V8','v8-home-products'],['produto caixinhas','Caixinhas'],['produto lembrancinhas','Lembrancinhas'],['produto adesivos e chaveiros','Adesivos & Chaveiros'],['grade nova de níveis','home-v717-level-grid'],['visuais oficiais dos níveis','TopperLevelVisual'],['galeria de inspirações','home-v717-gallery-grid'],['fonte real de inspirações','publicTopperInspirations'],['processo em três passos','home-v717-process-grid'],['acabamento visual','home-v717-detail-grid'],['história da marca','home-v717-about-grid'],['FAQ ampliado','Posso enviar uma foto ou referência minha?'],['contato final','home-v717-contact-shell'],['âncora sobre','id="sobre"'],['âncora dúvidas','id="duvidas"'],['âncora contato','id="contato"']
   ];
   for(const [label,token] of required)if(!home.includes(token))errors.push(label);
   const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd);
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
   if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
-  if(isEssentialHome){
-    for(const forbidden of ['Doces & Complementos','href="/personalizados#doces"','href="/personalizados#kits"'])if(home.includes(forbidden))errors.push('Home V8.21 voltou a expor categoria não ativa: '+forbidden);
-  }
+  if(isEssentialHome){for(const forbidden of ['Doces & Complementos','href="/personalizados#doces"','href="/personalizados#kits"'])if(home.includes(forbidden))errors.push('Home V8.21 voltou a expor categoria não ativa: '+forbidden);}
   const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
   if(v8Curated){
     const codes=[...home.matchAll(/INSP-TOP-(\d{2,3})/g)].map(match=>Number(match[1]));
@@ -79,30 +56,13 @@ if(fs.existsSync('app/page.tsx')){
 
 if(fs.existsSync('app/public-v717.css')){
   const css=read('app/public-v717.css');
-  const required=[
-    ['marcador V7.17','/* V7.17 — Home editorial premium */'],
-    ['hero em duas colunas','.premium-hero .hero-grid'],
-    ['colagem editorial','.home-v717-showcase{'],
-    ['metadados do hero','.home-v717-hero-meta{'],
-    ['grade de níveis 3 colunas','grid-template-columns:repeat(3,minmax(0,1fr))'],
-    ['galeria assimétrica','.home-v717-gallery-card-1'],
-    ['processo em cards','.home-v717-process-grid{'],
-    ['detalhes de acabamento','.home-v717-detail-grid{'],
-    ['seção sobre editorial','.home-v717-about-grid{'],
-    ['contato escuro','.home-v717-contact-shell{'],
-    ['tablet','@media(max-width:900px)'],
-    ['mobile','@media(max-width:640px)'],
-    ['mobile estreito','@media(max-width:390px)'],
-    ['movimento reduzido','@media(prefers-reduced-motion:reduce)']
-  ];
+  const required=[['marcador V7.17','/* V7.17 — Home editorial premium */'],['hero em duas colunas','.premium-hero .hero-grid'],['colagem editorial','.home-v717-showcase{'],['metadados do hero','.home-v717-hero-meta{'],['grade de níveis 3 colunas','grid-template-columns:repeat(3,minmax(0,1fr))'],['galeria assimétrica','.home-v717-gallery-card-1'],['processo em cards','.home-v717-process-grid{'],['detalhes de acabamento','.home-v717-detail-grid{'],['seção sobre editorial','.home-v717-about-grid{'],['contato escuro','.home-v717-contact-shell{'],['tablet','@media(max-width:900px)'],['mobile','@media(max-width:640px)'],['mobile estreito','@media(max-width:390px)'],['movimento reduzido','@media(prefers-reduced-motion:reduce)']];
   for(const [label,token] of required)if(!css.includes(token))errors.push(label);
 }
 
 if(fs.existsSync('lib/topper-inspirations.ts')){
   const source=read('lib/topper-inspirations.ts');
-  for(const code of ['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104']){
-    if(!source.includes("code:'"+code+"'"))errors.push('inspiração atual da Home ausente: '+code);
-  }
+  for(const code of ['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'])if(!source.includes(`'${code}'`))errors.push('inspiração atual da Home ausente: '+code);
 }
 
 if(fs.existsSync('lib/topper-catalog.ts')){
@@ -110,9 +70,5 @@ if(fs.existsSync('lib/topper-catalog.ts')){
   if((catalog.match(/slug:'/g)||[]).length<6)errors.push('catálogo perdeu os seis níveis');
 }
 
-if(errors.length){
-  console.error('V7.17 Home Editorial Contract: FALHOU ('+errors.length+')');
-  for(const error of errors)console.error('- '+error);
-  process.exit(1);
-}
+if(errors.length){console.error('V7.17 Home Editorial Contract: FALHOU ('+errors.length+')');for(const error of errors)console.error('- '+error);process.exit(1);}
 console.log('V8.21 Home Editorial Contract: OK — hero curto, produtos ativos, trabalhos reais, inspirações e contato protegidos.');
