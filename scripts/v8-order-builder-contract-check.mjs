@@ -32,21 +32,28 @@ if(isMinimalV815){
 if(!quote.includes('<OrderBuilder/>'))errors.push('/orcamento não usa OrderBuilder');
 
 for(const token of [
-  "'topo'","'caixinhas'","'lembrancinhas'","'chaveiros'","'adesivos'","'doces'","'kit'","'outro'",
+  "'topo'","'marcadores'","'caixinhas'","'lembrancinhas'","'chaveiros'","'outro'",
   "'/api/inquiries'","request_id:requestId.current","getAttribution()","source:'site'",
   "desired_categories:[selectedProduct.label]","product_name:selectedProduct.label",
-  "productType==='topo'","cake_size","quantity","frontBack","kitItems","description"
+  "productType==='topo'","cake_size","quantity","frontBack","description",
+  'Enviar pedido pelo WhatsApp','Sim, vou enviar uma foto','Foto de referência selecionada'
 ]){
-  if(!builder.includes(token))errors.push('OrderBuilder sem requisito: '+token);
+  if(!builder.includes(token))errors.push('OrderBuilder sem requisito V8.21: '+token);
 }
 
-for(const token of ['ORDER_DRAFT_KEY','ORDER_DRAFT_EVENT','productType:OrderProductType','writeOrderDraft','readOrderDraft','clearOrderDraft']){
-  if(!draft.includes(token))errors.push('rascunho V8.06 sem requisito: '+token);
+const publicProductBlock=builder.slice(builder.indexOf('const productTypes=['),builder.indexOf('const productQueryMap'));
+for(const forbidden of ["key:'doces'","key:'kit'","short:'Doces'","short:'Kit'"]){
+  if(publicProductBlock.includes(forbidden))errors.push('OrderBuilder voltou a oferecer categoria pública não ativa: '+forbidden);
+}
+
+for(const token of ['ORDER_DRAFT_KEY','ORDER_DRAFT_EVENT','productType:OrderProductType','writeOrderDraft','readOrderDraft','clearOrderDraft',"'marcadores'"]){
+  if(!draft.includes(token))errors.push('rascunho V8.21 sem requisito: '+token);
 }
 
 for(const source of [header,footer,dock]){
   if(!source.includes('/monte-seu-pedido'))errors.push('navegação pública sem /monte-seu-pedido');
 }
+if(!header.includes('<MerlinMobileDock/>'))errors.push('dock móvel não está compartilhado pelo header público');
 if(!sitemap.includes('/monte-seu-pedido'))errors.push('sitemap sem /monte-seu-pedido');
 if(!sitemap.includes('/personalizados'))errors.push('sitemap sem /personalizados');
 
@@ -68,13 +75,14 @@ const orderStyleIndex=layout.indexOf("import './v8-order-builder.css';");
 const inspirationsIndex=layout.indexOf("import './v8-inspirations.css';");
 if(orderStyleIndex<0)errors.push('layout não importa v8-order-builder.css');
 if(inspirationsIndex>=0&&orderStyleIndex<inspirationsIndex)errors.push('v8-order-builder.css deve carregar depois da camada de inspirações');
+if(!layout.includes("import './v821-stabilization.css';"))errors.push('layout não importa a camada V8.21');
 
 if(builder.includes('category:selectedProduct.label'))errors.push('OrderBuilder não deve exigir categoria administrativa não validada');
 if(!builder.includes("category:''"))errors.push('OrderBuilder precisa evitar categoria administrativa sintética');
 
 if(errors.length){
-  console.error('V8.06 Order Builder Contract: FALHOU ('+errors.length+')');
+  console.error('V8.21 Order Builder Contract: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.15 Order Builder Contract: OK — pedido essencial, seleção acessível, campos adaptativos, rascunho e CRM protegidos.');
+console.log('V8.21 Order Builder Contract: OK — fluxo compacto, marcadores, referência e WhatsApp preservam rascunho e CRM.');
