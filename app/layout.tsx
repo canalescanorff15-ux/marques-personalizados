@@ -29,6 +29,7 @@ import './v8-gallery-minimal.css';
 import './v8-final-polish.css';
 import './v8-typography-balance.css';
 import './v8-catalog-real-photos.css';
+import './v821-stabilization.css';
 import PremiumExperience from '@/components/PremiumExperience';
 import { QuoteListProvider } from '@/components/QuoteListProvider';
 import { CompareProvider } from '@/components/CompareProvider';
@@ -36,10 +37,11 @@ import DeferredTelemetry from '@/components/DeferredTelemetry';
 import NetworkStatus from '@/components/NetworkStatus';
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
 import AttributionCapture from '@/components/AttributionCapture';
+import { OFFICIAL_MERLIN_LOGO } from '@/lib/brand-assets';
 import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 
-const topperDescription='Topos de bolo e papelaria personalizada feitos sob encomenda, com criação adaptada ao tema, cores e detalhes de cada comemoração.';
+const topperDescription='Topos de bolo, marcadores de página e papelaria personalizada feitos sob encomenda, adaptados ao tema, cores e detalhes de cada ocasião.';
 export const viewport:Viewport={width:'device-width',initialScale:1,themeColor:'#fffaf8'};
 
 export async function generateMetadata():Promise<Metadata>{
@@ -51,7 +53,7 @@ export async function generateMetadata():Promise<Metadata>{
   description:topperDescription,
   applicationName:s.brand_name,
   robots:{index:true,follow:true},
-  openGraph:{type:'website',locale:'pt_BR',siteName:s.brand_name,title,description:topperDescription,url:siteUrl||undefined,images:s.logo_url?[s.logo_url]:undefined},
+  openGraph:{type:'website',locale:'pt_BR',siteName:s.brand_name,title,description:topperDescription,url:siteUrl||undefined,images:[OFFICIAL_MERLIN_LOGO]},
   twitter:{card:'summary_large_image',title,description:topperDescription},
   appleWebApp:{capable:true,statusBarStyle:'default',title:s.brand_name},
   icons:{icon:'/favicon.svg',apple:'/apple-touch-icon.png'}
