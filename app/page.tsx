@@ -40,7 +40,7 @@ export default async function HomePage(){
           <p className="hero-copy">Topos de bolo, marcadores e papelaria personalizada criados sob encomenda para o seu tema, suas cores e o seu momento.</p>
           <div className="hero-actions">
             <Link className="btn btn-primary btn-luxury" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
-            <Link className="btn btn-ghost" href="/catalogo">Ver modelos <Layers3 size={17}/></Link>
+            <Link className="btn btn-ghost" href="/catalogo">Ver topos <Layers3 size={17}/></Link>
           </div>
           <div className="v822-hero-trust" aria-label="Diferenciais Merlin">
             <span>Produção artesanal</span><span>Personalizado para você</span><span>Atendimento pelo WhatsApp</span>
