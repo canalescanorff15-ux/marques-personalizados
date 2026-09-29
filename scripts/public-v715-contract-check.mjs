@@ -45,11 +45,13 @@ if(fs.existsSync('app/page.tsx')){
   const isEssentialHome=home.includes('v8-essential-home-v814');
   const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd>0?heroEnd:home.indexOf('<section className="category-showcase'));
-  const heroTokens=isV808
-    ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento']
-    : isV8
-      ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento','Orçamento confirmado antes da produção']
-      : ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'];
+  const heroTokens=isEssentialHome
+    ? ['Personalizados feitos para','Ver topos','Pedir orçamento']
+    : isV808
+      ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento']
+      : isV8
+        ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento','Orçamento confirmado antes da produção']
+        : ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'];
   for(const token of heroTokens)if(!hero.includes(token))errors.push('hero público sem '+token);
   if(!isV8){
     for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
@@ -64,7 +66,6 @@ if(fs.existsSync('app/page.tsx')){
     if(!home.includes('Caixinhas')||!home.includes('Lembrancinhas'))errors.push('Home V8 sem expansão de produtos');
   }
 }
-
 
 if(fs.existsSync('lib/topper-inspirations.ts')){
   const inspirationSource=read('lib/topper-inspirations.ts');
@@ -113,4 +114,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.14 Visual Structure Contract: OK — hierarquia essencial, legibilidade, produtos, inspirações e breakpoints protegidos.');
+console.log('V8.21 Visual Structure Contract: OK — hierarquia curta, produtos ativos, inspirações e breakpoints protegidos.');

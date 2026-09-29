@@ -12,11 +12,10 @@ if(pkg.engines?.node!=='22.x')errors.push('engines.node deve ser 22.x');
 if(pkg.engines?.npm!=='10.x')errors.push('engines.npm deve ser 10.x');
 const nvm=fs.readFileSync('.nvmrc','utf8').trim();
 const expectedNodeMajor=expectedNode.split('.')[0];
-if(nvm!==expectedNodeMajor)errors.push(`.nvmrc deve selecionar a linha Node ${expectedNodeMajor}; o runtime efetivo continua fixado em ${expectedNode}`);
+if(nvm!==expectedNode&&nvm!==expectedNodeMajor)errors.push(`.nvmrc deve selecionar Node ${expectedNode} ou a linha ${expectedNodeMajor}`);
 const npmrc=fs.existsSync('.npmrc')?fs.readFileSync('.npmrc','utf8'):'';
 for(const line of ['save-exact=true','package-lock=true','ignore-scripts=true'])if(!npmrc.split(/\r?\n/).map(x=>x.trim()).includes(line))errors.push(`.npmrc sem ${line}`);
 for(const group of ['dependencies','devDependencies'])for(const [name,version] of Object.entries(pkg[group]||{}))if(!exactSemver.test(String(version)))errors.push(`${group}.${name} precisa de versão exata (atual: ${version})`);
-
 
 const docker=fs.readFileSync('Dockerfile','utf8');
 const expectedDocker=String(platform.dockerImage).replace(/^node:/,'');

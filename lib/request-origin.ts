@@ -3,6 +3,10 @@ function localHostname(hostname:string){
   return host==='localhost'||host==='127.0.0.1'||host==='::1';
 }
 
+const CURRENT_PUBLIC_ORIGINS=new Set([
+  'https://merlin.encantos.workers.dev'
+]);
+
 function configuredProductionOrigin(){
   const raw=String(process.env.NEXT_PUBLIC_SITE_URL||'').trim();
   if(!raw)return'';
@@ -14,8 +18,17 @@ function configuredProductionOrigin(){
   }catch{return'';}
 }
 
+function productionOriginForRequest(request:Request){
+  const configured=configuredProductionOrigin();
+  try{
+    const actual=new URL(request.url).origin;
+    if(actual===configured||CURRENT_PUBLIC_ORIGINS.has(actual))return actual;
+  }catch{}
+  return configured;
+}
+
 export function trustedRequestOrigin(request:Request){
-  if(process.env.NODE_ENV==='production')return configuredProductionOrigin();
+  if(process.env.NODE_ENV==='production')return productionOriginForRequest(request);
   try{return new URL(request.url).origin;}catch{return'';}
 }
 

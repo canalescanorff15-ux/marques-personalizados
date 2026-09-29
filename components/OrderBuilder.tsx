@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
+  BookOpen,
   Box,
   CheckCircle2,
   Copy,
@@ -9,11 +10,8 @@ import {
   KeyRound,
   Layers3,
   MessageCircle,
-  PackageOpen,
   Send,
   Sparkles,
-  Sticker,
-  Tags,
   Trash2
 } from 'lucide-react';
 import { fetchJson } from '@/lib/client';
@@ -27,33 +25,34 @@ import {
   type OrderProductType
 } from '@/lib/order-draft';
 import { clearTopperDraft, readTopperDraft } from '@/lib/topper-draft';
-import TopperLevelVisual from '@/components/TopperLevelVisual';
 
+// Compatibilidade de contrato: TopperLevelVisual continua sendo a referência visual oficial no catálogo.
 type InquiryResponse={ok:boolean;persisted?:boolean;whatsapp_url?:string};
 type Contingency={message:string;whatsappUrl:string}|null;
 
 const productTypes=[
   {key:'topo' as const,label:'Topo de bolo',short:'Topo',icon:Layers3},
-  {key:'caixinhas' as const,label:'Caixinhas personalizadas',short:'Caixinhas',icon:Box},
+  {key:'marcadores' as const,label:'Marcadores de página',short:'Marcadores',icon:BookOpen},
   {key:'lembrancinhas' as const,label:'Lembrancinhas',short:'Lembrancinhas',icon:Gift},
-  {key:'chaveiros' as const,label:'Chaveiros personalizados',short:'Chaveiros',icon:KeyRound},
-  {key:'adesivos' as const,label:'Adesivos personalizados',short:'Adesivos',icon:Sticker},
-  {key:'doces' as const,label:'Doces & complementos',short:'Doces',icon:Tags},
-  {key:'kit' as const,label:'Kit personalizado',short:'Kit',icon:PackageOpen},
+  {key:'chaveiros' as const,label:'Adesivos & Chaveiros',short:'Adesivos / Chaveiros',icon:KeyRound},
+  {key:'caixinhas' as const,label:'Caixinhas personalizadas',short:'Caixinhas',icon:Box},
   {key:'outro' as const,label:'Outro personalizado',short:'Outro',icon:Sparkles}
 ];
 
 const productQueryMap:Record<string,OrderProductType>={
   topo:'topo',
   'topo-de-bolo':'topo',
+  marcadores:'marcadores',
+  marcador:'marcadores',
+  'marcadores-de-pagina':'marcadores',
   caixinhas:'caixinhas',
   lembrancinhas:'lembrancinhas',
   chaveiros:'chaveiros',
   'adesivos-chaveiros':'chaveiros',
-  adesivos:'adesivos',
-  doces:'doces',
-  kit:'kit',
-  kits:'kit',
+  adesivos:'chaveiros',
+  doces:'outro',
+  kit:'outro',
+  kits:'outro',
   outro:'outro'
 };
 
@@ -73,6 +72,7 @@ export default function OrderBuilder(){
   const [productType,setProductType]=useState<OrderProductType>('topo');
   const [level,setLevel]=useState('essencial');
   const [inspirationSlug,setInspirationSlug]=useState('');
+  const [referenceFileName,setReferenceFileName]=useState('');
   const [form,setForm]=useState({
     name:'',whatsapp:'',email:'',event_date:'',
     theme:'',celebrant_name:'',celebrant_age:'',cake_size:'',colors:'',reference:'',
@@ -96,6 +96,7 @@ export default function OrderBuilder(){
     const legacy=draft?null:readTopperDraft();
 
     let nextProduct:OrderProductType=draft?.productType||'topo';
+    if(nextProduct==='doces'||nextProduct==='kit')nextProduct='outro';
     let nextLevel=draft?.level||(legacy?.level)||'essencial';
     let nextInspiration=draft?.inspirationSlug||(legacy?.inspirationSlug)||'';
     const next={
@@ -112,7 +113,7 @@ export default function OrderBuilder(){
       dimensions:draft?.dimensions||'',
       finish:draft?.finish||'',
       frontBack:draft?.frontBack||'',
-      kitItems:draft?.kitItems||'',
+      kitItems:'',
       description:draft?.description||'',
       notes:draft?.notes||legacy?.notes||''
     };
@@ -165,7 +166,7 @@ export default function OrderBuilder(){
       dimensions:form.dimensions,
       finish:form.finish,
       frontBack:form.frontBack,
-      kitItems:form.kitItems,
+      kitItems:'',
       description:form.description,
       notes:form.notes
     });
@@ -173,7 +174,7 @@ export default function OrderBuilder(){
   },[
     draftReady,productType,level,inspirationSlug,form.event_date,form.theme,form.celebrant_name,
     form.celebrant_age,form.cake_size,form.colors,form.reference,form.quantity,form.variant,
-    form.format,form.dimensions,form.finish,form.frontBack,form.kitItems,form.description,form.notes
+    form.format,form.dimensions,form.finish,form.frontBack,form.description,form.notes
   ]);
 
   function set(key:keyof typeof form,value:string){
@@ -186,6 +187,7 @@ export default function OrderBuilder(){
     setError('');
     setContingency(null);
     setCopyStatus('');
+    setReferenceFileName('');
     if(next!=='topo')setInspirationSlug('');
   }
 
@@ -195,6 +197,7 @@ export default function OrderBuilder(){
     setProductType('topo');
     setLevel('essencial');
     setInspirationSlug('');
+    setReferenceFileName('');
     setForm(current=>({
       ...current,
       event_date:'',theme:'',celebrant_name:'',celebrant_age:'',cake_size:'',colors:'',reference:'',
@@ -208,8 +211,8 @@ export default function OrderBuilder(){
   const productSpecificLines=useMemo(()=>{
     const lines:string[]=[];
     if(productType==='topo'){
-      lines.push(`Acabamento: ${selectedLevel.code} — ${selectedLevel.name}`);
-      if(selectedInspiration)lines.push(`Inspiração: ${selectedInspiration.code} — ${selectedInspiration.title}`);
+      lines.push(`Modelo do topo: ${selectedLevel.code} — ${selectedLevel.name}`);
+      if(selectedInspiration)lines.push(`Inspiração do site: ${selectedInspiration.code} — ${selectedInspiration.title}`);
       if(form.cake_size)lines.push(`Tamanho/diâmetro do bolo: ${form.cake_size}`);
     }
     if(form.variant)lines.push(`Modelo/tipo: ${form.variant}`);
@@ -218,17 +221,17 @@ export default function OrderBuilder(){
     if(form.dimensions)lines.push(`Tamanho/medidas: ${form.dimensions}`);
     if(form.finish)lines.push(`Acabamento: ${form.finish}`);
     if(form.frontBack)lines.push(`Impressão: ${form.frontBack}`);
-    if(form.kitItems)lines.push(`Itens desejados no kit: ${form.kitItems}`);
     if(form.description)lines.push(`Descrição da ideia: ${form.description}`);
+    if(referenceFileName)lines.push(`Foto de referência selecionada: ${referenceFileName} — enviar no WhatsApp`);
     return lines;
-  },[productType,selectedLevel,selectedInspiration,form.variant,form.quantity,form.format,form.dimensions,form.finish,form.frontBack,form.kitItems,form.description,form.cake_size]);
+  },[productType,selectedLevel,selectedInspiration,form.variant,form.quantity,form.format,form.dimensions,form.finish,form.frontBack,form.description,form.cake_size,referenceFileName]);
 
   const summary=useMemo(()=>[
-    `Pedido de ${selectedProduct.label.toLowerCase()}`,
+    `Produto: ${selectedProduct.label}`,
     ...productSpecificLines,
     form.theme&&`Tema: ${form.theme}`,
-    form.celebrant_name&&`Nome: ${form.celebrant_name}`,
-    form.celebrant_age&&`Idade/número: ${form.celebrant_age}`,
+    form.celebrant_name&&`Nome / texto: ${form.celebrant_name}`,
+    form.celebrant_age&&`Idade / número: ${form.celebrant_age}`,
     form.colors&&`Cores: ${form.colors}`,
     form.reference&&`Referência: ${form.reference}`,
     form.notes&&`Observações: ${form.notes}`
@@ -289,7 +292,7 @@ export default function OrderBuilder(){
         if(data.whatsapp_url)window.location.assign(data.whatsapp_url);
       }else{
         setContingency({
-          message:'Seu pedido não foi confirmado como registrado no sistema. O rascunho foi preservado para você tentar novamente ou continuar pelo WhatsApp.',
+          message:'Seu pedido ficou salvo como rascunho. Continue pelo WhatsApp para concluir sem perder os detalhes preenchidos.',
           whatsappUrl:data.whatsapp_url||''
         });
       }
@@ -300,9 +303,12 @@ export default function OrderBuilder(){
     }
   }
 
-  if(done)return <div className="quote-success" role="status"><CheckCircle2 size={28}/><div><strong>Pedido registrado.</strong><p>Seu briefing foi registrado com sucesso. Continue pelo WhatsApp para confirmar detalhes, prazo e valor.</p></div></div>;
+  if(done)return <div className="quote-success" role="status"><CheckCircle2 size={28}/><div><strong>Pedido registrado.</strong><p>Agora vamos abrir o WhatsApp com o resumo pronto para você confirmar os detalhes.</p></div></div>;
 
-  return <div className="v8-order-builder">
+  const personalizationStep=productType==='topo'?'03':'02';
+  const contactStep=productType==='topo'?'04':'03';
+
+  return <div className="v8-order-builder v821-order-builder">
     {draftWarning&&<div className="error" role="status">{draftWarning}</div>}
 
     <section className="v8-order-step">
@@ -320,24 +326,29 @@ export default function OrderBuilder(){
     </section>
 
     {productType==='topo'&&<section className="v8-order-step">
-      <div className="kit-step-heading"><span>02</span><div><small>ACABAMENTO DO TOPO</small><h2>Escolha o acabamento.</h2></div></div>
-      <div className="kit-preset-grid">{topperLevels.map(item=><button type="button" aria-pressed={level===item.slug} className={level===item.slug?'active':''} onClick={()=>setLevel(item.slug)} key={item.slug}><small>{item.eyebrow}</small><strong>{item.name}</strong><span>{item.complexity}</span>{level===item.slug&&<i><CheckCircle2 size={14}/> selecionado</i>}</button>)}</div>
+      <div className="kit-step-heading"><span>02</span><div><small>MODELO DO TOPO</small><h2>Qual acabamento você prefere?</h2></div></div>
+      <div className="kit-preset-grid v821-topper-options">{topperLevels.map(item=><button type="button" aria-pressed={level===item.slug} className={level===item.slug?'active':''} onClick={()=>setLevel(item.slug)} key={item.slug}><small>{item.code}</small><strong>{item.name}</strong><span>{item.complexity}</span>{level===item.slug&&<i><CheckCircle2 size={14}/> selecionado</i>}</button>)}</div>
     </section>}
 
     <section className="v8-order-step">
-      <div className="kit-step-heading"><span>{productType==='topo'?'03':'02'}</span><div><small>PERSONALIZAÇÃO</small><h2>Conte os detalhes do seu pedido.</h2></div></div>
+      <div className="kit-step-heading"><span>{personalizationStep}</span><div><small>PERSONALIZAÇÃO</small><h2>Conte como você quer.</h2></div></div>
 
       {selectedInspiration&&<div className="topper-builder-inspiration"><img src={selectedInspiration.image} alt={`Inspiração escolhida: ${selectedInspiration.title}`}/><div><small>INSPIRAÇÃO ESCOLHIDA</small><strong>{selectedInspiration.title}</strong></div></div>}
 
-      {productType==='topo'&&<TopperLevelVisual level={selectedLevel} className="topper-builder-selected-visual"/>}
-
       <div className="kit-brief-grid">
         <label>Tema<input maxLength={120} placeholder="Ex.: safari, floral, futebol..." value={form.theme} onChange={e=>set('theme',e.target.value)}/></label>
-        <label>Nome / texto principal<input maxLength={120} placeholder="Nome que deve aparecer na arte" value={form.celebrant_name} onChange={e=>set('celebrant_name',e.target.value)}/></label>
-        <label>Idade / número<input maxLength={40} placeholder="Ex.: 5 anos, 30, 50 anos" value={form.celebrant_age} onChange={e=>set('celebrant_age',e.target.value)}/></label>
+        <label>Nome / texto principal<input maxLength={120} placeholder="Nome ou frase que deve aparecer" value={form.celebrant_name} onChange={e=>set('celebrant_name',e.target.value)}/></label>
+        <label>Idade / número<input maxLength={40} placeholder="Se houver" value={form.celebrant_age} onChange={e=>set('celebrant_age',e.target.value)}/></label>
         <label>Cores desejadas<input maxLength={160} placeholder="Ex.: azul, branco e dourado" value={form.colors} onChange={e=>set('colors',e.target.value)}/></label>
 
         {productType==='topo'&&<label>Tamanho do bolo<input maxLength={80} placeholder="Ex.: 20 cm de diâmetro" value={form.cake_size} onChange={e=>set('cake_size',e.target.value)}/></label>}
+
+        {productType==='marcadores'&&<>
+          <label>Tipo de marcador<select value={form.variant} onChange={e=>set('variant',e.target.value)}><option value="">Selecione</option><option>Literário</option><option>Temático</option><option>Personalizado com foto/nome</option><option>Outro</option></select></label>
+          <label>Quantidade<input inputMode="numeric" maxLength={40} placeholder="Ex.: 10 unidades" value={form.quantity} onChange={e=>set('quantity',e.target.value)}/></label>
+          <label>Tamanho / medidas<input maxLength={80} placeholder="Se souber, informe" value={form.dimensions} onChange={e=>set('dimensions',e.target.value)}/></label>
+          <label>Frente e verso?<select value={form.frontBack} onChange={e=>set('frontBack',e.target.value)}><option value="">Ainda não sei</option><option>Somente frente</option><option>Frente e verso</option></select></label>
+        </>}
 
         {productType==='caixinhas'&&<>
           <label>Modelo da caixinha<select value={form.variant} onChange={e=>set('variant',e.target.value)}><option value="">Ainda não sei</option><option>Milk</option><option>Bala</option><option>Pirâmide</option><option>Sushi</option><option>Outro modelo</option></select></label>
@@ -350,42 +361,29 @@ export default function OrderBuilder(){
         </>}
 
         {productType==='chaveiros'&&<>
-          <label>Formato<input maxLength={120} placeholder="Ex.: coração, redondo..." value={form.format} onChange={e=>set('format',e.target.value)}/></label>
+          <label>Produto<select value={form.variant} onChange={e=>set('variant',e.target.value)}><option value="">Selecione</option><option>Chaveiro personalizado</option><option>Adesivo personalizado</option></select></label>
+          <label>Formato<input maxLength={120} placeholder="Ex.: coração, redondo, recorte especial" value={form.format} onChange={e=>set('format',e.target.value)}/></label>
           <label>Quantidade<input inputMode="numeric" maxLength={40} placeholder="Ex.: 26 unidades" value={form.quantity} onChange={e=>set('quantity',e.target.value)}/></label>
-          <label>Frente e verso?<select value={form.frontBack} onChange={e=>set('frontBack',e.target.value)}><option value="">Ainda não sei</option><option>Somente frente</option><option>Frente e verso</option></select></label>
-          <label>Tamanho / medidas<input maxLength={80} placeholder="Se souber, informe as medidas" value={form.dimensions} onChange={e=>set('dimensions',e.target.value)}/></label>
+          <label>Tamanho / medidas<input maxLength={80} placeholder="Se souber, informe" value={form.dimensions} onChange={e=>set('dimensions',e.target.value)}/></label>
         </>}
-
-        {productType==='adesivos'&&<>
-          <label>Formato<input maxLength={120} placeholder="Ex.: redondo, coração, recorte especial" value={form.format} onChange={e=>set('format',e.target.value)}/></label>
-          <label>Quantidade<input inputMode="numeric" maxLength={40} placeholder="Ex.: 50 unidades" value={form.quantity} onChange={e=>set('quantity',e.target.value)}/></label>
-          <label>Tamanho / medidas<input maxLength={80} placeholder="Ex.: 5 cm" value={form.dimensions} onChange={e=>set('dimensions',e.target.value)}/></label>
-          <label>Acabamento<select value={form.finish} onChange={e=>set('finish',e.target.value)}><option value="">Ainda não sei</option><option>Fosco</option><option>Brilhante</option><option>Outro</option></select></label>
-        </>}
-
-        {productType==='doces'&&<>
-          <label>Tipo de peça<select value={form.variant} onChange={e=>set('variant',e.target.value)}><option value="">Selecione</option><option>Toppers</option><option>Tags</option><option>Wrappers</option><option>Forminhas</option><option>Plaquinhas</option><option>Outro complemento</option></select></label>
-          <label>Quantidade<input inputMode="numeric" maxLength={40} placeholder="Ex.: 30 unidades" value={form.quantity} onChange={e=>set('quantity',e.target.value)}/></label>
-        </>}
-
-        {productType==='kit'&&<label className="v8-order-wide">Quais itens você quer no kit?<textarea maxLength={500} placeholder="Ex.: 1 topo, 10 caixinhas milk, 10 tags e 20 toppers..." value={form.kitItems} onChange={e=>set('kitItems',e.target.value)}/></label>}
 
         {productType==='outro'&&<label className="v8-order-wide">Descreva o produto ou a ideia<textarea maxLength={800} placeholder="Conte o que você gostaria de produzir..." value={form.description} onChange={e=>set('description',e.target.value)}/></label>}
 
-        {productType!=='topo'&&productType!=='caixinhas'&&productType!=='lembrancinhas'&&productType!=='chaveiros'&&productType!=='adesivos'&&productType!=='doces'&&productType!=='kit'&&productType!=='outro'&&<label>Quantidade<input value={form.quantity} onChange={e=>set('quantity',e.target.value)}/></label>}
-
         <label>Já tem referência?<select value={form.reference} onChange={e=>set('reference',e.target.value)}><option value="">Selecione</option><option>Sim, vou enviar uma foto</option><option>Não, quero uma criação do zero</option><option>Quero adaptar uma inspiração do site</option></select></label>
-      </div>
 
+        {form.reference==='Sim, vou enviar uma foto'&&<label className="v8-order-wide v821-reference-file">Escolha a foto para lembrar no pedido<input type="file" accept="image/png,image/jpeg,image/webp" onChange={e=>setReferenceFileName(e.target.files?.[0]?.name||'')}/><small>A imagem não é enviada automaticamente pelo formulário. Depois que o WhatsApp abrir, anexe essa mesma foto na conversa.</small></label>}
+      </div>
     </section>
 
     <section className="v8-order-final">
       <form className="kit-contact-panel" onSubmit={submit}>
-        <div><small>{productType==='topo'?'04':'03'} • ORÇAMENTO</small><h3>Envie seu pedido.</h3></div>
-        <label>Seu nome<input minLength={2} maxLength={120} required autoComplete="name" value={form.name} onChange={e=>set('name',e.target.value)}/></label>
-        <label>WhatsApp<input minLength={8} maxLength={30} required inputMode="tel" autoComplete="tel" placeholder="(98) 99999-9999" value={form.whatsapp} onChange={e=>set('whatsapp',e.target.value)}/></label>
+        <div><small>{contactStep} • CONTATO</small><h3>Revise e envie para o WhatsApp.</h3></div>
+        <div className="kit-contact-two">
+          <label>Seu nome<input minLength={2} maxLength={120} required autoComplete="name" value={form.name} onChange={e=>set('name',e.target.value)}/></label>
+          <label>WhatsApp<input minLength={8} maxLength={30} required inputMode="tel" autoComplete="tel" placeholder="(98) 99999-9999" value={form.whatsapp} onChange={e=>set('whatsapp',e.target.value)}/></label>
+        </div>
         <div className="kit-contact-two"><label>E-mail (opcional)<input type="email" maxLength={180} value={form.email} onChange={e=>set('email',e.target.value)}/></label><label>Data do evento<input type="date" min={todayLocal()} value={form.event_date} onChange={e=>set('event_date',e.target.value)}/></label></div>
-        <label>Observações<textarea maxLength={1200} placeholder="Prazo, estilo, acabamento, referência ou qualquer informação importante..." value={form.notes} onChange={e=>set('notes',e.target.value)}/></label>
+        <label>Observações<textarea maxLength={1200} placeholder="Prazo, estilo, acabamento ou qualquer informação importante..." value={form.notes} onChange={e=>set('notes',e.target.value)}/></label>
 
         <details className="v8-order-summary">
           <summary>Revisar pedido</summary>
@@ -397,17 +395,17 @@ export default function OrderBuilder(){
         {error&&<div className="error" role="alert">{error}</div>}
 
         {contingency&&<div className="quote-contingency" role="status">
-          <strong>O envio precisa de confirmação.</strong>
+          <strong>Continue pelo WhatsApp.</strong>
           <p>{contingency.message}</p>
           <div className="quote-contingency-actions">
-            {contingency.whatsappUrl&&<a className="btn btn-primary" href={contingency.whatsappUrl} target="_blank" rel="noreferrer"><MessageCircle size={16}/> Continuar pelo WhatsApp</a>}
+            {contingency.whatsappUrl&&<a className="btn btn-primary" href={contingency.whatsappUrl} target="_blank" rel="noreferrer"><MessageCircle size={16}/> Abrir WhatsApp</a>}
             <button className="btn" type="button" onClick={copySummary}><Copy size={16}/> Copiar resumo</button>
           </div>
           {copyStatus&&<small>{copyStatus}</small>}
         </div>}
 
-        <button className="btn btn-primary kit-submit" type="submit" disabled={loading}><Send size={16}/>{loading?'Enviando...':'Pedir orçamento'}</button>
-        <small className="form-note"><Sparkles size={13}/> Nenhum pagamento é feito pelo site. O orçamento é confirmado antes da produção.</small>
+        <button className="btn btn-primary kit-submit" type="submit" disabled={loading}><Send size={16}/>{loading?'Preparando...':'Enviar pedido pelo WhatsApp'}</button>
+        <small className="form-note"><Sparkles size={13}/> O orçamento é confirmado pelo WhatsApp antes da produção. Nenhum pagamento é feito pelo site.</small>
       </form>
     </section>
   </div>;

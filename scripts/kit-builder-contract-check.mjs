@@ -7,6 +7,7 @@ const builder=read('components/TopperBuilder.tsx');
 const page=read('app/monte-seu-topo/page.tsx');
 const orderPage=read('app/monte-seu-pedido/page.tsx');
 const orderBuilder=read('components/OrderBuilder.tsx');
+const orderDraft=read('lib/order-draft.ts');
 const legacy=read('app/monte-seu-kit/page.tsx');
 const header=read('components/PublicTopperHeader.tsx');
 const home=read('app/page.tsx');
@@ -30,7 +31,10 @@ if(!header.includes("href:'/monte-seu-pedido'")&&!header.includes('href="/monte-
 if(!home.includes('href="/monte-seu-pedido"'))errors.push('home não oferece caminho direto para /monte-seu-pedido');
 if(!sitemap.includes('/monte-seu-pedido'))errors.push('sitemap não inclui /monte-seu-pedido');
 if(!orderPage.includes('<OrderBuilder/>'))errors.push('rota /monte-seu-pedido não monta OrderBuilder');
-for(const token of ["'topo'","'caixinhas'","'lembrancinhas'","'chaveiros'","'adesivos'","'doces'","'kit'","'outro'","'/api/inquiries'","desired_categories:[selectedProduct.label]"])if(!orderBuilder.includes(token))errors.push(`OrderBuilder sem contrato V8.06: ${token}`);
+for(const token of ["'topo'","'marcadores'","'caixinhas'","'lembrancinhas'","'chaveiros'","'outro'","'/api/inquiries'","desired_categories:[selectedProduct.label]"])if(!orderBuilder.includes(token))errors.push(`OrderBuilder sem contrato V8.21: ${token}`);
+for(const legacyType of ["'doces'","'kit'"])if(!orderDraft.includes(legacyType))errors.push(`rascunho não preserva compatibilidade com tipo legado: ${legacyType}`);
+if(orderBuilder.slice(orderBuilder.indexOf('const productTypes=['),orderBuilder.indexOf('const productQueryMap')).includes("key:'kit'"))errors.push('OrderBuilder não deve oferecer Kit como categoria pública enquanto não estiver ativo');
+if(orderBuilder.slice(orderBuilder.indexOf('const productTypes=['),orderBuilder.indexOf('const productQueryMap')).includes("key:'doces'"))errors.push('OrderBuilder não deve oferecer Doces como categoria pública');
 if(header.includes('href="/monte-seu-kit"'))errors.push('header ainda expõe o construtor antigo de kits');
 
 if(errors.length){
@@ -38,4 +42,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Order Builder Contract: OK — 6 níveis de topo preservados e V8.06 adiciona briefing adaptativo sem quebrar o fluxo legado.');
+console.log('Order Builder Contract: OK — 6 níveis de topo preservados e V8.21 adiciona marcadores sem expor kits/doces ainda não oferecidos.');

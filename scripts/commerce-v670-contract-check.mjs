@@ -26,12 +26,14 @@ if(isV809Footer){
   if(!home.includes('href="/orcamento"'))errors.push('Home V8.09 sem acesso a orçamento');
   if(isEssentialHome&&!home.includes('href="/catalogo"'))errors.push('Home V8.14 sem acesso ao catálogo, que concentra níveis e guia de acabamentos');
 }
-const dock=must('components/MerlinMobileDock.tsx',['href="/orcamento"','href="/monte-seu-pedido"']);
+const dock=must('components/MerlinMobileDock.tsx',["href:'/orcamento'","href:'/monte-seu-pedido'"]);
 const sitemap=must('app/sitemap.ts',['/guia-de-precos','/monte-seu-pedido','topperLevels.map']);
 
 if(catalog.includes('price_cents'))errors.push('linha de níveis não deve inventar preço fixo');
 if(price.match(/R\$\s*\d/))errors.push('guia de níveis não deve publicar preço não validado');
-for(const source of [home,header,footer,dock])if(source.includes('href="/monte-seu-kit"'))errors.push('jornada pública ainda oferece Monte seu Kit');
+for(const source of [home,header,footer,dock]){
+  if(source.includes('href="/monte-seu-kit"')||source.includes("href:'/monte-seu-kit'"))errors.push('jornada pública ainda oferece Monte seu Kit');
+}
 if(detail.includes('getProductBySlug'))errors.push('detalhe público ainda resolve produto legado do banco');
 if(!builder.includes("source:'site'"))errors.push('briefing de topo precisa manter atribuição de origem site');
 
@@ -42,4 +44,4 @@ const workflow=read('.github/workflows/ci.yml');
 if(!workflow.includes('check:commerce-v670'))errors.push('CI não executa o contrato comercial');
 
 if(errors.length){console.error(`TOPPER_COMMERCE_CONTRACT_FAIL (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('TOPPER_COMMERCE_CONTRACT_OK — catálogo, orçamento e navegação clean protegidos; Home V8.14 não duplica o guia de acabamentos.');
+console.log('TOPPER_COMMERCE_CONTRACT_OK — catálogo, orçamento e navegação clean protegidos; dock móvel V8.21 usa rotas orientadas por dados.');

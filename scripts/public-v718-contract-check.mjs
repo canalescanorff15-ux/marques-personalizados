@@ -20,14 +20,14 @@ if(fs.existsSync('app/page.tsx')){
   const isV8=home.includes('v8-home-products');
   const isEssentialHome=home.includes('v8-essential-home-v814');
   const required=isEssentialHome
-    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','publicTopperInspirations']
+    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','publicTopperInspirations','Feito por Nós']
     : isV8
       ? ['home-v718-brand-signature','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada']
     : ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal'];
   for(const token of required){
-    if(!home.includes(token))errors.push('Home '+(isV8?'V8.02':'V7.18')+' sem '+token);
+    if(!home.includes(token))errors.push('Home '+(isV8?'V8.21':'V7.18')+' sem '+token);
   }
-  if(isV8&&home.includes('home-v717-showcase-seal'))errors.push('Home V8.02 não deve reintroduzir selo editorial legado');
+  if(isV8&&home.includes('home-v717-showcase-seal'))errors.push('Home V8 não deve reintroduzir selo editorial legado');
   if(!isEssentialHome&&!home.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('Home legada não usa a logo configurável da marca');
 }
 
@@ -60,11 +60,15 @@ if(fs.existsSync('app/public-v718.css')){
 
 if(fs.existsSync('components/PublicTopperHeader.tsx')){
   const header=read('components/PublicTopperHeader.tsx');
-  if(!header.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('header não usa logo configurável');
+  const official=header.includes('merlin-logo-oficial.webp');
+  const configurable=header.includes("settings.logo_url||'/merlin-logo.webp'");
+  if(!official&&!configurable)errors.push('header não usa logo oficial/configurável');
 }
 if(fs.existsSync('components/Footer.tsx')){
   const footer=read('components/Footer.tsx');
-  if(!footer.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('footer não usa logo configurável');
+  const official=footer.includes('merlin-logo-oficial.webp');
+  const configurable=footer.includes("settings.logo_url||'/merlin-logo.webp'");
+  if(!official&&!configurable)errors.push('footer não usa logo oficial/configurável');
 }
 
 if(errors.length){
@@ -72,4 +76,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.14 Premium Global Brand Contract: OK — marca, header, Home essencial, cards, formulários e footer protegidos.');
+console.log('V8.21 Premium Global Brand Contract: OK — logo oficial, marca, header, Home, cards, formulários e footer protegidos.');
