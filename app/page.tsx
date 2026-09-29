@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, BookOpen, Box, Gift, KeyRound, Layers3, MessageCircle, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
@@ -27,71 +28,79 @@ export default async function HomePage(){
   const featuredInspirations=homeInspirationCodes.map(code=>publicTopperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof publicTopperInspirations;
   const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:'Merlin Encantos em Papel',url:siteUrl||undefined,description:'Topos de bolo, marcadores e papelaria personalizada feitos sob encomenda.',logo:OFFICIAL_LOGO,telephone:settings.whatsapp_number,areaServed:settings.location};
 
-  return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719 v8-clean-home v8-essential-home-v814 v821-home">
+  return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719 v8-clean-home v8-essential-home-v814 v821-home v822-home">
     <Header settings={settings}/>
     <JsonLd data={organizationJsonLd}/>
 
-    <section className="hero premium-hero home-v717-hero v8-clean-hero v821-home-hero" id="inicio">
+    <section className="hero premium-hero home-v717-hero v8-clean-hero v821-home-hero v822-home-hero" id="inicio">
       <div className="container hero-grid">
         <div className="hero-copy-column" data-reveal>
+          <span className="v822-hero-kicker">FEITO SOB ENCOMENDA</span>
           <h1>Personalizados feitos para <span>ter a sua cara.</span></h1>
           <p className="hero-copy">Topos de bolo, marcadores e papelaria personalizada criados sob encomenda para o seu tema, suas cores e o seu momento.</p>
           <div className="hero-actions">
-            <Link className="btn btn-primary btn-luxury" href="/catalogo">Ver topos <Layers3 size={17}/></Link>
-            <Link className="btn btn-ghost" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
+            <Link className="btn btn-primary btn-luxury" href="/orcamento">Pedir orçamento <ArrowUpRight size={16}/></Link>
+            <Link className="btn btn-ghost" href="/catalogo">Ver topos <Layers3 size={17}/></Link>
+          </div>
+          <div className="v822-hero-trust" aria-label="Diferenciais Merlin">
+            <span>Produção artesanal</span><span>Personalizado para você</span><span>Atendimento pelo WhatsApp</span>
           </div>
         </div>
 
-        {featuredInspirations[0]&&<Link className="home-v717-showcase v8-clean-hero-media" href={'/inspiracoes/'+featuredInspirations[0].code} data-reveal>
-          <img src={featuredInspirations[0].image} alt={'Inspiração de topo '+featuredInspirations[0].title}/>
-        </Link>}
+        <div className="v822-hero-visual" data-reveal>
+          <Link className="home-v717-showcase v8-clean-hero-media v822-hero-real" href="/orcamento" aria-label="Pedir orçamento para um personalizado como este">
+            <Image src={REAL_WORKS[0].src} alt={REAL_WORKS[0].title} fill sizes="(max-width: 900px) 100vw, 46vw" priority quality={82}/>
+            <span className="v822-hero-badge"><Sparkles size={14}/> Produção Merlin</span>
+          </Link>
+          <div className="v822-hero-proof"><strong>{REAL_WORKS[0].title}</strong><span>{REAL_WORKS[0].copy}</span></div>
+        </div>
       </div>
     </section>
 
     <section className="v8-home-products v8-clean-products v821-home-products" id="personalizados">
       <div className="container">
         <div className="v8-clean-section-head" data-reveal>
-          <div><h2>O que fazemos.</h2></div>
+          <div><small className="v822-section-kicker">PERSONALIZADOS</small><h2>O que fazemos.</h2></div>
           <Link href="/personalizados">Ver personalizados <ArrowUpRight size={15}/></Link>
         </div>
 
         <div className="v8-home-products-grid v8-clean-products-grid v821-product-grid">
-          <Link href="/catalogo" className="v8-home-product-card is-featured"><span><Layers3 size={20}/></span><h3>Topos de Bolo</h3></Link>
-          <Link href="/personalizados#marcadores" className="v8-home-product-card"><span><BookOpen size={20}/></span><h3>Marcadores de Página</h3></Link>
-          <Link href="/personalizados#lembrancinhas" className="v8-home-product-card"><span><Gift size={20}/></span><h3>Lembrancinhas</h3></Link>
-          <Link href="/personalizados#adesivos-chaveiros" className="v8-home-product-card"><span><KeyRound size={20}/></span><h3>Adesivos & Chaveiros</h3></Link>
-          <Link href="/personalizados#caixinhas" className="v8-home-product-card"><span><Box size={20}/></span><h3>Caixinhas</h3><small>Sob consulta</small></Link>
-          <Link href="/personalizados#outros" className="v8-home-product-card"><span><Sparkles size={20}/></span><h3>Outros Personalizados</h3></Link>
+          <Link href="/catalogo" className="v8-home-product-card v822-product-card is-featured"><span><Layers3 size={20}/></span><h3>Topos de Bolo</h3><i>Ver modelos</i></Link>
+          <Link href="/personalizados#marcadores" className="v8-home-product-card v822-product-card"><span><BookOpen size={20}/></span><h3>Marcadores de Página</h3><i>Personalizados</i></Link>
+          <Link href="/personalizados#lembrancinhas" className="v8-home-product-card v822-product-card"><span><Gift size={20}/></span><h3>Lembrancinhas</h3><i>Sob encomenda</i></Link>
+          <Link href="/personalizados#adesivos-chaveiros" className="v8-home-product-card v822-product-card"><span><KeyRound size={20}/></span><h3>Adesivos & Chaveiros</h3><i>Nome, foto ou tema</i></Link>
+          <Link href="/personalizados#caixinhas" className="v8-home-product-card v822-product-card"><span><Box size={20}/></span><h3>Caixinhas</h3><small>Sob consulta</small></Link>
+          <Link href="/personalizados#outros" className="v8-home-product-card v822-product-card"><span><Sparkles size={20}/></span><h3>Outros Personalizados</h3><i>Conte sua ideia</i></Link>
         </div>
       </div>
     </section>
 
-    <section className="v821-real-work" id="feito-por-nos">
+    <section className="v821-real-work v822-real-work" id="feito-por-nos">
       <div className="container">
         <div className="v8-clean-section-head" data-reveal>
-          <div><small>TRABALHOS REAIS</small><h2>Feito por Nós.</h2></div>
+          <div><small>TRABALHOS REAIS</small><h2>Feito por Nós.</h2><p className="v822-section-copy">Peças que já saíram da nossa bancada, com impressão, recorte e acabamento feitos pela Merlin.</p></div>
           <Link href="/orcamento">Quero encomendar <ArrowUpRight size={15}/></Link>
         </div>
-        <div className="v821-real-work-grid">
-          {REAL_WORKS.map(item=><article className="v821-real-work-card" key={item.src}>
-            <img src={item.src} alt={item.title} loading="lazy" decoding="async"/>
+        <div className="v821-real-work-grid v822-real-work-grid">
+          {REAL_WORKS.map((item,index)=><article className="v821-real-work-card v822-real-work-card" key={item.src}>
+            <div className="v822-real-work-media"><Image src={item.src} alt={item.title} width={900} height={1125} sizes="(max-width: 560px) 100vw, (max-width: 820px) 50vw, 25vw" quality={index===0?82:76}/><span>Produção Merlin</span></div>
             <div><strong>{item.title}</strong><span>{item.copy}</span></div>
           </article>)}
         </div>
       </div>
     </section>
 
-    <section className="home-v717-inspiration-story v8-clean-inspirations v821-inspirations">
+    <section className="home-v717-inspiration-story v8-clean-inspirations v821-inspirations v822-inspirations">
       <div className="container">
         <div className="home-v717-story-head v8-clean-section-head" data-reveal>
-          <div><small>REFERÊNCIAS</small><h2>Inspirações para <em>começar sua ideia.</em></h2></div>
+          <div><small>REFERÊNCIAS</small><h2>Inspirações para <em>começar sua ideia.</em></h2><p className="v822-section-copy">Escolha uma referência e nós adaptamos cores, nome, idade e detalhes ao seu pedido.</p></div>
           <Link href="/inspiracoes">Ver todas <ArrowUpRight size={15}/></Link>
         </div>
 
-        <div className="home-v717-gallery-grid v8-clean-gallery">
-          {featuredInspirations.map(item=><Link className="home-v717-gallery-card" href={'/inspiracoes/'+item.code} key={item.code}>
-            <img src={item.image} alt={'Inspiração de topo '+item.title}/>
-            <div className="home-v717-gallery-info"><strong>{item.title}</strong></div>
+        <div className="home-v717-gallery-grid v8-clean-gallery v822-inspiration-grid">
+          {featuredInspirations.map(item=><Link className="home-v717-gallery-card v822-inspiration-card" href={'/inspiracoes/'+item.code} key={item.code}>
+            <Image src={item.image} alt={'Inspiração de topo '+item.title} width={900} height={675} sizes="(max-width: 680px) 100vw, 33vw" quality={76}/>
+            <div className="home-v717-gallery-info"><strong>{item.title}</strong><span>Usar como referência <ArrowUpRight size={14}/></span></div>
           </Link>)}
         </div>
 
@@ -99,9 +108,9 @@ export default async function HomePage(){
       </div>
     </section>
 
-    <section className="v8-clean-contact" id="contato">
+    <section className="v8-clean-contact v822-contact" id="contato">
       <div className="container home-v717-contact-shell">
-        <div><h2>Conte sua ideia.</h2></div>
+        <div><small>SEU PEDIDO COMEÇA AQUI</small><h2>Conte sua ideia.</h2><p>Envie tema, data e os detalhes que você imagina. A gente organiza o restante com você.</p></div>
         <div>
           <Link className="btn btn-primary btn-luxury" href="/monte-seu-pedido">Monte seu Pedido <ArrowUpRight size={16}/></Link>
           {wa&&<a className="btn btn-ghost" href={wa} target="_blank" rel="noreferrer"><MessageCircle size={16}/> WhatsApp</a>}
