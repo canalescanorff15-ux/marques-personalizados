@@ -80,7 +80,7 @@ if(fs.existsSync('components/TopperInspirationGallery.tsx')){
 }
 if(fs.existsSync('lib/topper-catalog.ts')){
   const catalog=read('lib/topper-catalog.ts');
-  if(!catalog.includes("name:'Topo Elite Shaker + Acetato'"))errors.push('catálogo sem nome longo do nível Elite para teste de encaixe');
+  if(!catalog.includes("name:'Topo Luxo — Movimento + Acetato'"))errors.push('catálogo sem nome longo atual do nível completo para teste de encaixe');
 }
 if(fs.existsSync('lib/topper-inspirations.ts')){
   const inspirations=read('lib/topper-inspirations.ts');
@@ -92,4 +92,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V7.16/V8.09 Global Visual Audit Contract: OK — busca contextual, preço, filtros, texto e breakpoints protegidos.');
+console.log('V7.16/V8.21 Global Visual Audit Contract: OK — busca contextual, nomes atuais, filtros, texto e breakpoints protegidos.');
