@@ -1,0 +1,122 @@
+/* V8.23 — preços de lançamento e quatro linhas atuais */
+.v823-pricing-card{
+  grid-template-columns:160px minmax(0,1fr);
+  overflow:hidden;
+}
+.v823-card-visual{
+  display:block;
+  color:inherit;
+}
+.v823-card-copy{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+}
+.v823-card-copy>small{
+  color:#9a7182;
+  font-size:.56rem;
+  font-weight:900;
+  letter-spacing:.09em;
+}
+.v823-card-copy h2{
+  margin:6px 0 10px;
+}
+.v823-card-copy h2 a{
+  color:inherit;
+  text-decoration:none;
+}
+.v823-price-badge{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  margin:0 0 14px;
+  padding:7px 11px;
+  border:1px solid rgba(126,31,57,.14);
+  border-radius:999px;
+  background:#fff7f4;
+  color:#7e1f39;
+  font-size:.78rem;
+  font-weight:900;
+  letter-spacing:-.01em;
+}
+.v823-card-actions{
+  width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 12px;
+  margin-top:auto;
+}
+.v823-card-actions>a{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  color:var(--v8-rose,#c93c72);
+  font-size:.68rem;
+  font-weight:900;
+  text-decoration:none;
+}
+.v823-card-actions .v823-whatsapp-cta{
+  min-height:36px;
+  padding:0 11px;
+  border:1px solid rgba(126,31,57,.12);
+  border-radius:999px;
+  background:#7e1f39;
+  color:#fff;
+}
+.v823-launch-note,
+.v823-base-price-note{
+  margin:20px 0 0;
+  color:#7c6b73;
+  font-size:.69rem;
+  line-height:1.55;
+}
+.v823-launch-note{
+  padding:14px 18px;
+  border-left:2px solid #c8a269;
+  border-radius:0 12px 12px 0;
+  background:#fffaf3;
+}
+.v823-base-price-note{
+  max-width:660px;
+  padding:11px 13px;
+  border:1px solid rgba(200,162,105,.22);
+  border-radius:12px;
+  background:#fffaf3;
+}
+.v823-detail-price{
+  color:#7e1f39!important;
+}
+
+.v823-price-guide-table .price-guide-row>span:nth-child(3),
+.v823-price-guide-table .price-guide-row>strong:nth-child(3){
+  color:#7e1f39;
+  font-weight:900;
+}
+.v823-price-guide-note{
+  margin:20px 0 0;
+  padding:14px 18px;
+  border:1px solid rgba(200,162,105,.22);
+  border-radius:14px;
+  background:#fffaf3;
+  color:#74656c;
+  font-size:.72rem;
+  line-height:1.55;
+}
+
+@media(max-width:640px){
+  .v823-pricing-card{
+    grid-template-columns:100px minmax(0,1fr);
+  }
+  .v823-card-actions{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .v823-card-actions .v823-whatsapp-cta{
+    min-height:34px;
+  }
+  .v823-price-badge{
+    font-size:.73rem;
+  }
+}

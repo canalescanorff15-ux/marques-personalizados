@@ -13,7 +13,6 @@ const base32Alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
 function decodeBase32(secret){let bits='';for(const char of secret){const index=base32Alphabet.indexOf(char);if(index<0)throw new Error('E2E_ADMIN_TOTP_SECRET inválido.');bits+=index.toString(2).padStart(5,'0');}const bytes=[];for(let offset=0;offset+8<=bits.length;offset+=8)bytes.push(Number.parseInt(bits.slice(offset,offset+8),2));return Buffer.from(bytes);}
 function currentTotp(secret){const step=Math.floor(Date.now()/1000/30);const counter=Buffer.alloc(8);counter.writeBigUInt64BE(BigInt(step));const digest=crypto.createHmac('sha1',decodeBase32(secret)).update(counter).digest();const offset=digest[digest.length-1]&15;const binary=((digest[offset]&127)<<24)|((digest[offset+1]&255)<<16)|((digest[offset+2]&255)<<8)|(digest[offset+3]&255);return String(binary%1_000_000).padStart(6,'0');}
 
-
 function assert(ok,label,detail=''){assertions++;console.log(`${ok?'✓':'✗'} ${label}${detail?` — ${detail}`:''}`);if(!ok)failures++;}
 async function request(path,options={}){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12_000);try{return await fetch(`${base}${path}`,{redirect:'manual',...options,signal:controller.signal});}finally{clearTimeout(timer);}}
 async function bodyJson(response){try{return await response.json();}catch{return {};}}
@@ -46,7 +45,6 @@ function applySetCookies(jar,response){
 }
 function cookieHeader(jar){return [...jar].map(([name,value])=>`${name}=${value}`).join('; ');}
 
-
 async function waitForServer(){for(let i=0;i<40;i++){try{const r=await request('/api/health?mode=live');if(r.ok)return true;}catch{}await new Promise(resolve=>setTimeout(resolve,500));}return false;}
 
 try{
@@ -58,9 +56,9 @@ try{
 
   r=await request('/catalogo');assert(r.ok,'Catálogo de topos responde',`HTTP ${r.status}`);
   r=await request('/catalogo/essencial');assert(r.ok,'Detalhe TOP-01 responde',`HTTP ${r.status}`);
-  const topperHtml=await r.text();assert(/Topo Essencial|TOP-01/i.test(topperHtml),'Detalhe TOP-01 contém identificação do nível');
-  r=await request('/monte-seu-pedido');assert(r.ok,'Monte seu Pedido responde',`HTTP ${r.status}`);r=await request('/monte-seu-topo');assert(r.ok,'Monte seu topo legado continua acessível',`HTTP ${r.status}`);
-  const builderHtml=await r.text();assert(/Monte seu topo|Do simples ao Elite/i.test(builderHtml),'Configurador de topo retorna a nova jornada');
+  const topperHtml=await r.text();assert(/Topo Clássico|TOP-01/i.test(topperHtml),'Detalhe TOP-01 contém identificação do nível atual');
+  r=await request('/monte-seu-pedido');assert(r.ok,'Monte seu Pedido responde',`HTTP ${r.status}`);
+  r=await request('/monte-seu-topo');assert([301,302,303,307,308].includes(r.status),'Monte seu topo legado redireciona',`HTTP ${r.status}`);assert((r.headers.get('location')||'').includes('/monte-seu-pedido?produto=topo'),'Redirecionamento do topo legado aponta para o pedido atual');
   r=await request('/monte-seu-kit');assert([301,302,303,307,308].includes(r.status),'Monte seu kit legado redireciona',`HTTP ${r.status}`);assert((r.headers.get('location')||'').includes('/monte-seu-pedido'),'Redirecionamento legado aponta para Monte seu Pedido');
   r=await request('/categorias/legado');assert([301,302,303,307,308].includes(r.status),'Categoria legada não expõe catálogo antigo',`HTTP ${r.status}`);
   r=await request('/api/catalog?page=1&limit=3');const catalog=await bodyJson(r);assert(r.ok&&Array.isArray(catalog.items),'API de catálogo preservada para compatibilidade interna');assert(Number.isInteger(catalog.page)&&Number.isInteger(catalog.page_size),'API de catálogo mantém paginação consistente');

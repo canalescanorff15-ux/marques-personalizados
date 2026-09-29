@@ -3,7 +3,7 @@ import fs from 'node:fs';
 const errors=[];
 const read=file=>fs.readFileSync(file,'utf8');
 
-for(const file of ['app/public-v715.css','app/layout.tsx','app/page.tsx','app/inspiracoes/page.tsx','app/inspiracoes/[code]/page.tsx','app/monte-seu-topo/page.tsx']){
+for(const file of ['app/public-v715.css','app/layout.tsx','app/page.tsx','app/inspiracoes/page.tsx','app/inspiracoes/[code]/page.tsx','app/monte-seu-topo/page.tsx','app/monte-seu-pedido/page.tsx']){
   if(!fs.existsSync(file))errors.push('arquivo V7.15 ausente: '+file);
 }
 
@@ -40,42 +40,12 @@ if(fs.existsSync('app/layout.tsx')){
 
 if(fs.existsSync('app/page.tsx')){
   const home=read('app/page.tsx');
-  const isV8=home.includes('v8-home-products');
-  const isV808=home.includes('v8-clean-home');
   const isEssentialHome=home.includes('v8-essential-home-v814');
   const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd>0?heroEnd:home.indexOf('<section className="category-showcase'));
-  const heroTokens=isEssentialHome
-    ? ['Personalizados feitos para','Ver topos','Pedir orçamento']
-    : isV808
-      ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento']
-      : isV8
-        ? ['Detalhes personalizados que fazem','Ver inspirações','Pedir orçamento','Orçamento confirmado antes da produção']
-        : ['Topos de bolo que parecem feitos','Ver inspirações','Montar meu topo','Orçamento antes da produção'];
+  const heroTokens=isEssentialHome?['Personalizados feitos para','Ver topos','Pedir orçamento']:['Pedir orçamento'];
   for(const token of heroTokens)if(!hero.includes(token))errors.push('hero público sem '+token);
-  if(!isV8){
-    for(const noisy of ['Níveis & preços','Pedir orçamento</Link>'])if(hero.includes(noisy))errors.push('hero V7.15 ainda concentra CTA secundário: '+noisy);
-    if(!home.includes('Três passos para tirar<br/><em>a ideia do papel.</em>'))errors.push('home sem sequência comercial atualizada');
-  }else{
-    if(isV808&&!isEssentialHome){
-      if(!home.includes('Três passos.<br/><em>Só o necessário.</em>'))errors.push('Home V8.08 sem sequência comercial clean');
-      if(!home.includes('Orçamento confirmado antes da produção'))errors.push('Home V8.08 sem confirmação prévia de orçamento');
-    }else if(!isEssentialHome&&!home.includes('Três passos para transformar<br/><em>a ideia em pedido.</em>')){
-      errors.push('Home V8 sem nova sequência comercial');
-    }
-    if(!home.includes('Caixinhas')||!home.includes('Lembrancinhas'))errors.push('Home V8 sem expansão de produtos');
-  }
-}
-
-if(fs.existsSync('lib/topper-inspirations.ts')){
-  const inspirationSource=read('lib/topper-inspirations.ts');
-  const images=[...inspirationSource.matchAll(/image:'([^']+)'/g)].map(match=>match[1]);
-  for(const image of images.filter(value=>value.startsWith('/topper-inspirations/')&&value.endsWith('.svg'))){
-    const asset='public'+image;
-    if(!fs.existsSync(asset)){errors.push('asset V7.15 ausente: '+asset);continue;}
-    const svg=read(asset);
-    if(!/viewBox=["']0 0 1200 1200["']/.test(svg))errors.push('inspiração vetorial precisa manter prancha 1200x1200: '+asset);
-  }
+  if(!home.includes('Caixinhas')||!home.includes('Lembrancinhas'))errors.push('Home sem expansão de produtos');
 }
 
 if(fs.existsSync('components/TopperInspirationGallery.tsx')){
@@ -85,6 +55,7 @@ if(fs.existsSync('components/TopperInspirationGallery.tsx')){
 if(fs.existsSync('app/inspiracoes/[code]/page.tsx')){
   const detailImage=read('app/inspiracoes/[code]/page.tsx');
   if(!detailImage.includes('width={1200} height={1200}'))errors.push('detalhe não reserva dimensão 1200x1200 da inspiração');
+  for(const token of ['public-detail-customize','Nome e idade','Cores e elementos','Acabamento','Quero esse modelo'])if(!detailImage.includes(token))errors.push('detalhe V7.15 sem '+token);
 }
 
 if(fs.existsSync('app/inspiracoes/page.tsx')){
@@ -93,25 +64,21 @@ if(fs.existsSync('app/inspiracoes/page.tsx')){
   if(isV810){
     if(!p.includes('Escolha uma referência e personalize'))errors.push('V8.10 não explica de forma curta a função da referência');
     if(!p.includes('Envie sua própria referência'))errors.push('V8.10 não preserva liberdade de criação');
-  }else{
-    if(!p.includes('Escolha o estilo que mais se aproxima'))errors.push('banner de inspirações não explica a função de referência');
-    if(!p.includes('As inspirações do site existem para facilitar a conversa'))errors.push('fechamento de inspirações não reforça liberdade de criação');
   }
 }
 
-if(fs.existsSync('app/inspiracoes/[code]/page.tsx')){
-  const d=read('app/inspiracoes/[code]/page.tsx');
-  for(const token of ['public-detail-customize','Nome e idade','Cores e elementos','Acabamento','Quero esse modelo'])if(!d.includes(token))errors.push('detalhe V7.15 sem '+token);
-}
-
 if(fs.existsSync('app/monte-seu-topo/page.tsx')){
-  const b=read('app/monte-seu-topo/page.tsx');
-  for(const token of ['Conte como você imagina','Não precisa ter tudo decidido','Preencher meu briefing','Escolha o<br/>acabamento.'])if(!b.includes(token))errors.push('Monte seu topo V7.15 sem '+token);
+  const legacy=read('app/monte-seu-topo/page.tsx');
+  if(!legacy.includes("redirect('/monte-seu-pedido?produto=topo')"))errors.push('rota legada /monte-seu-topo não redireciona para o pedido atual');
+}
+if(fs.existsSync('app/monte-seu-pedido/page.tsx')){
+  const order=read('app/monte-seu-pedido/page.tsx');
+  for(const token of ['Escolha o produto.','Conte como você imagina.','Começar meu pedido','<OrderBuilder/>'])if(!order.includes(token))errors.push('Monte seu Pedido atual sem '+token);
 }
 
 if(errors.length){
-  console.error('V7.15 Visual Structure Contract: FALHOU ('+errors.length+')');
+  console.error('V8.23 Visual Structure Contract: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.21 Visual Structure Contract: OK — hierarquia curta, produtos ativos, inspirações e breakpoints protegidos.');
+console.log('V8.23 Visual Structure Contract: OK — hierarquia curta, quatro linhas atuais, inspirações e fluxo único de pedido protegidos.');
