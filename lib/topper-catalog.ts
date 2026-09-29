@@ -12,6 +12,7 @@ export type TopperLevel={
   highlight?:boolean;
 };
 
+// Compatibilidade técnica pré-V8.21 (não exibida): Topo Simples | Topo Básico 3D | Topo Shaker | Topo Elite Shaker + Acetato
 export const topperLevels:TopperLevel[]=[
   {
     slug:'essencial',code:'TOP-01',name:'Topo Essencial',eyebrow:'PERSONALIZADO E DIRETO',
