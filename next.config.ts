@@ -39,6 +39,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: '/monte-seu-topo', destination: '/monte-seu-pedido?produto=topo', permanent: true },
       { source: '/monte-seu-kit', destination: '/monte-seu-pedido', permanent: true },
       { source: '/categorias/:path*', destination: '/catalogo', permanent: true },
       { source: '/temas/:path*', destination: '/inspiracoes', permanent: true },
