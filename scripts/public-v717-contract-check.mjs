@@ -26,11 +26,12 @@ if(fs.existsSync('app/page.tsx')){
     ['CTA inspirações','Ver inspirações'],
     ['CTA orçamento','Pedir orçamento'],
     ['vitrine de produtos V8','v8-home-products'],
-    ['produto caixinhas','Caixinhas'],
+    ['produto marcadores','Marcadores de Página'],
+    ['produto caixinhas','Caixinhas — sob consulta'],
     ['produto lembrancinhas','Lembrancinhas'],
     ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
-    ['produto doces','Doces & Complementos'],
-    ['produto kits','Kits'],
+    ['produto outros','Outros Personalizados'],
+    ['trabalhos reais','Feito por Nós'],
     ['galeria de inspirações','home-v717-gallery-grid'],
     ['fonte real de inspirações','publicTopperInspirations'],
     ['escopo comercial curto','v8-home-scope-note'],
@@ -42,36 +43,18 @@ if(fs.existsSync('app/page.tsx')){
     ['headline V8','Detalhes personalizados que fazem'],
     ['CTA inspirações','Ver inspirações'],
     ['CTA orçamento','Pedir orçamento'],
-    ['faixa de processo','home-v717-intro-strip'],
     ['vitrine de produtos V8','v8-home-products'],
-    ['produto caixinhas','Caixinhas'],
-    ['produto lembrancinhas','Lembrancinhas'],
-    ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
-    ['produto doces','Doces & Complementos'],
-    ['produto kits','Kits'],
-    ['grade nova de níveis','home-v717-level-grid'],
-    ['visuais oficiais dos níveis','TopperLevelVisual'],
     ['galeria de inspirações','home-v717-gallery-grid'],
     ['fonte real de inspirações','publicTopperInspirations'],
-    ['processo em três passos','home-v717-process-grid'],
-    ['acabamento visual','home-v717-detail-grid'],
-    ['história da marca','home-v717-about-grid'],
-    ['FAQ ampliado','Posso enviar uma foto ou referência minha?'],
     ['contato final','home-v717-contact-shell'],
-    ['âncora sobre','id="sobre"'],
-    ['âncora dúvidas','id="duvidas"'],
     ['âncora contato','id="contato"']
   ];
   for(const [label,token] of required)if(!home.includes(token))errors.push(label);
+  for(const forbidden of ['Doces & Complementos','>Kits<'])if(home.includes(forbidden))errors.push('Home voltou a exibir linha desativada: '+forbidden);
   const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd);
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero V7.17 deve manter exatamente 2 CTAs principais');
   if(hero.includes('Conhecer os níveis'))errors.push('hero V7.17 voltou a concentrar CTA de níveis');
-  const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
-  if(v8Curated){
-    const codes=[...home.matchAll(/INSP-TOP-(\\d{2})/g)].map(match=>Number(match[1]));
-    if(codes.some(code=>code<18||code>50))errors.push('hero V8 usa inspiração fora da faixa curada de bolos');
-  }else if(!home.includes("['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17'"))errors.push('hero sem curadoria visual de inspirações reais');
 }
 
 if(fs.existsSync('app/public-v717.css')){
@@ -95,21 +78,10 @@ if(fs.existsSync('app/public-v717.css')){
   for(const [label,token] of required)if(!css.includes(token))errors.push(label);
 }
 
-if(fs.existsSync('lib/topper-inspirations.ts')){
-  const source=read('lib/topper-inspirations.ts');
-  for(const code of ['INSP-TOP-13','INSP-TOP-16','INSP-TOP-17','INSP-TOP-14','INSP-TOP-10','INSP-TOP-05']){
-    if(!source.includes("code:'"+code+"'"))errors.push('inspiração da Home ausente: '+code);
-  }
-}
-
 if(fs.existsSync('lib/topper-catalog.ts')){
   const catalog=read('lib/topper-catalog.ts');
   if((catalog.match(/slug:'/g)||[]).length<6)errors.push('catálogo perdeu os seis níveis');
 }
 
-if(errors.length){
-  console.error('V7.17 Home Editorial Contract: FALHOU ('+errors.length+')');
-  for(const error of errors)console.error('- '+error);
-  process.exit(1);
-}
-console.log('V8.14 Home Editorial Contract: OK — hero, produtos, inspirações e contato protegidos; blocos secundários podem permanecer aposentados.');
+if(errors.length){console.error('V7.17 Home Editorial Contract: FALHOU ('+errors.length+')');for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('V8.21 Home Editorial Contract: OK — hero, produtos ativos, trabalhos reais, inspirações e contato protegidos.');

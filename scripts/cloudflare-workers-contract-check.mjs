@@ -10,7 +10,7 @@ assert(exists('vite.config.ts'),'vite.config.ts ausente');
 assert(exists('CLOUDFLARE.md'),'CLOUDFLARE.md ausente');
 
 const wrangler=read('wrangler.jsonc');
-assert(/"name"\s*:\s*"merlin-encantos-em-papel"/.test(wrangler),'Worker deve usar o nome merlin-encantos-em-papel');
+assert(/"name"\s*:\s*"merlin"/.test(wrangler),'Worker deve usar o nome merlin após a renomeação pública');
 assert(/"nodejs_compat"/.test(wrangler),'Workers precisa de nodejs_compat para o runtime atual');
 assert(/"main"\s*:\s*"vinext\/server\/fetch-handler"/.test(wrangler),'entrypoint vinext do Worker ausente');
 assert(/"directory"\s*:\s*"dist\/client"/.test(wrangler),'Static Assets devem sair de dist/client');
@@ -49,4 +49,4 @@ if(failures.length){
   for(const f of failures)console.error(`- ${f}`);
   process.exit(1);
 }
-console.log('Cloudflare Workers Contract: OK — vinext + Static Assets + Workers Cache prontos; bindings de dashboard preservados e DATABASE_URL obrigatória; Neon e R2 seguem externos.');
+console.log('Cloudflare Workers Contract: OK — Worker merlin + vinext + Static Assets prontos; bindings preservados e DATABASE_URL obrigatória.');

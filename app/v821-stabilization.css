@@ -1,0 +1,92 @@
+/* V8.21 — estabilização comercial, navegação e trabalhos reais */
+
+/* Marca oficial: a própria logo já comunica a marca completa. */
+.v8-simple-header .public-brand-logo{
+  width:58px!important;height:58px!important;flex:0 0 58px!important;
+  border-radius:50%!important;overflow:hidden!important;background:#fff!important;
+}
+.v8-simple-header .public-brand-logo img{object-fit:cover!important}
+.v821-brand-copy{display:grid;gap:3px;min-width:0}
+.v821-brand-copy strong{font-family:var(--display,Georgia,serif)!important;font-size:1.05rem!important;line-height:1!important}
+.v821-brand-copy small{display:block!important;font-size:.52rem!important;letter-spacing:.16em!important;color:#a16f79!important}
+
+/* Dock persistente apenas em telas móveis. */
+.merlin-mobile-dock{display:none}
+@media(max-width:1040px){
+  body{padding-bottom:74px}
+  .merlin-mobile-dock{
+    position:fixed;z-index:120;left:10px;right:10px;bottom:max(10px,env(safe-area-inset-bottom));
+    min-height:60px;display:grid;grid-template-columns:repeat(5,1fr);align-items:stretch;
+    padding:6px;border:1px solid rgba(95,61,70,.12);border-radius:19px;
+    background:rgba(255,252,250,.97);box-shadow:0 14px 38px rgba(55,34,44,.16);backdrop-filter:blur(18px);
+  }
+  .merlin-mobile-dock a{
+    min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+    padding:6px 2px;border-radius:13px;color:#76666d;font-size:.56rem;font-weight:850;text-align:center;
+  }
+  .merlin-mobile-dock a svg{width:17px;height:17px}
+  .merlin-mobile-dock a.is-active{background:#f8e9ee;color:var(--v8-rose)}
+  .merlin-mobile-dock a.is-primary{color:#7d5361}
+  .merlin-mobile-dock a.is-primary.is-active{background:var(--v8-ink);color:#fff}
+}
+@media(max-width:680px){
+  .v8-simple-header .public-brand-logo{width:50px!important;height:50px!important;flex-basis:50px!important}
+  .v821-brand-copy strong{font-size:.92rem!important}
+  .v821-brand-copy small{font-size:.44rem!important}
+}
+
+/* Home compacta e sem grandes vazios. */
+.v821-home .v8-clean-hero{padding:38px 0 42px!important}
+.v821-home .v8-clean-products{padding:46px 0 50px!important}
+.v821-home .v8-clean-inspirations{padding:50px 0 54px!important}
+.v821-home .v8-clean-products-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+.v821-home .v8-home-product-card{min-height:76px!important}
+.v821-real-work{padding:52px 0;border-top:1px solid var(--v8-line);background:#fffdfb}
+.v821-real-work .v8-clean-section-head{margin-bottom:22px}
+.v821-real-work .v8-clean-section-head small,
+.v821-home .v8-clean-inspirations .v8-clean-section-head small{display:block!important;margin-bottom:7px;color:#aa7384;font-size:.58rem;font-weight:900;letter-spacing:.13em}
+.v821-real-work .v8-clean-section-head p{margin:8px 0 0;color:var(--v8-muted);font-size:.8rem}
+.v821-real-work-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.v821-real-work-card{overflow:hidden;border:1px solid var(--v8-line);border-radius:20px;background:#fff}
+.v821-real-work-photo{aspect-ratio:4/5;overflow:hidden;background:#f6f0ed}
+.v821-real-work-photo img{width:100%;height:100%;object-fit:cover}
+.v821-real-work-card>div:last-child{padding:15px 16px 17px}
+.v821-real-work-card small{color:#aa7384;font-size:.55rem;font-weight:900;letter-spacing:.1em}
+.v821-real-work-card h3{margin:5px 0 5px;font-size:1.05rem}
+.v821-real-work-card p{margin:0;color:var(--v8-muted);font-size:.72rem;line-height:1.5}
+
+/* Personalizados: explicação curta dentro do próprio card. */
+.v821-personalizados .v8-storefront-hero{padding-top:46px!important;padding-bottom:38px!important;min-height:0!important}
+.v821-personalizados .v8-storefront-grid-section{padding-top:38px!important}
+.v821-personalizados .v8-storefront-product-card p{margin:7px 0 14px;color:var(--v8-muted);font-size:.75rem;line-height:1.48}
+
+/* Pedido: elimina a coluna vazia e reduz rolagem. */
+.v821-order-page .v8-order-hero{padding:34px 0 28px!important;min-height:0!important}
+.v821-order-page .v8-order-hero .container{display:block!important;max-width:980px!important}
+.v821-order-page .v8-order-hero h1{max-width:900px;margin:9px 0 9px!important;font-size:clamp(2rem,4vw,3.25rem)!important;line-height:1!important}
+.v821-order-page .v8-order-hero p{margin:0!important;max-width:620px!important}
+.v821-order-page .v8-order-main{padding:24px 0 70px!important}
+.v821-order-builder{gap:14px!important}
+.v821-order-builder .v8-order-step,.v821-order-builder .v8-order-final{padding:22px!important;border-radius:18px!important;box-shadow:none!important}
+.v821-order-builder .v8-order-product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;margin-top:16px!important}
+.v821-order-builder .v8-order-product-grid button{min-height:90px!important;padding:13px!important;border-radius:14px!important}
+.v821-order-builder .v8-order-product-grid button>span{width:32px!important;height:32px!important;margin-bottom:8px!important}
+.v821-order-builder .kit-preset-grid{margin-top:16px!important;gap:8px!important}
+.v821-order-builder .kit-brief-grid{margin-top:16px!important;gap:12px!important}
+.v821-order-builder .topper-builder-selected-visual{margin-top:16px!important}
+.v821-order-builder .kit-contact-panel>div:first-child p{margin:5px 0 0;color:var(--v8-muted);font-size:.75rem}
+
+@media(max-width:900px){
+  .v821-home .v8-clean-products-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .v821-real-work-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .v821-order-builder .v8-order-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .v821-home .v8-clean-hero{padding:28px 0 32px!important}
+  .v821-home .v8-clean-products,.v821-real-work,.v821-home .v8-clean-inspirations{padding:38px 0!important}
+  .v821-real-work-grid{grid-template-columns:1fr}
+  .v821-real-work-photo{aspect-ratio:4/4.6}
+  .v821-order-page .v8-order-hero{padding:26px 0 22px!important}
+  .v821-order-page .v8-order-main{padding-top:16px!important}
+  .v821-order-builder .v8-order-step,.v821-order-builder .v8-order-final{padding:16px!important}
+}

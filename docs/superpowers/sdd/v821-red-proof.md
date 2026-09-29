@@ -1,0 +1,1 @@
+The V8.21 contract intentionally expects behavior not present before implementation: new public topper names, real-work section, markers category, shared mobile dock, Worker merlin, trusted current domain, and WhatsApp header.

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Mail, MapPin } from 'lucide-react';
 import type { SiteSettings } from '@/lib/db';
+import { OFFICIAL_MERLIN_LOGO } from '@/lib/brand-assets';
 import SocialLinks from './SocialLinks';
 import SafeImage from './SafeImage';
 
@@ -8,11 +9,11 @@ export default function Footer({settings}:{settings:SiteSettings}){
   return <footer className="footer premium-footer kf-footer public-v712-footer v8-simple-footer">
     <div className="container v8-simple-footer-main">
       <div className="v8-simple-footer-brand">
-        <span className="kf-footer-logo"><SafeImage src={settings.logo_url||'/merlin-logo.webp'} alt=""/></span>
+        <span className="kf-footer-logo"><SafeImage src={OFFICIAL_MERLIN_LOGO} alt="Logo Merlin Encantos em Papel"/></span>
         <div>
-          <small>PAPELARIA PERSONALIZADA</small>
-          <strong>{settings.brand_name}</strong>
-          <p>Topos de bolo personalizados e papelaria sob encomenda.</p>
+          <small>ENCANTOS EM PAPEL</small>
+          <strong>Merlin</strong>
+          <p>Topos de bolo, marcadores e papelaria personalizada sob encomenda.</p>
         </div>
       </div>
 
@@ -31,7 +32,7 @@ export default function Footer({settings}:{settings:SiteSettings}){
     </div>
 
     <div className="container v8-simple-footer-bottom">
-      <span>© {new Date().getFullYear()} {settings.brand_name}.</span>
+      <span>© {new Date().getFullYear()} Merlin Encantos em Papel.</span>
       <div><Link href="/privacidade">Privacidade</Link><Link href="/termos">Termos</Link></div>
     </div>
   </footer>;

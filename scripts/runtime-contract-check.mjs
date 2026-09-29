@@ -17,7 +17,6 @@ const npmrc=fs.existsSync('.npmrc')?fs.readFileSync('.npmrc','utf8'):'';
 for(const line of ['save-exact=true','package-lock=true','ignore-scripts=true'])if(!npmrc.split(/\r?\n/).map(x=>x.trim()).includes(line))errors.push(`.npmrc sem ${line}`);
 for(const group of ['dependencies','devDependencies'])for(const [name,version] of Object.entries(pkg[group]||{}))if(!exactSemver.test(String(version)))errors.push(`${group}.${name} precisa de versão exata (atual: ${version})`);
 
-
 const docker=fs.readFileSync('Dockerfile','utf8');
 const expectedDocker=String(platform.dockerImage).replace(/^node:/,'');
 const imageMatches=[...docker.matchAll(/^FROM\s+node:([^\s]+).*$/gm)].map(match=>match[1]);
@@ -37,8 +36,21 @@ if(!fs.existsSync('.github/workflows/recovery-drill.yml'))errors.push('workflow 
 if(!fs.existsSync('.github/workflows/media-backup.yml'))errors.push('workflow de backup de mídia ausente');
 for(const token of ['npm run check:http-boundary','npm run check:concurrency','npm run check:sessions','npm run check:mfa','npm run check:recovery','npm run check:critical','npm run check:observability','npm run check:backup-auth','npm run check:backup-encryption','npm run check:restore','npm run check:resilience','npm run check:performance','npm run check:commercial','npm run check:scalable-crm','npm run check:crm-search','npm run check:production-scale','npm run check:agenda-scale','npm run check:reactivation','npm run check:audit-chain','npm run check:privacy','npm run check:privacy-dr','npm run check:offsite-backup','npm run check:backup-freshness','npm run check:recovery-drill','npm run check:media-dr','npm run check:media-recovery-drill','npm run check:critical-audit','npm run check:supply-chain','npm run check:public-flow','npm run check:load -- http://127.0.0.1:3100','npm run check:e2e -- http://127.0.0.1:3100','Start production server for E2E'])if(!ci.includes(token))errors.push(`CI sem contrato funcional: ${token}`);
 
-const nodeVersion=process.versions.node;if(nodeVersion!==expectedNode){const msg=`runtime atual é Node ${nodeVersion}; alvo reproduzível é ${expectedNode}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
-const npmUserAgent=String(process.env.npm_config_user_agent||'');const npmMatch=npmUserAgent.match(/(?:^|\s)npm\/([^\s]+)/);if(npmMatch&&npmMatch[1]!==expectedNpm){const msg=`runtime atual usa npm ${npmMatch[1]}; alvo reproduzível é ${expectedNpm}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
+// A .nvmrc seleciona deliberadamente a linha major do Node para os runners/Cloudflare.
+// O container de produção continua fixado pelo digest do platform-contract.json. Portanto,
+// atualização de patch no runner hospedado é aviso; mudança de major continua falhando fechado.
+const nodeVersion=process.versions.node;
+if(nodeVersion!==expectedNode){
+  const actualMajor=nodeVersion.split('.')[0];
+  const msg=`runtime atual é Node ${nodeVersion}; alvo reproduzível do container é ${expectedNode}`;
+  if(actualMajor!==expectedNodeMajor)errors.push(msg);else warnings.push(msg);
+}
+const npmUserAgent=String(process.env.npm_config_user_agent||'');const npmMatch=npmUserAgent.match(/(?:^|\s)npm\/([^\s]+)/);
+if(npmMatch&&npmMatch[1]!==expectedNpm){
+  const actualMajor=npmMatch[1].split('.')[0],expectedMajor=expectedNpm.split('.')[0];
+  const msg=`runtime atual usa npm ${npmMatch[1]}; alvo reproduzível do pacote é ${expectedNpm}`;
+  if(actualMajor!==expectedMajor)errors.push(msg);else warnings.push(msg);
+}
 const lockRequired=process.argv.includes('--require-lock');
 if(fs.existsSync('package-lock.json')){
   const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
