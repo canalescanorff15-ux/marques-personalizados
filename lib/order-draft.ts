@@ -1,3 +1,5 @@
+import { topperLevelBySlug } from './topper-catalog';
+
 export const ORDER_DRAFT_KEY='merlin_order_draft_v1';
 export const ORDER_DRAFT_EVENT='merlin-order-draft-change';
 
@@ -61,11 +63,14 @@ function sanitize(value:unknown):OrderDraft|null{
   const input=value as Record<string,unknown>;
   if(input.version!==1)return null;
   const type=typeof input.productType==='string'&&allowed.has(input.productType as OrderProductType)?input.productType as OrderProductType:'topo';
+  const rawLevel=trim(input.level,80)||'essencial';
+  const level=topperLevelBySlug(rawLevel)?rawLevel:'essencial';
+  const retiredLevelMigrated=level!==rawLevel;
   return{
     version:1,
     productType:type,
-    level:trim(input.level,80)||'essencial',
-    inspirationSlug:trim(input.inspirationSlug,120),
+    level,
+    inspirationSlug:retiredLevelMigrated?'':trim(input.inspirationSlug,120),
     eventDate:trim(input.eventDate,20),
     theme:trim(input.theme,120),
     celebrantName:trim(input.celebrantName,120),
