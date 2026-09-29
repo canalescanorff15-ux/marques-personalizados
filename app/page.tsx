@@ -18,7 +18,7 @@ const REAL_WORKS=[
   {src:'https://merlin-topper-assets.floot.app/_cdn/static/61eafead-9c67-4a4d-b160-18980f734786-marcadores-personalizados-real.webp',title:'Marcadores personalizados',copy:'Produção real • temas variados e sob encomenda'},
   {src:'https://merlin-topper-assets.floot.app/_cdn/static/3c3a473f-0045-4027-a9a7-d04623c6d5b8-topo-dragon-ball-real-2026-09-28.jpeg',title:'Topo temático em camadas',copy:'Produção real • impressão, recorte, volume e haste em acetato'}
 ];
-const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'];
+const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-86','INSP-TOP-98'];
 // Compatibilidade V8.08: ['INSP-TOP-48','INSP-TOP-49','INSP-TOP-50']
 
 export default async function HomePage(){
