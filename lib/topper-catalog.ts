@@ -1,3 +1,4 @@
+// Compatibilidade de contratos históricos: Topo Simples | Topo Básico 3D | Topo Premium | Topo Shaker | Topo com Acetato | Topo Elite Shaker + Acetato
 export type TopperLevel={
   slug:string;
   code:string;
