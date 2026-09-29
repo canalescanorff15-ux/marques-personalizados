@@ -1,20 +1,21 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Sparkles } from 'lucide-react';
 import { redirect } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import InspirationFavoriteButton from '@/components/InspirationFavoriteButton';
 import InspirationShareButton from '@/components/InspirationShareButton';
 import { getSiteSettings } from '@/lib/db';
-import { isPublicTopperInspiration, publicTopperInspirations, topperInspirationByCode } from '@/lib/topper-inspirations';
+import { activePublicTopperInspirations, isActivePublicTopperInspiration } from '@/lib/active-topper-inspirations';
+import { topperInspirationByCode } from '@/lib/topper-inspirations';
 
 type Props={params:Promise<{code:string}>};
 
 export async function generateMetadata({params}:Props):Promise<Metadata>{
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
-  if(!inspiration||!isPublicTopperInspiration(inspiration.code))return{title:'Inspirações | Merlin Encantos em Papel'};
+  if(!inspiration||!isActivePublicTopperInspiration(inspiration.code))return{title:'Inspirações | Merlin Encantos em Papel'};
   return{title:inspiration.title+' | Merlin Encantos em Papel',description:inspiration.description};
 }
 
@@ -24,11 +25,11 @@ export default async function InspirationDetailPage({params}:Props){
   const {code}=await params;
   const inspiration=topperInspirationByCode(decodeURIComponent(code));
   if(!inspiration)redirect('/inspiracoes');
-  if(!isPublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
+  if(!isActivePublicTopperInspiration(inspiration.code))redirect('/inspiracoes');
 
   const settings=await getSiteSettings();
   const builderHref='/monte-seu-pedido?produto=topo&inspiracao='+encodeURIComponent(inspiration.slug)+'&nivel='+encodeURIComponent(inspiration.levelSlug)+'&tema='+encodeURIComponent(inspiration.title);
-  const related=publicTopperInspirations.filter(item=>item.code!==inspiration.code).slice(0,2);
+  const related=activePublicTopperInspirations.filter(item=>item.code!==inspiration.code).slice(0,2);
 
   return <main className="merlin-public public-inspiration-detail-page v8-inspiration-detail v8-storefront-detail v8-detail-minimal-v817">
     <Header settings={settings}/>
@@ -51,7 +52,8 @@ export default async function InspirationDetailPage({params}:Props){
           <div className="v8-detail-copy">
             <span className="v8-detail-kicker"><Sparkles size={14}/> INSPIRAÇÃO</span>
             <h1>{inspiration.title}</h1>
-            <p className="v8-detail-description">Use esta referência como ponto de partida e personalize nome, idade, cores e acabamento.</p>\n            <div className="public-detail-customize v8-detail-contract-copy" aria-hidden="true"><span>Nome e idade</span><span>Cores e elementos</span><span>Acabamento</span></div>
+            <p className="v8-detail-description">Use esta referência como ponto de partida e personalize nome, idade, cores e acabamento.</p>
+            <div className="public-detail-customize v8-detail-contract-copy" aria-hidden="true"><span>Nome e idade</span><span>Cores e elementos</span><span>Acabamento</span></div>
 
             <div className="v8-detail-actions">
               <Link className="btn btn-primary btn-luxury" href={builderHref}>Quero esse modelo <ArrowUpRight size={16}/></Link>
