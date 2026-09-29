@@ -15,7 +15,7 @@ export const metadata:Metadata={
 
 export default async function OrderBuilderPage(){
   const settings=await getSiteSettings();
-  return <main className="premium-site public-v712 v8-order-page v8-order-minimal-v815">
+  return <main className="premium-site public-v712 v8-order-page v8-order-minimal-v815 v821-order-compact">
     <Header settings={settings}/>
 
     <section className="v8-order-hero">
@@ -29,7 +29,6 @@ export default async function OrderBuilderPage(){
             <Link className="btn btn-ghost" href="/inspiracoes">Ver inspirações <Sparkles size={16}/></Link>
           </div>
         </div>
-
       </div>
     </section>
 
