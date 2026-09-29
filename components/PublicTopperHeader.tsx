@@ -8,6 +8,7 @@ import type { SiteSettings } from '@/lib/db';
 import SafeImage from './SafeImage';
 import MerlinMobileDock from './MerlinMobileDock';
 
+const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/fc9617e0-d9e3-4afa-b08f-4a93729b0aed-merlin-logo-oficial.webp';
 const navItems=[
   {href:'/',label:'Início'},
   {href:'/catalogo',label:'Topos de bolo'},
@@ -20,7 +21,6 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const [menuOpen,setMenuOpen]=useState(false);
   const menuButtonRef=useRef<HTMLButtonElement>(null);
   const mobileMenuRef=useRef<HTMLElement>(null);
-  const logo=settings.logo_url||'/merlin-logo.webp';
 
   useEffect(()=>{
     if(!menuOpen)return;
@@ -48,7 +48,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
       <div className="public-header-top">
         <div className="public-shell public-header-top-inner">
           <Link className="public-brand" href="/" aria-label={settings.brand_name+' — início'}>
-            <span className="public-brand-logo"><SafeImage src={logo} fallback="/merlin-logo.webp" alt="Logo Merlin Encantos em Papel" width={58} height={54} sizes="58px" priority/></span>
+            <span className="public-brand-logo"><SafeImage src={OFFICIAL_LOGO} fallback="/merlin-logo.webp" alt="Logo Merlin Encantos em Papel" width={58} height={58} sizes="58px" priority/></span>
             <span className="v821-brand-copy"><strong>Merlin</strong><small>ENCANTOS EM PAPEL</small></span>
           </Link>
 
