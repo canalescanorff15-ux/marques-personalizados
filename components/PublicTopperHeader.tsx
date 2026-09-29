@@ -8,6 +8,8 @@ import type { SiteSettings } from '@/lib/db';
 import SafeImage from './SafeImage';
 import MerlinMobileDock from './MerlinMobileDock';
 
+const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/273a6c2e-69e9-460f-b9ca-fd60d3f2b2e5-merlin-logo-v821.webp';
+
 const navItems=[
   {href:'/',label:'Início'},
   {href:'/catalogo',label:'Topos de bolo'},
@@ -20,7 +22,7 @@ export default function PublicTopperHeader({settings}:{settings:SiteSettings}){
   const [menuOpen,setMenuOpen]=useState(false);
   const menuButtonRef=useRef<HTMLButtonElement>(null);
   const mobileMenuRef=useRef<HTMLElement>(null);
-  const logo=settings.logo_url||'/merlin-logo.webp';
+  const logo=OFFICIAL_LOGO;
 
   useEffect(()=>{
     if(!menuOpen)return;
