@@ -1,7 +1,7 @@
 export const ORDER_DRAFT_KEY='merlin_order_draft_v1';
 export const ORDER_DRAFT_EVENT='merlin-order-draft-change';
 
-export type OrderProductType='topo'|'caixinhas'|'lembrancinhas'|'chaveiros'|'adesivos'|'doces'|'kit'|'outro';
+export type OrderProductType='topo'|'caixinhas'|'lembrancinhas'|'chaveiros'|'adesivos'|'marcadores'|'outro';
 
 export type OrderDraft={
   version:1;
@@ -53,13 +53,15 @@ function trim(value:unknown,max:number){
   return typeof value==='string'?value.slice(0,max):'';
 }
 
-const allowed=new Set<OrderProductType>(['topo','caixinhas','lembrancinhas','chaveiros','adesivos','doces','kit','outro']);
+const allowed=new Set<OrderProductType>(['topo','caixinhas','lembrancinhas','chaveiros','adesivos','marcadores','outro']);
 
 function sanitize(value:unknown):OrderDraft|null{
   if(!value||typeof value!=='object')return null;
   const input=value as Record<string,unknown>;
   if(input.version!==1)return null;
-  const type=typeof input.productType==='string'&&allowed.has(input.productType as OrderProductType)?input.productType as OrderProductType:'topo';
+  const rawType=typeof input.productType==='string'?input.productType:'';
+  const migratedType=rawType==='doces'||rawType==='kit'?'outro':rawType;
+  const type=allowed.has(migratedType as OrderProductType)?migratedType as OrderProductType:'topo';
   return{
     version:1,
     productType:type,
