@@ -60,6 +60,7 @@ const nestedContracts=[
   'scripts/public-v721-inspirations-contract-check.mjs',
   'scripts/public-v722-inspiration-batch-contract-check.mjs',
   'scripts/v8-home-premium-contract-check.mjs',
+  'scripts/v824-hero-real-work-carousel-contract-check.mjs',
   'scripts/v8-inspirations-contract-check.mjs',
   'scripts/v8-inspiration-detail-contract-check.mjs',
   'scripts/v8-order-builder-contract-check.mjs',
@@ -76,8 +77,8 @@ for(const contract of nestedContracts){
 }
 
 if(errors.length){
-  console.error(`Merlin V8.23 Commercial UX: FALHOU (${errors.length})`);
+  console.error(`Merlin V8.24 Commercial UX: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Merlin V8.23 Commercial UX: OK — quatro linhas atuais, preços centralizados, inspirações filtradas e fluxo de orçamento preservado.');
+console.log('Merlin V8.24 Commercial UX: OK — quatro linhas atuais, preços centralizados e trabalhos reais integrados ao hero com carrossel premium.');
