@@ -20,14 +20,17 @@ if(fs.existsSync('app/page.tsx')){
   const isV8=home.includes('v8-home-products');
   const isEssentialHome=home.includes('v8-essential-home-v814');
   const required=isEssentialHome
-    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','publicTopperInspirations','Feito por Nós']
+    ? ['v8-essential-home-v814','Merlin Encantos em Papel','v8-home-products','publicTopperInspirations','HomeRealWorkCarousel','<HomeRealWorkCarousel works={REAL_WORKS}/>']
     : isV8
       ? ['home-v718-brand-signature','Merlin Encantos em Papel','v8-home-products','Papelaria personalizada']
     : ['home-v718-brand-signature','Merlin Encantos em Papel','feitos sob encomenda','home-v717-showcase-seal'];
   for(const token of required){
-    if(!home.includes(token))errors.push('Home '+(isV8?'V8.21':'V7.18')+' sem '+token);
+    if(!home.includes(token))errors.push('Home '+(isEssentialHome?'V8.24':isV8?'V8.21':'V7.18')+' sem '+token);
   }
   if(isV8&&home.includes('home-v717-showcase-seal'))errors.push('Home V8 não deve reintroduzir selo editorial legado');
+  if(isEssentialHome){
+    for(const removed of ['TRABALHOS REAIS','Feito por Nós.','id="feito-por-nos"'])if(home.includes(removed))errors.push('Home V8.24 voltou a expor seção separada removida: '+removed);
+  }
   if(!isEssentialHome&&!home.includes("settings.logo_url||'/merlin-logo.webp'"))errors.push('Home legada não usa a logo configurável da marca');
 }
 
@@ -41,7 +44,7 @@ if(fs.existsSync('app/public-v718.css')){
     ['busca refinada','.public-header-search{'],
     ['navegação refinada','.public-main-nav a::after'],
     ['assinatura da logo na Home','.home-v718-brand-signature{'],
-    ['selo afastado','.home-v717-showcase-seal{'],
+    ['selo afastado legado preservado no CSS','.home-v717-showcase-seal{'],
     ['selo desktop mais afastado da foto','left:-96px!important'],
     ['banners internos','.public-inspiration-banner,'],
     ['cards globais','.public-inspiration-card,'],
@@ -76,4 +79,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.21 Premium Global Brand Contract: OK — logo oficial, marca, header, Home, cards, formulários e footer protegidos.');
+console.log('V8.24 Premium Global Brand Contract: OK — logo oficial, marca e Home com trabalhos reais integrados ao hero protegidos.');
