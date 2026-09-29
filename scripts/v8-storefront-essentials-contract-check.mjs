@@ -17,11 +17,11 @@ for(const forbidden of ['price-guide-rules','Sem pacote obrigatório.','Shaker e
   if(catalog.includes(forbidden))errors.push('Catálogo V8.10 ainda contém bloco excessivo: '+forbidden);
 }
 
-for(const token of ['v8-storefront-personalizados','Caixinhas','Lembrancinhas','Adesivos & Chaveiros','Kits Personalizados','v8-storefront-note']){
-  if(!personalizados.includes(token))errors.push('Personalizados V8.10 sem '+token);
+for(const token of ['v8-storefront-personalizados','Marcadores de Página','Caixinhas — sob consulta','Lembrancinhas','Adesivos & Chaveiros','Outros Personalizados','v8-storefront-note']){
+  if(!personalizados.includes(token))errors.push('Personalizados V8.21 sem '+token);
 }
-for(const forbidden of ['v8-scope-section','v8-personalizados-steps','O que pode estar incluso','TRANSPARÊNCIA NO PEDIDO']){
-  if(personalizados.includes(forbidden))errors.push('Personalizados V8.10 ainda contém bloco excessivo: '+forbidden);
+for(const forbidden of ['Kits Personalizados','Doces & Complementos','v8-scope-section','v8-personalizados-steps','O que pode estar incluso','TRANSPARÊNCIA NO PEDIDO']){
+  if(personalizados.includes(forbidden))errors.push('Personalizados V8.21 contém item/bloco que deve ficar oculto: '+forbidden);
 }
 
 for(const token of ['v8-storefront-inspirations','TopperInspirationGallery','Encontre uma ideia.','Contar minha ideia']){
@@ -57,8 +57,8 @@ if(storefrontIndex<0)errors.push('layout não importa v8-storefront-clean.css');
 if(globalIndex<0||storefrontIndex<globalIndex)errors.push('v8-storefront-clean.css precisa carregar depois de v8-global-clean.css');
 
 if(errors.length){
-  console.error('V8.10 Storefront Essentials Contract: FALHOU ('+errors.length+')');
+  console.error('V8 Storefront Essentials Contract: FALHOU ('+errors.length+')');
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.10 Storefront Essentials Contract: OK — produto, imagem e CTA prioritários com conteúdo mínimo.');
+console.log('V8.21 Storefront Essentials Contract: OK — personalizados ativos, imagem e CTA prioritários sem categorias não ofertadas.');
