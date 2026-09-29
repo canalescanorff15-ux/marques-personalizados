@@ -74,7 +74,7 @@ export default async function HomePage(){
         </div>
         <div className="v821-real-work-grid">
           {REAL_WORKS.map(item=><article className="v821-real-work-card" key={item.src}>
-            <img src={item.src} alt={item.title}/>
+            <img src={item.src} alt={item.title} loading="lazy" decoding="async"/>
             <div><strong>{item.title}</strong><span>{item.copy}</span></div>
           </article>)}
         </div>
