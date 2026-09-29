@@ -11,13 +11,14 @@ import { publicTopperInspirations } from '@/lib/topper-inspirations';
 export const dynamic='force-dynamic';
 function digits(v:string){return v.replace(/\D/g,'');}
 
+const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/fc9617e0-d9e3-4afa-b08f-4a93729b0aed-merlin-logo-oficial.webp';
 const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'];
 // Compatibilidade V8.08: ['INSP-TOP-48','INSP-TOP-49','INSP-TOP-50']
 
 const realWork=[
-  {src:'/trabalhos/topo-gotico-real.webp',title:'Topo de bolo personalizado',copy:'Produção real feita sob encomenda.'},
-  {src:'/trabalhos/marcadores-literarios-real.webp',title:'Marcadores literários',copy:'Marcadores impressos e recortados por nós.'},
-  {src:'/trabalhos/marcadores-personalizados-real.webp',title:'Marcadores personalizados',copy:'Temas e estilos diferentes conforme o pedido.'}
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/4a19b88c-1f47-4413-9d77-390a25cef683-trabalho-topo-gotico-real.webp',title:'Topo de bolo personalizado',copy:'Produção real feita sob encomenda.'},
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/a6f584d3-5ac8-45d7-b179-b9ec7c3da8fb-trabalho-marcadores-literarios-real.webp',title:'Marcadores literários',copy:'Marcadores impressos e recortados por nós.'},
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/ee9a825f-1ab3-479d-83d0-806944f52709-trabalho-marcadores-personalizados-real.webp',title:'Marcadores personalizados',copy:'Temas e estilos diferentes conforme o pedido.'}
 ];
 
 export default async function HomePage(){
@@ -25,7 +26,7 @@ export default async function HomePage(){
   const phone=digits(settings.whatsapp_number);
   const wa=phone?`https://wa.me/${phone}?text=${encodeURIComponent('Olá! Vim pelo site da Merlin Encantos em Papel e gostaria de pedir um orçamento de papelaria personalizada.')}`:'';
   const featuredInspirations=homeInspirationCodes.map(code=>publicTopperInspirations.find(item=>item.code===code)).filter(Boolean) as typeof publicTopperInspirations;
-  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo e papelaria personalizada feitos sob encomenda para festas e momentos especiais.',logo:settings.logo_url||'/merlin-logo.webp',telephone:settings.whatsapp_number,areaServed:settings.location};
+  const organizationJsonLd={"@context":"https://schema.org","@type":"Store",name:settings.brand_name,url:siteUrl||undefined,description:'Topos de bolo e papelaria personalizada feitos sob encomenda para festas e momentos especiais.',logo:OFFICIAL_LOGO,telephone:settings.whatsapp_number,areaServed:settings.location};
 
   return <main className="premium-site kf-theme home-v672 home-v673 home-v680 public-v712 home-v717 home-v719 v8-clean-home v8-essential-home-v814 v821-home">
     <Header settings={settings}/>
