@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { siteUrl } from '@/lib/config';
 import { topperLevels } from '@/lib/topper-catalog';
-import { publicTopperInspirations } from '@/lib/topper-inspirations';
+import { activePublicTopperInspirations } from '@/lib/active-topper-inspirations';
 
 export default function sitemap():MetadataRoute.Sitemap{
  if(!siteUrl)return[];
@@ -11,7 +11,7 @@ export default function sitemap():MetadataRoute.Sitemap{
   {url:`${siteUrl}/catalogo`,lastModified:now,changeFrequency:'weekly',priority:.95},
   ...topperLevels.map(level=>({url:`${siteUrl}/catalogo/${level.slug}`,lastModified:now,changeFrequency:'monthly' as const,priority:.82})),
   {url:`${siteUrl}/inspiracoes`,lastModified:now,changeFrequency:'weekly',priority:.9},
-  ...publicTopperInspirations.map(item=>({url:`${siteUrl}/inspiracoes/${encodeURIComponent(item.code)}`,lastModified:now,changeFrequency:'monthly' as const,priority:.76})),
+  ...activePublicTopperInspirations.map(item=>({url:`${siteUrl}/inspiracoes/${encodeURIComponent(item.code)}`,lastModified:now,changeFrequency:'monthly' as const,priority:.76})),
   {url:`${siteUrl}/personalizados`,lastModified:now,changeFrequency:'weekly',priority:.9},
   {url:`${siteUrl}/monte-seu-pedido`,lastModified:now,changeFrequency:'weekly',priority:.94},
   {url:`${siteUrl}/guia-de-precos`,lastModified:now,changeFrequency:'weekly',priority:.82},
