@@ -6,21 +6,17 @@ const header=fs.readFileSync('components/Header.tsx','utf8');
 const dock=fs.readFileSync('components/MerlinMobileDock.tsx','utf8');
 const home=fs.readFileSync('app/page.tsx','utf8');
 const catalog=fs.readFileSync('app/catalogo/page.tsx','utf8');
+const topperCatalog=fs.readFileSync('lib/topper-catalog.ts','utf8');
 
 if(!comparePage.includes("redirect('/inspiracoes')"))errors.push('comparador antigo precisa redirecionar para inspirações de topo');
 for(const [name,source] of [['header',header],['dock',dock],['home',home],['catalog',catalog]]){
   if(source.includes('/comparar-inspiracoes'))errors.push(`${name} ainda expõe o comparador antigo`);
 }
-if(!catalog.includes('topperLevels.map'))errors.push('comparação comercial agora precisa acontecer entre os níveis do catálogo');
-const isV810=catalog.includes('v8-storefront-catalog');
-const isV811=fs.existsSync('app/v8-sales-minimal.css')&&catalog.includes('v8-storefront-catalog');
-if(isV811){
-  if(!catalog.includes('Ver acabamento'))errors.push('catálogo V8.11 precisa manter acesso aos seis níveis');
-}else if(isV810){
-  if(!catalog.includes('item.code')||!catalog.includes('Ver acabamento'))errors.push('catálogo V8.10 precisa manter identificação e acesso aos seis níveis');
-}else if(!catalog.includes('TOP-01 ao TOP-06')){
-  errors.push('catálogo precisa comunicar claramente a escala dos seis níveis');
-}
+if(!catalog.includes('topperLevels.map'))errors.push('comparação comercial agora precisa acontecer entre as linhas do catálogo');
+if(!catalog.includes('Ver acabamento'))errors.push('catálogo precisa manter acesso aos detalhes dos quatro acabamentos');
+const levels=[...topperCatalog.matchAll(/slug:'([^']+)',code:'TOP-/g)].map(match=>match[1]);
+if(levels.length!==4)errors.push(`catálogo comercial deveria ter 4 linhas atuais; encontrou ${levels.length}`);
+for(const retired of ['shaker','elite-shaker-acetato'])if(levels.includes(retired))errors.push(`linha retirada ainda está no catálogo: ${retired}`);
 
 if(errors.length){console.error(`Legacy Compare Contract: FALHOU (${errors.length})`);for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('Legacy Compare Contract: OK — comparador antigo aposentado e seis níveis preservados sem exigir código técnico na V8.11.');
+console.log('Legacy Compare Contract: OK — comparador antigo aposentado e quatro linhas comerciais atuais preservadas.');
