@@ -29,8 +29,8 @@ if(!legacy.includes("redirect('/monte-seu-topo')"))errors.push('rota antiga /mon
 if(!header.includes("href:'/monte-seu-pedido'")&&!header.includes('href="/monte-seu-pedido"'))errors.push('header não expõe /monte-seu-pedido');
 if(!home.includes('href="/monte-seu-pedido"'))errors.push('home não oferece caminho direto para /monte-seu-pedido');
 if(!sitemap.includes('/monte-seu-pedido'))errors.push('sitemap não inclui /monte-seu-pedido');
-if(!orderPage.includes('<OrderBuilder/>'))errors.push('rota /monte-seu-pedido não monta OrderBuilder');
-for(const token of ["'topo'","'caixinhas'","'lembrancinhas'","'chaveiros'","'adesivos'","'doces'","'kit'","'outro'","'/api/inquiries'","desired_categories:[selectedProduct.label]"])if(!orderBuilder.includes(token))errors.push(`OrderBuilder sem contrato V8.06: ${token}`);
+if(!orderPage.includes('<OrderBuilder businessWhatsapp={settings.whatsapp_number}/>'))errors.push('rota /monte-seu-pedido não monta OrderBuilder com fallback de WhatsApp');
+for(const token of ["'topo'","'marcadores'","'caixinhas'","'lembrancinhas'","'chaveiros'","'adesivos'","'doces'","'kit'","'outro'","'/api/inquiries'","desired_categories:[selectedProduct.label]"])if(!orderBuilder.includes(token))errors.push(`OrderBuilder sem contrato V8.21: ${token}`);
 if(header.includes('href="/monte-seu-kit"'))errors.push('header ainda expõe o construtor antigo de kits');
 
 if(errors.length){
@@ -38,4 +38,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Order Builder Contract: OK — 6 níveis de topo preservados e V8.06 adiciona briefing adaptativo sem quebrar o fluxo legado.');
+console.log('Order Builder Contract: OK — 6 níveis preservados, marcadores ativos e fallback de WhatsApp integrado sem quebrar fluxo legado.');
