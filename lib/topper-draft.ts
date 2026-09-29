@@ -1,3 +1,5 @@
+import { topperLevelBySlug } from './topper-catalog';
+
 export const TOPPER_DRAFT_KEY='merlin_topper_draft_v1';
 export const TOPPER_DRAFT_EVENT='merlin-topper-draft-change';
 
@@ -37,10 +39,13 @@ function sanitize(value:unknown):TopperDraft|null{
   if(!value||typeof value!=='object')return null;
   const input=value as Record<string,unknown>;
   if(input.version!==1)return null;
+  const rawLevel=trim(input.level,80)||'essencial';
+  const level=topperLevelBySlug(rawLevel)?rawLevel:'essencial';
+  const retiredLevelMigrated=level!==rawLevel;
   return{
     version:1,
-    level:trim(input.level,80)||'essencial',
-    inspirationSlug:trim(input.inspirationSlug,120),
+    level,
+    inspirationSlug:retiredLevelMigrated?'':trim(input.inspirationSlug,120),
     eventDate:trim(input.eventDate,20),
     theme:trim(input.theme,120),
     celebrantName:trim(input.celebrantName,120),
