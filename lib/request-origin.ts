@@ -31,7 +31,8 @@ function allowedProductionOrigins(){
 export function trustedRequestOrigin(request:Request){
   try{
     const requestOrigin=new URL(request.url).origin;
-    if(process.env.NODE_ENV!=='production')return requestOrigin;
+    const production=process.env.NODE_ENV==='production';
+    if(!production)return requestOrigin;
     return allowedProductionOrigins().has(requestOrigin)?requestOrigin:'';
   }catch{return'';}
 }
