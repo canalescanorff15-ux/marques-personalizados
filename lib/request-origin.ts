@@ -3,6 +3,13 @@ function localHostname(hostname:string){
   return host==='localhost'||host==='127.0.0.1'||host==='::1';
 }
 
+const OFFICIAL_PRODUCTION_ORIGINS=new Set([
+  'https://merlin.encantos.workers.dev',
+  // Alias de transição mantido para não quebrar pedidos durante propagação/cache antigo.
+  'https://merlin-encantos-em-papel.encantos.workers.dev',
+  'https://merlin-encantos-em-papel.canalescanorff15.workers.dev'
+]);
+
 function configuredProductionOrigin(){
   const raw=String(process.env.NEXT_PUBLIC_SITE_URL||'').trim();
   if(!raw)return'';
@@ -14,9 +21,19 @@ function configuredProductionOrigin(){
   }catch{return'';}
 }
 
+function allowedProductionOrigins(){
+  const allowed=new Set(OFFICIAL_PRODUCTION_ORIGINS);
+  const configured=configuredProductionOrigin();
+  if(configured)allowed.add(configured);
+  return allowed;
+}
+
 export function trustedRequestOrigin(request:Request){
-  if(process.env.NODE_ENV==='production')return configuredProductionOrigin();
-  try{return new URL(request.url).origin;}catch{return'';}
+  try{
+    const requestOrigin=new URL(request.url).origin;
+    if(process.env.NODE_ENV!=='production')return requestOrigin;
+    return allowedProductionOrigins().has(requestOrigin)?requestOrigin:'';
+  }catch{return'';}
 }
 
 export function sameOriginBoundary(request:Request){
@@ -27,7 +44,7 @@ export function sameOriginBoundary(request:Request){
   if(origin){try{return new URL(origin).origin===expected;}catch{return false;}}
   const referer=request.headers.get('referer');
   if(referer){try{return new URL(referer).origin===expected;}catch{return false;}}
-  // Requisições não-browser (CLI/health tooling) não carregam os Fetch Metadata headers.
-  // Browsers modernos enviam Origin/Referer e Sec-Fetch-Site em mutações cross-origin.
+  // Clientes não-browser sem Fetch Metadata continuam suportados somente quando
+  // o próprio URL da requisição pertence à lista explícita de origens confiáveis.
   return !fetchSite;
 }
