@@ -61,6 +61,13 @@ const orderBuilder=read('components/OrderBuilder.tsx');
 assert(orderBuilder.includes('topperLevels'),'OrderBuilder deve continuar usando a fonte oficial dos quatro topos');
 assert(orderBuilder.includes('selectedLevel.name'),'resumo do pedido deve levar o nome do topo selecionado');
 
+for(const draftFile of ['lib/order-draft.ts','lib/topper-draft.ts']){
+  const draft=read(draftFile);
+  assert(draft.includes('topperLevelBySlug'),`${draftFile} nao valida nivel salvo contra o catalogo atual`);
+  assert(draft.includes("level=topperLevelBySlug(rawLevel)?rawLevel:'essencial'"),`${draftFile} nao migra nivel retirado para o classico`);
+  assert(draft.includes("retiredLevelMigrated?'':trim(input.inspirationSlug"),`${draftFile} nao limpa inspiracao ligada a nivel retirado`);
+}
+
 const activeInspirations=read('lib/active-topper-inspirations.ts');
 assert(activeInspirations.includes('topperLevelBySlug'),'inspiracoes publicas nao estao limitadas aos quatro topos atuais');
 const gallery=read('components/TopperInspirationGallery.tsx');
@@ -76,4 +83,4 @@ if(failures.length){
   process.exit(1);
 }
 
-console.log('V8.23 Pricing Contract: OK — quatro topos publicos, precos centralizados, etapas/politica interna preservadas e linhas retiradas fora da vitrine.');
+console.log('V8.23 Pricing Contract: OK — quatro topos publicos, precos centralizados, politica interna preservada, rascunhos antigos migrados e linhas retiradas fora da vitrine.');
