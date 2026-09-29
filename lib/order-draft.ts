@@ -1,7 +1,7 @@
 export const ORDER_DRAFT_KEY='merlin_order_draft_v1';
 export const ORDER_DRAFT_EVENT='merlin-order-draft-change';
 
-export type OrderProductType='topo'|'caixinhas'|'lembrancinhas'|'chaveiros'|'adesivos'|'doces'|'kit'|'outro';
+export type OrderProductType='topo'|'marcadores'|'caixinhas'|'lembrancinhas'|'chaveiros'|'adesivos'|'doces'|'kit'|'outro';
 
 export type OrderDraft={
   version:1;
@@ -53,7 +53,7 @@ function trim(value:unknown,max:number){
   return typeof value==='string'?value.slice(0,max):'';
 }
 
-const allowed=new Set<OrderProductType>(['topo','caixinhas','lembrancinhas','chaveiros','adesivos','doces','kit','outro']);
+const allowed=new Set<OrderProductType>(['topo','marcadores','caixinhas','lembrancinhas','chaveiros','adesivos','doces','kit','outro']);
 
 function sanitize(value:unknown):OrderDraft|null{
   if(!value||typeof value!=='object')return null;
