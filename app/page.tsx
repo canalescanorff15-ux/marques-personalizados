@@ -14,7 +14,8 @@ const OFFICIAL_LOGO='https://merlin-topper-assets.floot.app/_cdn/static/7a6e5cde
 const REAL_WORKS=[
   {src:'https://merlin-topper-assets.floot.app/_cdn/static/a49f67d2-8791-4123-a284-22150488ab15-topo-gotico-real.webp',title:'Topo de bolo personalizado',copy:'Produção real • camadas e acabamento temático'},
   {src:'https://merlin-topper-assets.floot.app/_cdn/static/f67e7060-7eee-4c2e-afb4-662a2491768c-marcadores-literarios-real.webp',title:'Marcadores literários',copy:'Produção real • impressão, corte e acabamento'},
-  {src:'https://merlin-topper-assets.floot.app/_cdn/static/61eafead-9c67-4a4d-b160-18980f734786-marcadores-personalizados-real.webp',title:'Marcadores personalizados',copy:'Produção real • temas variados e sob encomenda'}
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/61eafead-9c67-4a4d-b160-18980f734786-marcadores-personalizados-real.webp',title:'Marcadores personalizados',copy:'Produção real • temas variados e sob encomenda'},
+  {src:'https://merlin-topper-assets.floot.app/_cdn/static/3c3a473f-0045-4027-a9a7-d04623c6d5b8-topo-dragon-ball-real-2026-09-28.jpeg',title:'Topo temático em camadas',copy:'Produção real • impressão, recorte, volume e haste em acetato'}
 ];
 const homeInspirationCodes=['INSP-TOP-74','INSP-TOP-92','INSP-TOP-104'];
 // Compatibilidade V8.08: ['INSP-TOP-48','INSP-TOP-49','INSP-TOP-50']
