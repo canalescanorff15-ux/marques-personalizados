@@ -14,7 +14,7 @@ const mustContain={
   'components/PublicTopperHeader.tsx':['Merlin Encantos','EM PAPEL','merlin-logo-oficial.webp'],
   'components/Footer.tsx':['merlin-logo-oficial.webp','Topos de bolo personalizados'],
   'app/page.tsx':essentialHome
-    ? ['v8-essential-home-v814','Personalizados feitos para','Topos de Bolo','Marcadores de Página','Feito por Nós']
+    ? ['v8-essential-home-v814','Personalizados feitos para','Topos de Bolo','Marcadores de Página','HomeRealWorkCarousel','<HomeRealWorkCarousel works={REAL_WORKS}/>']
     : ['Merlin'],
   'app/catalogo/page.tsx':catalogNeedles,
   'app/monte-seu-topo/page.tsx':["redirect('/monte-seu-pedido?produto=topo')"],
@@ -25,6 +25,9 @@ for(const [rel,needles] of Object.entries(mustContain)){
   if(!fs.existsSync(file)){errors.push(`${rel}: ausente`);continue;}
   const text=fs.readFileSync(file,'utf8');
   for(const needle of needles)if(!text.includes(needle))errors.push(`${rel}: faltando ${JSON.stringify(needle)}`);
+}
+for(const removed of ['TRABALHOS REAIS','Feito por Nós.','Peças que já saíram da nossa bancada','id="feito-por-nos"']){
+  if(homeText.includes(removed))errors.push(`app/page.tsx: bloco separado de trabalhos reais voltou: ${JSON.stringify(removed)}`);
 }
 for(const rel of ['public/merlin-logo.webp','public/merlin-logo-original.png','public/favicon.svg']){
   const file=path.join(root,rel);
@@ -41,4 +44,4 @@ for(const retired of ["slug:'shaker'","slug:'elite-shaker-acetato'"]){
   if(publicCatalog.includes(retired))errors.push(`lib/topper-catalog.ts: linha retirada ainda pública ${retired}`);
 }
 if(errors.length){console.error(`Branding contract falhou (${errors.length}):\n- ${errors.join('\n- ')}`);process.exit(1);}
-console.log('Branding contract OK — Merlin Encantos em Papel usa a identidade oficial e quatro linhas atuais sem Shaker/Luxo públicos.');
+console.log('Branding contract OK — Merlin preserva a identidade oficial, quatro linhas atuais e trabalhos reais integrados ao hero sem seção duplicada.');
