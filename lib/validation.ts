@@ -70,7 +70,7 @@ export const inquirySchema = z.object({
   product_id: z.string().uuid().or(z.literal('')).optional(),
   product_name: z.string().trim().max(120).optional().default(''),
   category: z.string().trim().max(80).optional().default(''),
-  message: z.string().trim().max(2000).optional().default(''),
+  message: z.string().trim().max(6000).optional().default(''),
   items: z.array(z.object({product_id:z.string().uuid(),quantity:z.number().int().min(1).max(99999),customizations:z.record(z.string().trim().max(200)).optional().default({})})).max(30).optional().default([]),
   brief: inquiryBriefSchema,
   website: z.string().max(200).optional().default(''),
