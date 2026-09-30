@@ -46,7 +46,8 @@ export const categorySchema = z.object({
   sort_order: z.number().int().min(0).max(9999),
 });
 
-const attributionSchema=z.object({source:z.string().trim().max(80).optional(),medium:z.string().trim().max(80).optional(),campaign:z.string().trim().max(120).optional(),content:z.string().trim().max(120).optional(),term:z.string().trim().max(120).optional(),landing_path:z.string().trim().max(180).regex(/^\//).optional(),referrer_host:z.string().trim().max(120).regex(/^[a-z0-9.-]+$/i).optional()}).optional();
+const emptyStringToUndefined=(value:unknown)=>typeof value==='string'&&value.trim()===''?undefined:value;
+const attributionSchema=z.object({source:z.string().trim().max(80).optional(),medium:z.string().trim().max(80).optional(),campaign:z.string().trim().max(120).optional(),content:z.string().trim().max(120).optional(),term:z.string().trim().max(120).optional(),landing_path:z.preprocess(emptyStringToUndefined,z.string().trim().max(180).regex(/^\//).optional()),referrer_host:z.preprocess(emptyStringToUndefined,z.string().trim().max(120).regex(/^[a-z0-9.-]+$/i).optional())}).optional();
 
 const inquiryBriefSchema = z.object({
   occasion: z.string().trim().max(80).optional().default(''),
