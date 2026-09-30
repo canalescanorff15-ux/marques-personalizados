@@ -3,9 +3,8 @@ import fs from 'node:fs';
 const errors=[];
 const orderDraft=fs.readFileSync('lib/order-draft.ts','utf8');
 const topperDraft=fs.readFileSync('lib/topper-draft.ts','utf8');
-const builder=fs.readFileSync('components/OrderBuilder.tsx','utf8');
 
-// Rascunhos antigos precisam convergir para as categorias públicas atuais.
+// Rascunhos antigos precisam convergir para as categorias públicas atuais na fronteira de leitura.
 if(!/input\.productType[\s\S]*adesivos[\s\S]*chaveiros/.test(orderDraft))errors.push('rascunho legado de adesivos ainda não migra centralmente para chaveiros');
 if(!/input\.productType[\s\S]*(doces|kit)[\s\S]*outro/.test(orderDraft))errors.push('rascunhos legados de doces/kit ainda não migram centralmente para outro');
 
@@ -15,12 +14,9 @@ for(const [name,source] of [['order-draft',orderDraft],['topper-draft',topperDra
   if(!helper.includes('.trim()'))errors.push(`${name} ainda preserva espaços em branco como conteúdo real`);
 }
 
-// A UI não pode restaurar um tipo sem botão correspondente.
-if(!builder.includes("if(nextProduct==='adesivos')nextProduct='chaveiros'"))errors.push('OrderBuilder não possui defesa de compatibilidade para rascunho adesivos legado');
-
 if(errors.length){
   console.error(`V8.29 Draft Integrity Contract: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.29 Draft Integrity Contract: OK — rascunhos legados convergem para categorias atuais e espaços vazios não criam estado fantasma.');
+console.log('V8.29 Draft Integrity Contract: OK — rascunhos legados convergem na sanitização central e espaços vazios não criam estado fantasma.');
