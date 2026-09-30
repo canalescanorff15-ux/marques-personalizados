@@ -13,11 +13,14 @@ for(const removed of ['TRABALHOS REAIS','Feito por Nós.','Peças que já saíra
   if(home.includes(removed))errors.push(`bloco separado de trabalhos reais ainda existe: ${removed}`);
 }
 
-for(const token of ["'use client'",'AUTO_ROTATE_MS=6000','setInterval','aria-label="Trabalho anterior"','aria-label="Próximo trabalho"','Produção Merlin','next/image','v824-carousel-backdrop']){
+for(const token of ["'use client'",'AUTO_ROTATE_MS=6000','setInterval','aria-label="Trabalho anterior"','aria-label="Próximo trabalho"','Produção Merlin','next/image']){
   if(!component.includes(token))errors.push(`carrossel sem comportamento obrigatório: ${token}`);
 }
 for(const forbidden of ['onMouseEnter','onMouseLeave','onFocusCapture','onBlurCapture','const [paused','if(paused']){
   if(component.includes(forbidden))errors.push(`carrossel ainda pode pausar indefinidamente: ${forbidden}`);
+}
+for(const token of ['aspectRatios','setAspectRatios','naturalWidth','naturalHeight','onLoad','style={{aspectRatio:activeAspectRatio}}']){
+  if(!component.includes(token))errors.push(`carrossel não ajusta a moldura à proporção real da foto: ${token}`);
 }
 if(!component.includes('aria-live="polite"'))errors.push('carrossel sem anúncio acessível da peça atual');
 if(!component.includes('prefers-reduced-motion'))errors.push('carrossel não respeita redução de movimento');
@@ -27,13 +30,14 @@ const v824=layout.indexOf("import './v824-hero-real-work-carousel.css';");
 if(v824<0)errors.push('layout não importa CSS V8.24');
 if(v823>=0&&v824<=v823)errors.push('CSS V8.24 deve carregar depois da V8.23');
 
-for(const token of ['.v824-real-work-carousel','.v824-carousel-stage','.v824-carousel-backdrop','.v824-carousel-image','.v824-carousel-controls','.v824-carousel-dots','object-fit:contain','filter:blur(','@media(max-width:680px)','@media(prefers-reduced-motion:reduce)']){
+for(const token of ['.v824-real-work-carousel','.v824-carousel-stage','.v824-carousel-image','.v824-carousel-controls','.v824-carousel-dots','object-fit:contain','@media(max-width:680px)','@media(prefers-reduced-motion:reduce)']){
   if(!css.includes(token))errors.push(`CSS V8.24 sem ${token}`);
 }
+if(css.includes('aspect-ratio:4/3'))errors.push('moldura do carrossel ainda está presa em 4/3');
 
 if(errors.length){
   console.error(`V8.24 Hero Real Work Carousel Contract: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.24 Hero Real Work Carousel Contract: OK — trabalhos reais integrados ao hero, rotação automática de 6s sem pausa por hover, enquadramento completo com fundo desfocado e controles acessíveis.');
+console.log('V8.24 Hero Real Work Carousel Contract: OK — autoplay de 6s e moldura adaptativa usam a proporção real de cada foto, sem corte fixo em 4/3.');
