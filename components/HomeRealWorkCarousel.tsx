@@ -17,26 +17,22 @@ const AUTO_ROTATE_MS=6000;
 
 export default function HomeRealWorkCarousel({works}:Props){
   const [index,setIndex]=useState(0);
-  const [reduceMotion,setReduceMotion]=useState(false);
-  const [aspectRatios,setAspectRatios]=useState<Record<string,number>>({});
 
   useEffect(()=>{
-    const media=window.matchMedia('(prefers-reduced-motion: reduce)');
-    const sync=()=>setReduceMotion(media.matches);
-    sync();
-    media.addEventListener?.('change',sync);
-    return()=>media.removeEventListener?.('change',sync);
-  },[]);
+    for(const work of works){
+      const image=new window.Image();
+      image.src=work.src;
+    }
+  },[works]);
 
   useEffect(()=>{
-    if(reduceMotion||works.length<2)return;
+    if(works.length<2)return;
     const timer=window.setInterval(()=>setIndex(current=>(current+1)%works.length),AUTO_ROTATE_MS);
     return()=>window.clearInterval(timer);
-  },[reduceMotion,works.length,index]);
+  },[works.length]);
 
   if(!works.length)return null;
   const active=works[index%works.length];
-  const activeAspectRatio=aspectRatios[active.src]??4/3;
   const previous=()=>setIndex(current=>(current-1+works.length)%works.length);
   const next=()=>setIndex(current=>(current+1)%works.length);
 
@@ -45,9 +41,8 @@ export default function HomeRealWorkCarousel({works}:Props){
     aria-roledescription="carrossel"
     aria-label="Trabalhos reais da Merlin"
   >
-    <div className="v824-carousel-stage" style={{aspectRatio:activeAspectRatio}}>
+    <div className="v824-carousel-stage">
       <Image
-        key={`backdrop-${active.src}`}
         className="v824-carousel-backdrop"
         src={active.src}
         alt=""
@@ -57,7 +52,6 @@ export default function HomeRealWorkCarousel({works}:Props){
         aria-hidden="true"
       />
       <Image
-        key={active.src}
         className="v824-carousel-image"
         src={active.src}
         alt={active.title}
@@ -65,12 +59,6 @@ export default function HomeRealWorkCarousel({works}:Props){
         sizes="(max-width: 900px) 100vw, 46vw"
         priority={index===0}
         quality={84}
-        onLoad={event=>{
-          const {naturalWidth,naturalHeight}=event.currentTarget;
-          if(!naturalWidth||!naturalHeight)return;
-          const ratio=naturalWidth/naturalHeight;
-          setAspectRatios(current=>current[active.src]===ratio?current:{...current,[active.src]:ratio});
-        }}
       />
       <span className="v824-carousel-badge"><Sparkles size={14}/> Produção Merlin</span>
       {works.length>1&&<div className="v824-carousel-controls" aria-label="Controles do carrossel">
