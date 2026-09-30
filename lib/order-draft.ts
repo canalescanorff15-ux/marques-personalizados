@@ -98,7 +98,6 @@ export function readOrderDraft(){
     if(!raw)return null;
     const parsed=sanitize(JSON.parse(raw));
     if(!parsed)sessionStorage.removeItem(ORDER_DRAFT_KEY);
-    else sessionStorage.setItem(ORDER_DRAFT_KEY,JSON.stringify(parsed));
     return parsed;
   }catch{
     try{sessionStorage.removeItem(ORDER_DRAFT_KEY);}catch{}
