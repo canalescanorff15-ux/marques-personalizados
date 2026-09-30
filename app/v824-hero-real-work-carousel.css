@@ -14,13 +14,14 @@
 .v824-carousel-stage{
   position:relative;
   width:100%;
+  height:clamp(420px,42vw,540px);
   overflow:hidden;
   border:1px solid rgba(75,48,59,.08);
   border-radius:30px;
   background:#2d2025;
   box-shadow:0 30px 76px rgba(73,45,57,.15);
   isolation:isolate;
-  transition:aspect-ratio .32s ease,box-shadow .2s ease;
+  transition:box-shadow .2s ease;
 }
 
 .v824-carousel-backdrop{
@@ -35,7 +36,6 @@
   z-index:1;
   object-fit:contain;
   object-position:center;
-  animation:v824-carousel-in .55s ease both;
 }
 
 .v824-carousel-shade{
@@ -158,11 +158,6 @@
   box-shadow:0 30px 76px rgba(73,45,57,.18),0 0 0 3px rgba(142,82,107,.09);
 }
 
-@keyframes v824-carousel-in{
-  from{opacity:.35;transform:scale(1.018)}
-  to{opacity:1;transform:scale(1)}
-}
-
 @media(max-width:980px){
   .v822-home .v822-home-hero h1{
     font-size:clamp(2.55rem,5.4vw,4.15rem)!important;
@@ -185,6 +180,7 @@
     hyphens:none!important;
   }
   .v824-carousel-stage{
+    height:clamp(340px,105vw,460px);
     border-radius:22px;
     box-shadow:0 20px 48px rgba(73,45,57,.13);
   }
@@ -225,9 +221,7 @@
 
 @media(prefers-reduced-motion:reduce){
   .v824-carousel-stage,
-  .v824-carousel-image,
   .v824-carousel-controls button{
-    animation:none!important;
     transition:none!important;
   }
 }
