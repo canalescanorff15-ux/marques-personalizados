@@ -179,6 +179,7 @@ export default function OrderBuilder(){
 
   function set(key:keyof typeof form,value:string){
     setForm(current=>({...current,[key]:value}));
+    if(error)setError('');
     if(contingency)setContingency(null);
   }
 
