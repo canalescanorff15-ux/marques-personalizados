@@ -6,7 +6,6 @@ const home=read('app/page.tsx');
 const layout=read('app/layout.tsx');
 const component=fs.existsSync('components/HomeRealWorkCarousel.tsx')?read('components/HomeRealWorkCarousel.tsx'):'';
 const css=fs.existsSync('app/v824-hero-real-work-carousel.css')?read('app/v824-hero-real-work-carousel.css'):'';
-const homeCss=fs.existsSync('app/v822-home-premium.css')?read('app/v822-home-premium.css'):'';
 
 if(!home.includes("import HomeRealWorkCarousel from '@/components/HomeRealWorkCarousel';"))errors.push('Home não importa o carrossel de trabalhos reais');
 if(!home.includes('<HomeRealWorkCarousel works={REAL_WORKS}/>'))errors.push('Hero não usa os trabalhos reais no carrossel');
@@ -44,10 +43,10 @@ const mobileControlsBlock=css.match(/@media\(max-width:680px\)\{[\s\S]*?\.v824-c
 if(!/top:\s*10px/.test(mobileControlsBlock))errors.push('controles do carrossel não ficam no topo direito no mobile');
 if(/bottom:\s*10px/.test(mobileControlsBlock))errors.push('controles mobile ainda estão ancorados na parte inferior');
 
-const heroTitleBlock=homeCss.match(/\.v822-home \.v822-home-hero h1\s*\{([\s\S]*?)\}/)?.[1]??'';
+const heroTitleBlock=css.match(/\.v822-home \.v822-home-hero h1\s*\{([\s\S]*?)\}/)?.[1]??'';
 if(!/font-size:\s*clamp\(2\.7rem,4\.8vw,5rem\)!important/.test(heroTitleBlock))errors.push('título principal desktop ainda está grande demais');
-const mobileHeroTitleBlock=homeCss.match(/@media\(max-width:680px\)\{[\s\S]*?\.v822-home \.v822-home-hero h1\s*\{([\s\S]*?)\}/)?.[1]??'';
-for(const token of ['max-width:100%!important','font-size:clamp(2.45rem,11vw,3.35rem)!important','overflow-wrap:normal!important','word-break:normal!important','hyphens:none!important']){
+const mobileHeroTitleBlock=css.match(/@media\(max-width:680px\)\{[\s\S]*?\.v822-home \.v822-home-hero h1\s*\{([\s\S]*?)\}/)?.[1]??'';
+for(const token of ['max-width:100%!important','font-size:clamp(2.25rem,9.5vw,3rem)!important','overflow-wrap:normal!important','word-break:normal!important','hyphens:none!important']){
   if(!mobileHeroTitleBlock.includes(token))errors.push(`título principal mobile sem ajuste obrigatório: ${token}`);
 }
 
