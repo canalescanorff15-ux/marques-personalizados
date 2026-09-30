@@ -18,6 +18,7 @@ const AUTO_ROTATE_MS=6000;
 export default function HomeRealWorkCarousel({works}:Props){
   const [index,setIndex]=useState(0);
   const [reduceMotion,setReduceMotion]=useState(false);
+  const [aspectRatios,setAspectRatios]=useState<Record<string,number>>({});
 
   useEffect(()=>{
     const media=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -35,6 +36,7 @@ export default function HomeRealWorkCarousel({works}:Props){
 
   if(!works.length)return null;
   const active=works[index%works.length];
+  const activeAspectRatio=aspectRatios[active.src]??4/3;
   const previous=()=>setIndex(current=>(current-1+works.length)%works.length);
   const next=()=>setIndex(current=>(current+1)%works.length);
 
@@ -43,7 +45,7 @@ export default function HomeRealWorkCarousel({works}:Props){
     aria-roledescription="carrossel"
     aria-label="Trabalhos reais da Merlin"
   >
-    <div className="v824-carousel-stage">
+    <div className="v824-carousel-stage" style={{aspectRatio:activeAspectRatio}}>
       <Image
         key={`backdrop-${active.src}`}
         className="v824-carousel-backdrop"
@@ -63,6 +65,12 @@ export default function HomeRealWorkCarousel({works}:Props){
         sizes="(max-width: 900px) 100vw, 46vw"
         priority={index===0}
         quality={84}
+        onLoad={event=>{
+          const {naturalWidth,naturalHeight}=event.currentTarget;
+          if(!naturalWidth||!naturalHeight)return;
+          const ratio=naturalWidth/naturalHeight;
+          setAspectRatios(current=>current[active.src]===ratio?current:{...current,[active.src]:ratio});
+        }}
       />
       <span className="v824-carousel-badge"><Sparkles size={14}/> Produção Merlin</span>
       <div className="v824-carousel-shade" aria-hidden="true"/>

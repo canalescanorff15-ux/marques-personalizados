@@ -7,13 +7,13 @@
 .v824-carousel-stage{
   position:relative;
   width:100%;
-  aspect-ratio:4/3;
   overflow:hidden;
   border:1px solid rgba(75,48,59,.08);
   border-radius:30px;
   background:#2d2025;
   box-shadow:0 30px 76px rgba(73,45,57,.15);
   isolation:isolate;
+  transition:aspect-ratio .32s ease,box-shadow .2s ease;
 }
 
 .v824-carousel-backdrop{
@@ -190,7 +190,6 @@
 
 @media(max-width:680px){
   .v824-carousel-stage{
-    aspect-ratio:4/3;
     border-radius:22px;
     box-shadow:0 20px 48px rgba(73,45,57,.13);
   }
@@ -231,6 +230,7 @@
 }
 
 @media(prefers-reduced-motion:reduce){
+  .v824-carousel-stage,
   .v824-carousel-image,
   .v824-carousel-controls button,
   .v824-carousel-dots button{

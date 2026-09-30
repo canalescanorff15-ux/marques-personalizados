@@ -12,7 +12,9 @@ if(pkg.engines?.node!=='22.x')errors.push('engines.node deve ser 22.x');
 if(pkg.engines?.npm!=='10.x')errors.push('engines.npm deve ser 10.x');
 const nvm=fs.readFileSync('.nvmrc','utf8').trim();
 const expectedNodeMajor=expectedNode.split('.')[0];
-if(nvm!==expectedNode&&nvm!==expectedNodeMajor)errors.push(`.nvmrc deve selecionar Node ${expectedNode} ou a linha ${expectedNodeMajor}`);
+const expectedNpmMajor=expectedNpm.split('.')[0];
+const nvmUsesMajorLine=nvm===expectedNodeMajor;
+if(nvm!==expectedNode&&!nvmUsesMajorLine)errors.push(`.nvmrc deve selecionar Node ${expectedNode} ou a linha ${expectedNodeMajor}`);
 const npmrc=fs.existsSync('.npmrc')?fs.readFileSync('.npmrc','utf8'):'';
 for(const line of ['save-exact=true','package-lock=true','ignore-scripts=true'])if(!npmrc.split(/\r?\n/).map(x=>x.trim()).includes(line))errors.push(`.npmrc sem ${line}`);
 for(const group of ['dependencies','devDependencies'])for(const [name,version] of Object.entries(pkg[group]||{}))if(!exactSemver.test(String(version)))errors.push(`${group}.${name} precisa de versão exata (atual: ${version})`);
@@ -36,8 +38,12 @@ if(!fs.existsSync('.github/workflows/recovery-drill.yml'))errors.push('workflow 
 if(!fs.existsSync('.github/workflows/media-backup.yml'))errors.push('workflow de backup de mídia ausente');
 for(const token of ['npm run check:http-boundary','npm run check:concurrency','npm run check:sessions','npm run check:mfa','npm run check:recovery','npm run check:critical','npm run check:observability','npm run check:backup-auth','npm run check:backup-encryption','npm run check:restore','npm run check:resilience','npm run check:performance','npm run check:commercial','npm run check:scalable-crm','npm run check:crm-search','npm run check:production-scale','npm run check:agenda-scale','npm run check:reactivation','npm run check:audit-chain','npm run check:privacy','npm run check:privacy-dr','npm run check:offsite-backup','npm run check:backup-freshness','npm run check:recovery-drill','npm run check:media-dr','npm run check:media-recovery-drill','npm run check:critical-audit','npm run check:supply-chain','npm run check:public-flow','npm run check:load -- http://127.0.0.1:3100','npm run check:e2e -- http://127.0.0.1:3100','Start production server for E2E'])if(!ci.includes(token))errors.push(`CI sem contrato funcional: ${token}`);
 
-const nodeVersion=process.versions.node;if(nodeVersion!==expectedNode){const msg=`runtime atual é Node ${nodeVersion}; alvo reproduzível é ${expectedNode}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
-const npmUserAgent=String(process.env.npm_config_user_agent||'');const npmMatch=npmUserAgent.match(/(?:^|\s)npm\/([^\s]+)/);if(npmMatch&&npmMatch[1]!==expectedNpm){const msg=`runtime atual usa npm ${npmMatch[1]}; alvo reproduzível é ${expectedNpm}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
+const nodeVersion=process.versions.node;
+const nodeMatches=nvmUsesMajorLine?nodeVersion.split('.')[0]===expectedNodeMajor:nodeVersion===expectedNode;
+if(!nodeMatches){const msg=nvmUsesMajorLine?`runtime atual é Node ${nodeVersion}; .nvmrc exige a linha ${expectedNodeMajor}.x`:`runtime atual é Node ${nodeVersion}; alvo reproduzível é ${expectedNode}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
+const npmUserAgent=String(process.env.npm_config_user_agent||'');const npmMatch=npmUserAgent.match(/(?:^|\s)npm\/([^\s]+)/);
+const npmMatches=!npmMatch||(!nvmUsesMajorLine?npmMatch[1]===expectedNpm:npmMatch[1].split('.')[0]===expectedNpmMajor);
+if(!npmMatches&&npmMatch){const msg=nvmUsesMajorLine?`runtime atual usa npm ${npmMatch[1]}; engines exige a linha ${expectedNpmMajor}.x`:`runtime atual usa npm ${npmMatch[1]}; alvo reproduzível é ${expectedNpm}`;if(process.env.GITHUB_ACTIONS==='true')errors.push(msg);else warnings.push(msg);}
 const lockRequired=process.argv.includes('--require-lock');
 if(fs.existsSync('package-lock.json')){
   const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
