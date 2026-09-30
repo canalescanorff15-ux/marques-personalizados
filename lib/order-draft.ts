@@ -52,17 +52,18 @@ export const EMPTY_ORDER_DRAFT:OrderDraft={
 };
 
 function trim(value:unknown,max:number){
-  return typeof value==='string'?value.slice(0,max):'';
+  return typeof value==='string'?value.trim().slice(0,max):'';
 }
 
-// `doces` e `kit` permanecem aceitos apenas para recuperar rascunhos antigos.
+// Tipos retirados permanecem aceitos somente para migrar rascunhos antigos.
 const allowed=new Set<OrderProductType>(['topo','marcadores','caixinhas','lembrancinhas','chaveiros','adesivos','doces','kit','outro']);
 
 function sanitize(value:unknown):OrderDraft|null{
   if(!value||typeof value!=='object')return null;
   const input=value as Record<string,unknown>;
   if(input.version!==1)return null;
-  const type=typeof input.productType==='string'&&allowed.has(input.productType as OrderProductType)?input.productType as OrderProductType:'topo';
+  const rawType=typeof input.productType==='string'&&allowed.has(input.productType as OrderProductType)?input.productType as OrderProductType:'topo';
+  const type:OrderProductType=rawType==='adesivos'?'chaveiros':rawType==='doces'||rawType==='kit'?'outro':rawType;
   const rawLevel=trim(input.level,80)||'essencial';
   const level=topperLevelBySlug(rawLevel)?rawLevel:'essencial';
   const retiredLevelMigrated=level!==rawLevel;
@@ -97,6 +98,7 @@ export function readOrderDraft(){
     if(!raw)return null;
     const parsed=sanitize(JSON.parse(raw));
     if(!parsed)sessionStorage.removeItem(ORDER_DRAFT_KEY);
+    else sessionStorage.setItem(ORDER_DRAFT_KEY,JSON.stringify(parsed));
     return parsed;
   }catch{
     try{sessionStorage.removeItem(ORDER_DRAFT_KEY);}catch{}
