@@ -13,11 +13,10 @@ type RealWork={
 
 type Props={works:RealWork[]};
 
-const AUTO_ROTATE_MS=7000;
+const AUTO_ROTATE_MS=6000;
 
 export default function HomeRealWorkCarousel({works}:Props){
   const [index,setIndex]=useState(0);
-  const [paused,setPaused]=useState(false);
   const [reduceMotion,setReduceMotion]=useState(false);
 
   useEffect(()=>{
@@ -29,10 +28,10 @@ export default function HomeRealWorkCarousel({works}:Props){
   },[]);
 
   useEffect(()=>{
-    if(paused||reduceMotion||works.length<2)return;
+    if(reduceMotion||works.length<2)return;
     const timer=window.setInterval(()=>setIndex(current=>(current+1)%works.length),AUTO_ROTATE_MS);
     return()=>window.clearInterval(timer);
-  },[paused,reduceMotion,works.length,index]);
+  },[reduceMotion,works.length,index]);
 
   if(!works.length)return null;
   const active=works[index%works.length];
@@ -41,16 +40,20 @@ export default function HomeRealWorkCarousel({works}:Props){
 
   return <div
     className="v824-real-work-carousel"
-    onMouseEnter={()=>setPaused(true)}
-    onMouseLeave={()=>setPaused(false)}
-    onFocusCapture={()=>setPaused(true)}
-    onBlurCapture={event=>{
-      if(!event.relatedTarget||!event.currentTarget.contains(event.relatedTarget as Node))setPaused(false);
-    }}
     aria-roledescription="carrossel"
     aria-label="Trabalhos reais da Merlin"
   >
     <div className="v824-carousel-stage">
+      <Image
+        key={`backdrop-${active.src}`}
+        className="v824-carousel-backdrop"
+        src={active.src}
+        alt=""
+        fill
+        sizes="(max-width: 900px) 100vw, 46vw"
+        quality={60}
+        aria-hidden="true"
+      />
       <Image
         key={active.src}
         className="v824-carousel-image"
