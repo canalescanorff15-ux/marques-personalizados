@@ -179,6 +179,7 @@ export default function OrderBuilder(){
 
   function set(key:keyof typeof form,value:string){
     setForm(current=>({...current,[key]:value}));
+    if(error)setError('');
     if(contingency)setContingency(null);
   }
 
@@ -203,6 +204,7 @@ export default function OrderBuilder(){
       event_date:'',theme:'',celebrant_name:'',celebrant_age:'',cake_size:'',colors:'',reference:'',
       quantity:'',variant:'',format:'',dimensions:'',finish:'',frontBack:'',kitItems:'',description:'',notes:''
     }));
+    setError('');
     setDraftWarning('');
     setContingency(null);
     setCopyStatus('');
@@ -380,7 +382,7 @@ export default function OrderBuilder(){
         <div><small>{contactStep} • CONTATO</small><h3>Revise e envie para o WhatsApp.</h3></div>
         <div className="kit-contact-two">
           <label>Seu nome<input minLength={2} maxLength={120} required autoComplete="name" value={form.name} onChange={e=>set('name',e.target.value)}/></label>
-          <label>WhatsApp<input minLength={8} maxLength={30} required inputMode="tel" autoComplete="tel" placeholder="(98) 99999-9999" value={form.whatsapp} onChange={e=>set('whatsapp',e.target.value)}/></label>
+          <label>WhatsApp<input minLength={10} maxLength={30} required inputMode="tel" autoComplete="tel" placeholder="(98) 99999-9999" value={form.whatsapp} onChange={e=>set('whatsapp',e.target.value)}/></label>
         </div>
         <div className="kit-contact-two"><label>E-mail (opcional)<input type="email" maxLength={180} value={form.email} onChange={e=>set('email',e.target.value)}/></label><label>Data do evento<input type="date" min={todayLocal()} value={form.event_date} onChange={e=>set('event_date',e.target.value)}/></label></div>
         <label>Observações<textarea maxLength={1200} placeholder="Prazo, estilo, acabamento ou qualquer informação importante..." value={form.notes} onChange={e=>set('notes',e.target.value)}/></label>

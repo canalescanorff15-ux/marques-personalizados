@@ -65,6 +65,12 @@ const nestedContracts=[
   'scripts/v826-carousel-product-safe-fit-contract-check.mjs',
   'scripts/v827-carousel-individual-fit-contract-check.mjs',
   'scripts/v828-carousel-balanced-fit-contract-check.mjs',
+  'scripts/v829-order-validation-integrity-contract-check.mjs',
+  'scripts/v829-draft-integrity-contract-check.mjs',
+  'scripts/v829-draft-date-integrity-contract-check.mjs',
+  'scripts/v829-public-route-integrity-contract-check.mjs',
+  'scripts/v829-public-state-integrity-contract-check.mjs',
+  'scripts/v829-order-boundary-contract-check.mjs',
   'scripts/v8-inspirations-contract-check.mjs',
   'scripts/v8-inspiration-detail-contract-check.mjs',
   'scripts/v8-order-builder-contract-check.mjs',
@@ -81,8 +87,8 @@ for(const contract of nestedContracts){
 }
 
 if(errors.length){
-  console.error(`Merlin V8.28 Commercial UX: FALHOU (${errors.length})`);
+  console.error(`Merlin V8.29 Commercial UX: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Merlin V8.28 Commercial UX: OK — quatro linhas atuais, preços centralizados e hero com fotos grandes, inteiras e equilibradas.');
+console.log('Merlin V8.29 Commercial UX: OK — jornada comercial preservada com fronteiras cliente/servidor consistentes, metadados opcionais normalizados, rascunhos legados seguros, estados públicos coerentes e rotas públicas válidas.');

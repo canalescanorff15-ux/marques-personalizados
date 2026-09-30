@@ -46,7 +46,8 @@ export const categorySchema = z.object({
   sort_order: z.number().int().min(0).max(9999),
 });
 
-const attributionSchema=z.object({source:z.string().trim().max(80).optional(),medium:z.string().trim().max(80).optional(),campaign:z.string().trim().max(120).optional(),content:z.string().trim().max(120).optional(),term:z.string().trim().max(120).optional(),landing_path:z.string().trim().max(180).regex(/^\//).optional(),referrer_host:z.string().trim().max(120).regex(/^[a-z0-9.-]+$/i).optional()}).optional();
+const emptyStringToUndefined=(value:unknown)=>typeof value==='string'&&value.trim()===''?undefined:value;
+const attributionSchema=z.object({source:z.string().trim().max(80).optional(),medium:z.string().trim().max(80).optional(),campaign:z.string().trim().max(120).optional(),content:z.string().trim().max(120).optional(),term:z.string().trim().max(120).optional(),landing_path:z.preprocess(emptyStringToUndefined,z.string().trim().max(180).regex(/^\//).optional()),referrer_host:z.preprocess(emptyStringToUndefined,z.string().trim().max(120).regex(/^[a-z0-9.-]+$/i).optional())}).optional();
 
 const inquiryBriefSchema = z.object({
   occasion: z.string().trim().max(80).optional().default(''),
@@ -69,7 +70,7 @@ export const inquirySchema = z.object({
   product_id: z.string().uuid().or(z.literal('')).optional(),
   product_name: z.string().trim().max(120).optional().default(''),
   category: z.string().trim().max(80).optional().default(''),
-  message: z.string().trim().max(2000).optional().default(''),
+  message: z.string().trim().max(6000).optional().default(''),
   items: z.array(z.object({product_id:z.string().uuid(),quantity:z.number().int().min(1).max(99999),customizations:z.record(z.string().trim().max(200)).optional().default({})})).max(30).optional().default([]),
   brief: inquiryBriefSchema,
   website: z.string().max(200).optional().default(''),
