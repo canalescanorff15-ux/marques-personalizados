@@ -8,14 +8,24 @@ import { serverFailure } from '@/lib/observability';
 function deterministicUuid(value:string){const h=crypto.createHash('sha256').update(value).digest('hex').slice(0,32).split('');h[12]='4';h[16]=((parseInt(h[16],16)&3)|8).toString(16);const x=h.join('');return `${x.slice(0,8)}-${x.slice(8,12)}-${x.slice(12,16)}-${x.slice(16,20)}-${x.slice(20)}`;}
 function localToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Fortaleza',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
 function formatDate(value:string|undefined){return value?value.split('-').reverse().join('/'):'';}
+function inquiryValidationMessage(error:{issues:Array<{path:(string|number)[]}>}){
+  const field=String(error.issues[0]?.path?.[0]||'');
+  if(field==='name')return'Informe seu nome para continuar.';
+  if(field==='whatsapp')return'Informe um WhatsApp válido com DDD.';
+  if(field==='email')return'Confira o e-mail informado.';
+  if(field==='event_date')return'Confira a data do evento.';
+  if(field==='message'||field==='items'||field==='brief')return'Revise os detalhes do pedido e tente novamente.';
+  if(field==='product_id'||field==='product_name'||field==='category')return'Revise o produto escolhido e tente novamente.';
+  return'Revise os dados do pedido e tente novamente.';
+}
 
 export async function POST(request:Request){
   if(!sameOriginRequest(request))return Response.json({error:'Origem inválida.'},{status:403});
   const limited=await protectedRateLimit(request,'inquiry',6,15*60_000);if(!limited.allowed)return Response.json({error:'Muitas solicitações em pouco tempo. Tente novamente mais tarde.'},{status:429});
   let body:Record<string,unknown>={};try{body=await readJsonBody(request,48_000);}catch(e){return Response.json({error:e instanceof Error&&e.message==='PAYLOAD_TOO_LARGE'?'Solicitação muito grande.':'Dados inválidos.'},{status:e instanceof Error&&e.message==='PAYLOAD_TOO_LARGE'?413:400});}
-  const parsed=inquirySchema.safeParse(body);if(!parsed.success)return Response.json({error:'Confira seu nome, WhatsApp e os dados do orçamento.',details:parsed.error.flatten()},{status:400});
+  const parsed=inquirySchema.safeParse(body);if(!parsed.success)return Response.json({error:inquiryValidationMessage(parsed.error)},{status:400});
   if(parsed.data.website)return Response.json({ok:true});
-  const phone=normalizeWhatsapp(parsed.data.whatsapp);if(phone.length<10)return Response.json({error:'Informe um WhatsApp válido.'},{status:400});
+  const phone=normalizeWhatsapp(parsed.data.whatsapp);if(phone.length<10)return Response.json({error:'Informe um WhatsApp válido com DDD.'},{status:400});
   if(parsed.data.event_date&&parsed.data.event_date<localToday())return Response.json({error:'A data do evento não pode estar no passado.'},{status:400});
 
   const settings=await getSiteSettings();
