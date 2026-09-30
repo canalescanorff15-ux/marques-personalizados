@@ -9,10 +9,10 @@ const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{
 
 const pages=walk('app').filter(file=>file.endsWith(`${path.sep}page.tsx`));
 function pageRoute(file){
-  const relative=file.replace(/\\/g,'/').replace(/^app\//,'').replace(/\/page\.tsx$/,'');
+  const relative=file.replace(/\\/g,'/').replace(/^app\//,'').replace(/(?:^|\/)page\.tsx$/,'');
   if(!relative)return'/';
-  const parts=relative.split('/').filter(part=>!/^\(.+\)$/.test(part));
-  return'/'+parts.join('/');
+  const parts=relative.split('/').filter(part=>part&&!/^\(.+\)$/.test(part));
+  return parts.length?'/'+parts.join('/'):'/';
 }
 const routes=new Set(pages.map(pageRoute));
 const patterns=[...routes].map(route=>{
@@ -27,7 +27,9 @@ function existsRoute(value){
   return routes.has(clean)||patterns.some(pattern=>pattern.test(clean));
 }
 
-const tsx=[...walk('app'),...walk('components')].filter(file=>file.endsWith('.tsx')).filter(file=>!file.replace(/\\/g,'/').includes('/app/admin/'));
+const tsx=[...walk('app'),...walk('components')]
+  .filter(file=>file.endsWith('.tsx'))
+  .filter(file=>!file.replace(/\\/g,'/').startsWith('app/admin/'));
 const localLinks=[];
 for(const file of tsx){
   const source=fs.readFileSync(file,'utf8');
