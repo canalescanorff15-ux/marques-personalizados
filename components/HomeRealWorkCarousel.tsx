@@ -51,15 +51,17 @@ export default function HomeRealWorkCarousel({works}:Props){
         quality={60}
         aria-hidden="true"
       />
-      <Image
-        className="v824-carousel-image"
-        src={active.src}
-        alt={active.title}
-        fill
-        sizes="(max-width: 900px) 100vw, 46vw"
-        priority={index===0}
-        quality={84}
-      />
+      <div className="v826-carousel-photo-safe">
+        <Image
+          className="v824-carousel-image"
+          src={active.src}
+          alt={active.title}
+          fill
+          sizes="(max-width: 900px) 92vw, 42vw"
+          priority={index===0}
+          quality={84}
+        />
+      </div>
       <span className="v824-carousel-badge"><Sparkles size={14}/> Produção Merlin</span>
       {works.length>1&&<div className="v824-carousel-controls" aria-label="Controles do carrossel">
         <button type="button" onClick={previous} aria-label="Trabalho anterior"><ArrowLeft size={17}/></button>
