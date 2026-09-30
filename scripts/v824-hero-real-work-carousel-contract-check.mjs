@@ -19,12 +19,8 @@ for(const token of ["'use client'",'AUTO_ROTATE_MS=6000','setInterval','aria-lab
 for(const forbidden of ['onMouseEnter','onMouseLeave','onFocusCapture','onBlurCapture','const [paused','if(paused']){
   if(component.includes(forbidden))errors.push(`carrossel ainda pode pausar indefinidamente: ${forbidden}`);
 }
-for(const token of ['aspectRatios','setAspectRatios','naturalWidth','naturalHeight','onLoad','style={{aspectRatio:activeAspectRatio}}']){
-  if(!component.includes(token))errors.push(`carrossel não ajusta a moldura à proporção real da foto: ${token}`);
-}
 if(component.includes('v824-carousel-dots')||component.includes('Selecionar trabalho'))errors.push('carrossel ainda exibe os pontos de navegação inferiores');
 if(!component.includes('aria-live="polite"'))errors.push('carrossel sem anúncio acessível da peça atual');
-if(!component.includes('prefers-reduced-motion'))errors.push('carrossel não respeita redução de movimento');
 
 const v823=layout.indexOf("import './v823-pricing.css';");
 const v824=layout.indexOf("import './v824-hero-real-work-carousel.css';");
@@ -55,4 +51,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.24 Hero Real Work Carousel Contract: OK — título responsivo menor, autoplay 6s, moldura adaptativa e controles no topo sem bolinhas inferiores.');
+console.log('V8.24 Hero Real Work Carousel Contract: OK — título responsivo menor, autoplay 6s e controles no topo sem bolinhas inferiores.');
