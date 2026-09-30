@@ -32,7 +32,7 @@ export const EMPTY_TOPPER_DRAFT:TopperDraft={
 };
 
 function trim(value:unknown,max:number){
-  return typeof value==='string'?value.slice(0,max):'';
+  return typeof value==='string'?value.trim().slice(0,max):'';
 }
 
 function sanitize(value:unknown):TopperDraft|null{
