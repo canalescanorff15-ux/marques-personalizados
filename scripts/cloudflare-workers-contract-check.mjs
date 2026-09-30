@@ -9,6 +9,11 @@ assert(exists('wrangler.jsonc'),'wrangler.jsonc ausente');
 assert(exists('vite.config.ts'),'vite.config.ts ausente');
 assert(exists('CLOUDFLARE.md'),'CLOUDFLARE.md ausente');
 
+const platform=JSON.parse(read('platform-contract.json'));
+const expectedNodeMajor=String(platform.nodeVersion).split('.')[0];
+const nvmVersion=read('.nvmrc').trim();
+assert(nvmVersion===expectedNodeMajor,`.nvmrc deve usar somente a linha Node ${expectedNodeMajor} no bootstrap do Workers Builds; a versão exata ${platform.nodeVersion} continua fixada no contrato/CI/Docker`);
+
 const wrangler=read('wrangler.jsonc');
 assert(/"name"\s*:\s*"merlin"/.test(wrangler),'Worker deve usar o nome merlin para publicar em merlin.encantos.workers.dev');
 assert(/"nodejs_compat"/.test(wrangler),'Workers precisa de nodejs_compat para o runtime atual');
@@ -49,4 +54,4 @@ if(failures.length){
   for(const f of failures)console.error(`- ${f}`);
   process.exit(1);
 }
-console.log('Cloudflare Workers Contract: OK — Worker merlin + vinext + Static Assets alinhados ao domínio atual; bindings de dashboard preservados e DATABASE_URL obrigatória.');
+console.log('Cloudflare Workers Contract: OK — bootstrap Node major-only + Worker merlin + vinext + Static Assets alinhados; bindings de dashboard preservados e DATABASE_URL obrigatória.');
