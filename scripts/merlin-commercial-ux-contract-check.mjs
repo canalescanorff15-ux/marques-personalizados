@@ -67,7 +67,9 @@ const nestedContracts=[
   'scripts/v828-carousel-balanced-fit-contract-check.mjs',
   'scripts/v829-order-validation-integrity-contract-check.mjs',
   'scripts/v829-draft-integrity-contract-check.mjs',
+  'scripts/v829-draft-date-integrity-contract-check.mjs',
   'scripts/v829-public-route-integrity-contract-check.mjs',
+  'scripts/v829-public-state-integrity-contract-check.mjs',
   'scripts/v829-order-boundary-contract-check.mjs',
   'scripts/v8-inspirations-contract-check.mjs',
   'scripts/v8-inspiration-detail-contract-check.mjs',
@@ -89,4 +91,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Merlin V8.29 Commercial UX: OK — jornada comercial preservada com fronteiras cliente/servidor consistentes, metadados opcionais normalizados, rascunhos legados seguros e rotas públicas coerentes.');
+console.log('Merlin V8.29 Commercial UX: OK — jornada comercial preservada com fronteiras cliente/servidor consistentes, metadados opcionais normalizados, rascunhos legados seguros, estados públicos coerentes e rotas públicas válidas.');
