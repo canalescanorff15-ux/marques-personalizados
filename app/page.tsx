@@ -4,6 +4,7 @@ import { ArrowUpRight, BookOpen, Box, Gift, KeyRound, Layers3, MessageCircle, Sp
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import JsonLd from '@/components/JsonLd';
+import HomeRealWorkCarousel from '@/components/HomeRealWorkCarousel';
 import { getSiteSettings } from '@/lib/db';
 import { siteUrl } from '@/lib/config';
 import { publicTopperInspirations } from '@/lib/topper-inspirations';
@@ -48,11 +49,7 @@ export default async function HomePage(){
         </div>
 
         <div className="v822-hero-visual" data-reveal>
-          <Link className="home-v717-showcase v8-clean-hero-media v822-hero-real" href="/orcamento" aria-label="Pedir orçamento para um personalizado como este">
-            <Image src={REAL_WORKS[0].src} alt={REAL_WORKS[0].title} fill sizes="(max-width: 900px) 100vw, 46vw" priority quality={82}/>
-            <span className="v822-hero-badge"><Sparkles size={14}/> Produção Merlin</span>
-          </Link>
-          <div className="v822-hero-proof"><strong>{REAL_WORKS[0].title}</strong><span>{REAL_WORKS[0].copy}</span></div>
+          <HomeRealWorkCarousel works={REAL_WORKS}/>
         </div>
       </div>
     </section>
@@ -71,21 +68,6 @@ export default async function HomePage(){
           <Link href="/personalizados#adesivos-chaveiros" className="v8-home-product-card v822-product-card"><span><KeyRound size={20}/></span><h3>Adesivos & Chaveiros</h3><i>Nome, foto ou tema</i></Link>
           <Link href="/personalizados#caixinhas" className="v8-home-product-card v822-product-card"><span><Box size={20}/></span><h3>Caixinhas</h3><small>Sob consulta</small></Link>
           <Link href="/personalizados#outros" className="v8-home-product-card v822-product-card"><span><Sparkles size={20}/></span><h3>Outros Personalizados</h3><i>Conte sua ideia</i></Link>
-        </div>
-      </div>
-    </section>
-
-    <section className="v821-real-work v822-real-work" id="feito-por-nos">
-      <div className="container">
-        <div className="v8-clean-section-head" data-reveal>
-          <div><small>TRABALHOS REAIS</small><h2>Feito por Nós.</h2><p className="v822-section-copy">Peças que já saíram da nossa bancada, com impressão, recorte e acabamento feitos pela Merlin.</p></div>
-          <Link href="/orcamento">Quero encomendar <ArrowUpRight size={15}/></Link>
-        </div>
-        <div className="v821-real-work-grid v822-real-work-grid">
-          {REAL_WORKS.map((item,index)=><article className="v821-real-work-card v822-real-work-card" key={item.src}>
-            <div className="v822-real-work-media"><Image src={item.src} alt={item.title} width={900} height={1125} sizes="(max-width: 560px) 100vw, (max-width: 820px) 50vw, 25vw" quality={index===0?82:76}/><span>Produção Merlin</span></div>
-            <div><strong>{item.title}</strong><span>{item.copy}</span></div>
-          </article>)}
         </div>
       </div>
     </section>

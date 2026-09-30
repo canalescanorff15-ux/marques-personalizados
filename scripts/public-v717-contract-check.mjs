@@ -21,7 +21,9 @@ if(fs.existsSync('app/page.tsx')){
   const required=isEssentialHome?[
     ['escopo da home','home-v717'],
     ['Home essencial V8.14','v8-essential-home-v814'],
-    ['hero editorial','home-v717-showcase'],
+    ['hero premium atual','v822-home-hero'],
+    ['carrossel de trabalhos reais','HomeRealWorkCarousel'],
+    ['trabalhos reais integrados ao hero','<HomeRealWorkCarousel works={REAL_WORKS}/>'],
     ['headline V8.22','Personalizados feitos para'],
     ['CTA catálogo','Ver topos'],
     ['CTA orçamento','Pedir orçamento'],
@@ -31,7 +33,6 @@ if(fs.existsSync('app/page.tsx')){
     ['produto lembrancinhas','Lembrancinhas'],
     ['produto adesivos e chaveiros','Adesivos & Chaveiros'],
     ['outros personalizados','Outros Personalizados'],
-    ['trabalhos reais','Feito por Nós'],
     ['galeria de inspirações','home-v717-gallery-grid'],
     ['fonte real de inspirações','publicTopperInspirations'],
     ['escopo comercial curto','v8-home-scope-note'],
@@ -42,7 +43,10 @@ if(fs.existsSync('app/page.tsx')){
   const heroEnd=home.indexOf(isEssentialHome?'<section className="v8-home-products':'<section className="home-v717-intro-strip');
   const hero=home.slice(home.indexOf('<section className="hero'),heroEnd);
   if((hero.match(/className="btn /g)||[]).length!==2)errors.push('hero deve manter exatamente 2 CTAs principais');
-  if(isEssentialHome){for(const forbidden of ['Doces & Complementos','href="/personalizados#doces"','href="/personalizados#kits"'])if(home.includes(forbidden))errors.push('Home voltou a expor categoria não ativa: '+forbidden);}
+  if(isEssentialHome){
+    for(const forbidden of ['Doces & Complementos','href="/personalizados#doces"','href="/personalizados#kits"'])if(home.includes(forbidden))errors.push('Home voltou a expor categoria não ativa: '+forbidden);
+    for(const removed of ['TRABALHOS REAIS','Feito por Nós.','id="feito-por-nos"'])if(home.includes(removed))errors.push('Home voltou a renderizar seção separada removida: '+removed);
+  }
   const v8Curated=fs.existsSync('app/v8-image-policy.css')&&home.includes('homeInspirationCodes');
   if(v8Curated){
     const codes=[...home.matchAll(/INSP-TOP-(\d{2,3})/g)].map(match=>Number(match[1]));
@@ -54,7 +58,7 @@ if(fs.existsSync('app/page.tsx')){
 
 if(fs.existsSync('app/public-v717.css')){
   const css=read('app/public-v717.css');
-  const required=[['marcador V7.17','/* V7.17 — Home editorial premium */'],['hero em duas colunas','.premium-hero .hero-grid'],['colagem editorial','.home-v717-showcase{'],['tablet','@media(max-width:900px)'],['mobile','@media(max-width:640px)'],['mobile estreito','@media(max-width:390px)'],['movimento reduzido','@media(prefers-reduced-motion:reduce)']];
+  const required=[['marcador V7.17','/* V7.17 — Home editorial premium */'],['hero em duas colunas','.premium-hero .hero-grid'],['colagem editorial legada preservada no CSS','.home-v717-showcase{'],['tablet','@media(max-width:900px)'],['mobile','@media(max-width:640px)'],['mobile estreito','@media(max-width:390px)'],['movimento reduzido','@media(prefers-reduced-motion:reduce)']];
   for(const [label,token] of required)if(!css.includes(token))errors.push(label);
 }
 
@@ -66,5 +70,5 @@ if(fs.existsSync('lib/topper-catalog.ts')){
   for(const retired of ['shaker','elite-shaker-acetato'])if(current.includes(retired))errors.push('linha retirada voltou ao catálogo: '+retired);
 }
 
-if(errors.length){console.error('V8.23 Home Editorial Contract: FALHOU ('+errors.length+')');for(const error of errors)console.error('- '+error);process.exit(1);}
-console.log('V8.23 Home Editorial Contract: OK — hero curto, produtos ativos, quatro linhas, trabalhos reais, inspirações e contato protegidos.');
+if(errors.length){console.error('V8.24 Home Editorial Contract: FALHOU ('+errors.length+')');for(const error of errors)console.error('- '+error);process.exit(1);}
+console.log('V8.24 Home Editorial Contract: OK — hero curto com trabalhos reais em carrossel, produtos ativos, inspirações e contato protegidos.');
