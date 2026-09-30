@@ -73,6 +73,11 @@ export default function HomeRealWorkCarousel({works}:Props){
         }}
       />
       <span className="v824-carousel-badge"><Sparkles size={14}/> Produção Merlin</span>
+      {works.length>1&&<div className="v824-carousel-controls" aria-label="Controles do carrossel">
+        <button type="button" onClick={previous} aria-label="Trabalho anterior"><ArrowLeft size={17}/></button>
+        <span>{String(index+1).padStart(2,'0')} / {String(works.length).padStart(2,'0')}</span>
+        <button type="button" onClick={next} aria-label="Próximo trabalho"><ArrowRight size={17}/></button>
+      </div>}
       <div className="v824-carousel-shade" aria-hidden="true"/>
       <div className="v824-carousel-caption" aria-live="polite">
         <div>
@@ -81,22 +86,6 @@ export default function HomeRealWorkCarousel({works}:Props){
         </div>
         <Link href="/orcamento">Quero algo assim <ArrowRight size={14}/></Link>
       </div>
-      {works.length>1&&<div className="v824-carousel-controls" aria-label="Controles do carrossel">
-        <button type="button" onClick={previous} aria-label="Trabalho anterior"><ArrowLeft size={17}/></button>
-        <span>{String(index+1).padStart(2,'0')} / {String(works.length).padStart(2,'0')}</span>
-        <button type="button" onClick={next} aria-label="Próximo trabalho"><ArrowRight size={17}/></button>
-      </div>}
     </div>
-
-    {works.length>1&&<div className="v824-carousel-dots" aria-label="Selecionar trabalho">
-      {works.map((work,workIndex)=><button
-        type="button"
-        key={work.src}
-        className={workIndex===index?'is-active':''}
-        onClick={()=>setIndex(workIndex)}
-        aria-label={`Exibir ${work.title}`}
-        aria-current={workIndex===index?'true':undefined}
-      />)}
-    </div>}
   </div>;
 }
