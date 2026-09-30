@@ -32,10 +32,22 @@
   opacity:.48;
 }
 
+/* V8.26 — a foto real não preenche o quadro à força. A margem interna
+   preserva trabalhos fotografados de perto, enquanto o backdrop ocupa o card. */
+.v826-carousel-photo-safe{
+  position:absolute;
+  inset:clamp(24px,4.2vw,36px) clamp(20px,3.5vw,32px) clamp(72px,7.5vw,92px);
+  z-index:1;
+  overflow:hidden;
+  border-radius:22px;
+  pointer-events:none;
+}
+
 .v824-carousel-image{
   z-index:1;
   object-fit:contain;
   object-position:center;
+  transform:none!important;
 }
 
 .v824-carousel-shade{
@@ -186,6 +198,10 @@
   }
   .v824-carousel-backdrop{
     filter:blur(20px) saturate(.88);
+  }
+  .v826-carousel-photo-safe{
+    inset:clamp(16px,4vw,22px) clamp(12px,3.2vw,18px) clamp(58px,14vw,74px);
+    border-radius:16px;
   }
   .v824-carousel-badge{
     top:10px;
