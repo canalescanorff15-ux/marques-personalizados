@@ -4,11 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
 
 type RealWork={
   src:string;
   title:string;
   copy:string;
+  fitScale?:number;
+  fitPosition?:string;
 };
 
 type Props={works:RealWork[]};
@@ -35,6 +38,10 @@ export default function HomeRealWorkCarousel({works}:Props){
   const active=works[index%works.length];
   const previous=()=>setIndex(current=>(current-1+works.length)%works.length);
   const next=()=>setIndex(current=>(current+1)%works.length);
+  const photoStyle={
+    '--v827-photo-scale':String(active.fitScale??.86),
+    '--v827-photo-position':active.fitPosition??'50% 50%'
+  } as CSSProperties;
 
   return <div
     className="v824-real-work-carousel"
@@ -51,7 +58,7 @@ export default function HomeRealWorkCarousel({works}:Props){
         quality={60}
         aria-hidden="true"
       />
-      <div className="v826-carousel-photo-safe">
+      <div className="v826-carousel-photo-safe" style={photoStyle}>
         <Image
           className="v824-carousel-image"
           src={active.src}

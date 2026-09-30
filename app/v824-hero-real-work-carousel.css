@@ -36,7 +36,7 @@
    preserva trabalhos fotografados de perto, enquanto o backdrop ocupa o card. */
 .v826-carousel-photo-safe{
   position:absolute;
-  inset:clamp(24px,4.2vw,36px) clamp(20px,3.5vw,32px) clamp(72px,7.5vw,92px);
+  inset:clamp(18px,3vw,28px) clamp(14px,2.4vw,24px) clamp(72px,7.5vw,92px);
   z-index:1;
   overflow:hidden;
   border-radius:22px;
@@ -47,7 +47,17 @@
   z-index:1;
   object-fit:contain;
   object-position:center;
-  transform:none!important;
+}
+
+/* V8.27 — regra final do hero: vence qualquer política visual antiga que use
+   cover/zoom e aplica o enquadramento individual de cada trabalho real. */
+.premium-site.v822-home .v822-hero-visual .v826-carousel-photo-safe > img.v824-carousel-image{
+  z-index:1!important;
+  object-fit:contain!important;
+  object-position:var(--v827-photo-position,50% 50%)!important;
+  transform:scale(var(--v827-photo-scale,.86))!important;
+  transform-origin:center!important;
+  will-change:transform;
 }
 
 .v824-carousel-shade{
@@ -200,7 +210,7 @@
     filter:blur(20px) saturate(.88);
   }
   .v826-carousel-photo-safe{
-    inset:clamp(16px,4vw,22px) clamp(12px,3.2vw,18px) clamp(58px,14vw,74px);
+    inset:clamp(12px,3vw,18px) clamp(10px,2.5vw,15px) clamp(58px,14vw,74px);
     border-radius:16px;
   }
   .v824-carousel-badge{

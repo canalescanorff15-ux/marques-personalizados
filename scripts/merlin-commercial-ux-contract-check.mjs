@@ -63,6 +63,7 @@ const nestedContracts=[
   'scripts/v824-hero-real-work-carousel-contract-check.mjs',
   'scripts/v825-carousel-stability-contract-check.mjs',
   'scripts/v826-carousel-product-safe-fit-contract-check.mjs',
+  'scripts/v827-carousel-individual-fit-contract-check.mjs',
   'scripts/v8-inspirations-contract-check.mjs',
   'scripts/v8-inspiration-detail-contract-check.mjs',
   'scripts/v8-order-builder-contract-check.mjs',
@@ -79,8 +80,8 @@ for(const contract of nestedContracts){
 }
 
 if(errors.length){
-  console.error(`Merlin V8.26 Commercial UX: FALHOU (${errors.length})`);
+  console.error(`Merlin V8.27 Commercial UX: FALHOU (${errors.length})`);
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('Merlin V8.26 Commercial UX: OK — quatro linhas atuais, preços centralizados e hero com carrossel estável, automático e com enquadramento seguro do produto.');
+console.log('Merlin V8.27 Commercial UX: OK — quatro linhas atuais, preços centralizados e hero com carrossel estável, automático e com enquadramento individual por foto.');
