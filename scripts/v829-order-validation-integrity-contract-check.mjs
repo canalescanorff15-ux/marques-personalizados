@@ -9,7 +9,7 @@ const route=fs.readFileSync('app/api/inquiries/route.ts','utf8');
 // Regressão do bug visto em produção: visita direta gera referrer_host vazio.
 if(!attribution.includes('sanitizeAttribution'))errors.push('atribuição ainda não possui normalização central para dados atuais/legados');
 if(!/existing[\s\S]{0,180}sanitizeAttribution/.test(attribution))errors.push('atribuição recuperada do sessionStorage ainda pode reutilizar payload legado sem sanitização');
-if(/referrer_host\s*:\s*referrerHost\s*[,}]/.test(attribution))errors.push('cliente ainda envia referrer_host vazio em acesso direto');
+if(!attribution.includes("...(referrerHost?{referrer_host:referrerHost}:{})"))errors.push('cliente não condiciona referrer_host à existência de valor real');
 
 // O servidor também precisa ser tolerante a vazio equivalente a "não informado".
 const attributionBlock=validation.match(/const attributionSchema[\s\S]*?\.optional\(\);/)?.[0]??'';
