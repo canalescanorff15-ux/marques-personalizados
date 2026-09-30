@@ -14,14 +14,14 @@ for(const token of ['aspectRatios','setAspectRatios','naturalWidth','naturalHeig
 }
 
 const stage=css.match(/\.v824-carousel-stage\s*\{([\s\S]*?)\}/)?.[1]??'';
-if(!/height:\s*clamp\(420px,42vw,540px\)/.test(stage))errors.push('altura desktop do quadro ainda não está compactada e estabilizada');
+if(!/height:\s*clamp\(400px,40vw,520px\)/.test(stage))errors.push('altura desktop do quadro não está na faixa estável V8.28');
 if(/aspect-ratio/.test(stage)||/transition:[^;]*aspect-ratio/.test(stage))errors.push('quadro ainda anima/muda proporção e pode causar salto de página');
 
 const imageBlock=css.match(/\.v824-carousel-image\s*\{([\s\S]*?)\}/)?.[1]??'';
 if(/animation:/.test(imageBlock))errors.push('imagem ainda usa animação de entrada que pode causar piscada');
 
 const mobileStage=css.match(/@media\(max-width:680px\)\{[\s\S]*?\.v824-carousel-stage\s*\{([\s\S]*?)\}/)?.[1]??'';
-if(!/height:\s*clamp\(340px,105vw,460px\)/.test(mobileStage))errors.push('altura mobile do quadro ainda não está compactada');
+if(!/height:\s*clamp\(330px,98vw,440px\)/.test(mobileStage))errors.push('altura mobile do quadro não está na faixa estável V8.28');
 
 for(const token of ['type="button" onClick={previous}','type="button" onClick={next}']){
   if(!component.includes(token))errors.push(`controle manual perdeu botão seguro: ${token}`);
@@ -32,4 +32,4 @@ if(errors.length){
   for(const error of errors)console.error('- '+error);
   process.exit(1);
 }
-console.log('V8.25 Carousel Stability Contract: OK — autoplay 6s contínuo, quadro estável/menor e troca sem animação de entrada ou salto de layout.');
+console.log('V8.25 Carousel Stability Contract: OK — autoplay 6s contínuo, quadro estável/compacto e troca sem animação de entrada ou salto de layout.');
