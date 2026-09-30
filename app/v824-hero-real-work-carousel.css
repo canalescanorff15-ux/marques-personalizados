@@ -11,10 +11,11 @@
   line-height:.92!important;
 }
 
+/* V8.28 — equilíbrio visual: foto grande, inteira e sem grande faixa vazia. */
 .v824-carousel-stage{
   position:relative;
   width:100%;
-  height:clamp(420px,42vw,540px);
+  height:clamp(400px,40vw,520px);
   overflow:hidden;
   border:1px solid rgba(75,48,59,.08);
   border-radius:30px;
@@ -27,16 +28,16 @@
 .v824-carousel-backdrop{
   z-index:0;
   object-fit:cover;
-  filter:blur(24px) saturate(.88);
-  transform:scale(1.12);
-  opacity:.48;
+  filter:blur(24px) saturate(.86);
+  transform:scale(1.08);
+  opacity:.3;
 }
 
-/* V8.26 — a foto real não preenche o quadro à força. A margem interna
-   preserva trabalhos fotografados de perto, enquanto o backdrop ocupa o card. */
+/* A foto real usa praticamente toda a moldura; o backdrop aparece só nas
+   sobras naturais da proporção da foto. */
 .v826-carousel-photo-safe{
   position:absolute;
-  inset:clamp(18px,3vw,28px) clamp(14px,2.4vw,24px) clamp(72px,7.5vw,92px);
+  inset:clamp(10px,1.8vw,16px);
   z-index:1;
   overflow:hidden;
   border-radius:22px;
@@ -49,22 +50,22 @@
   object-position:center;
 }
 
-/* V8.27 — regra final do hero: vence qualquer política visual antiga que use
-   cover/zoom e aplica o enquadramento individual de cada trabalho real. */
+/* V8.27/V8.28 — regra final do hero: vence políticas antigas de cover/zoom,
+   preservando enquadramento individual sem ampliar acima de 100%. */
 .premium-site.v822-home .v822-hero-visual .v826-carousel-photo-safe > img.v824-carousel-image{
   z-index:1!important;
   object-fit:contain!important;
   object-position:var(--v827-photo-position,50% 50%)!important;
-  transform:scale(var(--v827-photo-scale,.86))!important;
+  transform:scale(var(--v827-photo-scale,.98))!important;
   transform-origin:center!important;
   will-change:transform;
 }
 
 .v824-carousel-shade{
   position:absolute;
-  inset:42% 0 0;
+  inset:48% 0 0;
   z-index:2;
-  background:linear-gradient(180deg,transparent 0%,rgba(24,14,18,.14) 28%,rgba(24,14,18,.78) 100%);
+  background:linear-gradient(180deg,transparent 0%,rgba(24,14,18,.08) 24%,rgba(24,14,18,.72) 100%);
   pointer-events:none;
 }
 
@@ -91,33 +92,34 @@
 .v824-carousel-caption{
   position:absolute;
   z-index:4;
-  right:22px;
-  bottom:22px;
-  left:22px;
+  right:20px;
+  bottom:18px;
+  left:20px;
   display:flex;
   align-items:flex-end;
   justify-content:space-between;
   gap:22px;
   color:#fff;
+  text-shadow:0 2px 12px rgba(18,8,12,.35);
 }
 
 .v824-carousel-caption>div{
   display:grid;
-  gap:5px;
+  gap:4px;
   min-width:0;
 }
 
 .v824-carousel-caption strong{
-  font-size:clamp(.94rem,1.4vw,1.18rem);
+  font-size:clamp(.92rem,1.3vw,1.12rem);
   line-height:1.18;
   letter-spacing:-.02em;
 }
 
 .v824-carousel-caption span{
   max-width:440px;
-  color:rgba(255,255,255,.78);
-  font-size:.64rem;
-  line-height:1.45;
+  color:rgba(255,255,255,.8);
+  font-size:.62rem;
+  line-height:1.42;
 }
 
 .v824-carousel-caption>a{
@@ -126,7 +128,7 @@
   gap:5px;
   flex:0 0 auto;
   color:#fff;
-  font-size:.62rem;
+  font-size:.61rem;
   font-weight:850;
   white-space:nowrap;
 }
@@ -185,9 +187,9 @@
     font-size:clamp(2.55rem,5.4vw,4.15rem)!important;
   }
   .v824-carousel-caption{
-    right:18px;
-    bottom:18px;
-    left:18px;
+    right:17px;
+    bottom:16px;
+    left:17px;
   }
   .v824-carousel-caption>a{display:none}
 }
@@ -202,15 +204,16 @@
     hyphens:none!important;
   }
   .v824-carousel-stage{
-    height:clamp(340px,105vw,460px);
+    height:clamp(330px,98vw,440px);
     border-radius:22px;
     box-shadow:0 20px 48px rgba(73,45,57,.13);
   }
   .v824-carousel-backdrop{
-    filter:blur(20px) saturate(.88);
+    filter:blur(20px) saturate(.86);
+    opacity:.28;
   }
   .v826-carousel-photo-safe{
-    inset:clamp(12px,3vw,18px) clamp(10px,2.5vw,15px) clamp(58px,14vw,74px);
+    inset:clamp(8px,2.2vw,12px);
     border-radius:16px;
   }
   .v824-carousel-badge{
@@ -219,11 +222,11 @@
     padding:7px 9px;
   }
   .v824-carousel-caption{
-    right:14px;
-    bottom:14px;
-    left:14px;
+    right:13px;
+    bottom:12px;
+    left:13px;
   }
-  .v824-carousel-caption span{font-size:.59rem}
+  .v824-carousel-caption span{font-size:.58rem}
   .v824-carousel-controls{
     top:10px;
     right:10px;
@@ -241,7 +244,7 @@
   .v822-home .v822-home-hero h1{
     font-size:clamp(2.1rem,10.5vw,2.65rem)!important;
   }
-  .v824-carousel-caption strong{font-size:.86rem}
+  .v824-carousel-caption strong{font-size:.84rem}
   .v824-carousel-caption span{display:none}
 }
 
