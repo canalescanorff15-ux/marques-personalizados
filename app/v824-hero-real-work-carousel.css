@@ -11,27 +11,37 @@
   overflow:hidden;
   border:1px solid rgba(75,48,59,.08);
   border-radius:30px;
-  background:#f2e8e5;
+  background:#2d2025;
   box-shadow:0 30px 76px rgba(73,45,57,.15);
   isolation:isolate;
 }
 
-.v824-carousel-image{
+.v824-carousel-backdrop{
+  z-index:0;
   object-fit:cover;
+  filter:blur(24px) saturate(.88);
+  transform:scale(1.12);
+  opacity:.48;
+}
+
+.v824-carousel-image{
+  z-index:1;
+  object-fit:contain;
+  object-position:center;
   animation:v824-carousel-in .55s ease both;
 }
 
 .v824-carousel-shade{
   position:absolute;
   inset:42% 0 0;
-  z-index:1;
+  z-index:2;
   background:linear-gradient(180deg,transparent 0%,rgba(24,14,18,.14) 28%,rgba(24,14,18,.78) 100%);
   pointer-events:none;
 }
 
 .v824-carousel-badge{
   position:absolute;
-  z-index:3;
+  z-index:4;
   top:16px;
   left:16px;
   display:inline-flex;
@@ -51,7 +61,7 @@
 
 .v824-carousel-caption{
   position:absolute;
-  z-index:3;
+  z-index:4;
   right:112px;
   bottom:22px;
   left:22px;
@@ -94,7 +104,7 @@
 
 .v824-carousel-controls{
   position:absolute;
-  z-index:4;
+  z-index:5;
   right:16px;
   bottom:16px;
   display:flex;
@@ -183,6 +193,9 @@
     aspect-ratio:4/3;
     border-radius:22px;
     box-shadow:0 20px 48px rgba(73,45,57,.13);
+  }
+  .v824-carousel-backdrop{
+    filter:blur(20px) saturate(.88);
   }
   .v824-carousel-badge{
     top:11px;
